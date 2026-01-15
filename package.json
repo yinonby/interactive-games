@@ -26,6 +26,7 @@
     "husky:verify:configured": "[ -f \".husky/pre-push\" ]",
     "pre-push": "npm run pre-push:no-local-changes && npm test",
     "pre-push:no-local-changes": "[ ! -n \"$(git status --porcelain)\" ]",
+    "integration": "npm test",
     "prepare": "husky"
   },
   "workspaces": [
