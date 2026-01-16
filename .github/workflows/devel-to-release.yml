@@ -19,9 +19,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout the code, must fetch all parents so that the later merge has related histories
+      # - Github actions fetches a specific commit (the one that triggered this action), and forces origin/devel
+      #   to point to it.
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # Step 2: Set up Node.js
       - name: Setup Node.js
@@ -53,6 +57,8 @@ jobs:
           git checkout release
 
           # Merge devel into release with a merge commit (--no-ff ensures a merge commit)
+          # origin/devel points to the commit that triggered this workflow, and 'fetch-depth: 0' guarantees
+          # it has related histories with release
           git merge --no-ff origin/devel -m "Merge origin/devel into release"
 
           # Push updated release branch
