@@ -38,8 +38,8 @@ describe("ChatView", () => {
       gameInstanceChatMessages: [],
     };
 
-    const { getByText } = render(<ChatView {...props} />);
-    expect(getByText("Loading")).toBeTruthy();
+    const { queryByTestId } = render(<ChatView {...props} />);
+    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
   it("renders error state", () => {

@@ -1,5 +1,5 @@
 
-import { RnuiCard, RnuiText } from "@ig/rnui";
+import { RnuiActivityIndicator, RnuiCard, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
@@ -10,7 +10,7 @@ export type GamesSummaryViewPropsT = object;
 export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
   const { isLoading, isError, data: userConfigModel } = useUserConfigModel();
 
-  if (isLoading) return <RnuiText>Loading</RnuiText>;
+  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
   if (isError) return <RnuiText>Error</RnuiText>;
   const minimalGameInstanceExposedInfos = userConfigModel.minimalGameInstanceExposedInfos;
 

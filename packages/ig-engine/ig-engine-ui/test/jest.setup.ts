@@ -111,6 +111,7 @@ jest.mock("@ig/rnui", () => {
     RnuiAppContent: View,
     RnuiCopyToClipboard: View,
     RnuiQrCode: View,
+    RnuiActivityIndicator: View,
   };
 });
 

@@ -55,6 +55,14 @@ describe("GamesAcceptInviteView", () => {
     } as GameContextProvider.GameContextT);
   });
 
+  it("renders activity indicator and message", async () => {
+    onAcceptInviteMock.mockResolvedValueOnce("giid-123");
+    const { getByTestId } = render(<GamesAcceptInviteView invitationCode="INV-1" />);
+
+    expect(getByTestId("activity-indicator-tid")).toBeTruthy();
+    expect(getByTestId("activity-message-tid")).toBeTruthy();
+  });
+
   it("calls onAcceptInvite and navigates to game when accept succeeds", async () => {
     onAcceptInviteMock.mockResolvedValueOnce("giid-123");
     render(<GamesAcceptInviteView invitationCode="INV-1" />);

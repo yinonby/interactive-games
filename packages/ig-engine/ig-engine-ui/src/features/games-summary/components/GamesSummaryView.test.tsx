@@ -34,13 +34,11 @@ describe('GamesSummaryView', () => {
       isError: false,
     });
 
-    const { getByText } = render(
+    const { queryByTestId } = render(
       <GamesSummaryView />
     );
 
-    expect(
-      getByText("Loading")
-    ).toBeTruthy();
+    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
   it('renders error', () => {

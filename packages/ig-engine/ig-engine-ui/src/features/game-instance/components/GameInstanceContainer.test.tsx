@@ -26,13 +26,11 @@ describe('GameInstanceView', () => {
       isError: false,
     });
 
-    const { getByText } = render(
+    const { queryByTestId } = render(
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(
-      getByText("Loading")
-    ).toBeTruthy();
+    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
   it('renders error', () => {

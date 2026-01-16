@@ -34,8 +34,8 @@ describe("AvailableGamesView", () => {
     mockUseAppConfigModel.mockReturnValue({ isLoading: true, isError: false, data: null });
     mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: null });
 
-    const { getByText } = render(<AvailableGamesView />);
-    expect(getByText("Loading")).toBeTruthy();
+    const { queryByTestId } = render(<AvailableGamesView />);
+    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
   it("renders Error when either model has error", () => {

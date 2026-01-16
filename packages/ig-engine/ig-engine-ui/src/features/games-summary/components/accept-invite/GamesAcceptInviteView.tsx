@@ -1,8 +1,9 @@
 
 import type { GameInstanceIdT } from "@ig/engine-models";
 import { usePlatformUiNavigation } from "@ig/platform-ui";
+import { RnuiActivityIndicator } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';
-import { ActivityIndicator, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useGameContext } from "../../../../app/layout/GameContextProvider";
 import { useClientLogger } from "../../../../app/providers/useClientLogger";
 import { useUserConfigController } from "../../../../domains/user-config/controller/user-actions/UserConfigController";
@@ -42,7 +43,7 @@ export const GamesAcceptInviteView: FC<GamesAcceptInviteViewPropsT> = ({ invitat
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
-      <ActivityIndicator testID="activity-indicator-tid" />
+      <RnuiActivityIndicator testID="activity-indicator-tid" />
       <Text testID="activity-message-tid">Accepting invitation...</Text>
     </View>
   );
