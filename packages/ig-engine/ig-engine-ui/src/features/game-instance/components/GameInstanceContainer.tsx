@@ -1,6 +1,6 @@
 
 import type { GameInstanceIdT } from "@ig/engine-models";
-import { RnuiText } from "@ig/rnui";
+import { RnuiActivityIndicator, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { useGameInstanceModel } from "../../../domains/game-instance/model/rtk/GameInstanceModel";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
@@ -13,7 +13,7 @@ export type GameInstanceContainerPropsT = TestableComponentT & {
 export const GameInstanceContainer: FC<GameInstanceContainerPropsT> = ({ gameInstanceId }) => {
   const { isLoading, isError, data: gameInstanceModel } = useGameInstanceModel(gameInstanceId);
 
-  if (isLoading) return <RnuiText>Loading</RnuiText>;
+  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
   if (isError) return <RnuiText>Error</RnuiText>;
 
   return (

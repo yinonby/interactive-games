@@ -3,7 +3,7 @@ import type {
   GameInstanceChatMessageT,
   GameInstanceExposedInfoT, PlayerExposedInfoT, UserIdT
 } from "@ig/engine-models";
-import { RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
+import { RnuiActivityIndicator, RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
 import React, { useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
 import {
@@ -65,7 +65,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
 
-  if (isLoading) return <RnuiText>Loading</RnuiText>;
+  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
   if (isError) return <RnuiText>Error</RnuiText>;
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =

@@ -16,6 +16,7 @@ export * from "./src/table/RnuiTableRow";
 export * from "./src/table/RnuiTableTitle";
 export * from "./src/text/RnuiText";
 export * from "./src/theme/RnuiProvider";
+export * from "./src/widget/RnuiActivityIndicator";
 export * from "./src/widget/RnuiCopyToClipboard";
 export * from "./src/widget/RnuiQrCode";
 
