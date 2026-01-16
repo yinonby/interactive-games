@@ -1,0 +1,54 @@
+
+import type { GameInstanceExposedInfoT } from "@ig/engine-models";
+import { RnuiButton, RnuiCopyToClipboard, RnuiQrCode, RnuiText } from "@ig/rnui";
+import type React from "react";
+import type { FC } from "react";
+import { View } from "react-native";
+import { useGameContext } from "../../../app/layout/GameContextProvider";
+import type { TestableComponentT } from "../../../types/ComponentTypes";
+import { useGenericStyles } from "../../../types/GenericStyles";
+
+export type InviteViewPropsT = TestableComponentT & {
+  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+};
+
+export const InviteView: FC<InviteViewPropsT> = (props) => {
+  const { gameInstanceExposedInfo } = props;
+  const { invitationCode, gameConfig, otherPlayerExposedInfos } = gameInstanceExposedInfo;
+  const { gameUiConfig } = useGameContext();
+  const invitationUrl = gameUiConfig.appUrl + "/games/accept-invite/" + invitationCode;
+  const isSaturated = otherPlayerExposedInfos.length >= gameConfig.maxParticipants - 1;
+  const genericStyles = useGenericStyles();
+
+  const handlePress = () => {
+    // does nothing at the moment
+  };
+
+  return (
+    <View>
+      <View style={[genericStyles.flexRow]}>
+        <View style={genericStyles.spacingEnd}>
+          <RnuiText testID="invite-code-title-tid">Invitation Code:</RnuiText>
+        </View>
+
+        <View style={genericStyles.spacingEnd}>
+          <RnuiText testID="invite-code-tid" variant="titleSmall">{invitationCode}</RnuiText>
+        </View>
+
+        <View style={genericStyles.spacingEnd}>
+          <RnuiCopyToClipboard testID="copy-to-clipboard-code-tid" copyText={invitationCode} size="xs" />
+        </View>
+
+        <View style={genericStyles.spacingEnd}>
+          <RnuiCopyToClipboard testID="copy-to-clipboard-link-tid" copyText={invitationUrl} text="Copy Link" size="xs" />
+        </View>
+
+        <RnuiButton testID="share-btn-tid" size="xs" onPress={handlePress} disabled={isSaturated}>Share</RnuiButton>
+
+        <View style={[genericStyles.flex1]} />
+
+        <RnuiQrCode testID="qr-code-tid" data={invitationUrl} pieceCornerType="rounded" size={50} />
+      </View>
+    </View>
+  );
+};

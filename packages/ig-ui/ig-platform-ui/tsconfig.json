@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                       // Modern JS target
+    "module": "ESNext",                       // Use native ES modules
+    "lib": ["ESNext", "DOM"],                 // Include DOM types if using web + RN
+    "allowJs": true,                          // Allow JS files in your project
+    "jsx": "react-jsx",                        // Modern React JSX transform
+    "strict": true,                            // Enable all strict type checks
+    "noEmit": true,                            // Don't emit JS (handled by Metro)
+    "isolatedModules": true,                   // Required for React Native / Babel
+    "esModuleInterop": true,                   // Import CommonJS modules properly
+    "moduleResolution": "node",                // Resolve modules like Node
+    "resolveJsonModule": true,                 // Allow importing JSON files
+    "skipLibCheck": true,                      // Skip type checking of node_modules
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing
+    "baseUrl": ".",                             // Root of your project for paths
+    "types": ["node", "jest"],
+    "paths": {
+      "@/*": ["src/*"]                          // Optional: alias @/ → src/
+    }
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"],
+  "include": ["**/*.ts", "**/*.tsx"]
+}
