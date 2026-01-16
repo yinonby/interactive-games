@@ -53,7 +53,7 @@ jobs:
           git checkout release
 
           # Merge devel into release with a merge commit (--no-ff ensures a merge commit)
-          git merge --no-ff origin/devel -m "Merge devel into release"
+          git merge --no-ff origin/devel -m "Merge origin/devel into release"
 
           # Push updated release branch
           git push origin release
