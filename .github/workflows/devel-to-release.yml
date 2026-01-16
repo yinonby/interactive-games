@@ -66,5 +66,3 @@ jobs:
 
           # Push updated release branch
           git push origin release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
