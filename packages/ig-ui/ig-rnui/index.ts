@@ -9,6 +9,7 @@ export * from "./src/grid/RnuiMasonryGrid";
 export * from "./src/image/RnuiImage";
 export * from "./src/input/RnuiTextInput";
 export * from "./src/layout/RnuiAppContent";
+export * from "./src/snackbar/RnuiSnackbarProvider";
 export * from "./src/table/RnuiTable";
 export * from "./src/table/RnuiTableCell";
 export * from "./src/table/RnuiTableHeader";
