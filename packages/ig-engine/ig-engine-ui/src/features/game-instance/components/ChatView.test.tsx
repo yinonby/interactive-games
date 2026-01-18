@@ -2,7 +2,10 @@
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, PlayerExposedInfoT } from "@ig/engine-models";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
-import { useGameInstanceController } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
+import {
+  useGameInstanceController
+} from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { ChatView } from "./ChatView";
 
@@ -79,9 +82,11 @@ describe("ChatView", () => {
       { chatMsgId: "m3", playerUserId: "unknown", msgText: "secret" } as GameInstanceChatMessageT,
     ];
 
-    const { getByTestId } = render(
+    const { getByTestId, getByText } = render(
       <ChatView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={messages} />
     );
+
+    getByText(buildMockedTranslation("common:chat"));
 
     const list = getByTestId("chat-msg-list-tid");
     expect(list.props.data.length).toBe(2); // Only 2 messages with known players

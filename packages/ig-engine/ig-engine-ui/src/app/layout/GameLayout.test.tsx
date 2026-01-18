@@ -1,7 +1,7 @@
 
 import type { RnuiImageSourceT, RnuiStylesT } from "@ig/rnui";
 import { render } from '@testing-library/react-native';
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { Text } from 'react-native';
 import type { MD3Theme } from "react-native-paper";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
@@ -28,8 +28,20 @@ jest.mock("../model/reducers/AppReduxStore", () => {
 });
 
 jest.mock("./AppWebSocketProvider", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
   return {
-    AppWebSocketProvider: ({ children }: { children: ReactNode }) => children,
+    AppWebSocketProvider: View,
+  };
+});
+
+jest.mock("../localization/AppLocalizationProvider", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    AppLocalizationProvider: View,
   };
 });
 

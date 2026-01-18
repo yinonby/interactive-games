@@ -72,16 +72,16 @@ describe('GamesTableRow', () => {
       gameStatus: "in-process",
     };
 
-    const { queryByTestId, getAllByTestId } = render(
+    const { getByTestId, getAllByTestId } = render(
       <GamesTableRow minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
     );
 
-    expect(queryByTestId('games-table-row-tid')).toBeTruthy();
+    getByTestId('games-table-row-tid');
     expect(getAllByTestId('games-table-cell-tid')).toHaveLength(4);
-    expect(getAllByTestId('game-name-text-tid')).toHaveLength(1);
-    expect(getAllByTestId('user-role-text-tid')).toHaveLength(1);
-    expect(getAllByTestId('pui-link-tid')).toHaveLength(1);
-    expect(getAllByTestId('open-game-btn-tid')).toHaveLength(1);
+    getByTestId('game-name-text-tid');
+    getByTestId('user-role-text-tid');
+    getByTestId('pui-link-tid');
+    getByTestId('open-game-btn-tid');
   });
 
   it('renders game row, player', () => {
@@ -100,15 +100,15 @@ describe('GamesTableRow', () => {
       gameStatus: "in-process",
     };
 
-    const { queryByTestId, getAllByTestId } = render(
+    const { getByTestId, getAllByTestId } = render(
       <GamesTableRow minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
     );
 
-    expect(queryByTestId('games-table-row-tid')).toBeTruthy();
+    getByTestId('games-table-row-tid');
     expect(getAllByTestId('games-table-cell-tid')).toHaveLength(4);
-    expect(getAllByTestId('game-name-text-tid')).toHaveLength(1);
-    expect(getAllByTestId('user-role-text-tid')).toHaveLength(1);
-    expect(getAllByTestId('pui-link-tid')).toHaveLength(1);
-    expect(getAllByTestId('open-game-btn-tid')).toHaveLength(1);
+    getByTestId('game-name-text-tid');
+    getByTestId('user-role-text-tid');
+    getByTestId('pui-link-tid');
+    getByTestId('open-game-btn-tid');
   });
 });

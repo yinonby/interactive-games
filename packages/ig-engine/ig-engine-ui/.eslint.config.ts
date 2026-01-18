@@ -33,4 +33,12 @@ export default defineConfig([
       react: { version: 'detect' },
     },
   },
+
+  // ensure sorted keys for translations
+  {
+    files: ["**/CommonTranslationKeys.ts", "**/GamesTranslationKeys.ts"],
+    rules: {
+      "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}]
+    },
+  },
 ]);

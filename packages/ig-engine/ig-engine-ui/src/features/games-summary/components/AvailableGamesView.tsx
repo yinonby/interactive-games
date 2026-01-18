@@ -3,6 +3,7 @@ import type { MinimalGameConfigT, MinimalGameInstanceExposedInfoT } from "@ig/en
 import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import { useAppConfigModel } from "../../../app/model/rtk/AppConfigModel";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { MinimalGameCardView } from "./MinimalGameCardView";
@@ -20,6 +21,7 @@ const getNonJoinedMinimalGameConfigs = (
 export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
   const { isLoading, isError, data: appConfigModel } = useAppConfigModel();
   const { isLoading: isUserConfigLoading, isError: isUserConfigError, data: userConfigModel } = useUserConfigModel();
+  const { t } = useAppLocalization();
 
   if (isLoading || isUserConfigLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
   if (isError || isUserConfigError) return <RnuiText>Error</RnuiText>;
@@ -32,7 +34,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
       {nonJoinedMinimalGameConfigs.length === 0 &&
         <View style={styles.spacingBottom} >
           <RnuiText testID="no-available-games-text-tid" variant="titleSmall" >
-            {"No games are available"}
+            {t("games:noGamesAbailable")}
           </RnuiText>
         </View>
       }
@@ -40,7 +42,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
       {nonJoinedMinimalGameConfigs.length > 0 &&
         <View style={[styles.spacingBottom]} >
           <RnuiText testID="available-games-text-tid" variant="titleSmall" >
-            {"Available games:"}
+            {t("games:abailableGames")}
           </RnuiText>
         </View>
       }

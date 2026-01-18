@@ -1,6 +1,19 @@
 {
-  "gamesSummary": {
-    "noGamesAbailable": "You don't have any games at the moment",
-    "yourGames": "Your games"
-  }
+  "noGamesAbailable": "No games are available",
+  "invitationCode": "Invitation code",
+  "joinGame": "Join game",
+  "abailableGames": "Available games",
+  "userNoGamesAbailable": "You don't have any games at the moment",
+  "yourGames": "Your games",
+  "gameName": "Game name",
+  "maxParticipants": "Max participants",
+  "play": "Play",
+  "suspend": "Suspend",
+  "activate": "Activate",
+  "uninvite": "Un-invite",
+  "noPlayers": "No players",
+  "players": "Players",
+  "gameEnded": "Game ended",
+  "gameNotStarted": "Game not started",
+  "gameInProcess": "Game in process"
 }

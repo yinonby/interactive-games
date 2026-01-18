@@ -5,6 +5,7 @@ import type React from "react";
 import type { FC } from "react";
 import { View } from "react-native";
 import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 import { useGenericStyles } from "../../../types/GenericStyles";
 
@@ -14,6 +15,7 @@ export type InviteViewPropsT = TestableComponentT & {
 
 export const InviteView: FC<InviteViewPropsT> = (props) => {
   const { gameInstanceExposedInfo } = props;
+  const { t } = useAppLocalization();
   const { invitationCode, gameConfig, otherPlayerExposedInfos } = gameInstanceExposedInfo;
   const { gameUiConfig } = useGameContext();
   const invitationUrl = gameUiConfig.appUrl + "/games/accept-invite/" + invitationCode;
@@ -28,7 +30,7 @@ export const InviteView: FC<InviteViewPropsT> = (props) => {
     <View>
       <View style={[genericStyles.flexRow]}>
         <View style={genericStyles.spacingEnd}>
-          <RnuiText testID="invite-code-title-tid">Invitation Code:</RnuiText>
+          <RnuiText testID="invite-code-title-tid">{t("games:invitationCode") + ":"}</RnuiText>
         </View>
 
         <View style={genericStyles.spacingEnd}>
@@ -40,10 +42,17 @@ export const InviteView: FC<InviteViewPropsT> = (props) => {
         </View>
 
         <View style={genericStyles.spacingEnd}>
-          <RnuiCopyToClipboard testID="copy-to-clipboard-link-tid" copyText={invitationUrl} text="Copy Link" size="xs" />
+          <RnuiCopyToClipboard
+            testID="copy-to-clipboard-link-tid"
+            copyText={invitationUrl}
+            text={t("common:copyLink")}
+            size="xs"
+          />
         </View>
 
-        <RnuiButton testID="share-btn-tid" size="xs" onPress={handlePress} disabled={isSaturated}>Share</RnuiButton>
+        <RnuiButton testID="share-btn-tid" size="xs" onPress={handlePress} disabled={isSaturated}>
+          <RnuiText>{t("common:share")}</RnuiText>
+        </RnuiButton>
 
         <View style={[genericStyles.flex1]} />
 

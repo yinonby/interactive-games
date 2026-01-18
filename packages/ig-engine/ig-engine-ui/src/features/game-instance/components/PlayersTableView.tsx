@@ -3,6 +3,7 @@ import type { PlayerExposedInfoT } from "@ig/engine-models";
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { View } from 'react-native';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import { PlayerTableRow } from "./PlayerTableRow";
 
 export type PlayersTableViewPropsT = {
@@ -12,17 +13,19 @@ export type PlayersTableViewPropsT = {
 };
 
 export const PlayersTableView: FC<PlayersTableViewPropsT> = ({ isPlayerAdmin, otherPlayerExposedInfos }) => {
+  const { t } = useAppLocalization();
+
   return (
     <RnuiTable testID="table-tid">
       <RnuiTableHeader testID="table-header-tid" style={{ paddingHorizontal: 0 }}>
         <RnuiTableTitle testID="table-title-tid">
-          <RnuiText>Nickname</RnuiText>
+          <RnuiText>{t("common:nickname")}</RnuiText>
         </RnuiTableTitle >
         <RnuiTableTitle testID="table-title-tid">
-          <RnuiText>Role</RnuiText>
+          <RnuiText>{t("common:role")}</RnuiText>
         </RnuiTableTitle>
         <RnuiTableTitle testID="table-title-tid">
-          <RnuiText>Status</RnuiText>
+          <RnuiText>{t("common:status")}</RnuiText>
         </RnuiTableTitle>
         {isPlayerAdmin &&
           <RnuiTableTitle testID="table-title-tid" endContent><></></RnuiTableTitle>

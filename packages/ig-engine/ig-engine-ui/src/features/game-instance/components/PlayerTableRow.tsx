@@ -2,6 +2,7 @@
 import type { PlayerExposedInfoT } from "@ig/engine-models";
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
 export type PlayersCardViewPropsT = TestableComponentT & {
@@ -10,6 +11,8 @@ export type PlayersCardViewPropsT = TestableComponentT & {
 };
 
 export const PlayerTableRow: FC<PlayersCardViewPropsT> = ({ isPlayerAdmin, otherPlayerExposedInfo }) => {
+    const { t } = useAppLocalization();
+
   let statusOnSurfaceColor: string | undefined = undefined;
   if (otherPlayerExposedInfo.playerStatus === "playing") {
     statusOnSurfaceColor = "green";
@@ -33,13 +36,19 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = ({ isPlayerAdmin, other
       {isPlayerAdmin &&
         <RnuiTableCell testID="table-cell-tid" endContent>
           {otherPlayerExposedInfo.playerStatus === "playing" &&
-            <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>Suspend</RnuiButton>
+            <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
+              <RnuiText>{t("games:suspend")}</RnuiText>
+            </RnuiButton>
           }
           {otherPlayerExposedInfo.playerStatus === "suspended" &&
-            <RnuiButton testID="activate-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>Activate</RnuiButton>
+            <RnuiButton testID="activate-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
+              <RnuiText>{t("games:activate")}</RnuiText>
+            </RnuiButton>
           }
           {otherPlayerExposedInfo.playerStatus === "invited" &&
-            <RnuiButton testID="uninvite-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>Un-invite</RnuiButton>
+            <RnuiButton testID="uninvite-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
+              <RnuiText>{t("games:uninvite")}</RnuiText>
+            </RnuiButton>
           }
         </RnuiTableCell>
       }

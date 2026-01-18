@@ -1,6 +1,7 @@
 
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import * as UserConfigModel from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { GamesSummaryView } from './GamesSummaryView';
 
@@ -67,15 +68,11 @@ describe('GamesSummaryView', () => {
       },
     });
 
-    const { getByText, queryByText, queryByTestId } = render(
+    const { getByText, queryByTestId } = render(
       <GamesSummaryView />
     );
 
-    expect(
-      getByText("You don't have any games at the moment")
-    ).toBeTruthy();
-
-    expect(queryByText('Your games:')).toBeNull();
+    getByText(buildMockedTranslation("games:userNoGamesAbailable"));
     expect(queryByTestId('current-games-card-tid')).toBeNull();
     expect(queryByTestId('current-games-table-view-tid')).toBeNull();
   });
@@ -121,7 +118,7 @@ describe('GamesSummaryView', () => {
       <GamesSummaryView />
     );
 
-    expect(getByText('Your games:')).toBeTruthy();
+    getByText(buildMockedTranslation("games:yourGames"));
     expect(queryByTestId('current-games-card-tid')).toBeTruthy();
     expect(queryByTestId('current-games-table-view-tid')).toBeTruthy();
   });

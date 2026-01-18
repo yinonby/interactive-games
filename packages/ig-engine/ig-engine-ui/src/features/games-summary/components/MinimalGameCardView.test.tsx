@@ -6,6 +6,7 @@ import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import type { GameContextT } from "../../../app/layout/GameContextProvider";
 import * as GameContextProvider from "../../../app/layout/GameContextProvider";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import type { UserConfigControllerT } from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import * as UserConfigController from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import type { GameImageTypeT } from "../../../types/GameImageTypes";
@@ -44,6 +45,34 @@ describe("MinimalGameCardView", () => {
       imagesSourceMap: imagesSourceMap,
       gameUiUrlPathsAdapter: gameUiUrlPathsAdapter,
     } as GameContextT);
+  });
+
+  it("renders correctly", async () => {
+    useUserConfigControllerSpy.mockReturnValue({
+      onPlayGame: onPlayGameMock,
+      onAddGame: jest.fn(),
+      onAcceptInvite: jest.fn(),
+    } as UserConfigControllerT);
+
+    onPlayGameMock.mockResolvedValue("game-instance-123");
+
+    const { getByText } = render(
+      <MinimalGameCardView
+        minimalGameConfig={{
+          gameConfigId: "cfg-1",
+          kind: "joint-game",
+          gameName: "Test Game",
+          maxDurationMinutes: 30,
+          maxParticipants: 4,
+          imageAssetName: "treasure-hunt",
+        }}
+      />
+    );
+
+    getByText(buildMockedTranslation("common:duration") + ": " + buildMockedTranslation("common:minutes"));
+    getByText(buildMockedTranslation("games:maxParticipants") + ": 4");
+    getByText(buildMockedTranslation("common:price") + ": ");
+    getByText(buildMockedTranslation("games:play"));
   });
 
   it("navigates to the game instance returned by onPlayGame when Play is pressed", async () => {

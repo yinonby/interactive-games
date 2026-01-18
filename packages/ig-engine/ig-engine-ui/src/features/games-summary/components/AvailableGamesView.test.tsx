@@ -1,6 +1,7 @@
 
 import { render } from "@testing-library/react-native";
 import React from "react";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { useAppConfigModel } from "../../../app/model/rtk/AppConfigModel";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { AvailableGamesView } from "./AvailableGamesView";
@@ -54,8 +55,9 @@ describe("AvailableGamesView", () => {
     mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: { minimalGameInstanceExposedInfos: userInfos } });
 
     const { getByTestId, queryByTestId, getByText } = render(<AvailableGamesView />);
-    expect(getByTestId("no-available-games-text-tid")).toBeTruthy();
-    expect(getByText("No games are available")).toBeTruthy();
+    getByTestId("no-available-games-text-tid");
+    getByText(buildMockedTranslation("games:noGamesAbailable"));
+
     expect(queryByTestId("grid-tid")).toBeNull();
   });
 
@@ -67,10 +69,10 @@ describe("AvailableGamesView", () => {
     mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: { minimalGameInstanceExposedInfos: userInfos } });
 
     const { getByTestId, getByText } = render(<AvailableGamesView />);
-    expect(getByTestId("available-games-text-tid")).toBeTruthy();
-    expect(getByText("Available games:")).toBeTruthy();
-    expect(getByTestId("grid-tid")).toBeTruthy();
-    // ensure the unjoined game card is rendered
-    expect(getByTestId("game-card-view-tid")).toBeTruthy();
+    getByTestId("available-games-text-tid");
+    getByText(buildMockedTranslation("games:abailableGames"));
+
+    getByTestId("grid-tid");
+    getByTestId("game-card-view-tid");
   });
 });

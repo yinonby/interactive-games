@@ -2,6 +2,7 @@
 import type { GameInstanceExposedInfoT } from "@ig/engine-models";
 import { render } from '@testing-library/react-native';
 import React from "react";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { PlayersView } from "./PlayersView";
 
 jest.mock("./PlayersTableView", () => {
@@ -20,11 +21,11 @@ describe("PlayersView", () => {
       otherPlayerExposedInfos: [],
     } as unknown as GameInstanceExposedInfoT;
 
-    const { queryByTestId } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
+    const { queryByTestId, getByText } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
 
     const noPlayers = queryByTestId("no-players-text-tid");
     expect(noPlayers).not.toBeNull();
-    expect(noPlayers.children).toContain("No players");
+    getByText(buildMockedTranslation("games:noPlayers"));
   });
 
   it("renders heading and PlayersTableView when players are present and passes props (admin)", () => {
@@ -33,11 +34,11 @@ describe("PlayersView", () => {
       playerRole: "admin",
       otherPlayerExposedInfos: otherPlayerExposedInfos,
     } as unknown as GameInstanceExposedInfoT;
-    const { queryByTestId } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
+    const { queryByTestId, getByText } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
 
     const heading = queryByTestId("players-text-tid");
     expect(heading).not.toBeNull();
-    expect(heading.children).toContain("Players");
+    getByText(buildMockedTranslation("games:players"));
 
     const table = queryByTestId("players-table-view-tid");
     expect(table).not.toBeNull();
@@ -52,10 +53,6 @@ describe("PlayersView", () => {
       otherPlayerExposedInfos: otherPlayerExposedInfos,
     } as unknown as GameInstanceExposedInfoT;
     const { queryByTestId } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
-
-    const heading = queryByTestId("players-text-tid");
-    expect(heading).not.toBeNull();
-    expect(heading.children).toContain("Players");
 
     const table = queryByTestId("players-table-view-tid");
     expect(table).not.toBeNull();

@@ -1,6 +1,8 @@
+
 import type { MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import type { GamesTableRowPropsT } from "./GamesTableRow";
 import { GamesTableView } from './GamesTableView';
 
@@ -28,13 +30,18 @@ describe('GamesTableView', () => {
 
   it('renders empty table', () => {
     const minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[] = [];
-    const { getAllByTestId, queryByTestId } = render(
+    const { getAllByTestId, getByTestId, queryByTestId, getByText } = render(
       <GamesTableView minimalGameInstanceExposedInfos={minimalGameInstanceExposedInfos} />
     );
 
-    expect(getAllByTestId('game-table-tid')).toHaveLength(1);
-    expect(getAllByTestId('game-table-header-tid')).toHaveLength(1);
+    getByTestId('game-table-tid');
+    getByTestId('game-table-header-tid');
+
     expect(getAllByTestId('game-table-title-tid')).toHaveLength(4);
+    getByText(buildMockedTranslation("games:gameName"));
+    getByText(buildMockedTranslation("common:status"));
+    getByText(buildMockedTranslation("common:role"));
+
     expect(queryByTestId('games-table-row-tid')).toBeNull();
   });
 
@@ -67,12 +74,12 @@ describe('GamesTableView', () => {
       gameStatus: "in-process",
     }];
 
-    const { getAllByTestId } = render(
+    const { getAllByTestId, getByTestId } = render(
       <GamesTableView minimalGameInstanceExposedInfos={minimalGameInstanceExposedInfos} />
     );
 
-    expect(getAllByTestId('game-table-tid')).toHaveLength(1);
-    expect(getAllByTestId('game-table-header-tid')).toHaveLength(1);
+    getByTestId('game-table-tid');
+    getByTestId('game-table-header-tid');
     expect(getAllByTestId('game-table-title-tid')).toHaveLength(4);
     expect(getAllByTestId('games-table-row-tid')).toHaveLength(2);
   });

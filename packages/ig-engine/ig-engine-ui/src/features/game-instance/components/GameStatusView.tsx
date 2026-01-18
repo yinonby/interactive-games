@@ -2,6 +2,7 @@
 import { RnuiBlinker } from "@ig/rnui";
 import { type FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
 export type GameStatusViewPropsT = TestableComponentT &{
@@ -11,14 +12,11 @@ export type GameStatusViewPropsT = TestableComponentT &{
 export const GameStatusView: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
   // Determine status color and text
   let statusColor = 'red';
-  let statusText = 'Game ended';
 
   if (gameStatus === 'not-started') {
     statusColor = 'orange';
-    statusText = 'Game not started';
   } else if (gameStatus === 'in-process') {
     statusColor = 'green';
-    statusText = 'Game in process';
   }
 
   return (
@@ -36,9 +34,24 @@ export const GameStatusView: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
           ]}
         />
       }
-      <Text style={styles.statusText}>{statusText}</Text>
+      <GameStatusText gameStatus={gameStatus}/>
     </View>
   );
+};
+
+const GameStatusText: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
+  const { t } = useAppLocalization();
+
+  // Determine status color and text
+  let statusText = t("games:gameEnded");
+
+  if (gameStatus === 'not-started') {
+    statusText = t("games:gameNotStarted");
+  } else if (gameStatus === 'in-process') {
+    statusText = t("games:gameInProcess");
+  }
+
+  return <Text style={styles.statusText}>{statusText}</Text>;
 };
 
 const styles = StyleSheet.create({

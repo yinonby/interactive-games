@@ -2,6 +2,7 @@
 import type { GameConfigIdT, GameInstanceExposedInfoT } from "@ig/engine-models";
 import { fireEvent, render } from "@testing-library/react-native";
 import React, { act } from "react";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { InviteView } from "./InviteView";
 
 // mocks
@@ -20,32 +21,28 @@ describe("InviteView", () => {
   } as unknown as GameInstanceExposedInfoT;
 
   it("renders component properly", () => {
-    const { getByTestId } = render(
+    const { getByTestId, getByText } = render(
       <InviteView gameInstanceExposedInfo={baseGameInstance} />
     );
 
-    const codeTitleText = getByTestId("invite-code-title-tid");
-    expect(codeTitleText).toBeTruthy();
-    expect(codeTitleText.props.children).toBe("Invitation Code:");
+    getByTestId("invite-code-title-tid");
+    getByText(buildMockedTranslation("games:invitationCode") + ":");
 
     const codeText = getByTestId("invite-code-tid");
-    expect(codeText).toBeTruthy();
     expect(codeText.props.children).toBe("ABC123");
 
     const copyToClipboardCode = getByTestId("copy-to-clipboard-code-tid");
-    expect(copyToClipboardCode).toBeTruthy();
     expect(copyToClipboardCode.props.copyText).toBe("ABC123");
 
     const copyToClipboardLink = getByTestId("copy-to-clipboard-link-tid");
-    expect(copyToClipboardLink).toBeTruthy();
     expect(copyToClipboardLink.props.copyText).toBe("https://example.com/games/accept-invite/ABC123");
+    expect(copyToClipboardLink.props.text).toBe(buildMockedTranslation("common:copyLink"));
 
     const shareButton = getByTestId("share-btn-tid");
-    expect(shareButton).toBeTruthy();
     expect(shareButton.props.disabled).toBe(false);
+    getByText(buildMockedTranslation("common:share"));
 
     const qrCode = getByTestId("qr-code-tid");
-    expect(qrCode).toBeTruthy();
     expect(qrCode.props.data).toBe("https://example.com/games/accept-invite/ABC123");
   });
 
@@ -55,7 +52,6 @@ describe("InviteView", () => {
     );
 
     const shareButton = getByTestId("share-btn-tid");
-    expect(shareButton).toBeTruthy();
     expect(shareButton.props.disabled).toBe(false);
 
     await act(async () => {

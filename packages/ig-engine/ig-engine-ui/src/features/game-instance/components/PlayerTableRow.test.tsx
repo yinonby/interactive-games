@@ -2,6 +2,7 @@
 import type { PlayerExposedInfoT } from "@ig/engine-models";
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from "react";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { PlayerTableRow } from "./PlayerTableRow";
 
 jest.mock("./PlayersTableView", () => {
@@ -14,7 +15,7 @@ jest.mock("./PlayersTableView", () => {
 });
 
 describe("PlayerTableRow", () => {
-  it("renders component properly, no buttons when player is not admin", () => {
+  it("renders row and cells", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
@@ -33,7 +34,7 @@ describe("PlayerTableRow", () => {
     expect(tableCells).toHaveLength(3);
   });
 
-  it("renders component properly, with buttons when player is admin", () => {
+  it("renders an extra cell for button when player is admin", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
@@ -100,17 +101,19 @@ describe("PlayerTableRow", () => {
     expect(statusText.props.theme.colors.onSurface).toBe("red");
   });
 
-  it("handles press suspend", async () => {
+  it("renders suspend button and handles press", async () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "playing",
     };
-    const { getByTestId } = render(<PlayerTableRow
+    const { getByTestId, getByText } = render(<PlayerTableRow
       isPlayerAdmin={true}
       otherPlayerExposedInfo={otherPlayerExposedInfo}
     />);
+
+    getByText(buildMockedTranslation("games:suspend"));
 
     const suspendButton = getByTestId("suspend-btn-tid");
     expect(suspendButton).toBeTruthy();
@@ -120,17 +123,19 @@ describe("PlayerTableRow", () => {
     });
   });
 
-  it("handles press activate", async () => {
+  it("renders activate button and handles press", async () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "suspended",
     };
-    const { getByTestId } = render(<PlayerTableRow
+    const { getByTestId, getByText } = render(<PlayerTableRow
       isPlayerAdmin={true}
       otherPlayerExposedInfo={otherPlayerExposedInfo}
     />);
+
+    getByText(buildMockedTranslation("games:activate"));
 
     const activateButton = getByTestId("activate-btn-tid");
     expect(activateButton).toBeTruthy();
@@ -140,17 +145,19 @@ describe("PlayerTableRow", () => {
     });
   });
 
-  it("handles press un-invite", async () => {
+  it("renders un button and handles press", async () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "invited",
     };
-    const { getByTestId } = render(<PlayerTableRow
+    const { getByTestId, getByText } = render(<PlayerTableRow
       isPlayerAdmin={true}
       otherPlayerExposedInfo={otherPlayerExposedInfo}
     />);
+
+    getByText(buildMockedTranslation("games:uninvite"));
 
     const uninviteButton = getByTestId("uninvite-btn-tid");
     expect(uninviteButton).toBeTruthy();

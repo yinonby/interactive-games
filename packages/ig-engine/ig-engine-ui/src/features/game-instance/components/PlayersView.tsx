@@ -3,6 +3,7 @@ import type { GameInstanceExposedInfoT } from "@ig/engine-models";
 import { RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { View } from 'react-native';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 import { useGenericStyles } from "../../../types/GenericStyles";
 import { PlayersTableView } from "./PlayersTableView";
@@ -12,6 +13,7 @@ export type PlayersViewPropsT = TestableComponentT & {
 };
 
 export const PlayersView: FC<PlayersViewPropsT> = (props) => {
+  const { t } = useAppLocalization();
   const { gameInstanceExposedInfo } = props;
   const { playerRole, otherPlayerExposedInfos } = gameInstanceExposedInfo;
   const genericStyles = useGenericStyles();
@@ -21,14 +23,14 @@ export const PlayersView: FC<PlayersViewPropsT> = (props) => {
   if (!arePlayersPresent) {
     return (
       <View >
-        <RnuiText testID="no-players-text-tid" variant="titleSmall">No players</RnuiText>
+        <RnuiText testID="no-players-text-tid" variant="titleSmall">{t("games:noPlayers")}</RnuiText>
       </View>
     );
   } else {
     return (
       <View >
         <View style={genericStyles.spacingBottom} >
-          <RnuiText testID="players-text-tid" variant="titleSmall">Players</RnuiText>
+          <RnuiText testID="players-text-tid" variant="titleSmall">{t("games:players")}</RnuiText>
         </View>
         <View style={genericStyles.spacingBottom} >
           <PlayersTableView

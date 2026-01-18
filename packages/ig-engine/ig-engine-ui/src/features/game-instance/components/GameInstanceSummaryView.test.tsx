@@ -2,6 +2,7 @@
 import type { GameInstanceExposedInfoT } from "@ig/engine-models";
 import { render } from '@testing-library/react-native';
 import React from "react";
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { GameInstanceSummaryView } from "./GameInstanceSummaryView";
 
 jest.mock("./GameStatusView", () => {
@@ -33,21 +34,18 @@ describe("GameInstanceSummaryView", () => {
     otherPlayerExposedInfos: [],
   }
 
-  it("renders component properly, no buttons when player is not admin", () => {
-    const { getByTestId } = render(<GameInstanceSummaryView
+  it("renders component properly", () => {
+    const { getByTestId, getByText } = render(<GameInstanceSummaryView
       gameInstanceExposedInfo={gameInstanceExposedInfo}
     />);
 
-    const title = getByTestId("title-tid");
-    expect(title.children).toContain("Treasure Hunt 1");
+    getByTestId("title-tid");
+    getByTestId("game-status-tid");
+    getByTestId("duration-text-tid");
+    getByTestId("max-participants-tid");
 
-    const gameStatus = getByTestId("game-status-tid");
-    expect(gameStatus).toBeTruthy();
-
-    const durationText = getByTestId("duration-text-tid");
-    expect(durationText).toBeTruthy();
-
-    const maxParticipantsText = getByTestId("max-participants-tid");
-    expect(maxParticipantsText).toBeTruthy();
+    getByText("Treasure Hunt 1");
+    getByText(buildMockedTranslation("common:duration") + ": " + buildMockedTranslation("common:minutes"));
+    getByText(buildMockedTranslation("games:maxParticipants") + ": 6");
   });
 });

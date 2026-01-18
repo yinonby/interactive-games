@@ -15,7 +15,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],                 // Include DOM types if using web + RN
+    "lib": ["ESNext", "DOM"], // Include DOM types if using web + RN
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

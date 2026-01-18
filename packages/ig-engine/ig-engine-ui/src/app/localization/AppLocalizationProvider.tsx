@@ -1,10 +1,11 @@
 
+import type { TOptions } from "i18next";
 import React, { createContext, useContext, type PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { GamesTranslationKeyT } from "../../types/GamesTranslationsTypes";
+import type { AppTranslationKeyT } from "../../types/CommonTranslationTypes";
 
 export interface AppLocalizationContextT {
-  t: (tKey: GamesTranslationKeyT) => string,
+  t: (tKey: AppTranslationKeyT, options?: TOptions) => string,
 }
 
 const AppLocalizationContext = createContext<AppLocalizationContextT | undefined>(undefined);
@@ -15,8 +16,8 @@ export const AppLocalizationProvider: React.FC<PropsWithChildren<AppLocalization
   const { children } = props;
   const { t: _t } = useTranslation();
 
-  const t = (tKey: GamesTranslationKeyT): string => {
-    return _t(tKey);
+  const t = (tKey: AppTranslationKeyT, options?: TOptions): string => {
+    return _t(tKey, options);
   }
 
   const value: AppLocalizationContextT = {

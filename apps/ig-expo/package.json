@@ -3,13 +3,21 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo nothing to do",
+    "test": "npm run tsc && npm run lint && npm run cover:unit",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "expo lint ./src",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "test:unit": "echo ok",
+    "test:verbose": "echo ok",
+    "cover:unit": "npm run test:unit -- run --coverage",
+
     "start": "expo start -c",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android -c",
     "ios": "expo start --ios -c",
-    "web": "expo start --web -c",
-    "lint": "expo lint"
+    "web": "expo start --web -c"
   },
   "dependencies": {
     "@ig/engine-ui": "*",

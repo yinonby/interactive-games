@@ -6,8 +6,8 @@ import { type MD3Theme } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import { AppLocalizationProvider } from "../localization/AppLocalizationProvider";
 import { createReduxStore } from "../model/reducers/AppReduxStore";
-import { AppLocalizationProvider } from "./AppLocalizationProvider";
 import { AppWebSocketProvider } from "./AppWebSocketProvider";
 import GameContextProvider from "./GameContextProvider";
 
