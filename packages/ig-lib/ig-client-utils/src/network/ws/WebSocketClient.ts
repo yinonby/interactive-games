@@ -17,7 +17,7 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
 {
   private socket?: WebSocket;
   private handlers = new Set<WebSocketMessageHandlerT<RCV_MSG_KIND, PAYLOAD_T>>();
-  private reconnectTimeout?: NodeJS.Timeout;
+  private reconnectTimeout?: ReturnType<typeof setTimeout>;
   private isAwaitingReconnect = false;
   private manuallyClosed = false;
 
