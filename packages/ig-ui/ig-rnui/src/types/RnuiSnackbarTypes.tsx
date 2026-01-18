@@ -3,9 +3,9 @@ export const RNUI_SNACKBAR_DEFAULT_DURATION_MS = 5000;
 
 export type RnuiSnackbarMessageRequestT = {
   message: string,
+  level?: "info" | "warn" | "err",
   durationMs?: number,
   withCloseButton?: boolean,
-  level?: "info" | "warn" | "err",
 }
 
 export type RnuiSnackbarMessageInfoT = RnuiSnackbarMessageRequestT & {

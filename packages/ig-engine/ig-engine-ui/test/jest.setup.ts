@@ -1,9 +1,40 @@
 
 import '@testing-library/jest-native/extend-expect';
-import React from "react";
+import React, { type ReactNode } from "react";
 
+beforeAll(() => {
+  jest.useFakeTimers();
+});
 
-jest.mock("../src/app/localization/AppLocalizationProvider");
+afterAll(() => {
+  jest.useRealTimers();
+});
+
+jest.mock("../src/app/localization/AppLocalizationProvider"); // uses __mocks__
+jest.mock("../src/app/error-handling/AppErrorHandlingProvider"); // uses __mocks__
+jest.mock('../src/app/providers/useClientLogger'); // uses __mocks__
+
+jest.mock("../src/app/error-handling/AppErrorHandlingProvider", () => {
+  const onErrorMock = jest.fn();
+
+  return {
+    __esModule: true,
+    AppErrorHandlingProvider: ({ children }: { children: ReactNode }) => children,
+    useAppErrorHandling: () => ({
+      onError: onErrorMock,
+    }),
+    // expose for tests
+    __errorHandlingMocks: {
+      onErrorMock,
+    },
+  };
+});
+
+declare module "../src/app/error-handling/AppErrorHandlingProvider" {
+  export const __errorHandlingMocks: {
+    onErrorMock: jest.Mock,
+  };
+}
 
 jest.mock("react-native/Libraries/Components/ScrollView/ScrollView", () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -115,6 +146,7 @@ jest.mock("@ig/rnui", () => {
     RnuiCopyToClipboard: View,
     RnuiQrCode: View,
     RnuiActivityIndicator: View,
+    useRnuiSnackbar: jest.fn(),
   };
 });
 
@@ -142,13 +174,3 @@ declare module "@ig/platform-ui" {
     navigateReplaceMock: jest.Mock,
   };
 }
-
-jest.mock('../src/app/providers/useClientLogger');
-
-beforeAll(() => {
-  jest.useFakeTimers();
-});
-
-afterAll(() => {
-  jest.useRealTimers();
-});

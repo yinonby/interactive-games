@@ -1,6 +1,7 @@
 
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { __errorHandlingMocks } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import * as UserConfigModel from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { GamesSummaryView } from './GamesSummaryView';
@@ -23,6 +24,7 @@ jest.mock('./GamesTableView', () => {
 // --------------------
 
 describe('GamesSummaryView', () => {
+  const { onErrorMock } = __errorHandlingMocks;
   const useUserConfigModelSpy = jest.spyOn(UserConfigModel, 'useUserConfigModel');
 
   afterEach(() => {
@@ -49,13 +51,11 @@ describe('GamesSummaryView', () => {
       appErrCode: "apiError:server",
     });
 
-    const { getByText } = render(
+    render(
       <GamesSummaryView />
     );
 
-    expect(
-      getByText("Error")
-    ).toBeTruthy();
+    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders empty state when there are no games', () => {

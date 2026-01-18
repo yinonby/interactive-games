@@ -1,4 +1,5 @@
 
+import type { AppErrorCodeT } from "./AppRtkTypes";
 import type { GamesTranslationKeyT } from "./GamesTranslationsTypes";
 
 export type CommonTranslationKeyT =
@@ -14,4 +15,4 @@ export type CommonTranslationKeyT =
   | "common:copyLink"
   | "common:share"
 
-export type AppTranslationKeyT = CommonTranslationKeyT | GamesTranslationKeyT;
+export type AppTranslationKeyT = CommonTranslationKeyT | GamesTranslationKeyT | AppErrorCodeT;

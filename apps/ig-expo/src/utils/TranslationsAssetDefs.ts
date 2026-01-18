@@ -1,7 +1,9 @@
 
 import type { GamesTranslationKeyT } from "@ig/engine-ui";
+import type { AppErrorCodeT } from "@ig/engine-ui/src/types/AppRtkTypes";
 import type { CommonTranslationKeyT } from "@ig/engine-ui/src/types/CommonTranslationTypes";
 import enCommonTranslationsJson from "../../assets/translations/en/common.json";
+import enErrosTranslationsJson from "../../assets/translations/en/errors.json";
 import enGamesTranslationsJson from "../../assets/translations/en/games.json";
 
 type ExpandKeyT<K extends string> =
@@ -19,10 +21,15 @@ type CommonTranslationShapeT =
 type GamesTranslationShapeT =
   UnionToIntersectionT<ExpandKeyT<GamesTranslationKeyT>>;
 
+type ErrorTranslationShapeT =
+  UnionToIntersectionT<ExpandKeyT<AppErrorCodeT>>;
+
 const enResource = {
+  apiError: enErrosTranslationsJson.apiError,
+  appError: enErrosTranslationsJson.appError,
   common: enCommonTranslationsJson,
   games: enGamesTranslationsJson,
-} satisfies CommonTranslationShapeT & GamesTranslationShapeT;
+} satisfies CommonTranslationShapeT & GamesTranslationShapeT & ErrorTranslationShapeT;
 
 export const getI18nResources = () => {
   return {

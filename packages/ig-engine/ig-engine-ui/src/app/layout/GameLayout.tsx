@@ -6,6 +6,7 @@ import { type MD3Theme } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import { AppErrorHandlingProvider } from "../error-handling/AppErrorHandlingProvider";
 import { AppLocalizationProvider } from "../localization/AppLocalizationProvider";
 import { createReduxStore } from "../model/reducers/AppReduxStore";
 import { AppWebSocketProvider } from "./AppWebSocketProvider";
@@ -27,19 +28,23 @@ export const GameLayout: React.FC<GameLayoutPropsT> = (props) => {
   return (
     <RnuiProvider theme={theme} rnuiStyles={rnuiStyles}>
       <AppLocalizationProvider>
-        <GameContextProvider
-          imagesSourceMap={imagesSourceMap}
-          gameUiConfig={gameUiConfig}
-          gameUiUrlPathsAdapter={gameUiUrlPathsAdapter}
-        >
-          <ReduxProvider store={reduxStore}>
-            <AppWebSocketProvider> {/* AppWebSocketProvider depends on GameContextProvider and ReduxProvider */}
-              <View style={styles.container} testID="game-layout-wrapper" >
-                {children}
-              </View>
-            </AppWebSocketProvider>
-          </ReduxProvider>
-        </GameContextProvider>
+        {/* AppErrorHandlingProvider depends on RnuiProvider::RnuiSnackbarProvider and AppLocalizationProvider */}
+        <AppErrorHandlingProvider>
+          <GameContextProvider
+            imagesSourceMap={imagesSourceMap}
+            gameUiConfig={gameUiConfig}
+            gameUiUrlPathsAdapter={gameUiUrlPathsAdapter}
+          >
+            <ReduxProvider store={reduxStore}>
+              {/* AppWebSocketProvider depends on GameContextProvider and ReduxProvider */}
+              <AppWebSocketProvider>
+                <View style={styles.container} testID="game-layout-wrapper" >
+                  {children}
+                </View>
+              </AppWebSocketProvider>
+            </ReduxProvider>
+          </GameContextProvider>
+        </AppErrorHandlingProvider>
       </AppLocalizationProvider>
     </RnuiProvider>
   );

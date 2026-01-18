@@ -4,8 +4,9 @@ import type {
   GameInstanceExposedInfoT, PlayerExposedInfoT, UserIdT
 } from "@ig/engine-models";
 import { RnuiActivityIndicator, RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
-import React, { useRef, useState, type FC } from 'react';
+import React, { useEffect, useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
+import { useAppErrorHandling } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import {
   useGameInstanceController
@@ -61,14 +62,23 @@ const getChatMessageWithPlayerNicknames = (
 export const ChatView: FC<ChatViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { onSendChatMessage } = useGameInstanceController();
-  const { isLoading, isError, data } = useUserConfigModel();
+  const { isLoading, isError, appErrCode, data } = useUserConfigModel();
+  const { onError } = useAppErrorHandling();
   const { t } = useAppLocalization();
   const [chatMessage, setChatMessage] = useState("");
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
 
+  useEffect(() => {
+    if (isError) {
+      onError(appErrCode);
+    }
+  }, [isError, onError, appErrCode]);
+
   if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
-  if (isError) return <RnuiText>Error</RnuiText>;
+  if (isError) {
+    return null;
+  }
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =
     getChatMessageWithPlayerNicknames(gameInstanceChatMessages, gameInstanceExposedInfo.otherPlayerExposedInfos,
