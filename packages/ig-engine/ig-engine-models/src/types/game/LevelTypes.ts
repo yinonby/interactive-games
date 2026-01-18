@@ -1,5 +1,5 @@
 
-import type { GeoLocationCoordsT } from "../lib/CommonTypes";
+import type { GeoLocationCoordsT } from "@ig/lib";
 
 // level
 

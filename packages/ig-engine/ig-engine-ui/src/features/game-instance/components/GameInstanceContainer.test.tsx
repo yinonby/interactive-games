@@ -2,6 +2,7 @@
 import type { GameInstanceExposedInfoT, GameInstanceIdT } from "@ig/engine-models";
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { __errorHandlingMocks } from "../../../app/error-handling/AppErrorHandlingProvider";
 import * as GameInstanceModel from "../../../domains/game-instance/model/rtk/GameInstanceModel";
 import { GameInstanceContainer } from "./GameInstanceContainer";
 
@@ -17,6 +18,7 @@ jest.mock('./GameInstanceView', () => {
 });
 
 describe('GameInstanceView', () => {
+  const { onErrorMock } = __errorHandlingMocks;
   const useGameInstanceModelSpy = jest.spyOn(GameInstanceModel, 'useGameInstanceModel');
   const gameInstanceId1: GameInstanceIdT = "gid-1";
 
@@ -37,15 +39,14 @@ describe('GameInstanceView', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
     });
 
-    const { getByText } = render(
+    render(
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(
-      getByText("Error")
-    ).toBeTruthy();
+    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders empty state when there are no games', () => {

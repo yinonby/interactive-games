@@ -1,6 +1,5 @@
 
 import type { AppDispatch } from "../../../../app/model/reducers/AppReduxStore";
-import type { GameInstanceUpdateWebSocketMsgKindT } from "../../../../types/ApiRequestTypes";
 import { handleGameInstanceWebSocketMessage } from "./GameInstanceWebSocketController";
 
 // 🔹 mock the RTK API util
@@ -11,6 +10,7 @@ jest.mock("../../model/rtk/GameInstanceRtkApi", () => ({
 }));
 
 // 🔹 import mocked util AFTER jest.mock
+import type { GameInstanceUpdateWebSocketMsgKindT } from "@ig/engine-models";
 import { gameInstanceRtkApiUtil } from "../../model/rtk/GameInstanceRtkApi";
 
 describe("handleGameInstanceWebSocketMessage", () => {

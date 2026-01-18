@@ -1,18 +1,29 @@
 
 import { RnuiActivityIndicator, RnuiCard, RnuiText } from "@ig/rnui";
-import React, { type FC } from 'react';
+import React, { useEffect, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useAppErrorHandling } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { GamesTableView } from "./GamesTableView";
+
 export type GamesSummaryViewPropsT = object;
 
 export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
-  const { isLoading, isError, data: userConfigModel } = useUserConfigModel();
+  const { isLoading, isError, appErrCode, data: userConfigModel } = useUserConfigModel();
   const { t } = useAppLocalization();
+  const { onError } = useAppErrorHandling();
+
+  useEffect(() => {
+    if (isError) {
+      onError(appErrCode);
+    }
+  }, [isError, onError, appErrCode]);
 
   if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
-  if (isError) return <RnuiText>Error</RnuiText>;
+  if (isError) {
+    return null;
+  }
 
   const minimalGameInstanceExposedInfos = userConfigModel.minimalGameInstanceExposedInfos;
 

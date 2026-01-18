@@ -2,6 +2,7 @@
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, PlayerExposedInfoT } from "@ig/engine-models";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
+import { __errorHandlingMocks } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import {
   useGameInstanceController
@@ -22,6 +23,7 @@ const mockedUseUserConfigModel = useUserConfigModel as unknown as jest.Mock;
 const mockedUseGameInstanceController = useGameInstanceController as unknown as jest.Mock;
 
 describe("ChatView", () => {
+  const { onErrorMock } = __errorHandlingMocks;
   const onSendChatMessage = jest.fn().mockResolvedValue(undefined);
   mockedUseGameInstanceController.mockReturnValue({ onSendChatMessage });
 
@@ -49,6 +51,7 @@ describe("ChatView", () => {
     mockedUseUserConfigModel.mockReturnValue({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
       data: undefined,
     });
 
@@ -57,8 +60,9 @@ describe("ChatView", () => {
       gameInstanceChatMessages: [],
     };
 
-    const { getByText } = render(<ChatView {...props} />);
-    expect(getByText("Error")).toBeTruthy();
+    render(<ChatView {...props} />);
+
+    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it("displays chat messages with nicknames, excludes unknown players, and sends new message", async () => {

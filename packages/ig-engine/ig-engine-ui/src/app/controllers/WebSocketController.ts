@@ -1,4 +1,9 @@
 
+import type {
+  AppWebSocketMessagePayloadT,
+  AppWebSocketRcvMsgKindT,
+  GameInstanceWebSocketMessagePayloadT
+} from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import {
   handleGameInstanceWebSocketMessage
@@ -6,10 +11,6 @@ import {
 import {
   handleUserConfigWebSocketMessage
 } from "../../domains/user-config/controller/ws-actions/UserConfigWebSocketController";
-import type {
-  AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT,
-  GameInstanceWebSocketMessagePayloadT
-} from "../../types/ApiRequestTypes";
 import type { AppDispatch } from "../model/reducers/AppReduxStore";
 
 export const handleWebSocketMessage = (

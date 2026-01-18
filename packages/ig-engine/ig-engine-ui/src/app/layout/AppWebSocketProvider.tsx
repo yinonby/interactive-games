@@ -1,7 +1,7 @@
 
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import { type ReactNode } from 'react';
 import { useDispatch } from "react-redux";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "../../types/ApiRequestTypes";
 import { handleWebSocketMessage } from "../controllers/WebSocketController";
 import type { AppDispatch } from "../model/reducers/AppReduxStore";
 import { useClientLogger } from "../providers/useClientLogger";

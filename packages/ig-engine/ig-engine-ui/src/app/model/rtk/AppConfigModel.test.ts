@@ -28,12 +28,14 @@ describe("useAppConfigModel", () => {
     mockedUseGetAppConfigQuery.mockReturnValue({
       isLoading: false,
       isError: true,
+      error: { appErrCode: "apiError:server" },
       data: undefined,
     });
 
     expect(useAppConfigModel()).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
     });
   });
 
@@ -47,6 +49,7 @@ describe("useAppConfigModel", () => {
     expect(useAppConfigModel()).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "appError:invalidResponse",
     });
   });
 

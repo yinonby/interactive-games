@@ -1,37 +1,24 @@
-
 import type {
   ChatMsgIdT,
   GameConfigIdT,
   GameInstanceChatMessageT,
-  GameInstanceExposedInfoT, GameInstanceIdT, MinimalGameConfigT, MinimalGameInstanceExposedInfoT,
-  UserIdT
-} from "@ig/engine-models";
+  GameInstanceExposedInfoT,
+  GameInstanceIdT, MinimalGameConfigT
+} from "../game/GameTypes";
+import type { UserIdT } from "../game/UserTypes";
+import type { UserConfigT } from "../user/UserTypes";
 
-export type DataSrcVersionT = string;
-
-export type UserConfigT = {
-  userId: UserIdT,
-  username: string,
-  minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[],
-}
-
-export type UserConfigeWbSocketMsgKindT = "user-config-update";
-export type GameInstanceUpdateWebSocketMsgKindT = "game-instance-update";
-export type AppWebSocketRcvMsgKindT = UserConfigeWbSocketMsgKindT | GameInstanceUpdateWebSocketMsgKindT;
-
-export type GameInstanceWebSocketMessagePayloadT = { gameInstanceId: GameInstanceIdT };
-export type AppWebSocketMessagePayloadT = GameInstanceWebSocketMessagePayloadT;
-
-// api responses
-
+// get/app-config
 export type GetAppConfigResponseT = {
   availableMinimalGameConfigs: MinimalGameConfigT[],
 }
 
+// get/user-config
 export type GetUserConfigResponseT = {
   userConfig: UserConfigT
 }
 
+// post/play-game
 export type PostPlayGameRequestBodyT = {
   gameConfigId: GameConfigIdT,
 }
@@ -40,6 +27,7 @@ export type PostPlayGameResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
+// post/accept-invite
 export type PostAcceptInviteRequestBodyT = {
   invitationCode: string,
 }
@@ -48,6 +36,7 @@ export type PostAcceptInviteResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
+// get/game-instance
 export type GetGameInstanceRequestT = {
   gameInstanceId: GameInstanceIdT,
 }
@@ -56,6 +45,7 @@ export type GetGameInstanceResponseT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
 }
 
+// get/game-instance/<id>/chat
 export type GetGameInstanceChatResponseT = {
   chatMessages: GameInstanceChatMessageT[],
 }
@@ -66,7 +56,7 @@ export type PostGameInstanceChatMessageParamT = {
   chatMessage: string,
 }
 
+// post/game-instance<id>/msg
 export type PostGameInstanceChatMessageResponseT = {
   chatMsgId: ChatMsgIdT,
 }
-

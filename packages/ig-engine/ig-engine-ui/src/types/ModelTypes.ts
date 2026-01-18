@@ -1,15 +1,7 @@
 
-export type ModelWithoutDataT = {
-  isLoading: true | false;
-  isError: true | false;
-  data?: never;
-} & (
-  | { isLoading: true; isError: boolean }
-  | { isLoading: boolean; isError: true }
-);
+import type { AppErrorCodeT } from "./AppRtkTypes";
 
-export type ModelWithDataT<T> = {
-  isLoading: false;
-  isError: false;
-  data: T;
-};
+export type ModelT<T> =
+  | { isLoading: true; isError: false; appErrCode?: undefined; data?: undefined }
+  | { isLoading: false; isError: true; appErrCode: AppErrorCodeT; data?: undefined }
+  | { isLoading: false; isError: false; appErrCode?: undefined; data: T;  };

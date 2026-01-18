@@ -1,46 +1,50 @@
 
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, GameInstanceIdT } from "@ig/engine-models";
+import { extractAppErrorCodeFromAppRtkError } from "../../../../app/model/rtk/AppRtkUtils";
+import type { ModelT } from "../../../../types/ModelTypes";
 import { useGetGameInstanceChatQuery, useGetGameInstanceQuery } from "./GameInstanceRtkApi";
 
-type ModelWithoutDataT = {
-  isLoading: true | false;
-  isError: true | false;
-  data?: never;
-} & (
-  | { isLoading: true; isError: boolean }
-  | { isLoading: boolean; isError: true }
-);
-
-type ModelWithDataT<T> = {
-  isLoading: false;
-  isError: false;
-  data: T;
-};
-
-export type GameInstanceModelT = ModelWithoutDataT | ModelWithDataT<{
+export type GameInstanceModelT = ModelT<{
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
   gameInstanceChatMessages: GameInstanceChatMessageT[],
 }>;
 
 export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInstanceModelT => {
-  const { data: gameInstanceResponse, isLoading, isError } = useGetGameInstanceQuery(gameInstanceId);
-  const { data: gameInstanceChatResponse, isLoading: isChatLoading, isError: isChatError } =
-    useGetGameInstanceChatQuery(gameInstanceId);
+  const {
+    isLoading: isGameInstanceLoading,
+    isError: isGameInstanceError,
+    error: gameInstanceError,
+    data: gameInstanceResponse
+  } = useGetGameInstanceQuery(gameInstanceId);
+  const {
+    isLoading: isChatLoading,
+    isError: isChatError,
+    error: chatError,
+    data: gameInstanceChatResponse
+  } = useGetGameInstanceChatQuery(gameInstanceId);
 
-  if (isLoading || isChatLoading) {
+  if (isGameInstanceLoading || isChatLoading) {
     return {
       isLoading: true,
       isError: false,
     }
-  } else if (isError || isChatError) {
+  } else if (isGameInstanceError) {
     return {
       isLoading: false,
       isError: true,
+      appErrCode: extractAppErrorCodeFromAppRtkError(gameInstanceError),
+    }
+  } else if (isChatError) {
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: extractAppErrorCodeFromAppRtkError(chatError),
     }
   } else if (gameInstanceResponse === undefined || gameInstanceChatResponse === undefined) {
     return {
       isLoading: false,
       isError: true,
+      appErrCode: "appError:invalidResponse",
     }
   }
 

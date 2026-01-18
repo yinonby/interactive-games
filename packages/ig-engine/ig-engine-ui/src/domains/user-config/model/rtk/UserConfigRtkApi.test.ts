@@ -1,11 +1,13 @@
 
-import type { MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
+import type {
+  GetUserConfigResponseT, MinimalGameInstanceExposedInfoT,
+  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
+} from "@ig/engine-models";
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { gameUiConfigReducer, gameUiConfigReducerPath } from "../../../../app/model/reducers/GameUiConfigReducer";
 import { appRtkApiReducerPath } from "../../../../app/model/rtk/AppRtkApi";
-import type { GetUserConfigResponseT, PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT } from "../../../../types/ApiRequestTypes";
 import type { GameUiConfigT } from "../../../../types/GameUiConfigTypes";
 import { userConfigRtkApiEndpoints, userConfigRtkApiMiddleware, userConfigRtkApiReducer } from "./UserConfigRtkApi";
 

@@ -2,19 +2,15 @@
 import type { HttpAdapter, HttpMethod } from "@ig/client-utils";
 import type {
   GameConfigIdT, GameInstanceChatMessageT,
-  GameInstanceExposedInfoT, GameInstanceIdT, MinimalGameConfigT
-} from "@ig/engine-models";
-import type { LoggerAdapter } from "@ig/lib";
-import { useClientLogger } from "../../src/app/providers/useClientLogger";
-import type {
-  GetAppConfigResponseT,
-  GetGameInstanceChatResponseT,
-  GetGameInstanceResponseT,
-  GetUserConfigResponseT,
+  GameInstanceExposedInfoT, GameInstanceIdT,
+  GetAppConfigResponseT, GetGameInstanceChatResponseT,
+  GetGameInstanceResponseT, GetUserConfigResponseT, MinimalGameConfigT,
   PostGameInstanceChatMessageParamT,
   PostGameInstanceChatMessageResponseT,
   UserConfigT
-} from "../../src/types/ApiRequestTypes";
+} from "@ig/engine-models";
+import type { LoggerAdapter } from "@ig/lib";
+import { useClientLogger } from "../../src/app/providers/useClientLogger";
 import {
   devAvailableMinimalGameConfigs, devChatMessages,
   devExternalGameInstanceExposedInfos, devGameInstanceExposedInfos

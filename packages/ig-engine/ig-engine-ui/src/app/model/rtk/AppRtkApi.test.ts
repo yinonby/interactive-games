@@ -1,8 +1,8 @@
 
+import type { GetAppConfigResponseT } from "@ig/engine-models";
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { GetAppConfigResponseT } from "../../../types/ApiRequestTypes";
 import type { GameUiConfigT } from "../../../types/GameUiConfigTypes";
 import { gameUiConfigReducer, gameUiConfigReducerPath } from "../../model/reducers/GameUiConfigReducer";
 import { appRtkApiReducer, appRtkApiReducerPath } from "../../model/rtk/AppRtkApi";

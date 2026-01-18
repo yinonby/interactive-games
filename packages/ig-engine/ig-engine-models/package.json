@@ -17,8 +17,10 @@
     "test:verbose": "cross-env NODE_ENV=testing LOG_LEVEL=VERBOSE vitest",
     "cover:unit": "npm run test:unit -- run --coverage"
   },
+  "dependencies": {
+    "@ig/lib": "*"
+  },
   "devDependencies": {
-    "@ig/lib": "*",
     "@ig/lint": "*",
     "@ig/vitest": "*",
     "@types/node": "^25.0.3",

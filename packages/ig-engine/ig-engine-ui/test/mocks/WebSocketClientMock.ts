@@ -1,7 +1,7 @@
 
 import type { WebSocketAdapter, WebSocketMessageHandlerT } from "@ig/client-utils";
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "../../src/types/ApiRequestTypes";
 
 export class WebSocketClientMock
   implements WebSocketAdapter<AppWebSocketRcvMsgKindT, never, AppWebSocketMessagePayloadT>

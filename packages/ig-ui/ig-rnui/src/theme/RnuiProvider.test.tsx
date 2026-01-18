@@ -2,7 +2,7 @@
 import { render } from '@testing-library/react-native';
 import type { FC } from "react";
 import { Text } from "react-native";
-import { RnuiProvider, useRnuiContext, type RnuiContextT, type RnuiProviderPropsT, type RnuiStylesT } from "./RnuiProvider";
+import { RnuiProvider, useRnuiContext, type RnuiContextT, type RnuiStylesT } from "./RnuiProvider";
 
 // Mock react-native-paper Button
 jest.mock('react-native-paper', () => {
@@ -10,14 +10,14 @@ jest.mock('react-native-paper', () => {
   const { View } = require('react-native');
 
   // Outer dumb component holds all props
-  const RnpThemeProviderMock: FC<RnuiProviderPropsT> = ({ children, ...props }) => {
+  const RnpThemeProviderMock: FC<{children: React.ReactNode }> = ({ children, ...props }) => {
     return (
       <View {...props} testID="theme-provider-test-id" >{children}</View>
     );
   };
 
   return {
-    ThemeProvider: (props: RnuiProviderPropsT) => <RnpThemeProviderMock {...props} />,
+    ThemeProvider: (props: { children: React.ReactNode }) => <RnpThemeProviderMock {...props} />,
   };
 });
 
