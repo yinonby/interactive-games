@@ -1,9 +1,9 @@
 
-import type { GameInstanceIdT } from "@ig/engine-models";
-import { appRtkApi } from "../../../../app/model/rtk/AppRtkApi";
 import type {
-  GetGameInstanceChatResponseT, GetGameInstanceResponseT, PostGameInstanceChatMessageParamT, PostGameInstanceChatMessageResponseT
-} from "../../../../types/ApiRequestTypes";
+  GameInstanceIdT, GetGameInstanceChatResponseT,
+  GetGameInstanceResponseT, PostGameInstanceChatMessageParamT, PostGameInstanceChatMessageResponseT
+} from "@ig/engine-models";
+import { appRtkApi } from "../../../../app/model/rtk/AppRtkApi";
 
 const gameInstanceRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({

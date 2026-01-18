@@ -46,6 +46,7 @@ describe('GamesSummaryView', () => {
     useUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
     });
 
     const { getByText } = render(

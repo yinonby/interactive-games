@@ -1,7 +1,9 @@
 
-import type { GameInstanceExposedInfoT } from "@ig/engine-models";
+import type {
+  GameInstanceExposedInfoT, GetGameInstanceChatResponseT,
+  GetGameInstanceResponseT
+} from "@ig/engine-models";
 import { renderHook } from '@testing-library/react-native';
-import type { GetGameInstanceChatResponseT, GetGameInstanceResponseT } from "../../../../types/ApiRequestTypes";
 import { useGameInstanceModel } from './GameInstanceModel';
 import type { UseGetGameInstanceChatQueryResultT, UseGetGameInstanceQueryResultT } from "./GameInstanceRtkApi";
 import * as GameInstanceRtkApi from './GameInstanceRtkApi';
@@ -68,6 +70,7 @@ describe('GameInstanceModel', () => {
     useGetGameInstanceQuerySpy.mockReturnValue({
       isLoading: false,
       isError: true,
+      error: { appErrCode: "apiError:server" },
       refetch: jest.fn(),
     } as UseGetGameInstanceQueryResultT);
     useGetGameInstanceChatQuerySpy.mockReturnValue({
@@ -82,6 +85,7 @@ describe('GameInstanceModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
       data: undefined,
     });
   });
@@ -98,6 +102,7 @@ describe('GameInstanceModel', () => {
     useGetGameInstanceChatQuerySpy.mockReturnValue({
       isLoading: false,
       isError: true,
+      error: { appErrCode: "apiError:server" },
       data: undefined,
       refetch: jest.fn(),
     } as UseGetGameInstanceChatQueryResultT);
@@ -107,6 +112,7 @@ describe('GameInstanceModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
       data: undefined,
     });
   });
@@ -133,6 +139,7 @@ describe('GameInstanceModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "appError:invalidResponse",
     });
   });
 
@@ -158,6 +165,7 @@ describe('GameInstanceModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "appError:invalidResponse",
     });
   });
 

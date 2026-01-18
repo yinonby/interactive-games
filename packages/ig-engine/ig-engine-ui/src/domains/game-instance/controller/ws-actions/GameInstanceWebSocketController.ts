@@ -1,6 +1,6 @@
 
+import type { GameInstanceUpdateWebSocketMsgKindT, GameInstanceWebSocketMessagePayloadT } from "@ig/engine-models";
 import type { AppDispatch } from "../../../../app/model/reducers/AppReduxStore";
-import type { GameInstanceUpdateWebSocketMsgKindT, GameInstanceWebSocketMessagePayloadT } from "../../../../types/ApiRequestTypes";
 import { gameInstanceRtkApiUtil } from "../../model/rtk/GameInstanceRtkApi";
 
 export const handleGameInstanceWebSocketMessage = (

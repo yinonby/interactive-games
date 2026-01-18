@@ -1,7 +1,7 @@
 
-// solution
+import type { GeoLocationCoordsT } from "@ig/lib";
 
-import type { GeoLocationCoordsT } from "@ig/engine-models";
+// solution
 
 export type SolutionConfigT = TextualSolutionConfigT
   | NumericSolutionConfigT

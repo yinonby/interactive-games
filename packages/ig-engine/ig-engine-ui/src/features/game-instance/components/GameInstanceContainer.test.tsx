@@ -37,6 +37,7 @@ describe('GameInstanceView', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
     });
 
     const { getByText } = render(

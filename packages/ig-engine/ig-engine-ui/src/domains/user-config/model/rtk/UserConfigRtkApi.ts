@@ -1,10 +1,9 @@
 
-import type { GameConfigIdT } from "@ig/engine-models";
-import { appRtkApi } from "../../../../app/model/rtk/AppRtkApi";
 import type {
-  GetUserConfigResponseT,
+  GameConfigIdT, GetUserConfigResponseT,
   PostAcceptInviteResponseT, PostPlayGameResponseT
-} from "../../../../types/ApiRequestTypes";
+} from "@ig/engine-models";
+import { appRtkApi } from "../../../../app/model/rtk/AppRtkApi";
 
 const userConfigRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({

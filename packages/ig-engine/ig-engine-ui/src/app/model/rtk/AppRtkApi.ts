@@ -1,6 +1,6 @@
 
+import type { GetAppConfigResponseT } from "@ig/engine-models";
 import { createApi } from '@reduxjs/toolkit/query/react';
-import type { GetAppConfigResponseT } from "../../../types/ApiRequestTypes";
 import { useHttpProvider } from '../../providers/useHttpProvider';
 import { httpProviderBaseQuery } from './HttpProviderRtkBaseQuery';
 

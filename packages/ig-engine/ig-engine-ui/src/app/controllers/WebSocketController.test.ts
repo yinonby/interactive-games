@@ -1,6 +1,5 @@
 
 import type { LoggerAdapter } from "@ig/lib";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "../../types/ApiRequestTypes";
 import type { AppDispatch } from "../model/reducers/AppReduxStore";
 import { useClientLogger } from "../providers/useClientLogger";
 import { handleWebSocketMessage } from "./WebSocketController";
@@ -25,6 +24,7 @@ import {
   handleUserConfigWebSocketMessage,
 } from "../../domains/user-config/controller/ws-actions/UserConfigWebSocketController";
 
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import {
   handleGameInstanceWebSocketMessage,
 } from "../../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController";

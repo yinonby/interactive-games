@@ -1,6 +1,5 @@
 
 import type { AppDispatch } from "../../../../app/model/reducers/AppReduxStore";
-import type { UserConfigeWbSocketMsgKindT } from "../../../../types/ApiRequestTypes";
 import { handleUserConfigWebSocketMessage } from "./UserConfigWebSocketController";
 
 // 🔹 mock the RTK API util
@@ -11,6 +10,7 @@ jest.mock("../../model/rtk/UserConfigRtkApi", () => ({
 }));
 
 // 🔹 import mocked util AFTER jest.mock
+import type { UserConfigeWebSocketMsgKindT } from "@ig/engine-models";
 import { userConfigRtkApiUtil } from "../../model/rtk/UserConfigRtkApi";
 
 describe("handleUserConfigWebSocketMessage", () => {
@@ -46,7 +46,7 @@ describe("handleUserConfigWebSocketMessage", () => {
   it("throws on invalid message kind", () => {
     expect(() =>
       handleUserConfigWebSocketMessage(
-        "invalid-message" as UserConfigeWbSocketMsgKindT,
+        "invalid-message" as UserConfigeWebSocketMsgKindT,
         dispatch
       )
     ).toThrow("Invalid message type");

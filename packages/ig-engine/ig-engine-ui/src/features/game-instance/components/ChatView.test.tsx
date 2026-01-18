@@ -49,6 +49,7 @@ describe("ChatView", () => {
     mockedUseUserConfigModel.mockReturnValue({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
       data: undefined,
     });
 

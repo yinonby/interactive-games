@@ -1,10 +1,10 @@
 
+import type { UserConfigeWebSocketMsgKindT } from "@ig/engine-models";
 import type { AppDispatch } from "../../../../app/model/reducers/AppReduxStore";
-import type { UserConfigeWbSocketMsgKindT } from "../../../../types/ApiRequestTypes";
 import { userConfigRtkApiUtil } from "../../model/rtk/UserConfigRtkApi";
 
 export const handleUserConfigWebSocketMessage = (
-  msgKind: UserConfigeWbSocketMsgKindT,
+  msgKind: UserConfigeWebSocketMsgKindT,
   dispatch: AppDispatch,
 ): void => {
   if (msgKind === 'user-config-update') {

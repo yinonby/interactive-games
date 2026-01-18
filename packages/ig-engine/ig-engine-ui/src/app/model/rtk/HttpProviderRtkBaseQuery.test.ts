@@ -100,8 +100,8 @@ describe('httpProviderBaseQuery', () => {
     expect(result).toEqual({
       error: {
         status: 401,
-        code: 'UNAUTHORIZED',
-        message: 'Not authorized',
+        appErrCode: 'appError:unknown',
+        errMsg: 'Not authorized',
       },
     });
   });
@@ -138,8 +138,8 @@ describe('httpProviderBaseQuery', () => {
     expect(result).toEqual({
       error: {
         status: 500,
-        code: undefined,
-        message: 'Boom',
+        appErrCode: "appError:unknown",
+        errMsg: 'Boom',
       },
     });
   });
@@ -169,8 +169,8 @@ describe('httpProviderBaseQuery', () => {
     expect(result).toEqual({
       error: {
         status: 500,
-        code: undefined,
-        message: 'Unexpected missing gameUiConfig in state',
+        appErrCode: "appError:unknown",
+        errMsg: 'Unexpected missing gameUiConfig in state',
       },
     });
   });

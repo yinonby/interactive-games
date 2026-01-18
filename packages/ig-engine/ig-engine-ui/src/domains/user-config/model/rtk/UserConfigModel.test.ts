@@ -1,5 +1,5 @@
 
-import type { UserConfigT } from "@/types/ApiRequestTypes";
+import type { UserConfigT } from "@ig/engine-models";
 import { renderHook } from '@testing-library/react-native';
 import { useUserConfigModel } from './UserConfigModel';
 import { useGetUserConfigQuery, type UseGetUserConfigQueryResultT } from './UserConfigRtkApi';
@@ -31,6 +31,7 @@ describe('UserConfigModel', () => {
     mockedUseGetUserConfigQuery.mockReturnValue({
       isLoading: false,
       isError: true,
+      error: { appErrCode: "apiError:server" },
       refetch: jest.fn(),
     } as UseGetUserConfigQueryResultT);
 
@@ -39,6 +40,7 @@ describe('UserConfigModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "apiError:server",
       data: undefined,
     });
   });
@@ -56,6 +58,7 @@ describe('UserConfigModel', () => {
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
+      appErrCode: "appError:invalidResponse",
     });
   });
 
