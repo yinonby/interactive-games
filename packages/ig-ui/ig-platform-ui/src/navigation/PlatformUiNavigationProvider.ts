@@ -9,7 +9,10 @@ export type PlatformUiNavigationT = {
 export const usePlatformUiNavigation = (): PlatformUiNavigationT => {
   const router = useRouter();
   return {
-    navigate: (url: string) => router.navigate(url),
-    navigateReplace: (url: string) => router.replace(url)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    navigate: (url: string) => router.navigate(url as any),
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    navigateReplace: (url: string) => router.replace(url as any)
   };
 }
