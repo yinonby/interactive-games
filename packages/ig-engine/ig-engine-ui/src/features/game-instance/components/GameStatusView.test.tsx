@@ -1,6 +1,7 @@
 
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { GameStatusView } from './GameStatusView';
 
 describe('GameStatusView', () => {
@@ -9,7 +10,7 @@ describe('GameStatusView', () => {
       <GameStatusView gameStatus="not-started" />
     );
 
-    expect(getByText('Game not started')).toBeTruthy();
+    getByText(buildMockedTranslation("games:gameNotStarted"));
     expect(queryByTestId('blinker')).toBeNull();
 
     const circle = getByTestId('status-circle');
@@ -25,7 +26,7 @@ describe('GameStatusView', () => {
       <GameStatusView gameStatus="in-process" />
     );
 
-    expect(getByText('Game in process')).toBeTruthy();
+    getByText(buildMockedTranslation("games:gameInProcess"));
     expect(getByTestId('blinker')).toBeTruthy();
     expect(queryByTestId('status-circle')).toBeNull();
   });
@@ -35,7 +36,7 @@ describe('GameStatusView', () => {
       <GameStatusView gameStatus="ended" />
     );
 
-    expect(getByText('Game ended')).toBeTruthy();
+    getByText(buildMockedTranslation("games:gameEnded"));
     expect(queryByTestId('blinker')).toBeNull();
 
     const circle = getByTestId('status-circle');

@@ -5,6 +5,7 @@ import { RnuiButton, RnuiCard, RnuiText, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import { useUserConfigController } from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import { getMinimalGameConfigImageProps } from "../../../utils/GameViewUtils";
 import { PriceView } from "./PriceView";
@@ -17,6 +18,7 @@ export type MinimalGameCardViewPropsT = {
 export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGameConfig }) => {
   const { imagesSourceMap } = useGameContext();
   const { gameUiUrlPathsAdapter } = useGameContext();
+  const { t } = useAppLocalization();
   const { onPlayGame } = useUserConfigController();
   const { navigate } = usePlatformUiNavigation();
   const rnuiImageProps: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(minimalGameConfig, imagesSourceMap);
@@ -42,26 +44,28 @@ export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGame
 
       <View style={styles.spacingBottom} >
         <RnuiText >
-          Duration: {minimalGameConfig.maxDurationMinutes} min.
+          {t("common:duration") + ": " + t("common:minutes", { minutes: minimalGameConfig.maxDurationMinutes })}
         </RnuiText>
       </View>
 
       <View style={styles.spacingBottom} >
         <RnuiText >
-          Max participants: {minimalGameConfig.maxParticipants}
+          {t("games:maxParticipants") + ": " + minimalGameConfig.maxParticipants}
         </RnuiText>
       </View>
 
       <View style={styles.spacingBottom} >
         <View style={{ flexDirection: "row"}}>
-          <RnuiText >Price: </RnuiText>
+          <RnuiText >{t("common:price") + ": "}</RnuiText>
           <PriceView testID="price-view-tid" price={minimalGameConfig.gamePrice}/>
         </View>
       </View>
 
       <View style={styles.spacingBottom} >
         <View style={{ flexDirection: "row" }}>
-          <RnuiButton testID="play-game-btn-tid" size="xs" mode="outlined" onPress={handlePlayGamePress}>Play</RnuiButton>
+          <RnuiButton testID="play-game-btn-tid" size="xs" mode="outlined" onPress={handlePlayGamePress}>
+            <RnuiText>{t("games:play")}</RnuiText>
+          </RnuiButton>
         </View>
       </View>
     </RnuiCard>

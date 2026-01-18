@@ -2,6 +2,9 @@
 import '@testing-library/jest-native/extend-expect';
 import React from "react";
 
+
+jest.mock("../src/app/localization/AppLocalizationProvider");
+
 jest.mock("react-native/Libraries/Components/ScrollView/ScrollView", () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { View } = require("react-native");

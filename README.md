@@ -34,6 +34,9 @@ The repository is organized as follows:
 - Real-Time Updates
   - **WebSockets**: Notify clients in real-time when relevant data updates occur, enabling live updates in apps and web clients.
 
+- Localization / Internationalization
+  - **i18next**: A framework that adapts the UI to different languages, regions, and cultural conventions.
+
 - Testing
   - **Vitest**: A modern test environment with advanced TypeScript features, also supporting coverage (via **istanbul**).
   - **Jest** and **React Testing Library**: Widely used pair for React Native testing and coverage (via **istanbul**).

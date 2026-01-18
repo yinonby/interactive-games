@@ -5,6 +5,7 @@ import type { PlatformUiLinkPropsT } from "../types/PlatformUiLinkTypes";
 
 export const PlatformUiExpoLink: FC<PlatformUiLinkPropsT> = ({ href, push, asChild, children }) => {
   return (
-    <ExpoLink href={href} push={push} asChild={asChild} >{children}</ExpoLink>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <ExpoLink href={href as any} push={push} asChild={asChild} >{children}</ExpoLink>
   );
 };

@@ -6,6 +6,7 @@ import { type MD3Theme } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import { AppLocalizationProvider } from "../localization/AppLocalizationProvider";
 import { createReduxStore } from "../model/reducers/AppReduxStore";
 import { AppWebSocketProvider } from "./AppWebSocketProvider";
 import GameContextProvider from "./GameContextProvider";
@@ -24,21 +25,23 @@ export const GameLayout: React.FC<GameLayoutPropsT> = (props) => {
   const reduxStore = createReduxStore(gameUiConfig);
 
   return (
-    <GameContextProvider
-      imagesSourceMap={imagesSourceMap}
-      gameUiConfig={gameUiConfig}
-      gameUiUrlPathsAdapter={gameUiUrlPathsAdapter}
-    >
-      <RnuiProvider theme={theme} rnuiStyles={rnuiStyles}>
-        <ReduxProvider store={reduxStore}>
-          <AppWebSocketProvider> {/* AppWebSocketProvider depends on GameContextProvider and ReduxProvider */}
-            <View style={styles.container} testID="game-layout-wrapper" >
-              {children}
-            </View>
-          </AppWebSocketProvider>
-        </ReduxProvider>
-      </RnuiProvider>
-    </GameContextProvider>
+    <RnuiProvider theme={theme} rnuiStyles={rnuiStyles}>
+      <AppLocalizationProvider>
+        <GameContextProvider
+          imagesSourceMap={imagesSourceMap}
+          gameUiConfig={gameUiConfig}
+          gameUiUrlPathsAdapter={gameUiUrlPathsAdapter}
+        >
+          <ReduxProvider store={reduxStore}>
+            <AppWebSocketProvider> {/* AppWebSocketProvider depends on GameContextProvider and ReduxProvider */}
+              <View style={styles.container} testID="game-layout-wrapper" >
+                {children}
+              </View>
+            </AppWebSocketProvider>
+          </ReduxProvider>
+        </GameContextProvider>
+      </AppLocalizationProvider>
+    </RnuiProvider>
   );
 };
 

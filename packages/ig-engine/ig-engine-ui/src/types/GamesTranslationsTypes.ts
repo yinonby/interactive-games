@@ -1,0 +1,20 @@
+
+export type GamesTranslationKeyT =
+  | "games:noGamesAbailable"
+  | "games:invitationCode"
+  | "games:joinGame"
+  | "games:abailableGames"
+  | "games:userNoGamesAbailable"
+  | "games:yourGames"
+  | "games:gameName"
+  | "games:maxParticipants"
+  | "games:play"
+  | "games:suspend"
+  | "games:activate"
+  | "games:uninvite"
+  | "games:noPlayers"
+  | "games:players"
+  | "games:gameEnded"
+  | "games:gameNotStarted"
+  | "games:gameInProcess"
+;

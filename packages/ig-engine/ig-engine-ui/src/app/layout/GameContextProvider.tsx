@@ -1,6 +1,8 @@
 
-import type { RnuiImageSourceT } from "@ig/rnui";
-import React, { createContext, ReactElement, useContext } from 'react';
+import {
+  type RnuiImageSourceT
+} from "@ig/rnui";
+import React, { createContext, useContext, type PropsWithChildren } from 'react';
 import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
 
@@ -14,16 +16,21 @@ type GameContextProviderPropsT = {
   imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
   gameUiConfig: GameUiConfigT,
   gameUiUrlPathsAdapter: GameUiUrlPathsAdapter,
-  children: ReactElement | ReactElement[],
 };
 
 const GameContext = createContext<GameContextT | undefined>(undefined);
 
-const GameContextProvider: React.FC<GameContextProviderPropsT> = ({
-  imagesSourceMap, gameUiConfig, gameUiUrlPathsAdapter, children }
-) => {
+const GameContextProvider: React.FC<PropsWithChildren<GameContextProviderPropsT>> = (props) => {
+  const { imagesSourceMap, gameUiConfig, gameUiUrlPathsAdapter, children } = props;
+
+  const value: GameContextT = {
+    imagesSourceMap,
+    gameUiConfig,
+    gameUiUrlPathsAdapter,
+  }
+
   return (
-    <GameContext.Provider value={{ imagesSourceMap, gameUiConfig, gameUiUrlPathsAdapter }}>
+    <GameContext.Provider value={value}>
       {children}
     </GameContext.Provider>
   );

@@ -1,6 +1,7 @@
 
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
+import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import { useUserConfigController } from '../../../domains/user-config/controller/user-actions/UserConfigController';
 import { AddGameView } from './AddGameView';
 
@@ -32,13 +33,13 @@ describe('AddGameView', () => {
     });
   });
 
-
   it('renders input and button', () => {
-    const { getByTestId } = render(<AddGameView />);
+    const { getByTestId, getByText } = render(<AddGameView />);
 
-    expect(getByTestId('add-game-view')).toBeTruthy();
-    expect(getByTestId('game-code-input')).toBeTruthy();
-    expect(getByTestId('add-game-button')).toBeTruthy();
+    getByTestId('add-game-view');
+    getByTestId('game-code-input');
+    getByTestId('add-game-button');
+    getByText(buildMockedTranslation("games:joinGame"));
   });
 
   it('renders disabled button when input is empty', () => {

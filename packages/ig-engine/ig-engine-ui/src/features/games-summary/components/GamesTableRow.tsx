@@ -1,10 +1,11 @@
 
-import type { GameUiUrlPathsAdapter } from "@/types/GameUiConfigTypes";
 import { type MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
 import { PlatformUiLink } from "@ig/platform-ui";
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
+import type { GameUiUrlPathsAdapter } from "../../../types/GameUiConfigTypes";
 import { GameStatusView } from "../../game-instance/components/GameStatusView";
 
 export type GamesTableRowPropsT = {
@@ -43,12 +44,13 @@ type GameActionButtonPropsT = {
 };
 
 const GameActionButton: FC<GameActionButtonPropsT> = ({ gameUiUrlPathsAdapter, minimalGameInstanceExposedInfo }) => {
+  const { t } = useAppLocalization();
   const gameInstanceUrl = gameUiUrlPathsAdapter
     .buildGameInstanceDashboardUrlPath(minimalGameInstanceExposedInfo.gameInstanceId);
 
   return (
     <PlatformUiLink href={gameInstanceUrl} asChild>
-      <RnuiButton testID="open-game-btn-tid" size="xs">Open</RnuiButton>
+      <RnuiButton testID="open-game-btn-tid" size="xs">{t("common:open")}</RnuiButton>
     </PlatformUiLink>
   );
 };

@@ -6,6 +6,7 @@ import type {
 import { RnuiActivityIndicator, RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
 import React, { useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
+import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import {
   useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
@@ -61,6 +62,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { onSendChatMessage } = useGameInstanceController();
   const { isLoading, isError, data } = useUserConfigModel();
+  const { t } = useAppLocalization();
   const [chatMessage, setChatMessage] = useState("");
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
@@ -80,7 +82,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   return (
     <View >
       <View style={genericStyles.spacingBottom} >
-        <RnuiText testID="chat-title-tid" variant="titleMedium">Chat</RnuiText>
+        <RnuiText testID="chat-title-tid" variant="titleMedium">{t("common:chat")}</RnuiText>
       </View>
 
       <View style={{ maxHeight: 200 }}>

@@ -2,6 +2,16 @@
 import '@testing-library/jest-native/extend-expect';
 import type { Animated } from 'react-native';
 
+// use fake timers in tests
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
+
 // mock libraries that contain ES modules (with export)
 
 jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
@@ -14,29 +24,33 @@ jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
 
 jest.mock('react-native/Libraries/Animated/Animated', () => {
   const ActualAnimated = jest.requireActual('react-native/Libraries/Animated/Animated');
+
   return {
-    ...ActualAnimated,
+    __esModule: true,
+    default: {
+      ...ActualAnimated.default,
 
-    timing: (
-      value: Animated.Value,
-      config: Animated.TimingAnimationConfig
-    ): Animated.CompositeAnimation => ({
-      start: (callback?: Animated.EndCallback) => {
-        value.setValue(config.toValue as number);
-        callback?.({ finished: true });
-      },
-      stop: (): void => { },
-      reset: (): void => { },
-    }),
+      timing: (
+        value: Animated.Value,
+        config: Animated.TimingAnimationConfig
+      ): Animated.CompositeAnimation => ({
+        start: (callback?: Animated.EndCallback) => {
+          value.setValue(config.toValue as number);
+          callback?.({ finished: true });
+        },
+        stop: () => {},
+        reset: () => {},
+      }),
 
-    loop: (
-      animation: Animated.CompositeAnimation
-    ): Animated.CompositeAnimation => ({
-      start: (callback?: Animated.EndCallback) => {
-        animation.start(() => callback?.({ finished: true }));
-      },
-      stop: (): void => { },
-      reset: (): void => { },
-    }),
+      loop: (
+        animation: Animated.CompositeAnimation
+      ): Animated.CompositeAnimation => ({
+        start: (callback?: Animated.EndCallback) => {
+          animation.start(() => callback?.({ finished: true }));
+        },
+        stop: () => {},
+        reset: () => {},
+      }),
+    },
   };
 });

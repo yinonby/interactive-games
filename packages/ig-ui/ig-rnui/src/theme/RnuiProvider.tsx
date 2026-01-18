@@ -2,6 +2,7 @@
 import React, { createContext, ReactElement, useContext } from 'react';
 import type { ColorValue, TextStyle } from "react-native";
 import { ThemeProvider, type MD3Theme } from "react-native-paper";
+import { RnuiSnackbarProvider } from "../snackbar/RnuiSnackbarProvider";
 
 export type RnuiStylesT = {
   xsButtonLabelStyle?: TextStyle,
@@ -30,7 +31,9 @@ export const RnuiProvider: React.FC<RnuiProviderPropsT> = ({ theme, rnuiStyles, 
   return (
     <RnuiContext.Provider value={{ rnuiStyles: rnuiStyles || {} }}>
       <ThemeProvider theme={theme}>
-        {children}
+        <RnuiSnackbarProvider /* depends on ThemeProvider */>
+          {children}
+        </RnuiSnackbarProvider>
       </ThemeProvider>
     </RnuiContext.Provider>
   );

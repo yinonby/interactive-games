@@ -7,7 +7,6 @@ export default defineConfig({
   ...baseViteUserConfig,
   test: {
     ...baseViteUserConfig.test,
-    passWithNoTests: true,
     setupFiles: ["./test/setup.ts"],
   },
   resolve: {
