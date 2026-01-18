@@ -1,8 +1,13 @@
 
 import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
 import { useGameRnuiStyles, useGameUiConfig, useGameUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
-import { GameLayout } from "@ig/engine-ui";
+import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
+import { GameLayout, initI18n } from "@ig/engine-ui";
 import { Stack } from "expo-router";
+
+// init i18n must be made once, before any rendering, because i18n is a singleton
+const resources = getI18nResources();
+initI18n(resources);
 
 export default function RootLayout() {
   return (
