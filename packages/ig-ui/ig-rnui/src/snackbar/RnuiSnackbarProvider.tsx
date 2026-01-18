@@ -1,6 +1,6 @@
 
 import { generateUuidv4 } from "@ig/lib";
-import React, { createContext, ReactElement, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, type PropsWithChildren } from 'react';
 import { View } from "react-native";
 import {
   RNUI_SNACKBAR_DEFAULT_DURATION_MS, type RnuiSnackbarMessageInfoT,
@@ -16,11 +16,9 @@ export interface RnuiSnackbarContextT {
 
 const RnuiSnackbarContext = createContext<RnuiSnackbarContextT | undefined>(undefined);
 
-export type RnuiSnackbarProviderPropsT = {
-  children: ReactElement | ReactElement[],
-};
+export type RnuiSnackbarProviderPropsT = object;
 
-export const RnuiSnackbarProvider: React.FC<RnuiSnackbarProviderPropsT> = ({ children }) => {
+export const RnuiSnackbarProvider: React.FC<PropsWithChildren<RnuiSnackbarProviderPropsT>> = ({ children }) => {
   const [snackbarMsgInfos, setSnackbarMsgInfos] = useState<RnuiSnackbarMessageInfoT[]>([]);
 
   const handleShowSnackbar = (snackbarMsgRequest: RnuiSnackbarMessageRequestT): void => {
