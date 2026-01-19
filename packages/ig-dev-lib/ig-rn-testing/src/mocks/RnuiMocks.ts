@@ -3,10 +3,20 @@ export const initRnuiMocks = () => {
   jest.mock("@ig/rnui", () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { Text, View } = require('react-native');
+    const React = require('react');
+
+    const RnuiButton = (props: any) => {
+      // Render a View wrapping the children in a Text
+      return React.createElement(
+        View,
+        props,
+        React.createElement(Text, null, props.children)
+      );
+    };
 
     return {
       RnuiText: Text,
-      RnuiButton: View,
+      RnuiButton: RnuiButton,
       RnuiIconButton: View,
       RnuiProvider: View,
       RnuiCard: View,

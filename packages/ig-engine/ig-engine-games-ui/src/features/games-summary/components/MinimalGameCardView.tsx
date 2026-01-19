@@ -63,7 +63,7 @@ export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGame
       <View style={styles.spacingBottom} >
         <View style={{ flexDirection: "row" }}>
           <RnuiButton testID="play-game-btn-tid" size="xs" mode="outlined" onPress={handlePlayGamePress}>
-            <RnuiText>{t("games:play")}</RnuiText>
+            {t("games:play")}
           </RnuiButton>
         </View>
       </View>
