@@ -1,5 +1,5 @@
 
-import GameInstancePageContent from "@/src/pages/GameInstancePage";
+import GameInstancePageContent from "@/src/pages/games/GameInstancePage";
 import { useLocalSearchParams } from "expo-router";
 
 export default function Page() {

@@ -2,7 +2,8 @@
 import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
 import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
-import { AppRootLayout, initI18n } from "@ig/engine-ui";
+import { AppRootLayout, initI18n } from "@ig/engine-app-ui";
+import { handleWebSocketMessage } from "@ig/engine-games-ui";
 import { Stack } from "expo-router";
 
 // init i18n must be made once, before any rendering, because i18n is a singleton
@@ -17,6 +18,7 @@ export default function RootLayout() {
       rnuiStyles={useGameRnuiStyles()}
       gameUiConfig={useGameUiConfig()}
       gamesUiUrlPathsAdapter={useGamesUiUrlPathsAdapter()}
+      appWebSocketMsgHandlers={[handleWebSocketMessage]}
     >
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Game & More' }} />

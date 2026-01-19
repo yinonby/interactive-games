@@ -1,5 +1,5 @@
 
-import type { GameImageTypeT } from "@ig/engine-ui";
+import type { GameImageTypeT } from "@ig/engine-app-ui";
 import type { RnuiImageSourceT } from "@ig/rnui";
 import { type ColorSchemeName, useColorScheme } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, type MD3Theme } from "react-native-paper";
