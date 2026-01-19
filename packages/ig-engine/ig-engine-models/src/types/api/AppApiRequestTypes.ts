@@ -8,17 +8,22 @@ import type {
 import type { UserIdT } from "../game/UserTypes";
 import type { UserConfigT } from "../user/UserTypes";
 
-// get/app-config
+// get::app-config
 export type GetAppConfigResponseT = {
+  version: string,
+}
+
+// get::games/games-config
+export type GetGamesConfigResponseT = {
   availableMinimalGameConfigs: MinimalGameConfigT[],
 }
 
-// get/user-config
+// get::games/user-config
 export type GetUserConfigResponseT = {
   userConfig: UserConfigT
 }
 
-// post/play-game
+// post::games/user-config/play-game
 export type PostPlayGameRequestBodyT = {
   gameConfigId: GameConfigIdT,
 }
@@ -27,7 +32,7 @@ export type PostPlayGameResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
-// post/accept-invite
+// post::games/user-config/accept-invite
 export type PostAcceptInviteRequestBodyT = {
   invitationCode: string,
 }
@@ -36,7 +41,7 @@ export type PostAcceptInviteResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
-// get/game-instance
+// get::games/game-instance
 export type GetGameInstanceRequestT = {
   gameInstanceId: GameInstanceIdT,
 }
@@ -45,7 +50,7 @@ export type GetGameInstanceResponseT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
 }
 
-// get/game-instance/<id>/chat
+// get::games/game-instance/<id>/chat
 export type GetGameInstanceChatResponseT = {
   chatMessages: GameInstanceChatMessageT[],
 }
@@ -56,7 +61,7 @@ export type PostGameInstanceChatMessageParamT = {
   chatMessage: string,
 }
 
-// post/game-instance<id>/msg
+// post::games/game-instance<id>/msg
 export type PostGameInstanceChatMessageResponseT = {
   chatMsgId: ChatMsgIdT,
 }

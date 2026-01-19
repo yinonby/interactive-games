@@ -3,11 +3,11 @@ import type {
   GameInstanceIdT
 } from "../game/GameTypes";
 
-// user-config-update
-export type UserConfigeWebSocketMsgKindT = "user-config-update";
+// gamesUserConfigUpdate
+export type UserConfigeWebSocketMsgKindT = "gamesUserConfigUpdate";
 
-// game-instance-update
-export type GameInstanceUpdateWebSocketMsgKindT = "game-instance-update";
+// gamesGameInstanceUpdate
+export type GameInstanceUpdateWebSocketMsgKindT = "gamesGameInstanceUpdate";
 export type GameInstanceWebSocketMessagePayloadT = { gameInstanceId: GameInstanceIdT };
 
 // aggregate

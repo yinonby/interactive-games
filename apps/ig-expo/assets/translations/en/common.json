@@ -3,7 +3,7 @@
   "status": "status",
   "role": "Role",
   "duration": "Duration",
-  "minutes": "Minutes",
+  "minutes": "{{minutes}} min.",
   "price": "Price",
   "free": "Free",
   "nickname": "Nickname",

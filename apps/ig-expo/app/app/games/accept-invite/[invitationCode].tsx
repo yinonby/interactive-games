@@ -1,5 +1,5 @@
 
-import GamesAcceptInvitePage from "@/src/pages/GamesAcceptInvitePage";
+import GamesAcceptInvitePage from "@/src/pages/games/GamesAcceptInvitePage";
 import { useLocalSearchParams } from "expo-router";
 
 export default function Page() {

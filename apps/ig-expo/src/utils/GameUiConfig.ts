@@ -1,5 +1,5 @@
 
-import type { GameUiConfigT, GameUiUrlPathsAdapter } from "@ig/engine-ui";
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "@ig/engine-app-ui";
 import type { RnuiStylesT } from "@ig/rnui";
 
 export const useGameUiConfig = (): GameUiConfigT => {
@@ -24,7 +24,7 @@ export const useGameUiConfig = (): GameUiConfigT => {
   }
 }
 
-export const useGameUiUrlPathsAdapter = (): GameUiUrlPathsAdapter => {
+export const useGamesUiUrlPathsAdapter = (): GamesUiUrlPathsAdapter => {
   return {
     buildGamesDashboardUrlPath: () => "/app/games/dashboard",
     buildGamesAcceptInviteUrlPath: (invitationCode: string) => `app/games/accept-invite/${invitationCode}`,
