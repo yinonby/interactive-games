@@ -1,7 +1,7 @@
 
+import { __loggerMocks } from '@ig/client-utils';
 import { render } from "@testing-library/react-native";
 import React from "react";
-import * as useClientLoggerModule from "../providers/useClientLogger";
 import * as wsClientModule from "../providers/useWsClient";
 import { AppWebSocketProvider, type AppWebSocketMsgHandlerT } from "./AppWebSocketProvider";
 
@@ -83,7 +83,7 @@ describe("AppWebSocketProvider", () => {
   });
 
   it("doesn't handle message", () => {
-    const useClientLoggerSpy = jest.spyOn(useClientLoggerModule, "useClientLogger");
+    const { errorMock } = __loggerMocks;
 
     const handleWebSocketMessage1 = jest.fn(() => false) as jest.Mock;
     const handleWebSocketMessage2 = jest.fn(() => false) as jest.Mock;
@@ -113,6 +113,6 @@ describe("AppWebSocketProvider", () => {
     expect(handleWebSocketMessage2.mock.calls[0][0]).toEqual("test-msg-kind");
     expect(handleWebSocketMessage2.mock.calls[0][1]).toEqual({ foo: "bar" });
 
-    expect(useClientLoggerSpy).toHaveBeenCalled();
+    expect(errorMock).toHaveBeenCalled();
   });
 });

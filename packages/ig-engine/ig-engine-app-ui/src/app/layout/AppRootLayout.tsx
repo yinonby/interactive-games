@@ -42,7 +42,7 @@ export const AppRootLayout: React.FC<AppRootLayoutPropsT> = (props) => {
             <ReduxProvider store={reduxStore}>
               {/* AppWebSocketProvider depends on AppConfigProvider and ReduxProvider */}
               <AppWebSocketProvider appWebSocketMsgHandlers={appWebSocketMsgHandlers}>
-                <View style={styles.container} testID="game-layout-wrapper" >
+                <View style={styles.container} testID="gameLayoutWrapper-tid" >
                   {children}
                 </View>
               </AppWebSocketProvider>

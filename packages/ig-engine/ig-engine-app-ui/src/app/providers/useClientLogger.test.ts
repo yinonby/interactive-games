@@ -1,4 +1,6 @@
 
+jest.unmock("./useClientLogger");
+
 import { useClientLogger } from "./useClientLogger";
 
 describe('useClientLogger', () => {

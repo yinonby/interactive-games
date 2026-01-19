@@ -16,7 +16,7 @@ jest.mock('react-redux', () => {
 
   return {
     Provider: ({ children }: { children: React.ReactNode }) => (
-      <View testID="react-redux-mock">{children}</View>
+      <View testID="reactReduxMock-tid">{children}</View>
     ),
   };
 });
@@ -81,7 +81,7 @@ describe('AppRootLayout', () => {
       </AppRootLayout>
     );
 
-    expect(getByTestId('react-redux-mock')).toBeTruthy();
-    expect(getByTestId('game-layout-wrapper')).toBeTruthy();
+    expect(getByTestId('reactReduxMock-tid')).toBeTruthy();
+    expect(getByTestId('gameLayoutWrapper-tid')).toBeTruthy();
   });
 });
