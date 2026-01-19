@@ -49,7 +49,7 @@ export const InviteView: FC<InviteViewPropsT> = (props) => {
         </View>
 
         <RnuiButton testID="share-btn-tid" size="xs" onPress={handlePress} disabled={isSaturated}>
-          <RnuiText>{t("common:share")}</RnuiText>
+          {t("common:share")}
         </RnuiButton>
 
         <View style={[genericStyles.flex1]} />

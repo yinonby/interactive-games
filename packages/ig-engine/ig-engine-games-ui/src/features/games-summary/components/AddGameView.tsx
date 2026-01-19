@@ -1,6 +1,6 @@
 
 import { useAppLocalization } from "@ig/engine-app-ui";
-import { RnuiButton, RnuiText, RnuiTextInput } from "@ig/rnui";
+import { RnuiButton, RnuiTextInput } from "@ig/rnui";
 import { useState, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useUserConfigController } from "../../../domains/user-config/controller/user-actions/UserConfigController";
@@ -32,7 +32,7 @@ export const AddGameView: FC<AddGameViewPropsT> = () => {
         />
       </View>
       <RnuiButton testID="add-game-button" onPress={handlePress} disabled={gameCode === ""}>
-        <RnuiText>{t("games:joinGame")}</RnuiText>
+        {t("games:joinGame")}
       </RnuiButton>
     </View>
   );

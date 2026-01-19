@@ -37,17 +37,17 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = ({ isPlayerAdmin, other
         <RnuiTableCell testID="table-cell-tid" endContent>
           {otherPlayerExposedInfo.playerStatus === "playing" &&
             <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
-              <RnuiText>{t("games:suspend")}</RnuiText>
+              {t("games:suspend")}
             </RnuiButton>
           }
           {otherPlayerExposedInfo.playerStatus === "suspended" &&
             <RnuiButton testID="activate-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
-              <RnuiText>{t("games:activate")}</RnuiText>
+              {t("games:activate")}
             </RnuiButton>
           }
           {otherPlayerExposedInfo.playerStatus === "invited" &&
             <RnuiButton testID="uninvite-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
-              <RnuiText>{t("games:uninvite")}</RnuiText>
+              {t("games:uninvite")}
             </RnuiButton>
           }
         </RnuiTableCell>
