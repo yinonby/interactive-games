@@ -3,9 +3,9 @@ import type { GameInstanceIdT, MinimalGameInstanceExposedInfoT } from "@ig/engin
 import type { RnuiImageSourceT } from "@ig/rnui";
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GameContextProvider from "../../../app/layout/GameContextProvider";
+import * as AppConfigProvider from "../../../app/layout/AppConfigProvider";
 import type { GameImageTypeT } from "../../../types/GameImageTypes";
-import type { GameUiUrlPathsAdapter } from "../../../types/GameUiConfigTypes";
+import type { GamesUiUrlPathsAdapter } from "../../../types/GameUiConfigTypes";
 import type { GameStatusViewPropsT } from "../../game-instance/components/GameStatusView";
 import { GamesTableRow } from './GamesTableRow';
 
@@ -34,22 +34,22 @@ jest.mock('../../game-instance/components/GameStatusView', () => {
 // tests
 
 describe('GamesTableRow', () => {
-  const useGameContextSpy = jest.spyOn(GameContextProvider, "useGameContext");
+  const useAppConfigSpy = jest.spyOn(AppConfigProvider, "useAppConfig");
 
   const imagesSourceMap = {
     ["treasure-hunt-1"]: { uri: "http://example.com/cover.png" },
   } as Record<GameImageTypeT, RnuiImageSourceT>;
-  const gameUiUrlPathsAdapter: GameUiUrlPathsAdapter = {
+  const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
     buildGameInstanceDashboardUrlPath: (gameInstanceId: GameInstanceIdT) => `gi-dashboard-${gameInstanceId}`,
-  } as GameUiUrlPathsAdapter;
+  } as GamesUiUrlPathsAdapter;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    useGameContextSpy.mockReturnValue({
+    useAppConfigSpy.mockReturnValue({
       imagesSourceMap: imagesSourceMap,
-      gameUiUrlPathsAdapter: gameUiUrlPathsAdapter,
-    } as GameContextProvider.GameContextT);
+      gamesUiUrlPathsAdapter: gamesUiUrlPathsAdapter,
+    } as AppConfigProvider.AppConfigT);
   });
 
   afterEach(() => {

@@ -21,7 +21,7 @@ describe("handleUserConfigWebSocketMessage", () => {
     jest.clearAllMocks();
   });
 
-  it("dispatches invalidateTags on user-config-update", () => {
+  it("dispatches invalidateTags on gamesUserConfigUpdate", () => {
     const invalidateResult = { type: "TEST_ACTION", payload: [] };
 
     // make invalidateTags return a fake action
@@ -30,13 +30,13 @@ describe("handleUserConfigWebSocketMessage", () => {
     );
 
     handleUserConfigWebSocketMessage(
-      "user-config-update",
+      "gamesUserConfigUpdate",
       dispatch
     );
 
     expect(userConfigRtkApiUtil.invalidateTags).toHaveBeenCalledTimes(1);
     expect(userConfigRtkApiUtil.invalidateTags).toHaveBeenCalledWith([
-      "UserConfigTag",
+      "GamesUserConfigTag",
     ]);
 
     expect(dispatch).toHaveBeenCalledTimes(1);

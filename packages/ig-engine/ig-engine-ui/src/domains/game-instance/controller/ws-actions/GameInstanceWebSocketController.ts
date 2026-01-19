@@ -8,9 +8,9 @@ export const handleGameInstanceWebSocketMessage = (
   payload: GameInstanceWebSocketMessagePayloadT,
   dispatch: AppDispatch,
 ): void => {
-  if (msgKind === "game-instance-update") {
+  if (msgKind === "gamesGameInstanceUpdate") {
     dispatch(
-      gameInstanceRtkApiUtil.invalidateTags([{ type: 'GameInstanceTag', id: payload.gameInstanceId }])
+      gameInstanceRtkApiUtil.invalidateTags([{ type: 'GamesInstanceTag', id: payload.gameInstanceId }])
     );
   } else {
     throw new Error("Invalid message type");

@@ -8,6 +8,7 @@ export const getMinimalGameConfigImageProps = (
   imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
 ): RnuiImagePropsT | undefined => {
   let rnuiImageProps: RnuiImagePropsT | undefined = undefined;
+
   if (minimalGameConfig.imageAssetName !== undefined) {
     const gameImageType = minimalGameConfig.imageAssetName as GameImageTypeT;
     const imageSource: RnuiImageSourceT | undefined = imagesSourceMap[gameImageType]
@@ -27,5 +28,6 @@ export const getMinimalGameConfigImageProps = (
     };
     rnuiImageProps.imgLabelPosition = "top-start";
   }
+
   return rnuiImageProps;
 };

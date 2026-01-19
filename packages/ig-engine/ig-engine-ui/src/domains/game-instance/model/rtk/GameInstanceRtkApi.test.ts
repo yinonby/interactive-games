@@ -19,28 +19,28 @@ const gameInstanceExposedInfoMock1: GameInstanceExposedInfoT = {
 } as GameInstanceExposedInfoT;
 
 export const server = setupServer(
-  http.get('https://api.test/game-instance/giid-1', () => {
+  http.get('https://api.test/games/game-instance/giid-1', () => {
     return HttpResponse.json({ gameInstanceExposedInfo: gameInstanceExposedInfoMock1 });
   }),
-  http.get('https://api.test/game-instance/giid-2', () => {
+  http.get('https://api.test/games/game-instance/giid-2', () => {
     return HttpResponse.error();
   }),
-  http.get('https://api.test/game-instance/giid-1/chat', () => {
+  http.get('https://api.test/games/game-instance/giid-1/chat', () => {
     const response: GetGameInstanceChatResponseT = {
       chatMessages: [],
     };
     return HttpResponse.json(response);
   }),
-  http.get('https://api.test/game-instance/giid-2/chat', () => {
+  http.get('https://api.test/games/game-instance/giid-2/chat', () => {
     return HttpResponse.error();
   }),
-  http.post('https://api.test/game-instance/giid-1/chat/message', () => {
+  http.post('https://api.test/games/game-instance/giid-1/chat/message', () => {
     const response: PostGameInstanceChatMessageResponseT = {
       chatMsgId: "msg-1",
     };
     return HttpResponse.json(response);
   }),
-  http.post('https://api.test/game-instance/giid-2/chat/message', () => {
+  http.post('https://api.test/games/game-instance/giid-2/chat/message', () => {
     return HttpResponse.error();
   }),
 );

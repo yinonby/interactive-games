@@ -7,8 +7,8 @@ import { InviteView } from "./InviteView";
 
 // mocks
 
-jest.mock("../../../app/layout/GameContextProvider", () => ({
-  useGameContext: () => ({ gameUiConfig: { appUrl: "https://example.com" } }),
+jest.mock("../../../app/layout/AppConfigProvider", () => ({
+  useAppConfig: () => ({ gameUiConfig: { appUrl: "https://example.com" } }),
 }));
 
 // tests

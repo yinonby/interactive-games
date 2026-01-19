@@ -6,11 +6,11 @@ import { handleWebSocketMessage } from "../controllers/WebSocketController";
 import type { AppDispatch } from "../model/reducers/AppReduxStore";
 import { useClientLogger } from "../providers/useClientLogger";
 import { useWsClient } from "../providers/useWsClient";
-import { useGameContext } from "./GameContextProvider";
+import { useAppConfig } from "./AppConfigProvider";
 import { WebSocketProvider } from "./WebSocketProvider";
 
 export function AppWebSocketProvider({ children }: { children: ReactNode }) {
-  const { gameUiConfig } = useGameContext();
+  const { gameUiConfig } = useAppConfig();
   const dispatch = useDispatch<AppDispatch>();
   const msgHandler = (msgKind: AppWebSocketRcvMsgKindT, payload?: AppWebSocketMessagePayloadT) => {
     handleWebSocketMessage(msgKind, payload, dispatch, useClientLogger());

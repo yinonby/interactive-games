@@ -4,7 +4,7 @@ import { RnuiButton, RnuiCopyToClipboard, RnuiQrCode, RnuiText } from "@ig/rnui"
 import type React from "react";
 import type { FC } from "react";
 import { View } from "react-native";
-import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppConfig } from "../../../app/layout/AppConfigProvider";
 import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 import { useGenericStyles } from "../../../types/GenericStyles";
@@ -17,7 +17,7 @@ export const InviteView: FC<InviteViewPropsT> = (props) => {
   const { gameInstanceExposedInfo } = props;
   const { t } = useAppLocalization();
   const { invitationCode, gameConfig, otherPlayerExposedInfos } = gameInstanceExposedInfo;
-  const { gameUiConfig } = useGameContext();
+  const { gameUiConfig } = useAppConfig();
   const invitationUrl = gameUiConfig.appUrl + "/games/accept-invite/" + invitationCode;
   const isSaturated = otherPlayerExposedInfos.length >= gameConfig.maxParticipants - 1;
   const genericStyles = useGenericStyles();

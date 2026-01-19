@@ -16,8 +16,8 @@ jest.mock("./WebSocketProvider", () => {
   }
 });
 
-jest.mock("./GameContextProvider", () => ({
-  useGameContext: jest.fn(() => ({
+jest.mock("./AppConfigProvider", () => ({
+  useAppConfig: jest.fn(() => ({
     gameUiConfig: {
       wssUrl: "ws://test",
       isDevel: true,

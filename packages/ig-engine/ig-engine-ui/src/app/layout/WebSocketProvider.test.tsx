@@ -56,7 +56,7 @@ describe("WebSocketProvider", () => {
     // capture the subscribed handler
     const wsHandler = subscribeMock.mock.calls[0][0];
 
-    const msgKind = "user-config-update" as AppWebSocketRcvMsgKindT;
+    const msgKind = "update" as AppWebSocketRcvMsgKindT;
     const payload = { foo: "bar" };
 
     wsHandler(msgKind, payload);

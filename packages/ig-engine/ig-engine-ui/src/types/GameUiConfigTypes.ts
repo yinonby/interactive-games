@@ -7,7 +7,7 @@ export type GameUiConfigT = {
   isDevel: boolean,
 }
 
-export interface GameUiUrlPathsAdapter {
+export interface GamesUiUrlPathsAdapter {
   buildGamesDashboardUrlPath: () => string,
   buildGamesAcceptInviteUrlPath: (invitationCode: string) => string,
   buildGameInstanceDashboardUrlPath: (gameInstanceId: string) => string,

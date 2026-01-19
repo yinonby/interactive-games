@@ -4,13 +4,13 @@ import { __puiMocks } from "@ig/platform-ui";
 import type { RnuiImagePropsT, RnuiImageSourceT } from "@ig/rnui";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
-import type { GameContextT } from "../../../app/layout/GameContextProvider";
-import * as GameContextProvider from "../../../app/layout/GameContextProvider";
+import type { AppConfigT } from "../../../app/layout/AppConfigProvider";
+import * as AppConfigProvider from "../../../app/layout/AppConfigProvider";
 import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
 import type { UserConfigControllerT } from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import * as UserConfigController from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import type { GameImageTypeT } from "../../../types/GameImageTypes";
-import type { GameUiUrlPathsAdapter } from "../../../types/GameUiConfigTypes";
+import type { GamesUiUrlPathsAdapter } from "../../../types/GameUiConfigTypes";
 import * as GameViewUtils from "../../../utils/GameViewUtils";
 import { MinimalGameCardView } from "./MinimalGameCardView";
 
@@ -29,22 +29,22 @@ describe("MinimalGameCardView", () => {
   const onPlayGameMock = jest.fn();
   const useUserConfigControllerSpy = jest.spyOn(UserConfigController, "useUserConfigController");
   const getMinimalGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, "getMinimalGameConfigImageProps");
-  const useGameContextSpy = jest.spyOn(GameContextProvider, "useGameContext");
+  const useAppConfigSpy = jest.spyOn(AppConfigProvider, "useAppConfig");
 
   const imagesSourceMap = {
     ["treasure-hunt-1"]: { uri: "http://example.com/cover.png" },
   } as Record<GameImageTypeT, RnuiImageSourceT>;
-  const gameUiUrlPathsAdapter: GameUiUrlPathsAdapter = {
+  const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
     buildGameInstanceDashboardUrlPath: (gameInstanceId: GameInstanceIdT) => `gi-dashboard-${gameInstanceId}`,
-  } as GameUiUrlPathsAdapter;
+  } as GamesUiUrlPathsAdapter;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    useGameContextSpy.mockReturnValue({
+    useAppConfigSpy.mockReturnValue({
       imagesSourceMap: imagesSourceMap,
-      gameUiUrlPathsAdapter: gameUiUrlPathsAdapter,
-    } as GameContextT);
+      gamesUiUrlPathsAdapter: gamesUiUrlPathsAdapter,
+    } as AppConfigT);
   });
 
   it("renders correctly", async () => {

@@ -6,8 +6,8 @@ import { GameInstanceView } from './GameInstanceView';
 
 // mocks
 
-jest.mock("../../../app/layout/GameContextProvider", () => ({
-  useGameContext: () => ({ imagesSourceMap: { thumbnail: "http://example.com/img.png" } }),
+jest.mock("../../../app/layout/AppConfigProvider", () => ({
+  useAppConfig: () => ({ imagesSourceMap: { thumbnail: "http://example.com/img.png" } }),
 }));
 
 jest.mock('./GameInstanceSummaryView', () => {

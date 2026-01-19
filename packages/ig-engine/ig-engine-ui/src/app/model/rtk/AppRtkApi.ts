@@ -7,7 +7,7 @@ import { httpProviderBaseQuery } from './HttpProviderRtkBaseQuery';
 export const appRtkApi = createApi({
   reducerPath: 'appRtkApiReducer',
   baseQuery: httpProviderBaseQuery(useHttpProvider),
-  tagTypes: ['AppConfigTag', 'UserConfigTag', "GameInstanceTag", "GameInstanceChatTag"],
+  tagTypes: ['AppConfigTag', 'GamesConfigTag', 'GamesUserConfigTag', "GamesInstanceTag", "GamesInstanceChatTag"],
   endpoints: builder => ({
     getAppConfig: builder.query<GetAppConfigResponseT, void>({
       query: () => ({

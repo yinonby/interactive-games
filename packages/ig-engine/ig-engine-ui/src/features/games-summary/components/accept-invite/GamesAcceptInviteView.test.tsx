@@ -4,11 +4,11 @@ import { __puiMocks } from "@ig/platform-ui";
 import type { RnuiImageSourceT } from "@ig/rnui";
 import { render, waitFor } from "@testing-library/react-native";
 import React from "react";
-import * as GameContextProvider from "../../../../app/layout/GameContextProvider";
+import * as AppConfigProvider from "../../../../app/layout/AppConfigProvider";
 import { useClientLogger } from "../../../../app/providers/useClientLogger";
 import { useUserConfigController } from "../../../../domains/user-config/controller/user-actions/UserConfigController";
 import type { GameImageTypeT } from "../../../../types/GameImageTypes";
-import type { GameUiUrlPathsAdapter } from "../../../../types/GameUiConfigTypes";
+import type { GamesUiUrlPathsAdapter } from "../../../../types/GameUiConfigTypes";
 import { GamesAcceptInviteView } from "./GamesAcceptInviteView";
 
 // mocks
@@ -30,15 +30,15 @@ describe("GamesAcceptInviteView", () => {
   const { navigateReplaceMock } = __puiMocks;
   const onAcceptInviteMock = jest.fn();
   const loggerErrorMock = jest.fn();
-  const useGameContextSpy = jest.spyOn(GameContextProvider, "useGameContext");
+  const useAppConfigSpy = jest.spyOn(AppConfigProvider, "useAppConfig");
 
   const imagesSourceMap = {
     ["treasure-hunt-1"]: { uri: "http://example.com/cover.png" },
   } as Record<GameImageTypeT, RnuiImageSourceT>;
-  const gameUiUrlPathsAdapter: GameUiUrlPathsAdapter = {
+  const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
     buildGameInstanceDashboardUrlPath: (gameInstanceId: GameInstanceIdT) => `gi-dashboard-${gameInstanceId}`,
     buildGamesDashboardUrlPath: () => "games-dashboard-fake-url",
-  } as GameUiUrlPathsAdapter;
+  } as GamesUiUrlPathsAdapter;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -49,10 +49,10 @@ describe("GamesAcceptInviteView", () => {
       error: loggerErrorMock,
     });
 
-    useGameContextSpy.mockReturnValue({
+    useAppConfigSpy.mockReturnValue({
       imagesSourceMap: imagesSourceMap,
-      gameUiUrlPathsAdapter: gameUiUrlPathsAdapter,
-    } as GameContextProvider.GameContextT);
+      gamesUiUrlPathsAdapter: gamesUiUrlPathsAdapter,
+    } as AppConfigProvider.AppConfigT);
   });
 
   it("renders activity indicator and message", async () => {

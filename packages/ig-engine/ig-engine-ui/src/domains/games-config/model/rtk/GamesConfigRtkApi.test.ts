@@ -1,18 +1,18 @@
 
-import type { GetAppConfigResponseT } from "@ig/engine-models";
+import type { GetGamesConfigResponseT } from "@ig/engine-models";
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { GameUiConfigT } from "../../../types/GameUiConfigTypes";
-import { gameUiConfigReducer, gameUiConfigReducerPath } from "../../model/reducers/GameUiConfigReducer";
-import { appRtkApiReducer, appRtkApiReducerPath } from "../../model/rtk/AppRtkApi";
-import { appRtkApiEndpoints, appRtkApiMiddleware } from "./AppRtkApi";
+import { gameUiConfigReducer, gameUiConfigReducerPath } from "../../../../app/model/reducers/GameUiConfigReducer";
+import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from "../../../../app/model/rtk/AppRtkApi";
+import type { GameUiConfigT } from "../../../../types/GameUiConfigTypes";
+import { gamesConfigRtkApiEndpoints } from "./GamesConfigRtkApi";
 
-const appConfigResponse: GetAppConfigResponseT = { version: "1.0.0" };
+const gamesConfigResponse: GetGamesConfigResponseT = { availableMinimalGameConfigs: [] };
 
 export const server = setupServer(
-  http.get('https://api.test/app-config', () => {
-    return HttpResponse.json(appConfigResponse);
+  http.get('https://api.test/games/games-config', () => {
+    return HttpResponse.json(gamesConfigResponse);
   }),
 );
 
@@ -38,7 +38,7 @@ export const createTestStore = () =>
     }
   });
 
-describe('AppRtkApi', () => {
+describe('GamesConfigRtkApi', () => {
   beforeAll(() => {
     server.listen();
   });
@@ -51,13 +51,13 @@ describe('AppRtkApi', () => {
     const store = createTestStore();
 
     const result = await store.dispatch(
-      appRtkApiEndpoints.getAppConfig.initiate()
+      gamesConfigRtkApiEndpoints.getGamesConfig.initiate()
     );
-    const response: GetAppConfigResponseT | undefined = result.data;
+    const response: GetGamesConfigResponseT | undefined = result.data;
 
     if (response === undefined) {
       throw new Error('result.data is undefined');
     }
-    expect(response).toEqual(appConfigResponse);
+    expect(response).toEqual(gamesConfigResponse);
   });
 });

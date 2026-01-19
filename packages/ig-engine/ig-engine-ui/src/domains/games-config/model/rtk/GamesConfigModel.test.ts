@@ -1,16 +1,16 @@
 
-import { useAppConfigModel } from "./AppConfigModel";
-import { useGetAppConfigQuery } from "./AppRtkApi";
+import { useGamesConfigModel } from "./GamesConfigModel";
+import { useGetGamesConfigQuery } from "./GamesConfigRtkApi";
 
-jest.mock("./AppRtkApi", () => ({ useGetAppConfigQuery: jest.fn() }));
+jest.mock("./GamesConfigRtkApi", () => ({ useGetGamesConfigQuery: jest.fn() }));
 
-const mockedUseGetAppConfigQuery = useGetAppConfigQuery as unknown as jest.Mock;
+const mockedUseGetAppConfigQuery = useGetGamesConfigQuery as unknown as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("useAppConfigModel", () => {
+describe("useGamesConfigModel", () => {
   it("returns loading state when query is loading", () => {
     mockedUseGetAppConfigQuery.mockReturnValue({
       isLoading: true,
@@ -18,7 +18,7 @@ describe("useAppConfigModel", () => {
       data: undefined,
     });
 
-    expect(useAppConfigModel()).toEqual({
+    expect(useGamesConfigModel()).toEqual({
       isLoading: true,
       isError: false,
     });
@@ -32,7 +32,7 @@ describe("useAppConfigModel", () => {
       data: undefined,
     });
 
-    expect(useAppConfigModel()).toEqual({
+    expect(useGamesConfigModel()).toEqual({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
@@ -46,7 +46,7 @@ describe("useAppConfigModel", () => {
       data: undefined,
     });
 
-    expect(useAppConfigModel()).toEqual({
+    expect(useGamesConfigModel()).toEqual({
       isLoading: false,
       isError: true,
       appErrCode: "appError:invalidResponse",
@@ -63,7 +63,7 @@ describe("useAppConfigModel", () => {
       data: fakeData,
     });
 
-    expect(useAppConfigModel()).toEqual({
+    expect(useGamesConfigModel()).toEqual({
       isLoading: false,
       isError: false,
       data: fakeData,

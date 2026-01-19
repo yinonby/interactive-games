@@ -7,9 +7,9 @@ export const handleUserConfigWebSocketMessage = (
   msgKind: UserConfigeWebSocketMsgKindT,
   dispatch: AppDispatch,
 ): void => {
-  if (msgKind === 'user-config-update') {
+  if (msgKind === 'gamesUserConfigUpdate') {
     dispatch(
-      userConfigRtkApiUtil.invalidateTags(['UserConfigTag'])
+      userConfigRtkApiUtil.invalidateTags(['GamesUserConfigTag'])
     );
   } else {
     throw new Error("Invalid message type");

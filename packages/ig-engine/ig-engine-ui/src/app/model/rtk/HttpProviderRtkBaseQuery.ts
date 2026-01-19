@@ -39,6 +39,7 @@ export const httpProviderBaseQuery =
 
         return { data: result };
       } catch (error: unknown) {
+        logger.error("An error ocurred", error);
         return { error: extractAppRtkError(error) };
       }
     };

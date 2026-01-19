@@ -5,8 +5,8 @@ import React from 'react';
 import { Text } from 'react-native';
 import type { MD3Theme } from "react-native-paper";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
-import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
-import { GameLayout } from './GameLayout'; // adjust path if needed
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import { AppRootLayout } from './AppRootLayout'; // adjust path if needed
 
 jest.mock('react-redux', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -45,18 +45,18 @@ jest.mock("../localization/AppLocalizationProvider", () => {
   };
 });
 
-describe('GameLayout', () => {
+describe('AppRootLayout', () => {
   it('renders children correctly', () => {
     const { getByText } = render(
-      <GameLayout
+      <AppRootLayout
         imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
         theme={{} as MD3Theme}
         rnuiStyles={{} as RnuiStylesT}
         gameUiConfig={{} as GameUiConfigT}
-        gameUiUrlPathsAdapter={{} as GameUiUrlPathsAdapter}
+        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
         <Text>Test Child</Text>
-      </GameLayout>
+      </AppRootLayout>
     );
 
     // Check that the child text is rendered
@@ -65,15 +65,15 @@ describe('GameLayout', () => {
 
   it('renders wrappers', () => {
     const { getByTestId } = render(
-      <GameLayout
+      <AppRootLayout
         imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
         theme={{} as MD3Theme}
         rnuiStyles={{} as RnuiStylesT}
         gameUiConfig={{} as GameUiConfigT}
-        gameUiUrlPathsAdapter={{} as GameUiUrlPathsAdapter}
+        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
         <Text>Child</Text>
-      </GameLayout>
+      </AppRootLayout>
     );
 
     expect(getByTestId('react-redux-mock')).toBeTruthy();

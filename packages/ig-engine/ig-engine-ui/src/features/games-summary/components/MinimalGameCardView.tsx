@@ -4,7 +4,7 @@ import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiButton, RnuiCard, RnuiText, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppConfig } from "../../../app/layout/AppConfigProvider";
 import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
 import { useUserConfigController } from "../../../domains/user-config/controller/user-actions/UserConfigController";
 import { getMinimalGameConfigImageProps } from "../../../utils/GameViewUtils";
@@ -16,8 +16,8 @@ export type MinimalGameCardViewPropsT = {
 };
 
 export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGameConfig }) => {
-  const { imagesSourceMap } = useGameContext();
-  const { gameUiUrlPathsAdapter } = useGameContext();
+  const { imagesSourceMap } = useAppConfig();
+  const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
   const { onPlayGame } = useUserConfigController();
   const { navigate } = usePlatformUiNavigation();
@@ -26,7 +26,7 @@ export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGame
   const handlePlayGamePress = async (): Promise<void> => {
     const gameInstanceId: GameInstanceIdT | null = await onPlayGame(minimalGameConfig.gameConfigId);
     if (gameInstanceId !== null) {
-      const url = gameUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
+      const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
       navigate(url);
     }
   }

@@ -9,27 +9,27 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({
     getGameInstance: builder.query<GetGameInstanceResponseT, GameInstanceIdT>({
       query: (gameInstanceId: GameInstanceIdT) => ({
-        url: `/game-instance/${gameInstanceId}`,
+        url: `/games/game-instance/${gameInstanceId}`,
         method: 'GET',
       }),
-      providesTags: (result, error, gameInstanceId) => [{ type: 'GameInstanceTag', id: gameInstanceId }],
+      providesTags: (result, error, gameInstanceId) => [{ type: 'GamesInstanceTag', id: gameInstanceId }],
     }),
 
     getGameInstanceChat: builder.query<GetGameInstanceChatResponseT, GameInstanceIdT>({
       query: (gameInstanceId: GameInstanceIdT) => ({
-        url: `/game-instance/${gameInstanceId}/chat`,
+        url: `/games/game-instance/${gameInstanceId}/chat`,
         method: 'GET',
       }),
-      providesTags: (result, error, gameInstanceId) => [{ type: 'GameInstanceChatTag', id: gameInstanceId }],
+      providesTags: (result, error, gameInstanceId) => [{ type: 'GamesInstanceChatTag', id: gameInstanceId }],
     }),
 
     postGameInstanceChatMessage: builder.mutation<PostGameInstanceChatMessageResponseT, PostGameInstanceChatMessageParamT>({
       query: (param: PostGameInstanceChatMessageParamT) => ({
-        url: `/game-instance/${param.gameInstanceId}/chat/message`,
+        url: `/games/game-instance/${param.gameInstanceId}/chat/message`,
         method: 'POST',
         data: { chatMessage: param.chatMessage, playerUserId: param.playerUserId },
       }),
-      invalidatesTags: (result, error, param) => [{ type: 'GameInstanceChatTag', id: param.gameInstanceId }],
+      invalidatesTags: (result, error, param) => [{ type: 'GamesInstanceChatTag', id: param.gameInstanceId }],
     }),
   }),
   overrideExisting: false,

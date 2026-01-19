@@ -6,6 +6,10 @@ export const useGenericStyles = () => StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  flexRowAlignTop: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
   flex1: {
     flex: 1,
   },

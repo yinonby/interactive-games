@@ -22,9 +22,9 @@ export const handleWebSocketMessage = (
   logger.debug(`Received ws message, msgKind [${msgKind}]` +
     (payload === undefined ? ", no payload" : `, payload [${JSON.stringify(payload)}]`));
 
-  if (msgKind === 'user-config-update') {
+  if (msgKind === 'gamesUserConfigUpdate') {
     handleUserConfigWebSocketMessage(msgKind, dispatch);
-  } else if (msgKind === "game-instance-update") {
+  } else if (msgKind === "gamesGameInstanceUpdate") {
     handleGameInstanceWebSocketMessage(msgKind, payload as GameInstanceWebSocketMessagePayloadT, dispatch);
   } else {
     logger.error(`Invalid message type, msgKind [${msgKind}]`);

@@ -3,8 +3,11 @@ import type { HttpAdapter, HttpMethod } from "@ig/client-utils";
 import type {
   GameConfigIdT, GameInstanceChatMessageT,
   GameInstanceExposedInfoT, GameInstanceIdT,
-  GetAppConfigResponseT, GetGameInstanceChatResponseT,
-  GetGameInstanceResponseT, GetUserConfigResponseT, MinimalGameConfigT,
+  GetAppConfigResponseT,
+  GetGameInstanceChatResponseT,
+  GetGameInstanceResponseT,
+  GetGamesConfigResponseT,
+  GetUserConfigResponseT, MinimalGameConfigT,
   PostGameInstanceChatMessageParamT,
   PostGameInstanceChatMessageResponseT,
   UserConfigT
@@ -70,10 +73,15 @@ export class ApiServerMock implements HttpAdapter {
 
     if (options.url === "/app-config") {
       const response: GetAppConfigResponseT = {
+        version: "1.0.0",
+      }
+      return response as TResponse;
+    } else if (options.url === "/games/games-config") {
+      const response: GetGamesConfigResponseT = {
         availableMinimalGameConfigs: devAvailableMinimalGameConfigs,
       }
       return response as TResponse;
-    } else if (options.url === "/user-config") {
+    } else if (options.url === "/games/user-config") {
       const userConfig: UserConfigT = {
         userId: "plrid-1",
         username: "username 1",
@@ -86,22 +94,22 @@ export class ApiServerMock implements HttpAdapter {
         userConfig: userConfig,
       }
       return response as TResponse;
-    } else if (options.url === "/user-config/play-game") {
+    } else if (options.url === "/games/user-config/play-game") {
       const data: { gameConfigId: GameConfigIdT } = options.data as unknown as { gameConfigId: GameConfigIdT };
       const gameInstanceId: GameInstanceIdT | null = handlePlayGame(data.gameConfigId);
       if (gameInstanceId === null) {
         return {} as TResponse;
       }
       return { gameInstanceId: gameInstanceId } as TResponse;
-    } else if (options.url === "/user-config/accept-invite") {
+    } else if (options.url === "/games/user-config/accept-invite") {
       const data: { invitationCode: string } = options.data as unknown as { invitationCode: string };
       const gameInstanceId: GameInstanceIdT | null = handleAcceptInvite(data.invitationCode);
       if (gameInstanceId === null) {
         throw new Error("Not found");
       }
       return { gameInstanceId: gameInstanceId } as TResponse;
-    } else if (options.url.startsWith("/game-instance/") && options.url.endsWith("chat/message")) {
-      const gameInstanceId: GameInstanceIdT = options.url.split("/")[2] as GameInstanceIdT;
+    } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("chat/message")) {
+      const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
       const data: PostGameInstanceChatMessageParamT = options.data as unknown as PostGameInstanceChatMessageParamT;
 
       const chatMessage: GameInstanceChatMessageT = {
@@ -117,20 +125,20 @@ export class ApiServerMock implements HttpAdapter {
         chatMsgId: chatMessage.chatMsgId,
       }
       return response as TResponse;
-    } else if (options.url.startsWith("/game-instance/") && options.url.endsWith("chat")) {
-      const gameInstanceId: GameInstanceIdT = options.url.split("/")[2] as GameInstanceIdT;
+    } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("chat")) {
+      const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
 
       const response: GetGameInstanceChatResponseT = {
         chatMessages: getGameInstanceChatMessages(gameInstanceId),
       }
       return response as TResponse;
-    } else if (options.url.startsWith("/game-instance/")) {
-      const gameInstanceId: GameInstanceIdT = options.url.split("/")[2] as GameInstanceIdT;
+    } else if (options.url.startsWith("/games/game-instance/")) {
+      const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
       const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devGameInstanceExposedInfos.find(e =>
         e.gameInstanceId === gameInstanceId
       );
       if (gameInstanceExposedInfo === undefined) {
-        throw new Error("Not found");
+        throw new Error("Game instance not found");
       }
       const response: GetGameInstanceResponseT = {
         gameInstanceExposedInfo: gameInstanceExposedInfo,

@@ -19,8 +19,8 @@ export class WebSocketClientMock
 
   subscribe(handler: WebSocketMessageHandlerT<AppWebSocketRcvMsgKindT, AppWebSocketMessagePayloadT>): () => boolean {
     // set mocked msg every 10 seconds to refresh user config
-    setInterval(() => handler("user-config-update"), 10000);
-    setInterval(() => handler("game-instance-update", { gameInstanceId: "gid-1" }), 10000);
+    setInterval(() => handler("gamesUserConfigUpdate"), 10000);
+    setInterval(() => handler("gamesGameInstanceUpdate", { gameInstanceId: "gid-1" }), 10000);
     return () => true;
   }
 }

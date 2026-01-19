@@ -5,24 +5,24 @@ import { StyleSheet, View } from "react-native";
 import { type MD3Theme } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
 import type { GameImageTypeT } from "../../types/GameImageTypes";
-import type { GameUiConfigT, GameUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
 import { AppErrorHandlingProvider } from "../error-handling/AppErrorHandlingProvider";
 import { AppLocalizationProvider } from "../localization/AppLocalizationProvider";
 import { createReduxStore } from "../model/reducers/AppReduxStore";
+import AppConfigProvider from "./AppConfigProvider";
 import { AppWebSocketProvider } from "./AppWebSocketProvider";
-import GameContextProvider from "./GameContextProvider";
 
-export type GameLayoutPropsT = {
+export type AppRootLayoutPropsT = {
   imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
   theme: MD3Theme,
   rnuiStyles: RnuiStylesT,
   gameUiConfig: GameUiConfigT,
-  gameUiUrlPathsAdapter: GameUiUrlPathsAdapter,
+  gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter,
   children: ReactElement | ReactElement[],
 };
 
-export const GameLayout: React.FC<GameLayoutPropsT> = (props) => {
-  const { imagesSourceMap, theme, rnuiStyles, gameUiConfig, gameUiUrlPathsAdapter, children } = props;
+export const AppRootLayout: React.FC<AppRootLayoutPropsT> = (props) => {
+  const { imagesSourceMap, theme, rnuiStyles, gameUiConfig, gamesUiUrlPathsAdapter, children } = props;
   const reduxStore = createReduxStore(gameUiConfig);
 
   return (
@@ -30,20 +30,20 @@ export const GameLayout: React.FC<GameLayoutPropsT> = (props) => {
       <AppLocalizationProvider>
         {/* AppErrorHandlingProvider depends on RnuiProvider::RnuiSnackbarProvider and AppLocalizationProvider */}
         <AppErrorHandlingProvider>
-          <GameContextProvider
+          <AppConfigProvider
             imagesSourceMap={imagesSourceMap}
             gameUiConfig={gameUiConfig}
-            gameUiUrlPathsAdapter={gameUiUrlPathsAdapter}
+            gamesUiUrlPathsAdapter={gamesUiUrlPathsAdapter}
           >
             <ReduxProvider store={reduxStore}>
-              {/* AppWebSocketProvider depends on GameContextProvider and ReduxProvider */}
+              {/* AppWebSocketProvider depends on AppConfigProvider and ReduxProvider */}
               <AppWebSocketProvider>
                 <View style={styles.container} testID="game-layout-wrapper" >
                   {children}
                 </View>
               </AppWebSocketProvider>
             </ReduxProvider>
-          </GameContextProvider>
+          </AppConfigProvider>
         </AppErrorHandlingProvider>
       </AppLocalizationProvider>
     </RnuiProvider>

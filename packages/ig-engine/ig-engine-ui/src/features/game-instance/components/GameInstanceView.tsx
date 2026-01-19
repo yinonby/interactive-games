@@ -3,7 +3,7 @@ import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from "@ig/eng
 import { RnuiCard, RnuiGrid, RnuiGridItem, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useGameContext } from "../../../app/layout/GameContextProvider";
+import { useAppConfig } from "../../../app/layout/AppConfigProvider";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 import { getMinimalGameConfigImageProps } from "../../../utils/GameViewUtils";
 import { ChatView } from "./ChatView";
@@ -18,7 +18,7 @@ export type GameInstanceViewPropsT = TestableComponentT & {
 
 export const GameInstanceView: FC<GameInstanceViewPropsT> = ({ gameInstanceExposedInfo, gameInstanceChatMessages }) => {
   const { playerRole } = gameInstanceExposedInfo;
-  const { imagesSourceMap } = useGameContext();
+  const { imagesSourceMap } = useAppConfig();
   const gameConfig = gameInstanceExposedInfo.gameConfig;
   const rnuiImageProps: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(gameConfig, imagesSourceMap);
   const isPlayerAdmin = playerRole === "admin";

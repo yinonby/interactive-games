@@ -1,15 +1,15 @@
 
 import type { MinimalGameConfigT } from "@ig/engine-models";
-import { extractAppErrorCodeFromAppRtkError } from "../../../app/model/rtk/AppRtkUtils";
-import type { ModelT } from "../../../types/ModelTypes";
-import { useGetAppConfigQuery } from "./AppRtkApi";
+import { extractAppErrorCodeFromAppRtkError } from "../../../../app/model/rtk/AppRtkUtils";
+import type { ModelT } from "../../../../types/ModelTypes";
+import { useGetGamesConfigQuery } from "./GamesConfigRtkApi";
 
-export type AppConfigModelT = ModelT<{
+export type GamesConfigModelT = ModelT<{
   availableMinimalGameConfigs: MinimalGameConfigT[],
 }>;
 
-export const useAppConfigModel = (): AppConfigModelT => {
-  const { isLoading, isError, error, data: appConfigResponse } = useGetAppConfigQuery();
+export const useGamesConfigModel = (): GamesConfigModelT => {
+  const { isLoading, isError, error, data: gamesConfigResponse } = useGetGamesConfigQuery();
 
   if (isLoading) {
     return {
@@ -22,7 +22,7 @@ export const useAppConfigModel = (): AppConfigModelT => {
       isError: true,
       appErrCode: extractAppErrorCodeFromAppRtkError(error),
     }
-  } else if (appConfigResponse === undefined) {
+  } else if (gamesConfigResponse === undefined) {
     return {
       isLoading: false,
       isError: true,
@@ -33,6 +33,6 @@ export const useAppConfigModel = (): AppConfigModelT => {
   return {
     isLoading: false,
     isError: false,
-    data: appConfigResponse,
+    data: gamesConfigResponse,
   }
 }

@@ -14,11 +14,11 @@ import { userConfigRtkApiEndpoints, userConfigRtkApiMiddleware, userConfigRtkApi
 let userConfigMock = { minimalGameInstanceExposedInfos: [] as MinimalGameInstanceExposedInfoT[] };
 
 export const server = setupServer(
-  http.get('https://api.test/user-config', () => {
+  http.get('https://api.test/games/user-config', () => {
     return HttpResponse.json({ userConfig: userConfigMock });
   }),
 
-  http.post('https://api.test/user-config', async ({ request }) => {
+  http.post('https://api.test/games/user-config', async ({ request }) => {
     const body = await request.json() as { gameCode: string };
 
     userConfigMock.minimalGameInstanceExposedInfos.push({
@@ -28,7 +28,7 @@ export const server = setupServer(
     return new HttpResponse(null, { status: 200 });
   }),
 
-  http.post('https://api.test/user-config/play-game', async ({ request }) => {
+  http.post('https://api.test/games/user-config/play-game', async ({ request }) => {
     const body = await request.json() as PostPlayGameRequestBodyT;
 
     const gameInstanceId = "giid-" + body.gameConfigId;
@@ -42,7 +42,7 @@ export const server = setupServer(
     return HttpResponse.json(response);
   }),
 
-  http.post('https://api.test/user-config/accept-invite', async ({ request }) => {
+  http.post('https://api.test/games/user-config/accept-invite', async ({ request }) => {
     const body = await request.json() as PostAcceptInviteRequestBodyT;
 
     const gameInstanceId = "giid-" + body.invitationCode;

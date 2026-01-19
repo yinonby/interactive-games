@@ -1,8 +1,8 @@
 
 import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
-import { useGameRnuiStyles, useGameUiConfig, useGameUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
+import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
 import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
-import { GameLayout, initI18n } from "@ig/engine-ui";
+import { AppRootLayout, initI18n } from "@ig/engine-ui";
 import { Stack } from "expo-router";
 
 // init i18n must be made once, before any rendering, because i18n is a singleton
@@ -11,12 +11,12 @@ initI18n(resources);
 
 export default function RootLayout() {
   return (
-    <GameLayout
+    <AppRootLayout
       imagesSourceMap={useImageAssetDefs()}
       theme={useGameTheme()}
       rnuiStyles={useGameRnuiStyles()}
       gameUiConfig={useGameUiConfig()}
-      gameUiUrlPathsAdapter={useGameUiUrlPathsAdapter()}
+      gamesUiUrlPathsAdapter={useGamesUiUrlPathsAdapter()}
     >
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Game & More' }} />
@@ -25,6 +25,6 @@ export default function RootLayout() {
         <Stack.Screen name="app/games/accept-invite/[invitationCode]" options={{ title: 'Game & More / Accept Invitation' }} />
         <Stack.Screen name="app/games/[gameInstanceId]/dashboard" options={{ title: 'Game & More / Game' }} />
       </Stack>
-    </GameLayout>
+    </AppRootLayout>
   )
 }

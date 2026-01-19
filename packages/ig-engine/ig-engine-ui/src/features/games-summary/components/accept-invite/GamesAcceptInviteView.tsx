@@ -4,7 +4,7 @@ import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiActivityIndicator } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';
 import { Text, View } from "react-native";
-import { useGameContext } from "../../../../app/layout/GameContextProvider";
+import { useAppConfig } from "../../../../app/layout/AppConfigProvider";
 import { useClientLogger } from "../../../../app/providers/useClientLogger";
 import { useUserConfigController } from "../../../../domains/user-config/controller/user-actions/UserConfigController";
 
@@ -16,7 +16,7 @@ export type GamesAcceptInviteViewPropsT = {
 export const GamesAcceptInviteView: FC<GamesAcceptInviteViewPropsT> = ({ invitationCode }) => {
   const { onAcceptInvite } = useUserConfigController();
   const { navigateReplace } = usePlatformUiNavigation();
-  const { gameUiUrlPathsAdapter } = useGameContext();
+  const { gamesUiUrlPathsAdapter } = useAppConfig();
   const logger = useClientLogger();
 
   useEffect(() => {
@@ -28,12 +28,12 @@ export const GamesAcceptInviteView: FC<GamesAcceptInviteViewPropsT> = ({ invitat
 
         if (gameInstanceId === null) throw new Error("Invite failed");
 
-        const url = gameUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
+        const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
         navigateReplace(url);
       } catch (e) {
         logger.error(e);
 
-        const url = gameUiUrlPathsAdapter.buildGamesDashboardUrlPath();
+        const url = gamesUiUrlPathsAdapter.buildGamesDashboardUrlPath();
         navigateReplace(url);
       }
     };

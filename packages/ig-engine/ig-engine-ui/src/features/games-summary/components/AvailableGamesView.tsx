@@ -5,7 +5,7 @@ import React, { useEffect, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAppErrorHandling } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { useAppLocalization } from "../../../app/localization/AppLocalizationProvider";
-import { useAppConfigModel } from "../../../app/model/rtk/AppConfigModel";
+import { useGamesConfigModel } from "../../../domains/games-config/model/rtk/GamesConfigModel";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { MinimalGameCardView } from "./MinimalGameCardView";
 
@@ -27,7 +27,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     isError: isAppConfigError,
     appErrCode: appConfigErrCode,
     data: appConfigModel
-  } = useAppConfigModel();
+  } = useGamesConfigModel();
   const {
     isLoading: isUserConfigLoading,
     isError: isUserConfigError,

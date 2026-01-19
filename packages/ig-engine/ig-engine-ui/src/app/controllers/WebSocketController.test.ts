@@ -37,9 +37,9 @@ describe("handleWebSocketMessage", () => {
     jest.clearAllMocks();
   });
 
-  it("handles user-config-update messages", () => {
+  it("handles gamesUserConfigUpdate messages", () => {
     handleWebSocketMessage(
-      "user-config-update",
+      "gamesUserConfigUpdate",
       undefined,
       dispatch,
       logger,
@@ -47,18 +47,18 @@ describe("handleWebSocketMessage", () => {
 
     expect(handleUserConfigWebSocketMessage).toHaveBeenCalledTimes(1);
     expect(handleUserConfigWebSocketMessage).toHaveBeenCalledWith(
-      "user-config-update",
+      "gamesUserConfigUpdate",
       dispatch
     );
 
     expect(handleGameInstanceWebSocketMessage).not.toHaveBeenCalled();
   });
 
-  it("handles game-instance-update messages", () => {
+  it("handles gamesGameInstanceUpdate messages", () => {
     const payload: AppWebSocketMessagePayloadT = { gameInstanceId: "123" };
 
     handleWebSocketMessage(
-      "game-instance-update",
+      "gamesGameInstanceUpdate",
       payload,
       dispatch,
       logger,
@@ -66,7 +66,7 @@ describe("handleWebSocketMessage", () => {
 
     expect(handleGameInstanceWebSocketMessage).toHaveBeenCalledTimes(1);
     expect(handleGameInstanceWebSocketMessage).toHaveBeenCalledWith(
-      "game-instance-update",
+      "gamesGameInstanceUpdate",
       payload,
       dispatch,
     );

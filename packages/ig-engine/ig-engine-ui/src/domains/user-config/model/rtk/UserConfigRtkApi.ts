@@ -9,37 +9,37 @@ const userConfigRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({
     getUserConfig: builder.query<GetUserConfigResponseT, void>({
       query: () => ({
-        url: '/user-config',
+        url: '/games/user-config',
         method: 'GET',
       }),
-      providesTags: ['UserConfigTag'],
+      providesTags: ['GamesUserConfigTag'],
     }),
 
     addGameConfig: builder.mutation<void, string>({
       query: gameCode => ({
-        url: '/user-config',
+        url: '/games/user-config',
         method: 'POST',
         data: { gameCode },
       }),
-      invalidatesTags: ['UserConfigTag'],
+      invalidatesTags: ['GamesUserConfigTag'],
     }),
 
     playGame: builder.mutation<PostPlayGameResponseT, string>({
       query: (gameConfigId: GameConfigIdT) => ({
-        url: '/user-config/play-game',
+        url: '/games/user-config/play-game',
         method: 'POST',
         data: { gameConfigId },
       }),
-      invalidatesTags: ['UserConfigTag'],
+      invalidatesTags: ['GamesUserConfigTag'],
     }),
 
     acceptInvite: builder.mutation<PostAcceptInviteResponseT, string>({
       query: (invitationCode: string) => ({
-        url: '/user-config/accept-invite',
+        url: '/games/user-config/accept-invite',
         method: 'POST',
         data: { invitationCode },
       }),
-      invalidatesTags: ['UserConfigTag'],
+      invalidatesTags: ['GamesUserConfigTag'],
     }),
   }),
   overrideExisting: false,

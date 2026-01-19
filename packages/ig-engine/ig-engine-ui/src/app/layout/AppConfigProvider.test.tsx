@@ -3,10 +3,10 @@ import { render } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from 'react-native';
 import type { GameImageTypeT } from "../../types/GameImageTypes";
-import type { GameUiConfigT, GameUiUrlPathsAdapter } from '../../types/GameUiConfigTypes';
-import GameContextProvider, { useGameContext } from './GameContextProvider';
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from '../../types/GameUiConfigTypes';
+import AppConfigProvider, { useAppConfig } from './AppConfigProvider';
 
-describe('GameContextProvider and useGameContext (React Native)', () => {
+describe('AppConfigProvider and useAppConfig (React Native)', () => {
   const mockConfig: GameUiConfigT = {
     apiUrl: 'https://api.fake-url.com',
     wssUrl: 'https://wss.fake-url.com',
@@ -25,13 +25,13 @@ describe('GameContextProvider and useGameContext (React Native)', () => {
 
   it('renders children correctly', () => {
     const { getByTestId } = render(
-      <GameContextProvider
+      <AppConfigProvider
         imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
-        gameUiUrlPathsAdapter={{} as GameUiUrlPathsAdapter}
+        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
         <TestChild />
-      </GameContextProvider>
+      </AppConfigProvider>
     );
 
     const child = getByTestId('text-tid');
@@ -40,37 +40,37 @@ describe('GameContextProvider and useGameContext (React Native)', () => {
 
   it('renders multiple children correctly', () => {
     const { getAllByTestId } = render(
-      <GameContextProvider
+      <AppConfigProvider
         imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
-        gameUiUrlPathsAdapter={{} as GameUiUrlPathsAdapter}
+        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
         <TestChild />
         <TestChild />
-      </GameContextProvider>
+      </AppConfigProvider>
     );
 
     const children = getAllByTestId('text-tid');
     expect(children).toHaveLength(2);
   });
 
-  it('useGameContext returns the exact config object', () => {
+  it('useAppConfig returns the exact config object', () => {
     let contextValue: GameUiConfigT | undefined;
 
     const TestConsumer: React.FC = () => {
-      const { gameUiConfig } = useGameContext();
+      const { gameUiConfig } = useAppConfig();
       contextValue = gameUiConfig;
       return null;
     };
 
     render(
-      <GameContextProvider
+      <AppConfigProvider
         imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
-        gameUiUrlPathsAdapter={{} as GameUiUrlPathsAdapter}
+        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
         <TestConsumer />
-      </GameContextProvider>
+      </AppConfigProvider>
     );
 
     expect(contextValue).toBe(mockConfig);

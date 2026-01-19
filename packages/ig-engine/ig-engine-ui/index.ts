@@ -1,5 +1,5 @@
 
-export { GameLayout } from "./src/app/layout/GameLayout";
+export { AppRootLayout } from "./src/app/layout/AppRootLayout";
 export { initI18n } from "./src/app/localization/AppLocalizationInitializer";
 export * from "./src/features/game-instance/page/GameInstancePageContent";
 export * from "./src/features/games-summary/page/GamesAcceptInvitePageContent";

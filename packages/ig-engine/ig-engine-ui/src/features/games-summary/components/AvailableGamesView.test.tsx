@@ -3,7 +3,7 @@ import { render } from "@testing-library/react-native";
 import React from "react";
 import { __errorHandlingMocks } from "../../../app/error-handling/AppErrorHandlingProvider";
 import { buildMockedTranslation } from "../../../app/localization/__mocks__/AppLocalizationProvider";
-import { useAppConfigModel } from "../../../app/model/rtk/AppConfigModel";
+import { useGamesConfigModel } from "../../../domains/games-config/model/rtk/GamesConfigModel";
 import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { AvailableGamesView } from "./AvailableGamesView";
 
@@ -16,15 +16,15 @@ jest.mock("./MinimalGameCardView", () => {
   };
 });
 
-jest.mock("../../../app/model/rtk/AppConfigModel", () => ({
-  useAppConfigModel: jest.fn(),
+jest.mock("../../../domains/games-config/model/rtk/GamesConfigModel", () => ({
+  useGamesConfigModel: jest.fn(),
 }));
 
 jest.mock("../../../domains/user-config/model/rtk/UserConfigModel", () => ({
   useUserConfigModel: jest.fn(),
 }));
 
-const mockUseAppConfigModel = useAppConfigModel as jest.Mock;
+const mockUseAppConfigModel = useGamesConfigModel as jest.Mock;
 const mockUseUserConfigModel = useUserConfigModel as jest.Mock;
 
 describe("AvailableGamesView", () => {
@@ -42,7 +42,7 @@ describe("AvailableGamesView", () => {
     expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
-  it("renders Error when app-config model has error", () => {
+  it("renders Error when games-config model has error", () => {
     mockUseAppConfigModel.mockReturnValue({ isLoading: false, isError: true, appErrCode: "ERR", data: null });
     mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: null });
 
