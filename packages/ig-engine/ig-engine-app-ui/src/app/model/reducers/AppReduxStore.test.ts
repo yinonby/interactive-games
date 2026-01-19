@@ -6,9 +6,7 @@ import './AppReduxStore';
 import { createReduxStore } from "./AppReduxStore";
 import { gameUiConfigReducer, gameUiConfigReducerPath } from "./GameUiConfigReducer";
 
-// --------------------
-// Mock Redux Toolkit
-// --------------------
+// mocks
 
 jest.mock('@reduxjs/toolkit', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,9 +22,6 @@ jest.mock('@reduxjs/toolkit', () => ({
   }),
 }));
 
-// --------------------
-// Mock RTK Query API
-// --------------------
 jest.mock('../rtk/AppRtkApi', () => ({
   appRtkApi: {
     reducerPath: 'appRtkApi',
@@ -35,27 +30,13 @@ jest.mock('../rtk/AppRtkApi', () => ({
   },
 }));
 
-// --------------------
-// Mock GameUiConfigReducer
-// --------------------
 jest.mock('./GameUiConfigReducer', () => ({
   gameUiConfigReducer: jest.fn(),
   gameUiConfigReducerPath: 'gameUiConfigReducer',
 }));
 
-/*
-// --------------------
-// Mock DataSrcVersionReducer
-// --------------------
-jest.mock('./DataSrcVersionReducer', () => ({
-  dataSrcVersionReducer: jest.fn(),
-  dataSrcVersionReducerPath: 'dataSrcVersion',
-}));
-*/
+// tests
 
-// --------------------
-// Tests
-// --------------------
 describe('AppReduxStore', () => {
   it('calls configureStore with correct reducers and middleware', () => {
     const reduxStore = createReduxStore({} as GameUiConfigT);

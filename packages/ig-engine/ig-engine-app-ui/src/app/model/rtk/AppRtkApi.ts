@@ -1,12 +1,11 @@
 
 import type { GetAppConfigResponseT } from '@ig/engine-models';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { useHttpProvider } from '../../providers/useHttpProvider';
-import { httpProviderBaseQuery } from './HttpProviderRtkBaseQuery';
+import { createAppRtkBaseQuery } from './AppRtkBaseQuery';
 
 export const appRtkApi = createApi({
   reducerPath: 'appRtkApiReducer',
-  baseQuery: httpProviderBaseQuery(useHttpProvider),
+  baseQuery: createAppRtkBaseQuery(),
   tagTypes: [
     'AppConfigContextTag',
     'GamesConfigTag', 'GamesUserConfigTag', 'GamesInstanceTag', 'GamesInstanceChatTag'

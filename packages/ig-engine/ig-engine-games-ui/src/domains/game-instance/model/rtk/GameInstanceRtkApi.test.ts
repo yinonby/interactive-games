@@ -1,7 +1,8 @@
 
+import { Axios, type HttpAdapter } from '@ig/client-utils';
 import {
   appRtkApiReducerPath,
-  gameUiConfigReducer, gameUiConfigReducerPath, type GameUiConfigT
+  useClientLogger, type AppRtkHttpAdapterGeneratorProvider
 } from "@ig/engine-app-ui";
 import type {
   GameInstanceExposedInfoT,
@@ -15,61 +16,62 @@ import {
   gameInstanceRtkApiMiddleware, gameInstanceRtkApiReducer
 } from "./GameInstanceRtkApi";
 
+const apiUrl = 'https://api.test';
+
+export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorProvider = {
+  generateHttpAdapter: (): HttpAdapter | null => {
+    return new Axios(apiUrl);
+  }
+}
+
 const gameInstanceExposedInfoMock1: GameInstanceExposedInfoT = {
   gameInstanceId: "giid-1",
 } as GameInstanceExposedInfoT;
 
 export const server = setupServer(
   // get chat
-  http.get('https://api.test/games/game-instance/giid-1', () => {
+  http.get(apiUrl + '/games/game-instance/giid-1', () => {
     return HttpResponse.json({ gameInstanceExposedInfo: gameInstanceExposedInfoMock1 });
   }),
-  http.get('https://api.test/games/game-instance/giid-2', () => {
+  http.get(apiUrl + '/games/game-instance/giid-2', () => {
     return HttpResponse.error();
   }),
-  http.get('https://api.test/games/game-instance/giid-1/chat', () => {
+  http.get(apiUrl + '/games/game-instance/giid-1/chat', () => {
     const response: GetGameInstanceChatResponseT = {
       chatMessages: [],
     };
     return HttpResponse.json(response);
   }),
-  http.get('https://api.test/games/game-instance/giid-2/chat', () => {
+  http.get(apiUrl + '/games/game-instance/giid-2/chat', () => {
     return HttpResponse.error();
   }),
 
   // post chat message
-  http.post('https://api.test/games/game-instance/giid-1/chat/message', () => {
+  http.post(apiUrl + '/games/game-instance/giid-1/chat/message', () => {
     const response: PostGameInstanceChatMessageResponseT = {
       chatMsgId: "msg-1",
     };
     return HttpResponse.json(response);
   }),
-  http.post('https://api.test/games/game-instance/giid-2/chat/message', () => {
+  http.post(apiUrl + '/games/game-instance/giid-2/chat/message', () => {
     return HttpResponse.error();
   }),
 );
-
-const gameUiConfig: GameUiConfigT = {
-  apiUrl: 'https://api.test',
-  wssUrl: 'https://wss.test',
-  appUrl: 'https://app.test',
-  isTesting: true,
-  isDevel: false,
-}
 
 export const createTestStore = () =>
   // gameUiConfigReducer is needed inside appRtkApiReducer to get gameUiConfig
   configureStore({
     reducer: {
       [appRtkApiReducerPath]: gameInstanceRtkApiReducer,
-      [gameUiConfigReducerPath]: gameUiConfigReducer,
     },
-    middleware: (gDM) => gDM().concat(gameInstanceRtkApiMiddleware),
-    preloadedState: {
-      [gameUiConfigReducerPath]: {
-        gameUiConfig: gameUiConfig,
-      }
-    }
+    middleware: (gDM) => gDM({
+      thunk: {
+        extraArgument: {
+          appRtkHttpAdapterGeneratorProvider: appRtkHttpAdapterGeneratorProviderMock,
+          logger: useClientLogger(),
+        },
+      },
+    }).concat(gameInstanceRtkApiMiddleware),
   });
 
 describe('GameInstanceRtkApi', () => {

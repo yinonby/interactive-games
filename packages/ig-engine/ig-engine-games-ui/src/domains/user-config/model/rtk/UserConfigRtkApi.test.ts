@@ -1,8 +1,9 @@
 
+import { Axios, type HttpAdapter } from '@ig/client-utils';
 import {
-  type GameUiConfigT, appRtkApiReducerPath,
-  gameUiConfigReducer,
-  gameUiConfigReducerPath
+  appRtkApiReducerPath,
+  useClientLogger,
+  type AppRtkHttpAdapterGeneratorProvider
 } from "@ig/engine-app-ui";
 import type {
   GetUserConfigResponseT, MinimalGameInstanceExposedInfoT,
@@ -16,14 +17,22 @@ import {
   userConfigRtkApiReducer
 } from "./UserConfigRtkApi";
 
+const apiUrl = 'https://api.test';
+
+export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorProvider = {
+  generateHttpAdapter: (): HttpAdapter | null => {
+    return new Axios(apiUrl);
+  }
+}
+
 let userConfigMock = { minimalGameInstanceExposedInfos: [] as MinimalGameInstanceExposedInfoT[] };
 
 export const server = setupServer(
-  http.get('https://api.test/games/user-config', () => {
+  http.get(apiUrl + '/games/user-config', () => {
     return HttpResponse.json({ userConfig: userConfigMock });
   }),
 
-  http.post('https://api.test/games/user-config', async ({ request }) => {
+  http.post(apiUrl + '/games/user-config', async ({ request }) => {
     const body = await request.json() as { gameCode: string };
 
     userConfigMock.minimalGameInstanceExposedInfos.push({
@@ -33,7 +42,7 @@ export const server = setupServer(
     return new HttpResponse(null, { status: 200 });
   }),
 
-  http.post('https://api.test/games/user-config/play-game', async ({ request }) => {
+  http.post(apiUrl + '/games/user-config/play-game', async ({ request }) => {
     const body = await request.json() as PostPlayGameRequestBodyT;
 
     const gameInstanceId = "giid-" + body.gameConfigId;
@@ -47,7 +56,7 @@ export const server = setupServer(
     return HttpResponse.json(response);
   }),
 
-  http.post('https://api.test/games/user-config/accept-invite', async ({ request }) => {
+  http.post(apiUrl + '/games/user-config/accept-invite', async ({ request }) => {
     const body = await request.json() as PostAcceptInviteRequestBodyT;
 
     const gameInstanceId = "giid-" + body.invitationCode;
@@ -62,26 +71,19 @@ export const server = setupServer(
   }),
 );
 
-const gameUiConfig: GameUiConfigT = {
-  apiUrl: 'https://api.test',
-  wssUrl: 'https://wss.test',
-  appUrl: 'https://app.test',
-  isTesting: true,
-  isDevel: false,
-}
-
 export const createTestStore = () =>
   configureStore({
     reducer: {
       [appRtkApiReducerPath]: userConfigRtkApiReducer,
-      [gameUiConfigReducerPath]: gameUiConfigReducer,
     },
-    middleware: (gDM) => gDM().concat(userConfigRtkApiMiddleware),
-    preloadedState: {
-      [gameUiConfigReducerPath]: {
-        gameUiConfig: gameUiConfig,
-      }
-    }
+    middleware: (gDM) => gDM({
+      thunk: {
+        extraArgument: {
+          appRtkHttpAdapterGeneratorProvider: appRtkHttpAdapterGeneratorProviderMock,
+          logger: useClientLogger(),
+        },
+      },
+    }).concat(userConfigRtkApiMiddleware),
   });
 
 describe('UserConfigRtkApi', () => {

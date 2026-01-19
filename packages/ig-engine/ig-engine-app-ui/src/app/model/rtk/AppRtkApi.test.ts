@@ -1,40 +1,41 @@
 
+import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type { GetAppConfigResponseT } from "@ig/engine-models";
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { GameUiConfigT } from "../../../types/GameUiConfigTypes";
-import { gameUiConfigReducer, gameUiConfigReducerPath } from "../reducers/GameUiConfigReducer";
+import { useClientLogger } from '../../../app/providers/useClientLogger';
+import type { AppRtkHttpAdapterGeneratorProvider } from '../../../types/AppRtkTypes';
 import { appRtkApiEndpoints, appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from "./AppRtkApi";
 
-const appConfigResponse: GetAppConfigResponseT = { version: "1.0.0" };
+const apiUrl = 'https://api.test';
 
+export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorProvider = {
+  generateHttpAdapter: (): HttpAdapter | null => {
+    return new Axios(apiUrl);
+  }
+}
+
+const appConfigResponse: GetAppConfigResponseT = { version: "1.0.0" };
 export const server = setupServer(
-  http.get('https://api.test/app-config', () => {
+  http.get(apiUrl + '/app-config', () => {
     return HttpResponse.json(appConfigResponse);
   }),
 );
-
-const gameUiConfig: GameUiConfigT = {
-  apiUrl: 'https://api.test',
-  wssUrl: 'https://wss.test',
-  appUrl: 'https://app.test',
-  isTesting: true,
-  isDevel: false,
-}
 
 export const createTestStore = () =>
   configureStore({
     reducer: {
       [appRtkApiReducerPath]: appRtkApiReducer,
-      [gameUiConfigReducerPath]: gameUiConfigReducer,
     },
-    middleware: (gDM) => gDM().concat(appRtkApiMiddleware),
-    preloadedState: {
-      [gameUiConfigReducerPath]: {
-        gameUiConfig: gameUiConfig,
-      }
-    }
+    middleware: (gDM) => gDM({
+      thunk: {
+        extraArgument: {
+          appRtkHttpAdapterGeneratorProvider: appRtkHttpAdapterGeneratorProviderMock,
+          logger: useClientLogger(),
+        },
+      },
+    }).concat(appRtkApiMiddleware),
   });
 
 describe('AppRtkApi', () => {

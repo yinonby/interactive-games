@@ -1,8 +1,13 @@
 
 import { configureStore } from '@reduxjs/toolkit';
+import { useClientLogger } from '../../../app/providers/useClientLogger';
 import type { GameUiConfigT } from "../../../types/GameUiConfigTypes";
 import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from "../rtk/AppRtkApi";
-import { gameUiConfigReducer, gameUiConfigReducerPath } from "./GameUiConfigReducer";
+import { appRtkHttpAdapterGenerator } from './AppReduxUtils';
+import {
+  gameUiConfigReducer,
+  gameUiConfigReducerPath
+} from "./GameUiConfigReducer";
 
 export const createReduxStore = (gameUiConfig: GameUiConfigT) => configureStore({
   reducer: {
@@ -11,7 +16,14 @@ export const createReduxStore = (gameUiConfig: GameUiConfigT) => configureStore(
     [appRtkApiReducerPath]: appRtkApiReducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(appRtkApiMiddleware),
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: {
+          appRtkHttpAdapterGeneratorProvider: appRtkHttpAdapterGenerator,
+          logger: useClientLogger(),
+        },
+      },
+    }).concat(appRtkApiMiddleware),
   preloadedState: {
     [gameUiConfigReducerPath]: {
       gameUiConfig: gameUiConfig,
