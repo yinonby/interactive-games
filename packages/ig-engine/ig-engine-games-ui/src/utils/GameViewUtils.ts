@@ -1,25 +1,24 @@
 
-import type { GameImageTypeT } from "@ig/engine-app-ui";
-import type { MinimalGameConfigT } from "@ig/engine-models";
+import type { AppImageAssetT, MinimalGameConfigT } from "@ig/engine-models";
 import { type RnuiImagePropsT, type RnuiImageSourceT } from "@ig/rnui";
 
 export const getMinimalGameConfigImageProps = (
   minimalGameConfig: MinimalGameConfigT,
-  imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
+  imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
 ): RnuiImagePropsT | undefined => {
   let rnuiImageProps: RnuiImagePropsT | undefined = undefined;
 
   if (minimalGameConfig.imageAssetName !== undefined) {
-    const gameImageType = minimalGameConfig.imageAssetName as GameImageTypeT;
+    const gameImageType = minimalGameConfig.imageAssetName as AppImageAssetT;
     const imageSource: RnuiImageSourceT | undefined = imagesSourceMap[gameImageType]
     if (imageSource !== undefined) {
       rnuiImageProps = { imageSource: imageSource, height: 200 };
     }
-  } else if (minimalGameConfig.imageUrl !== undefined) {
-    rnuiImageProps = { imageSource: minimalGameConfig.imageUrl };
+  } else {
+    rnuiImageProps = { imageSource: minimalGameConfig.imageUrl, height: 200 };
   }
   if (rnuiImageProps !== undefined &&
-    (minimalGameConfig.gamePrice === undefined || minimalGameConfig.gamePrice.priceRate === 0)
+    (minimalGameConfig.gamePrice === "free" || minimalGameConfig.gamePrice.priceRate === 0)
   ) {
     rnuiImageProps.imgLabelProps = {
       text: "free",

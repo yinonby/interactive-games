@@ -1,8 +1,8 @@
+import type { AppImageAssetT } from '@ig/engine-models';
 import type { RnuiImageSourceT } from "@ig/rnui";
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from 'react-native';
-import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GamesUiUrlPathsAdapter } from '../../types/GameUiConfigTypes';
 import { AppConfigProvider, useAppConfig } from './AppConfigProvider';
 
@@ -26,7 +26,7 @@ describe('AppConfigProvider and useAppConfig (React Native)', () => {
   it('renders children correctly', () => {
     const { getByTestId } = render(
       <AppConfigProvider
-        imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
+        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
         gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
@@ -41,7 +41,7 @@ describe('AppConfigProvider and useAppConfig (React Native)', () => {
   it('renders multiple children correctly', () => {
     const { getAllByTestId } = render(
       <AppConfigProvider
-        imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
+        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
         gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >
@@ -65,7 +65,7 @@ describe('AppConfigProvider and useAppConfig (React Native)', () => {
 
     render(
       <AppConfigProvider
-        imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
+        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         gameUiConfig={mockConfig}
         gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
       >

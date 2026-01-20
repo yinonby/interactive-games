@@ -12,7 +12,7 @@ jest.mock('@ig/engine-models', () => ({
 
 describe('PriceView', () => {
   test('renders Free when price is undefined', () => {
-    const { getByText } = render(<PriceView price={undefined} />);
+    const { getByText } = render(<PriceView price={"free"} />);
 
     getByText(buildMockedTranslation("common:free"));
   });

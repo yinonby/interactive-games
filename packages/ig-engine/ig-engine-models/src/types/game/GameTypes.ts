@@ -1,4 +1,6 @@
 
+import type { XOR } from '@ig/lib';
+import type { AppImageAssetT } from '../app/AppTypes';
 import type { GameStatusT } from "./GameStateTypes";
 import type { LevelConfigT } from "./LevelTypes";
 import type { UserIdT } from "./UserTypes";
@@ -21,11 +23,12 @@ export type MinimalGameConfigT = {
   kind: "joint-game",
   gameName: string,
   maxDurationMinutes: number,
-  gamePrice?: PriceT,
+  gamePrice: PriceT | "free",
   maxParticipants: number,
-  imageUrl?: string,
-  imageAssetName?: string,
-}
+} & XOR<
+  { imageAssetName: AppImageAssetT },
+  { imageUrl: string }
+>
 
 export type GameConfigT = MinimalGameConfigT & {
   extraTimeMinutes: number,

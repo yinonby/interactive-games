@@ -1,5 +1,5 @@
 
-import type { GameImageTypeT } from "@ig/engine-app-ui";
+import type { AppImageAssetT } from '@ig/engine-models';
 import type { RnuiImageSourceT } from "@ig/rnui";
 import { type ColorSchemeName, useColorScheme } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, type MD3Theme } from "react-native-paper";
@@ -7,10 +7,11 @@ import type { MD3Colors } from "react-native-paper/lib/typescript/types";
 import darkThemeJson from "../../assets/theme/darkTheme.json";
 import lightThemeJson from "../../assets/theme/lightTheme.json";
 
-export const useImageAssetDefs = (): Record<GameImageTypeT, RnuiImageSourceT> => {
+export const useImageAssetDefs = (): Record<AppImageAssetT, RnuiImageSourceT> => {
   return {
     "treasure-hunt-1": require("../../assets/images/games/treasure-island-1.jpg"),
     "escape-room-1": require("../../assets/images/games/escape-room-1.jpg"),
+    "wordle-1": require("../../assets/images/games/wordle-1.jpg"),
   }
 }
 

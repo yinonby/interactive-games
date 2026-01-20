@@ -1,10 +1,10 @@
 
+import type { AppImageAssetT } from '@ig/engine-models';
 import { RnuiProvider, type RnuiImageSourceT, type RnuiStylesT } from "@ig/rnui";
 import React, { ReactElement } from 'react';
 import { StyleSheet, View } from "react-native";
 import { type MD3Theme } from "react-native-paper";
 import { Provider as ReduxProvider } from "react-redux";
-import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
 import { AppErrorHandlingProvider } from "../error-handling/AppErrorHandlingProvider";
 import { AppLocalizationProvider } from "../localization/AppLocalizationProvider";
@@ -13,7 +13,7 @@ import { AppConfigProvider } from "./AppConfigProvider";
 import { AppWebSocketProvider, type AppWebSocketMsgHandlerT } from "./AppWebSocketProvider";
 
 export type AppRootLayoutPropsT = {
-  imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
+  imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
   theme: MD3Theme,
   rnuiStyles: RnuiStylesT,
   gameUiConfig: GameUiConfigT,

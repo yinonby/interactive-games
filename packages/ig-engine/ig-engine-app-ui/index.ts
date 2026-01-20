@@ -11,7 +11,6 @@ export { extractAppErrorCodeFromAppRtkError } from "./src/app/model/rtk/AppRtkUt
 export { useClientLogger } from "./src/app/providers/useClientLogger";
 export * from "./src/types/AppRtkTypes";
 export * from "./src/types/CommonTranslationTypes";
-export * from "./src/types/GameImageTypes";
 export * from "./src/types/GamesTranslationsTypes";
 export * from "./src/types/GameUiConfigTypes";
 export * from "./src/types/GenericStyles";

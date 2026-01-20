@@ -1,10 +1,10 @@
 
+import type { AppImageAssetT } from '@ig/engine-models';
 import type { RnuiImageSourceT, RnuiStylesT } from "@ig/rnui";
 import { render } from '@testing-library/react-native';
 import React, { type ReactNode } from 'react';
 import { Text } from 'react-native';
 import type { MD3Theme } from "react-native-paper";
-import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
 import { AppRootLayout } from './AppRootLayout'; // adjust path if needed
 
@@ -52,7 +52,7 @@ describe('AppRootLayout', () => {
   it('renders children correctly', () => {
     const { getByText } = render(
       <AppRootLayout
-        imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
+        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         theme={{} as MD3Theme}
         rnuiStyles={{} as RnuiStylesT}
         gameUiConfig={{} as GameUiConfigT}
@@ -70,7 +70,7 @@ describe('AppRootLayout', () => {
   it('renders wrappers', () => {
     const { getByTestId } = render(
       <AppRootLayout
-        imagesSourceMap={{} as Record<GameImageTypeT, RnuiImageSourceT>}
+        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         theme={{} as MD3Theme}
         rnuiStyles={{} as RnuiStylesT}
         gameUiConfig={{} as GameUiConfigT}

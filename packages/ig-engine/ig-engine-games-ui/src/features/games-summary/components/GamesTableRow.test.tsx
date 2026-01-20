@@ -47,7 +47,9 @@ describe('GamesTableRow', () => {
         kind: "joint-game",
         gameName: 'Poker Night',
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -75,7 +77,9 @@ describe('GamesTableRow', () => {
         kind: "joint-game",
         gameName: 'Poker Night',
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "player",
       playerStatus: "playing",
