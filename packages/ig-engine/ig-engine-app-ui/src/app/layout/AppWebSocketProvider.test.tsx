@@ -82,7 +82,7 @@ describe("AppWebSocketProvider", () => {
     expect(handleWebSocketMessage3.mock.calls[0][1]).toEqual({ foo: "bar" });
   });
 
-  it("doesn't handle message", () => {
+  it("does not handle message", () => {
     const { errorMock } = __loggerMocks;
 
     const handleWebSocketMessage1 = jest.fn(() => false) as jest.Mock;

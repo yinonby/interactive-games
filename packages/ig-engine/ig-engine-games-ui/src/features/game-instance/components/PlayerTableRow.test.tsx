@@ -23,34 +23,48 @@ describe("PlayerTableRow", () => {
       playerStatus: "playing",
     };
     const { getByTestId, getAllByTestId } = render(<PlayerTableRow
-      isPlayerAdmin={false}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={false}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     const tableRow = getByTestId("table-row-tid");
     expect(tableRow).toBeTruthy()
 
-    const tableCells = getAllByTestId("table-cell-tid");
+    const tableCells = getAllByTestId("RnuiTableCell-tid");
     expect(tableCells).toHaveLength(3);
   });
 
-  it("renders an extra cell for button when player is admin", () => {
+  it("renders an extra empty cell when cur user is admin, and the row is for the cur user as a player", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "playing",
     };
-    const { getByTestId, getAllByTestId } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+    const { getByTestId } = render(<PlayerTableRow
+      isCurUserAdminPlayer={true}
+      isCurUser={true}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
-    const tableRow = getByTestId("table-row-tid");
-    expect(tableRow).toBeTruthy()
+    getByTestId("RnuiTableCell-noButtons-tid");
+  });
 
-    const tableCells = getAllByTestId("table-cell-tid");
-    expect(tableCells).toHaveLength(4);
+  it("renders an extra cell for button when cur user is admin, but the player is another player", () => {
+    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+      playerUserId: "p1",
+      playerNickname: "Alice",
+      playerRole: "player",
+      playerStatus: "playing",
+    };
+    const { getByTestId } = render(<PlayerTableRow
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
+    />);
+
+    getByTestId("RnuiTableCell-buttons-tid");
   });
 
   it("renders no status color when player is not joined", () => {
@@ -61,8 +75,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "invited",
     };
     const { getByTestId } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -77,8 +92,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "playing",
     };
     const { getByTestId } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -93,8 +109,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "suspended",
     };
     const { getByTestId } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -109,8 +126,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "playing",
     };
     const { getByTestId, getByText } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     getByText(buildMockedTranslation("games:suspend"));
@@ -131,8 +149,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "suspended",
     };
     const { getByTestId, getByText } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     getByText(buildMockedTranslation("games:activate"));
@@ -153,8 +172,9 @@ describe("PlayerTableRow", () => {
       playerStatus: "invited",
     };
     const { getByTestId, getByText } = render(<PlayerTableRow
-      isPlayerAdmin={true}
-      otherPlayerExposedInfo={otherPlayerExposedInfo}
+      isCurUserAdminPlayer={true}
+      isCurUser={false}
+      playerExposedInfo={otherPlayerExposedInfo}
     />);
 
     getByText(buildMockedTranslation("games:uninvite"));

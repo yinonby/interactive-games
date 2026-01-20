@@ -6,46 +6,50 @@ import React, { type FC } from 'react';
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
 export type PlayersCardViewPropsT = TestableComponentT & {
-  isPlayerAdmin: boolean,
-  otherPlayerExposedInfo: PlayerExposedInfoT,
+  isCurUserAdminPlayer: boolean,
+  isCurUser: boolean,
+  playerExposedInfo: PlayerExposedInfoT,
 };
 
-export const PlayerTableRow: FC<PlayersCardViewPropsT> = ({ isPlayerAdmin, otherPlayerExposedInfo }) => {
-    const { t } = useAppLocalization();
+export const PlayerTableRow: FC<PlayersCardViewPropsT> = ({ isCurUserAdminPlayer, isCurUser, playerExposedInfo }) => {
+  const { t } = useAppLocalization();
+  const youStr = isCurUser ? " (" + t("common:you", { postProcess: 'lowercase' }) + ")" : "";
+  const textVariant = isCurUser ? "titleSmall" : undefined;
 
   let statusOnSurfaceColor: string | undefined = undefined;
-  if (otherPlayerExposedInfo.playerStatus === "playing") {
+  if (playerExposedInfo.playerStatus === "playing") {
     statusOnSurfaceColor = "green";
-  } else if (otherPlayerExposedInfo.playerStatus === "suspended") {
+  } else if (playerExposedInfo.playerStatus === "suspended") {
     statusOnSurfaceColor = "red";
   }
 
   return (
     <RnuiTableRow testID="table-row-tid" style={{ paddingHorizontal: 0 }}>
-      <RnuiTableCell testID="table-cell-tid">
-        <RnuiText>{otherPlayerExposedInfo.playerNickname}</RnuiText>
+      <RnuiTableCell testID="RnuiTableCell-tid">
+        <RnuiText variant={textVariant}>{playerExposedInfo.playerNickname + youStr}</RnuiText>
       </RnuiTableCell>
-      <RnuiTableCell testID="table-cell-tid">
-        <RnuiText>{otherPlayerExposedInfo.playerRole}</RnuiText>
+      <RnuiTableCell testID="RnuiTableCell-tid">
+        <RnuiText variant={textVariant}>{playerExposedInfo.playerRole}</RnuiText>
       </RnuiTableCell>
-      <RnuiTableCell testID="table-cell-tid">
-        <RnuiText testID="status-text-tid" theme={{ colors: { onSurface: statusOnSurfaceColor } }}>
-          {otherPlayerExposedInfo.playerStatus}
+      <RnuiTableCell testID="RnuiTableCell-tid">
+        <RnuiText variant={textVariant} testID="status-text-tid" theme={{ colors: { onSurface: statusOnSurfaceColor } }}>
+          {playerExposedInfo.playerStatus}
         </RnuiText>
       </RnuiTableCell>
-      {isPlayerAdmin &&
-        <RnuiTableCell testID="table-cell-tid" endContent>
-          {otherPlayerExposedInfo.playerStatus === "playing" &&
+      {isCurUserAdminPlayer && isCurUser && <RnuiTableCell testID="RnuiTableCell-noButtons-tid" endContent><></></RnuiTableCell>}
+      {isCurUserAdminPlayer && !isCurUser &&
+        <RnuiTableCell testID="RnuiTableCell-buttons-tid" endContent>
+          {playerExposedInfo.playerStatus === "playing" &&
             <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
               {t("games:suspend")}
             </RnuiButton>
           }
-          {otherPlayerExposedInfo.playerStatus === "suspended" &&
+          {playerExposedInfo.playerStatus === "suspended" &&
             <RnuiButton testID="activate-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
               {t("games:activate")}
             </RnuiButton>
           }
-          {otherPlayerExposedInfo.playerStatus === "invited" &&
+          {playerExposedInfo.playerStatus === "invited" &&
             <RnuiButton testID="uninvite-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
               {t("games:uninvite")}
             </RnuiButton>

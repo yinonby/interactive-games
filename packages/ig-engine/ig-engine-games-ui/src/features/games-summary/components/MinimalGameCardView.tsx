@@ -5,7 +5,7 @@ import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiButton, RnuiCard, RnuiText, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useUserConfigController } from "../../../domains/user-config/controller/user-actions/UserConfigController";
+import { useGamesUserConfigController } from "../../../domains/user-config/controller/user-actions/GamesUserConfigController";
 import { getMinimalGameConfigImageProps } from "../../../utils/GameViewUtils";
 import { PriceView } from "./PriceView";
 
@@ -18,7 +18,7 @@ export const MinimalGameCardView: FC<MinimalGameCardViewPropsT> = ({ minimalGame
   const { imagesSourceMap } = useAppConfig();
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
-  const { onPlayGame } = useUserConfigController();
+  const { onPlayGame } = useGamesUserConfigController();
   const { navigate } = usePlatformUiNavigation();
   const rnuiImageProps: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(minimalGameConfig, imagesSourceMap);
 

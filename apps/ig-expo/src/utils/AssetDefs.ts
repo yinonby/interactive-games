@@ -12,6 +12,8 @@ export const useImageAssetDefs = (): Record<AppImageAssetT, RnuiImageSourceT> =>
     "treasure-hunt-1": require("../../assets/images/games/treasure-island-1.jpg"),
     "escape-room-1": require("../../assets/images/games/escape-room-1.jpg"),
     "wordle-1": require("../../assets/images/games/wordle-1.jpg"),
+    "wordle-2": require("../../assets/images/games/wordle-2.jpg"),
+    "wordle-3": require("../../assets/images/games/wordle-3.jpg"),
   }
 }
 

@@ -3,7 +3,7 @@ import type {
   AppConfigContextT, AppLocalizationContextT, AppTranslationKeyT,
   GamesUiUrlPathsAdapter
 } from "@ig/engine-app-ui";
-import type { AppImageAssetT, GameInstanceIdT } from "@ig/engine-models";
+import type { AppImageAssetT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import type { RnuiImageSourceT } from "@ig/rnui";
 
@@ -15,7 +15,8 @@ export const initEngineAppUiMocks = () => {
       '@ig/engine-app-ui'
     );
 
-    const onErrorMock = jest.fn();
+    const onAppErrorMock = jest.fn();
+    const onUnknownErrorMock = jest.fn();
     const loggerErrorMock = jest.fn();
 
     const useClientLoggerMock = (): LoggerAdapter => {
@@ -32,15 +33,19 @@ export const initEngineAppUiMocks = () => {
       t: jest.fn((tKey: AppTranslationKeyT) => "mocked-t-" + tKey),
     });
 
+    // useAppConfig mocks
     const imagesSourceMap = {
       ["treasure-hunt-1"]: { uri: "http://example.com/cover.png" },
     } as Record<AppImageAssetT, RnuiImageSourceT>;
+    const buildGamesDashboardUrlPathMock = jest.fn();
+    const buildGamesAcceptInviteUrlPathMock = jest.fn();
+    const buildGameInstanceDashboardUrlPathMock = jest.fn();
     const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
-      buildGamesDashboardUrlPath: (): string => "mockedPathGamesDashboard",
-      buildGamesAcceptInviteUrlPath: (invitationCode: string): string => `mockedPathGamesAcceptInvite/${invitationCode}`,
-      buildGameInstanceDashboardUrlPath: (gameInstanceId: GameInstanceIdT) => `mockedPathGamesInstance/${gameInstanceId}`,
+      buildGamesDashboardUrlPath: buildGamesDashboardUrlPathMock,//(): string => "mockedPathGamesDashboard",
+      buildGamesAcceptInviteUrlPath: buildGamesAcceptInviteUrlPathMock,//(invitationCode: string): string => `mockedPathGamesAcceptInvite/${invitationCode}`,
+      buildGameInstanceDashboardUrlPath: buildGameInstanceDashboardUrlPathMock,//(gameInstanceId: GameInstanceIdT) => `mockedPathGamesInstance/${gameInstanceId}`,
     } as GamesUiUrlPathsAdapter;
-    const useAppConfigMock = (): AppConfigContextT => ({
+    const useAppConfigMock = jest.fn((): AppConfigContextT => ({
       imagesSourceMap: imagesSourceMap,
       gameUiConfig: {
         apiUrl: "mockedApiUrl",
@@ -50,11 +55,11 @@ export const initEngineAppUiMocks = () => {
         isDevel: false,
       },
       gamesUiUrlPathsAdapter: gamesUiUrlPathsAdapter,
-    });
+    } as AppConfigContextT));
 
     return {
       ...actual,
-      useAppErrorHandling: () => ({ onError: onErrorMock }),
+      useAppErrorHandling: () => ({ onAppError: onAppErrorMock, onUnknownError: onUnknownErrorMock }),
       useAppLocalization: useAppLocalizationMock,
       useClientLogger: useClientLoggerMock,
       useAppConfig: useAppConfigMock,
@@ -62,7 +67,12 @@ export const initEngineAppUiMocks = () => {
       // expose for tests
       __engineAppUiMocks: {
         loggerErrorMock,
-        onErrorMock,
+        onAppErrorMock,
+        onUnknownErrorMock,
+        useAppConfigMock,
+        buildGamesDashboardUrlPathMock,
+        buildGamesAcceptInviteUrlPathMock,
+        buildGameInstanceDashboardUrlPathMock,
       },
     };
   });

@@ -14,31 +14,20 @@ export type PlayersViewPropsT = TestableComponentT & {
 export const PlayersView: FC<PlayersViewPropsT> = (props) => {
   const { t } = useAppLocalization();
   const { gameInstanceExposedInfo } = props;
-  const { playerRole, otherPlayerExposedInfos } = gameInstanceExposedInfo;
+  const { playerExposedInfos } = gameInstanceExposedInfo;
   const genericStyles = useGenericStyles();
-  const isPlayerAdmin = playerRole === "admin";
-  const arePlayersPresent = otherPlayerExposedInfos.length > 0;
 
-  if (!arePlayersPresent) {
-    return (
-      <View >
-        <RnuiText testID="no-players-text-tid" variant="titleSmall">{t("games:noPlayers")}</RnuiText>
+  return (
+    <View testID="container-tid">
+      <View style={genericStyles.spacingBottom} >
+        <RnuiText testID="players-text-tid" variant="titleSmall">{t("games:players")}</RnuiText>
       </View>
-    );
-  } else {
-    return (
-      <View >
-        <View style={genericStyles.spacingBottom} >
-          <RnuiText testID="players-text-tid" variant="titleSmall">{t("games:players")}</RnuiText>
-        </View>
-        <View style={genericStyles.spacingBottom} >
-          <PlayersTableView
-            testID="players-table-view-tid"
-            isPlayerAdmin={isPlayerAdmin}
-            otherPlayerExposedInfos={otherPlayerExposedInfos}
-          />
-        </View>
+      <View style={genericStyles.spacingBottom} >
+        <PlayersTableView
+          testID="players-table-view-tid"
+          playerExposedInfos={playerExposedInfos}
+        />
       </View>
-    );
-  }
+    </View>
+  );
 };

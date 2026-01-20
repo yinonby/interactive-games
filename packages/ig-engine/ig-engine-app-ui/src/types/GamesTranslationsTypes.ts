@@ -17,4 +17,6 @@ export type GamesTranslationKeyT =
   | "games:gameEnded"
   | "games:gameNotStarted"
   | "games:gameInProcess"
+  | "games:admin"
+  | "games:player"
 ;

@@ -1,11 +1,11 @@
 
-import { useAppConfig, useClientLogger } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling } from "@ig/engine-app-ui";
 import type { GameInstanceIdT } from "@ig/engine-models";
 import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiActivityIndicator } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';
 import { Text, View } from "react-native";
-import { useUserConfigController } from "../../../../domains/user-config/controller/user-actions/UserConfigController";
+import { useGamesUserConfigController } from "../../../../domains/user-config/controller/user-actions/GamesUserConfigController";
 
 export type GamesAcceptInviteViewPropsT = {
   invitationCode: string,
@@ -13,24 +13,22 @@ export type GamesAcceptInviteViewPropsT = {
 };
 
 export const GamesAcceptInviteView: FC<GamesAcceptInviteViewPropsT> = ({ invitationCode }) => {
-  const { onAcceptInvite } = useUserConfigController();
+  const { onAcceptInvite } = useGamesUserConfigController();
   const { navigateReplace } = usePlatformUiNavigation();
   const { gamesUiUrlPathsAdapter } = useAppConfig();
-  const logger = useClientLogger();
+  const { onUnknownError } = useAppErrorHandling();
 
   useEffect(() => {
     if (!invitationCode) return;
 
     const acceptInvite = async () => {
       try {
-        const gameInstanceId: GameInstanceIdT | null = await onAcceptInvite(invitationCode);
-
-        if (gameInstanceId === null) throw new Error("Invite failed");
+        const gameInstanceId: GameInstanceIdT = await onAcceptInvite(invitationCode);
 
         const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
         navigateReplace(url);
       } catch (e) {
-        logger.error(e);
+        onUnknownError(e);
 
         const url = gamesUiUrlPathsAdapter.buildGamesDashboardUrlPath();
         navigateReplace(url);

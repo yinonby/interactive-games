@@ -1,4 +1,6 @@
 
+import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-app-ui';
+import type { PlayerExposedInfoT } from '@ig/engine-models';
 import { render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
@@ -18,9 +20,59 @@ jest.mock('./PlayerTableRow', () => {
 // tests
 
 describe("PlayersTableView", () => {
-  it("renders component properly, no admin, no players", () => {
+  const { useAppConfigMock, loggerErrorMock } = __engineAppUiMocks;
+
+  // mock curUserId
+  const curUserId = "userIdMock";
+  useAppConfigMock.mockReturnValue({
+    curUserId: curUserId,
+  } as AppConfigContextT);
+
+  it("does not render when current user is not in players list", () => {
+    const playerExposedInfo: PlayerExposedInfoT = {
+      playerUserId: "otherUserId",
+      playerRole: 'player',
+    } as PlayerExposedInfoT;
+    const { queryByTestId } = render(
+      <PlayersTableView playerExposedInfos={[playerExposedInfo]} />
+    );
+
+    // verify calls
+    expect(loggerErrorMock).toHaveBeenCalled();
+
+    // verify components
+    expect(queryByTestId("table-tid")).toBeNull();
+  });
+
+  it("renders component properly, admin", () => {
+    const playerExposedInfo: PlayerExposedInfoT = {
+      playerUserId: curUserId,
+      playerRole: 'admin',
+    } as PlayerExposedInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
-      <PlayersTableView isPlayerAdmin={false} otherPlayerExposedInfos={[]} />
+      <PlayersTableView playerExposedInfos={[playerExposedInfo]} />
+    );
+
+    getByTestId("table-tid");
+    getByTestId("table-header-tid");
+
+    const tableTitles = getAllByTestId("table-title-tid");
+    expect(tableTitles).toHaveLength(4);
+    getByText(buildMockedTranslation("common:nickname"));
+    getByText(buildMockedTranslation("common:role"));
+    getByText(buildMockedTranslation("common:status"));
+
+    const playerRows = queryAllByTestId("player-row-tid");
+    expect(playerRows).toHaveLength(1);
+  });
+
+  it("renders component properly, no admin", () => {
+    const playerExposedInfo: PlayerExposedInfoT = {
+      playerUserId: curUserId,
+      playerRole: 'player',
+    } as PlayerExposedInfoT;
+    const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
+      <PlayersTableView playerExposedInfos={[playerExposedInfo]} />
     );
 
     getByTestId("table-tid");
@@ -33,44 +85,23 @@ describe("PlayersTableView", () => {
     getByText(buildMockedTranslation("common:status"));
 
     const playerRows = queryAllByTestId("player-row-tid");
-    expect(playerRows).toHaveLength(0);
+    expect(playerRows).toHaveLength(1);
   });
 
-  it("renders component properly, admin, no players", () => {
-    const { getByTestId, getAllByTestId, queryAllByTestId } = render(
-      <PlayersTableView isPlayerAdmin={true} otherPlayerExposedInfos={[]} />
+  it("renders component properly, multiple players", () => {
+    const playerExposedInfo1: PlayerExposedInfoT = {
+      playerUserId: curUserId,
+      playerRole: 'admin',
+    } as PlayerExposedInfoT;
+    const playerExposedInfo2: PlayerExposedInfoT = {
+      playerUserId: 'otherUserId',
+      playerRole: 'player',
+    } as PlayerExposedInfoT;
+    const { queryAllByTestId } = render(
+      <PlayersTableView playerExposedInfos={[playerExposedInfo1, playerExposedInfo2]} />
     );
-
-    getByTestId("table-tid");
-    getByTestId("table-header-tid");
-
-    const tableTitles = getAllByTestId("table-title-tid");
-    expect(tableTitles).toHaveLength(4);
 
     const playerRows = queryAllByTestId("player-row-tid");
-    expect(playerRows).toHaveLength(0);
-  });
-
-  it("renders component properly, admin, with players", () => {
-    const { getAllByTestId, getByTestId } = render(
-      <PlayersTableView
-        isPlayerAdmin={true}
-        otherPlayerExposedInfos={[{
-          playerUserId: "p1",
-          playerNickname: "Player 1",
-          playerRole: "player",
-          playerStatus: "playing",
-        }]}
-      />
-    );
-
-    getByTestId("table-tid");
-    getByTestId("table-header-tid");
-
-    const tableTitles = getAllByTestId("table-title-tid");
-    expect(tableTitles).toHaveLength(4);
-
-    const playerRows = getAllByTestId("player-row-tid");
-    expect(playerRows).toHaveLength(1);
+    expect(playerRows).toHaveLength(2);
   });
 });

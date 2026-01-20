@@ -1,6 +1,6 @@
 
 
-export const initLoggerMocks = () => {
+export const initClientUtilsMocks = () => {
   jest.mock('@ig/client-utils', () => {
     const actual = jest.requireActual<typeof import('@ig/client-utils')>('@ig/client-utils');
 

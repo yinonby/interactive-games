@@ -14,6 +14,7 @@
     "lint:fix": "npm run lint:eslint -- --fix",
     "lint:cycles": "madge --circular --extensions ts,tsx,js .",
     "test:unit": "jest",
+    "ut": "npm run test:unit",
     "cover:unit": "npm run test:unit -- --coverage"
   },
   "dependencies": {

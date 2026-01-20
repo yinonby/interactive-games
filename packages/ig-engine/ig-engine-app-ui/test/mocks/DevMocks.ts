@@ -41,7 +41,7 @@ const wordleEsMinimalConfig: MinimalGameConfigT = {
   maxDurationMinutes: 60,
   gamePrice: "free",
   maxParticipants: 6,
-  imageAssetName: "wordle-1",
+  imageAssetName: "wordle-2",
 }
 
 const wordleFrMinimalConfig: MinimalGameConfigT = {
@@ -51,46 +51,20 @@ const wordleFrMinimalConfig: MinimalGameConfigT = {
   maxDurationMinutes: 60,
   gamePrice: "free",
   maxParticipants: 6,
-  imageAssetName: "wordle-1",
+  imageAssetName: "wordle-3",
 }
 
 export const devAvailableMinimalGameConfigs: MinimalGameConfigT[] = [
   secretIslandMinimalConfig,
+  escapeRoomMinimalConfig,
+  wordleEnMinimalConfig,
   wordleEsMinimalConfig,
   wordleFrMinimalConfig,
 ]
 
-export const devExternalGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
-  gameInstanceId: "giid-wordle-french",
-  invitationCode: "invt-code-giid-wordle-french",
-  gameConfig: {
-    ...wordleFrMinimalConfig,
-    extraTimeMinutes: 10,
-    extraTimeLimitMinutes: 20,
-    levelConfigs: [],
-  },
-  playerRole: "player",
-  playerStatus: "playing",
-  gameStatus: "in-process",
-  otherPlayerExposedInfos: [{
-    playerUserId: "user-2",
-    playerNickname: "player 2",
-    playerRole: "admin",
-    playerStatus: "playing",
-  }, {
-    playerUserId: "user-3",
-    playerNickname: "player 3",
-    playerRole: "player",
-    playerStatus: "suspended",
-  }, {
-    playerUserId: "user-4",
-    playerNickname: "player 4",
-    playerRole: "player",
-    playerStatus: "invited",
-  }],
-}]
+export const devAllGameInstanceExposedInfos: GameInstanceExposedInfoT[] = []
 
-export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
+export const _devAllGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
   gameInstanceId: "giid-1",
   invitationCode: "invt-code-giid-1",
   gameConfig: {
@@ -99,10 +73,8 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
   },
-  playerRole: "admin",
-  playerStatus: "playing",
   gameStatus: "in-process",
-  otherPlayerExposedInfos: [{
+  playerExposedInfos: [{
     playerUserId: "user-2",
     playerNickname: "player 2",
     playerRole: "player",
@@ -127,10 +99,8 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
   },
-  playerRole: "player",
-  playerStatus: "playing",
   gameStatus: "in-process",
-  otherPlayerExposedInfos: [{
+  playerExposedInfos: [{
     playerUserId: "user-5",
     playerNickname: "player 5",
     playerRole: "player",
@@ -155,10 +125,39 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
   },
-  playerRole: "player",
-  playerStatus: "playing",
   gameStatus: "not-started",
-  otherPlayerExposedInfos: [],
+  playerExposedInfos: [{
+    playerUserId: "user-2",
+    playerNickname: "player 2",
+    playerRole: "admin",
+    playerStatus: "playing",
+  }],
+}, {
+  gameInstanceId: "giid-wordle-french",
+  invitationCode: "invt-code-giid-wordle-french",
+  gameConfig: {
+    ...wordleFrMinimalConfig,
+    extraTimeMinutes: 10,
+    extraTimeLimitMinutes: 20,
+    levelConfigs: [],
+  },
+  gameStatus: "in-process",
+  playerExposedInfos: [{
+    playerUserId: "user-2",
+    playerNickname: "player 2",
+    playerRole: "admin",
+    playerStatus: "playing",
+  }, {
+    playerUserId: "user-3",
+    playerNickname: "player 3",
+    playerRole: "player",
+    playerStatus: "suspended",
+  }, {
+    playerUserId: "user-4",
+    playerNickname: "player 4",
+    playerRole: "player",
+    playerStatus: "invited",
+  }],
 }];
 
 export const devChatMessages: GameInstanceChatMessageT[] = [{

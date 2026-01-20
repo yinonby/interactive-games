@@ -44,7 +44,7 @@ describe("WebSocketProvider", () => {
     expect(unsubscribeMock).toHaveBeenCalledTimes(1);
   });
 
-  it("forwards websocket messages to handleWebSocketMessage", () => {
+  it("forwards websocket messages to handleGamesWebSocketMessage", () => {
     const msgHandlerMock = jest.fn();
 
     render(

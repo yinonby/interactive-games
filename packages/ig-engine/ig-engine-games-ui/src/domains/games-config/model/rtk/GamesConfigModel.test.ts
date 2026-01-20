@@ -1,21 +1,20 @@
 
+import type { GetGamesConfigResponseT } from '@ig/engine-models';
 import { useGamesConfigModel } from "./GamesConfigModel";
-import { useGetGamesConfigQuery } from "./GamesConfigRtkApi";
-
-jest.mock("./GamesConfigRtkApi", () => ({ useGetGamesConfigQuery: jest.fn() }));
-
-const mockedUseGetAppConfigQuery = useGetGamesConfigQuery as unknown as jest.Mock;
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
+import * as GamesConfigRtkApi from "./GamesConfigRtkApi";
 
 describe("useGamesConfigModel", () => {
+  const useGetGamesConfigQuerySpy = jest.spyOn(GamesConfigRtkApi, 'useGetGamesConfigQuery');
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("returns loading state when query is loading", () => {
-    mockedUseGetAppConfigQuery.mockReturnValue({
+    useGetGamesConfigQuerySpy.mockReturnValue({
       isLoading: true,
       isError: false,
-      data: undefined,
+      refetch: jest.fn(),
     });
 
     expect(useGamesConfigModel()).toEqual({
@@ -25,11 +24,11 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns error state when query reports an error", () => {
-    mockedUseGetAppConfigQuery.mockReturnValue({
+    useGetGamesConfigQuerySpy.mockReturnValue({
       isLoading: false,
       isError: true,
       error: { appErrCode: "apiError:server" },
-      data: undefined,
+      refetch: jest.fn(),
     });
 
     expect(useGamesConfigModel()).toEqual({
@@ -40,10 +39,10 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns error state when data is undefined (no payload)", () => {
-    mockedUseGetAppConfigQuery.mockReturnValue({
+    useGetGamesConfigQuerySpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: undefined,
+      refetch: jest.fn(),
     });
 
     expect(useGamesConfigModel()).toEqual({
@@ -54,19 +53,22 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns data when query succeeds", () => {
-    const fakeData = {
-      availableMinimalGameConfigs: [{ id: "g1" }, { id: "g2" }],
+    const mockedResponse: GetGamesConfigResponseT = {
+      gamesConfig: {
+        availableMinimalGameConfigs: [],
+      }
     };
-    mockedUseGetAppConfigQuery.mockReturnValue({
+    useGetGamesConfigQuerySpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: fakeData,
+      data: mockedResponse,
+      refetch: jest.fn(),
     });
 
     expect(useGamesConfigModel()).toEqual({
       isLoading: false,
       isError: false,
-      data: fakeData,
+      data: { gamesConfig: mockedResponse.gamesConfig },
     });
   });
 });

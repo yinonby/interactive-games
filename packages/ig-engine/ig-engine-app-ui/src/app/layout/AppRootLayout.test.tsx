@@ -1,11 +1,11 @@
 
 import type { AppImageAssetT } from '@ig/engine-models';
-import type { RnuiImageSourceT, RnuiStylesT } from "@ig/rnui";
+import type { RnuiImageSourceT, RnuiStylesT } from '@ig/rnui';
 import { render } from '@testing-library/react-native';
 import React, { type ReactNode } from 'react';
 import { Text } from 'react-native';
-import type { MD3Theme } from "react-native-paper";
-import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
+import type { MD3Theme } from 'react-native-paper';
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from '../../types/GameUiConfigTypes';
 import { AppRootLayout } from './AppRootLayout'; // adjust path if needed
 
 jest.mock('react-redux', () => {
@@ -16,18 +16,18 @@ jest.mock('react-redux', () => {
 
   return {
     Provider: ({ children }: { children: React.ReactNode }) => (
-      <View testID="reactReduxMock-tid">{children}</View>
+      <View testID='reactReduxMock-tid'>{children}</View>
     ),
   };
 });
 
-jest.mock("../model/reducers/AppReduxStore", () => {
+jest.mock('../model/reducers/AppReduxStore', () => {
   return {
     createReduxStore: () => null,
   };
 });
 
-jest.mock("./AppWebSocketProvider", () => {
+jest.mock('./AppWebSocketProvider', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -36,15 +36,21 @@ jest.mock("./AppWebSocketProvider", () => {
   };
 });
 
-jest.mock("../localization/AppLocalizationProvider", () => {
+jest.mock('../localization/AppLocalizationProvider', () => {
   return {
     AppLocalizationProvider: ({ children }: { children: ReactNode }) => children,
   };
 });
 
-jest.mock("../error-handling/AppErrorHandlingProvider", () => {
+jest.mock('../error-handling/AppErrorHandlingProvider', () => {
   return {
     AppErrorHandlingProvider: ({ children }: { children: ReactNode }) => children,
+  };
+});
+
+jest.mock('./AppConfigProvider', () => {
+  return {
+    AppConfigProvider: ({ children }: { children: ReactNode }) => children,
   };
 });
 

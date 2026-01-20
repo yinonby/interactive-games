@@ -1,20 +1,35 @@
 
-import { useAppLocalization } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization } from "@ig/engine-app-ui";
+import type { GameInstanceIdT } from '@ig/engine-models';
+import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTextInput } from "@ig/rnui";
 import { useState, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useUserConfigController } from "../../../domains/user-config/controller/user-actions/UserConfigController";
+import { useGamesUserConfigController } from "../../../domains/user-config/controller/user-actions/GamesUserConfigController";
 
 export type AddGameViewPropsT = object;
 
 export const AddGameView: FC<AddGameViewPropsT> = () => {
-  const [gameCode, setGameCode] = useState<string>("");
-  const { onAddGame } = useUserConfigController();
+  const [invitationCode, setInvitationCode] = useState<string>("");
+  const { onAcceptInvite } = useGamesUserConfigController();
   const { t } = useAppLocalization();
+  const { gamesUiUrlPathsAdapter } = useAppConfig();
+  const { navigate } = usePlatformUiNavigation();
+  const { onUnknownError } = useAppErrorHandling();
 
-  const handlePress = (): void => {
-    if (gameCode !== "") {
-      onAddGame(gameCode);
+  const handlePress = async (): Promise<void> => {
+    if (invitationCode !== "") {
+      try {
+        const gameInstanceId: GameInstanceIdT = await onAcceptInvite(invitationCode);
+
+        const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
+        navigate(url);
+      } catch (e) {
+        onUnknownError(e);
+
+        const url = gamesUiUrlPathsAdapter.buildGamesDashboardUrlPath();
+        navigate(url);
+      }
     }
   }
 
@@ -27,11 +42,11 @@ export const AddGameView: FC<AddGameViewPropsT> = () => {
         <RnuiTextInput
           testID="game-code-input"
           label={t("games:invitationCode")}
-          value={gameCode}
-          onChangeText={setGameCode}
+          value={invitationCode}
+          onChangeText={setInvitationCode}
         />
       </View>
-      <RnuiButton testID="add-game-button" onPress={handlePress} disabled={gameCode === ""}>
+      <RnuiButton testID="add-game-button" onPress={handlePress} disabled={invitationCode === ""}>
         {t("games:joinGame")}
       </RnuiButton>
     </View>

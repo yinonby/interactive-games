@@ -15,5 +15,7 @@
   "players": "Players",
   "gameEnded": "Game ended",
   "gameNotStarted": "Game not started",
-  "gameInProcess": "Game in process"
+  "gameInProcess": "Game in process",
+  "admin": "Admin",
+  "player": "Player"
 }

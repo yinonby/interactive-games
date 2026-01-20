@@ -7,13 +7,13 @@ import type {
 } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import {
-  handleGameInstanceWebSocketMessage
-} from "../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController";
+  handleGamesInstanceWebSocketMessage
+} from "../domains/game-instance/controller/ws-actions/GamesInstanceWebSocketController";
 import {
-  handleUserConfigWebSocketMessage
-} from "../domains/user-config/controller/ws-actions/UserConfigWebSocketController";
+  handleGamesUserConfigWebSocketMessage
+} from "../domains/user-config/controller/ws-actions/GamesUserConfigWebSocketController";
 
-export const handleWebSocketMessage = (
+export const handleGamesWebSocketMessage = (
   msgKind: AppWebSocketRcvMsgKindT,
   payload: AppWebSocketMessagePayloadT | undefined,
   dispatch: AppDispatch,
@@ -23,10 +23,10 @@ export const handleWebSocketMessage = (
     (payload === undefined ? ", no payload" : `, payload [${JSON.stringify(payload)}]`));
 
   if (msgKind === 'gamesUserConfigUpdate') {
-    handleUserConfigWebSocketMessage(msgKind, dispatch);
+    handleGamesUserConfigWebSocketMessage(msgKind, dispatch);
     return true;
   } else if (msgKind === "gamesGameInstanceUpdate") {
-    handleGameInstanceWebSocketMessage(msgKind, payload as GameInstanceWebSocketMessagePayloadT, dispatch);
+    handleGamesInstanceWebSocketMessage(msgKind, payload as GameInstanceWebSocketMessagePayloadT, dispatch);
     return true;
   }
   return false;

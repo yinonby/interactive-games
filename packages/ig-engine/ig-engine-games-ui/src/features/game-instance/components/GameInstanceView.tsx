@@ -1,5 +1,5 @@
 
-import { useAppConfig } from "@ig/engine-app-ui";
+import { useAppConfig, useClientLogger } from "@ig/engine-app-ui";
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from "@ig/engine-models";
 import { RnuiCard, RnuiGrid, RnuiGridItem, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC } from 'react';
@@ -16,12 +16,22 @@ export type GameInstanceViewPropsT = TestableComponentT & {
   gameInstanceChatMessages: GameInstanceChatMessageT[],
 };
 
-export const GameInstanceView: FC<GameInstanceViewPropsT> = ({ gameInstanceExposedInfo, gameInstanceChatMessages }) => {
-  const { playerRole } = gameInstanceExposedInfo;
-  const { imagesSourceMap } = useAppConfig();
+export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
+  const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
+  const { playerExposedInfos } = gameInstanceExposedInfo;
+  const { imagesSourceMap, curUserId } = useAppConfig();
   const gameConfig = gameInstanceExposedInfo.gameConfig;
   const rnuiImageProps: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(gameConfig, imagesSourceMap);
-  const isPlayerAdmin = playerRole === "admin";
+  const logger = useClientLogger();
+
+  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerUserId === curUserId);
+  if (curPlayerExposedInfo === undefined) {
+    logger.error(`Unexpected game instance not belonging to player,` +
+      `gameInstanceId [${gameInstanceExposedInfo.gameInstanceId}] curUserId [${curUserId}]`);
+    return null;
+  }
+
+  const isCurUserAdminPlayer = curPlayerExposedInfo.playerRole === "admin";
 
   return (
     <View style={styles.container}>
@@ -32,29 +42,29 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = ({ gameInstanceExpos
             imageProps={rnuiImageProps}
           >
             <GameInstanceSummaryView
-              testID="game-instance-summary-view-tid"
+              testID="GameInstanceSummaryView-tid"
               gameInstanceExposedInfo={gameInstanceExposedInfo}
             />
           </RnuiCard>
         </RnuiGridItem>
 
         <RnuiGridItem key="players" xs={12} sm={12} md={7} lg={9} xl={5} >
-          {isPlayerAdmin &&
+          {isCurUserAdminPlayer &&
             <View style={styles.spacingBottom}>
               <RnuiCard>
-                <InviteView testID="invite-view-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
+                <InviteView testID="InviteView-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
               </RnuiCard>
             </View>
           }
           <RnuiCard >
-            <PlayersView testID="players-view-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
+            <PlayersView testID="PlayersView-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
           </RnuiCard>
         </RnuiGridItem>
 
         <RnuiGridItem key="chat" xs={12} sm={12} md={12} lg={12} xl={5} >
           <RnuiCard >
             <ChatView
-              testID="chat-view-tid"
+              testID="ChatView-tid"
               gameInstanceExposedInfo={gameInstanceExposedInfo}
               gameInstanceChatMessages={gameInstanceChatMessages}
             />

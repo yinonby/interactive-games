@@ -1,84 +1,49 @@
 
-import { __engineAppUiMocks } from "@ig/engine-app-ui";
-import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, PlayerExposedInfoT } from "@ig/engine-models";
+import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-app-ui';
+import {
+  type GameInstanceChatMessageT, type GameInstanceExposedInfoT
+} from "@ig/engine-models";
+import { buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/engine-models/test-utils';
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
 import {
   useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
-import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
 import { ChatView } from "./ChatView";
 
 // Mock hooks modules used in ChatView
-jest.mock("../../../domains/user-config/model/rtk/UserConfigModel", () => ({
-  useUserConfigModel: jest.fn(),
+jest.mock("../../../domains/user-config/model/rtk/GamesUserConfigModel", () => ({
+  useGamesUserConfigModel: jest.fn(),
 }));
 
 jest.mock("../../../domains/game-instance/controller/user-actions/GameInstanceController", () => ({
   useGameInstanceController: jest.fn(),
 }));
 
-const mockedUseUserConfigModel = useUserConfigModel as unknown as jest.Mock;
 const mockedUseGameInstanceController = useGameInstanceController as unknown as jest.Mock;
 
 describe("ChatView", () => {
-  const { onErrorMock } = __engineAppUiMocks;
   const onSendChatMessage = jest.fn().mockResolvedValue(undefined);
   mockedUseGameInstanceController.mockReturnValue({ onSendChatMessage });
+  const { useAppConfigMock } = __engineAppUiMocks;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders loading state", () => {
-    mockedUseUserConfigModel.mockReturnValue({
-      isLoading: true,
-      isError: false,
-      data: undefined,
-    });
-
-    const props = {
-      gameInstanceExposedInfo: { gameInstanceId: "gi1", otherPlayerExposedInfos: [] } as unknown as GameInstanceExposedInfoT,
-      gameInstanceChatMessages: [],
-    };
-
-    const { queryByTestId } = render(<ChatView {...props} />);
-    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
-  });
-
-  it("renders error state", () => {
-    mockedUseUserConfigModel.mockReturnValue({
-      isLoading: false,
-      isError: true,
-      appErrCode: "apiError:server",
-      data: undefined,
-    });
-
-    const props = {
-      gameInstanceExposedInfo: { gameInstanceId: "gi1", otherPlayerExposedInfos: [] } as unknown as GameInstanceExposedInfoT,
-      gameInstanceChatMessages: [],
-    };
-
-    render(<ChatView {...props} />);
-
-    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
-  });
-
   it("displays chat messages with nicknames, excludes unknown players, and sends new message", async () => {
-    // Mock user config (current user)
-    mockedUseUserConfigModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { userId: "user1", username: "Me" },
-    });
+    const mockedCurUserId = "mockedId";
+    useAppConfigMock.mockReturnValue({
+      curUserId: mockedCurUserId,
+    } as AppConfigContextT);
 
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: "gi1",
-      otherPlayerExposedInfos: [
-        { playerUserId: "user2", playerNickname: "Alice" } as PlayerExposedInfoT,
+      playerExposedInfos: [
+        buildTestPlayerExposedInfo({ playerUserId: "user2", playerNickname: "Alice" }),
       ],
-    } as GameInstanceExposedInfoT;
+    });
 
     const messages: GameInstanceChatMessageT[] = [
       { chatMsgId: "m1", playerUserId: "user1", msgText: "hello me" } as GameInstanceChatMessageT,
@@ -93,7 +58,7 @@ describe("ChatView", () => {
     getByText(buildMockedTranslation("common:chat"));
 
     const list = getByTestId("chat-msg-list-tid");
-    expect(list.props.data.length).toBe(2); // Only 2 messages with known players
+    expect(list.props.data.length).toBe(1); // Only 2 messages with known players
 
     fireEvent(getByTestId('new-msg-input-tid'), 'onChangeText', 'new message');
 
@@ -102,7 +67,7 @@ describe("ChatView", () => {
       fireEvent.press(sendBtn);
     });
 
-    expect(onSendChatMessage).toHaveBeenCalledWith("gi1", "user1", "new message");
+    expect(onSendChatMessage).toHaveBeenCalledWith("gi1", mockedCurUserId, "new message");
     const newMsgInput = getByTestId("new-msg-input-tid");
     expect(newMsgInput.props.value).toBe("");
   });

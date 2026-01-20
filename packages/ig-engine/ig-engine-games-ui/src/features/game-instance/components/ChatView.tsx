@@ -1,18 +1,15 @@
 
-import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
 import type {
   GameInstanceChatMessageT,
-  GameInstanceExposedInfoT, PlayerExposedInfoT, UserIdT
+  GameInstanceExposedInfoT, PlayerExposedInfoT
 } from "@ig/engine-models";
-import { RnuiActivityIndicator, RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
-import React, { useEffect, useRef, useState, type FC } from 'react';
+import { RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
+import React, { useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
 import {
   useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
-import {
-  useUserConfigModel
-} from "../../../domains/user-config/model/rtk/UserConfigModel";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
 export type ChatViewPropsT = TestableComponentT & {
@@ -26,10 +23,10 @@ export type ChatMessageWithPlayerNicknameT = GameInstanceChatMessageT & {
 
 const getChatMessagePlayerNickname = (
   gameInstanceChatMessage: GameInstanceChatMessageT,
-  otherPlayerExposedInfos: PlayerExposedInfoT[],
+  playerExposedInfos: PlayerExposedInfoT[],
 ): string | null => {
   const otherPlayerExposedInfo: PlayerExposedInfoT | undefined =
-    otherPlayerExposedInfos.find(e => e.playerUserId === gameInstanceChatMessage.playerUserId);
+    playerExposedInfos.find(e => e.playerUserId === gameInstanceChatMessage.playerUserId);
   if (otherPlayerExposedInfo === undefined) {
     return null;
   }
@@ -38,20 +35,14 @@ const getChatMessagePlayerNickname = (
 
 const getChatMessageWithPlayerNicknames = (
   gameInstanceChatMessages: GameInstanceChatMessageT[],
-  otherPlayerExposedInfos: PlayerExposedInfoT[],
-  userId: UserIdT,
-  username: string,
+  playerExposedInfos: PlayerExposedInfoT[],
 ): ChatMessageWithPlayerNicknameT[] => {
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] = [];
   for (const gameInstanceChatMessage of gameInstanceChatMessages) {
-    if (gameInstanceChatMessage.playerUserId === userId) {
-      chatMessageWithPlayerNicknames.push({ ...gameInstanceChatMessage, playerNickname: username });
-    } else {
-      const playerNickname: string | null = getChatMessagePlayerNickname(gameInstanceChatMessage,
-        otherPlayerExposedInfos);
-      if (playerNickname !== null) {
-        chatMessageWithPlayerNicknames.push({ ...gameInstanceChatMessage, playerNickname: playerNickname });
-      }
+    const playerNickname: string | null = getChatMessagePlayerNickname(gameInstanceChatMessage,
+      playerExposedInfos);
+    if (playerNickname !== null) {
+      chatMessageWithPlayerNicknames.push({ ...gameInstanceChatMessage, playerNickname: playerNickname });
     }
   }
   return chatMessageWithPlayerNicknames;
@@ -60,30 +51,17 @@ const getChatMessageWithPlayerNicknames = (
 export const ChatView: FC<ChatViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { onSendChatMessage } = useGameInstanceController();
-  const { isLoading, isError, appErrCode, data } = useUserConfigModel();
-  const { onError } = useAppErrorHandling();
   const { t } = useAppLocalization();
   const [chatMessage, setChatMessage] = useState("");
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
-
-  useEffect(() => {
-    if (isError) {
-      onError(appErrCode);
-    }
-  }, [isError, onError, appErrCode]);
-
-  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
-  if (isError) {
-    return null;
-  }
+  const { curUserId } = useAppConfig();
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =
-    getChatMessageWithPlayerNicknames(gameInstanceChatMessages, gameInstanceExposedInfo.otherPlayerExposedInfos,
-      data.userId, data.username);
+    getChatMessageWithPlayerNicknames(gameInstanceChatMessages, gameInstanceExposedInfo.playerExposedInfos);
 
   const handlePress = async (): Promise<void> => {
-    await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, data.userId, chatMessage);
+    await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, curUserId, chatMessage);
     setChatMessage("");
   }
 

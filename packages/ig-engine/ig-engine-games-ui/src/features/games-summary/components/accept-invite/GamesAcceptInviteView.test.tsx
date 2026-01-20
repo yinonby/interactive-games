@@ -3,26 +3,26 @@ import { __engineAppUiMocks } from "@ig/engine-app-ui";
 import { __puiMocks } from "@ig/platform-ui";
 import { render, waitFor } from "@testing-library/react-native";
 import React from "react";
-import { useUserConfigController } from "../../../../domains/user-config/controller/user-actions/UserConfigController";
+import * as GamesUserConfigController from "../../../../domains/user-config/controller/user-actions/GamesUserConfigController";
 import { GamesAcceptInviteView } from "./GamesAcceptInviteView";
-
-// mocks
-
-jest.mock("../../../../domains/user-config/controller/user-actions/UserConfigController", () => ({
-  useUserConfigController: jest.fn(),
-}));
 
 // tests
 
 describe("GamesAcceptInviteView", () => {
+  const {
+    onUnknownErrorMock,
+    buildGamesDashboardUrlPathMock,
+    buildGameInstanceDashboardUrlPathMock,
+  } = __engineAppUiMocks;
   const { navigateReplaceMock } = __puiMocks;
   const onAcceptInviteMock = jest.fn();
-  const { loggerErrorMock } = __engineAppUiMocks;
+  const useGamesUserConfigControllerSpy = jest.spyOn(GamesUserConfigController, 'useGamesUserConfigController');
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    (useUserConfigController as jest.Mock).mockReturnValue({
+    useGamesUserConfigControllerSpy.mockReturnValue({
+      onPlayGame: jest.fn(),
       onAcceptInvite: onAcceptInviteMock,
     });
   });
@@ -31,43 +31,51 @@ describe("GamesAcceptInviteView", () => {
     onAcceptInviteMock.mockResolvedValueOnce("giid-123");
     const { getByTestId } = render(<GamesAcceptInviteView invitationCode="INV-1" />);
 
-    expect(getByTestId("activity-indicator-tid")).toBeTruthy();
-    expect(getByTestId("activity-message-tid")).toBeTruthy();
-  });
-
-  it("calls onAcceptInvite and navigates to game when accept succeeds", async () => {
-    onAcceptInviteMock.mockResolvedValueOnce("giid-123");
-    render(<GamesAcceptInviteView invitationCode="INV-1" />);
-
-    await waitFor(() =>
-      expect(navigateReplaceMock).toHaveBeenCalledWith("mockedPathGamesInstance/giid-123")
-    );
-
-    expect(onAcceptInviteMock).toHaveBeenCalledWith("INV-1");
-  });
-
-  it("logs error and navigates to games list when accept returns null", async () => {
-    onAcceptInviteMock.mockResolvedValueOnce(null);
-    render(<GamesAcceptInviteView invitationCode="INV-2" />);
-
-    await waitFor(() =>
-      expect(navigateReplaceMock).toHaveBeenCalledWith("mockedPathGamesDashboard")
-    );
-
-    expect(loggerErrorMock).toHaveBeenCalled();
-    const errArg = loggerErrorMock.mock.calls[0][0];
-    expect(errArg).toBeInstanceOf(Error);
-    expect(errArg.message).toBe("Invite failed");
+    getByTestId("activity-indicator-tid");
+    getByTestId("activity-message-tid");
   });
 
   it("does nothing when invitationCode is falsy", async () => {
+    onAcceptInviteMock.mockImplementation(async () => { });
+    buildGameInstanceDashboardUrlPathMock.mockReturnValue('mockedUrl');
+
     render(<GamesAcceptInviteView invitationCode={""} />);
 
-    // give a tick to ensure no async work started
     await Promise.resolve();
 
     expect(onAcceptInviteMock).not.toHaveBeenCalled();
     expect(navigateReplaceMock).not.toHaveBeenCalled();
-    expect(loggerErrorMock).not.toHaveBeenCalled();
+    expect(onUnknownErrorMock).not.toHaveBeenCalled();
+  });
+
+  it("calls onAcceptInvite and navigates to game when accept succeeds", async () => {
+    onAcceptInviteMock.mockResolvedValueOnce("giid-123");
+    buildGameInstanceDashboardUrlPathMock.mockReturnValue('mockedUrl');
+
+    render(<GamesAcceptInviteView invitationCode="ABC123" />);
+
+    await waitFor(() => {
+      expect(onAcceptInviteMock).toHaveBeenCalledWith('ABC123');
+    });
+
+    expect(buildGameInstanceDashboardUrlPathMock).toHaveBeenCalledWith("giid-123");
+    expect(onAcceptInviteMock).toHaveBeenCalledWith("ABC123");
+    expect(navigateReplaceMock).toHaveBeenCalledWith("mockedUrl")
+  });
+
+  it("calls onAcceptInvite and handles failure", async () => {
+    onAcceptInviteMock.mockRejectedValueOnce(new Error("Invite failed"));
+    buildGamesDashboardUrlPathMock.mockReturnValue('mockedUrl');
+
+    render(<GamesAcceptInviteView invitationCode="ABC123" />);
+
+
+    await waitFor(() => {
+      expect(onAcceptInviteMock).toHaveBeenCalledWith('ABC123');
+    });
+
+    expect(onUnknownErrorMock).toHaveBeenCalled();
+    expect(buildGamesDashboardUrlPathMock).toHaveBeenCalled();
+    expect(navigateReplaceMock).toHaveBeenCalledWith('mockedUrl');
   });
 });

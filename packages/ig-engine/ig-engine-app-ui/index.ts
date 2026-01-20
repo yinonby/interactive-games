@@ -7,8 +7,9 @@ export { useAppLocalization, type AppLocalizationContextT } from "./src/app/loca
 export * from "./src/app/model/reducers/AppReduxStore";
 export * from "./src/app/model/reducers/GameUiConfigReducer";
 export * from "./src/app/model/rtk/AppRtkApi";
-export { extractAppErrorCodeFromAppRtkError } from "./src/app/model/rtk/AppRtkUtils";
+export { extractAppErrorCodeFromUnknownObject } from "./src/app/model/rtk/AppRtkUtils";
 export { useClientLogger } from "./src/app/providers/useClientLogger";
+export * from "./src/types/AppErrorTypes";
 export * from "./src/types/AppRtkTypes";
 export * from "./src/types/CommonTranslationTypes";
 export * from "./src/types/GamesTranslationsTypes";

@@ -1,10 +1,12 @@
 
-import { __engineAppUiMocks } from "@ig/engine-app-ui";
+import { __engineAppUiMocks, type AppErrorCodeT } from "@ig/engine-app-ui";
+import type { GamesConfigT, GamesUserConfigT } from '@ig/engine-models';
+import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
-import { useGamesConfigModel } from "../../../domains/games-config/model/rtk/GamesConfigModel";
-import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
+import * as GamesConfigModel from "../../../domains/games-config/model/rtk/GamesConfigModel";
+import * as GamesUserConfigModel from "../../../domains/user-config/model/rtk/GamesUserConfigModel";
 import { AvailableGamesView } from "./AvailableGamesView";
 
 jest.mock("./MinimalGameCardView", () => {
@@ -16,56 +18,98 @@ jest.mock("./MinimalGameCardView", () => {
   };
 });
 
-jest.mock("../../../domains/games-config/model/rtk/GamesConfigModel", () => ({
-  useGamesConfigModel: jest.fn(),
-}));
-
-jest.mock("../../../domains/user-config/model/rtk/UserConfigModel", () => ({
-  useUserConfigModel: jest.fn(),
-}));
-
-const mockUseAppConfigModel = useGamesConfigModel as jest.Mock;
-const mockUseUserConfigModel = useUserConfigModel as jest.Mock;
-
 describe("AvailableGamesView", () => {
-  const { onErrorMock } = __engineAppUiMocks;
+  const { onAppErrorMock } = __engineAppUiMocks;
+  const useGamesConfigModelSpy = jest.spyOn(GamesConfigModel, 'useGamesConfigModel');
+  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
 
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
   it("renders Loading when either model is loading", () => {
-    mockUseAppConfigModel.mockReturnValue({ isLoading: true, isError: false, data: null });
-    mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: null });
+    useGamesConfigModelSpy.mockReturnValue({
+      isLoading: true,
+      isError: false,
+      data: undefined
+    });
+    useGamesUserConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { gamesUserConfig: {} as GamesUserConfigT },
+    });
 
     const { queryByTestId } = render(<AvailableGamesView />);
     expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
   });
 
   it("renders Error when games-config model has error", () => {
-    mockUseAppConfigModel.mockReturnValue({ isLoading: false, isError: true, appErrCode: "ERR", data: null });
-    mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: null });
+    useGamesConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: true,
+      appErrCode: "ERR" as AppErrorCodeT,
+      data: undefined
+    });
+    useGamesUserConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { gamesUserConfig: {} as GamesUserConfigT },
+    });
 
     render(<AvailableGamesView />);
 
-    expect(onErrorMock).toHaveBeenCalledWith("ERR");
+    expect(onAppErrorMock).toHaveBeenCalledWith("ERR");
   });
 
   it("renders Error when user-config model has error", () => {
-    mockUseAppConfigModel.mockReturnValue({ isLoading: false, isError: false, data: null });
-    mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: true, appErrCode: "ERR", data: null });
+    useGamesConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { gamesConfig: {} as GamesConfigT },
+    });
+    useGamesUserConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: true,
+      appErrCode: "ERR" as AppErrorCodeT,
+    });
 
     render(<AvailableGamesView />);
 
-    expect(onErrorMock).toHaveBeenCalledWith("ERR");
+    expect(onAppErrorMock).toHaveBeenCalledWith("ERR");
   });
 
   it('renders "No games are available" when user has joined all available games', () => {
-    const available = [{ gameConfigId: "g1" }, { gameConfigId: "g2" }];
-    const userInfos = [{ minimalGameConfig: { gameConfigId: "g1" } }, { minimalGameConfig: { gameConfigId: "g2" } }];
+    const availableMinimalGameConfigs = [
+      buildTestMinimalGameConfig({ gameConfigId: "g1" }),
+      buildTestMinimalGameConfig({ gameConfigId: "g2" }),
+    ];
+    const minimalGameInstanceExposedInfos = [
+      buildTestMinimalGameInstanceExposedInfo({
+        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g1" }),
+      }),
+      buildTestMinimalGameInstanceExposedInfo({
+        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g2" }),
+      }),
+    ]
 
-    mockUseAppConfigModel.mockReturnValue({ isLoading: false, isError: false, data: { availableMinimalGameConfigs: available } });
-    mockUseUserConfigModel.mockReturnValue({ isLoading: false, isError: false, data: { minimalGameInstanceExposedInfos: userInfos } });
+    useGamesConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        gamesConfig: {
+          availableMinimalGameConfigs: availableMinimalGameConfigs
+        }
+      }
+    });
+    useGamesUserConfigModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        gamesUserConfig: {
+          minimalGameInstanceExposedInfos: minimalGameInstanceExposedInfos
+        }
+      }
+    });
 
     const { getByTestId, queryByTestId, getByText } = render(<AvailableGamesView />);
     getByTestId("no-available-games-text-tid");
@@ -75,18 +119,33 @@ describe("AvailableGamesView", () => {
   });
 
   it('renders "Available games:" and grid when there are non-joined games', () => {
-    const available = [{ gameConfigId: "g1" }, { gameConfigId: "g2" }];
-    const userInfos = [{ minimalGameConfig: { gameConfigId: "g1" } }];
+    const availableMinimalGameConfigs = [
+      buildTestMinimalGameConfig({ gameConfigId: "g1" }),
+      buildTestMinimalGameConfig({ gameConfigId: "g2" }),
+    ];
+    const minimalGameInstanceExposedInfos = [
+      buildTestMinimalGameInstanceExposedInfo({
+        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g1" }),
+      }),
+    ]
 
-    mockUseAppConfigModel.mockReturnValue({
+    useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { availableMinimalGameConfigs: available }
+      data: {
+        gamesConfig: {
+          availableMinimalGameConfigs: availableMinimalGameConfigs
+        }
+      }
     });
-    mockUseUserConfigModel.mockReturnValue({
+    useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { minimalGameInstanceExposedInfos: userInfos }
+      data: {
+        gamesUserConfig: {
+          minimalGameInstanceExposedInfos: minimalGameInstanceExposedInfos
+        }
+      }
     });
 
     const { getByTestId, getByText } = render(<AvailableGamesView />);

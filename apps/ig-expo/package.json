@@ -10,6 +10,7 @@
     "lint:fix": "npm run lint:eslint -- --fix",
     "lint:cycles": "madge --circular --extensions ts,tsx,js .",
     "test:unit": "echo ok",
+    "ut": "npm run test:unit",
     "test:verbose": "echo ok",
     "cover:unit": "npm run test:unit -- run --coverage",
 

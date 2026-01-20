@@ -1,9 +1,10 @@
 
 import { __engineAppUiMocks } from "@ig/engine-app-ui";
+import { buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
-import * as UserConfigModel from "../../../domains/user-config/model/rtk/UserConfigModel";
+import * as GamesUserConfigModel from "../../../domains/user-config/model/rtk/GamesUserConfigModel";
 import { GamesSummaryView } from './GamesSummaryView';
 
 // --------------------
@@ -24,15 +25,15 @@ jest.mock('./GamesTableView', () => {
 // --------------------
 
 describe('GamesSummaryView', () => {
-  const { onErrorMock } = __engineAppUiMocks;
-  const useUserConfigModelSpy = jest.spyOn(UserConfigModel, 'useUserConfigModel');
+  const { onAppErrorMock } = __engineAppUiMocks;
+  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders loading screen', () => {
-    useUserConfigModelSpy.mockReturnValue({
+    useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: true,
       isError: false,
     });
@@ -45,7 +46,7 @@ describe('GamesSummaryView', () => {
   });
 
   it('renders error', () => {
-    useUserConfigModelSpy.mockReturnValue({
+    useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
@@ -55,17 +56,17 @@ describe('GamesSummaryView', () => {
       <GamesSummaryView />
     );
 
-    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
+    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders empty state when there are no games', () => {
-    useUserConfigModelSpy.mockReturnValue({
+    useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        userId: "user-1",
-        username: "username 1",
-        minimalGameInstanceExposedInfos: []
+        gamesUserConfig: {
+          minimalGameInstanceExposedInfos: []
+        }
       },
     });
 
@@ -79,43 +80,16 @@ describe('GamesSummaryView', () => {
   });
 
   it('renders games list when games exist', () => {
-    useUserConfigModelSpy.mockReturnValue({
+    useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data:  {
-        userId: "user-1",
-        username: "username 1",
-        minimalGameInstanceExposedInfos: [{
-          gameInstanceId: "gid-1",
-          invitationCode: "invt-code-gid-1",
-          minimalGameConfig: {
-            gameConfigId: "game-1",
-            kind: "joint-game",
-            gameName: 'Poker Night',
-            maxDurationMinutes: 30,
-            gamePrice: "free",
-            maxParticipants: 4,
-            imageAssetName: "escape-room-1",
-          },
-          playerRole: "admin",
-          playerStatus: "playing",
-          gameStatus: "in-process",
-        }, {
-          gameInstanceId: "gid-2",
-          invitationCode: "invt-code-gid-2",
-          minimalGameConfig: {
-            gameConfigId: "game-2",
-            kind: "joint-game",
-            gameName: 'Chess Match',
-            maxDurationMinutes: 60,
-            gamePrice: "free",
-            maxParticipants: 6,
-            imageAssetName: "escape-room-1",
-          },
-          playerRole: "player",
-          playerStatus: "playing",
-          gameStatus: "in-process",
-        }],
+        gamesUserConfig: {
+          minimalGameInstanceExposedInfos: [
+            buildTestMinimalGameInstanceExposedInfo({}),
+            buildTestMinimalGameInstanceExposedInfo({}),
+          ],
+        }
       },
     });
 

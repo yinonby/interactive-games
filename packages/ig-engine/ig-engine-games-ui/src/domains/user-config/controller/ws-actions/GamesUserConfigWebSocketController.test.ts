@@ -1,9 +1,9 @@
 
-import { handleUserConfigWebSocketMessage } from "./UserConfigWebSocketController";
+import { handleGamesUserConfigWebSocketMessage } from "./GamesUserConfigWebSocketController";
 
 // 🔹 mock the RTK API util
-jest.mock("../../model/rtk/UserConfigRtkApi", () => ({
-  userConfigRtkApiUtil: {
+jest.mock("../../model/rtk/GamesUserConfigRtkApi", () => ({
+  gamesUserConfigRtkApiUtil: {
     invalidateTags: jest.fn(),
   },
 }));
@@ -11,11 +11,11 @@ jest.mock("../../model/rtk/UserConfigRtkApi", () => ({
 // 🔹 import mocked util AFTER jest.mock
 import type { AppDispatch } from "@ig/engine-app-ui";
 import type { UserConfigeWebSocketMsgKindT } from "@ig/engine-models";
-import { userConfigRtkApiUtil } from "../../model/rtk/UserConfigRtkApi";
+import { gamesUserConfigRtkApiUtil } from "../../model/rtk/GamesUserConfigRtkApi";
 
-describe("handleUserConfigWebSocketMessage", () => {
+describe("handleGamesUserConfigWebSocketMessage", () => {
   const dispatch = jest.fn() as unknown as AppDispatch;
-  const invalidateTagsSpy = jest.spyOn(userConfigRtkApiUtil, 'invalidateTags');
+  const invalidateTagsSpy = jest.spyOn(gamesUserConfigRtkApiUtil, 'invalidateTags');
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -29,13 +29,13 @@ describe("handleUserConfigWebSocketMessage", () => {
       invalidateResult
     );
 
-    handleUserConfigWebSocketMessage(
+    handleGamesUserConfigWebSocketMessage(
       "gamesUserConfigUpdate",
       dispatch
     );
 
-    expect(userConfigRtkApiUtil.invalidateTags).toHaveBeenCalledTimes(1);
-    expect(userConfigRtkApiUtil.invalidateTags).toHaveBeenCalledWith([
+    expect(gamesUserConfigRtkApiUtil.invalidateTags).toHaveBeenCalledTimes(1);
+    expect(gamesUserConfigRtkApiUtil.invalidateTags).toHaveBeenCalledWith([
       "GamesUserConfigTag",
     ]);
 
@@ -45,13 +45,13 @@ describe("handleUserConfigWebSocketMessage", () => {
 
   it("throws on invalid message kind", () => {
     expect(() =>
-      handleUserConfigWebSocketMessage(
+      handleGamesUserConfigWebSocketMessage(
         "invalid-message" as UserConfigeWebSocketMsgKindT,
         dispatch
       )
     ).toThrow("Invalid message type");
 
-    expect(userConfigRtkApiUtil.invalidateTags).not.toHaveBeenCalled();
+    expect(gamesUserConfigRtkApiUtil.invalidateTags).not.toHaveBeenCalled();
     expect(dispatch).not.toHaveBeenCalled();
   });
 });

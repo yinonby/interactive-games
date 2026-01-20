@@ -10,6 +10,11 @@ export const initI18n = (resources: Resource) => {
 
   i18next
     .use(initReactI18next)
+    .use({
+      type: 'postProcessor',
+      name: 'lowercase',
+      process: (value: string) => value.toLowerCase(),
+    })
     .init({
       resources,
       lng: languageCode || "en",

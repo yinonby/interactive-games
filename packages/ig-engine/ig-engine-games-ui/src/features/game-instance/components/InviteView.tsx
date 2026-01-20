@@ -14,10 +14,10 @@ export type InviteViewPropsT = TestableComponentT & {
 export const InviteView: FC<InviteViewPropsT> = (props) => {
   const { gameInstanceExposedInfo } = props;
   const { t } = useAppLocalization();
-  const { invitationCode, gameConfig, otherPlayerExposedInfos } = gameInstanceExposedInfo;
+  const { invitationCode, gameConfig, playerExposedInfos } = gameInstanceExposedInfo;
   const { gameUiConfig } = useAppConfig();
   const invitationUrl = gameUiConfig.apiUrl + "/games/accept-invite/" + invitationCode;
-  const isSaturated = otherPlayerExposedInfos.length >= gameConfig.maxParticipants - 1;
+  const isSaturated = playerExposedInfos.length >= gameConfig.maxParticipants - 1;
   const genericStyles = useGenericStyles();
 
   const handlePress = () => {

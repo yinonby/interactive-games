@@ -27,6 +27,8 @@
     "types": ["node", "jest"],
     "paths": {
       "@/*": ["src/*"],
+      "@test/*": ["test/*"],
+      "@ig/engine-models/test-utils": ["../ig-engine-models/test/test-index.ts"]
     }
   }
 }

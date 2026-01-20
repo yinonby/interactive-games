@@ -27,6 +27,7 @@ type ErrorTranslationShapeT =
 
 const enResource = {
   apiError: enErrosTranslationsJson.apiError,
+  gamesApiError: enErrosTranslationsJson.gamesApiError,
   appError: enErrosTranslationsJson.appError,
   common: enCommonTranslationsJson,
   games: enGamesTranslationsJson,

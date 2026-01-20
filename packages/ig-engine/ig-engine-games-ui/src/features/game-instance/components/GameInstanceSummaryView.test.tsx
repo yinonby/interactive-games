@@ -1,5 +1,8 @@
 
-import type { GameInstanceExposedInfoT } from "@ig/engine-models";
+import {
+  type GameInstanceExposedInfoT
+} from "@ig/engine-models";
+import { buildTestGameConfig, buildTestGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
@@ -15,28 +18,16 @@ jest.mock("./GameStatusView", () => {
 });
 
 describe("GameInstanceSummaryView", () => {
-  const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
-    gameInstanceId: "gid-1",
-    invitationCode: "invt-code-gid-1",
-    gameConfig: {
-      gameConfigId: "treasure-hunt-1",
-      kind: "joint-game",
-      gameName: "Treasure Hunt 1",
-      maxDurationMinutes: 60,
-      gamePrice: "free",
-      maxParticipants: 6,
-      imageAssetName: "escape-room-1",
-      extraTimeMinutes: 10,
-      extraTimeLimitMinutes: 20,
-      levelConfigs: [],
-    },
-    playerRole: "admin",
-    playerStatus: "playing",
-    gameStatus: "in-process",
-    otherPlayerExposedInfos: [],
-  }
-
   it("renders component properly", () => {
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+      gameConfig: buildTestGameConfig({
+        gameName: "Treasure Hunt 1",
+        maxDurationMinutes: 60,
+        maxParticipants: 6,
+      }),
+      gameStatus: "in-process",
+    });
+
     const { getByTestId, getByText } = render(<GameInstanceSummaryView
       gameInstanceExposedInfo={gameInstanceExposedInfo}
     />);

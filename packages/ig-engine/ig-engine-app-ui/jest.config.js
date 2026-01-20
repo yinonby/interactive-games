@@ -9,7 +9,7 @@ export default {
   },
   transformIgnorePatterns: [
     // Don't ignore these
-    'node_modules/(?!(msw|until-async|expo|@expo|expo-constants|expo-modules-core|react-native|@react-native|react-redux|@reduxjs/toolkit|immer)/)',
+    'node_modules/(?!(msw|until-async|expo|@expo|expo-constants|expo-modules-core|expo-router|react-native|@react-native|@react-navigation|react-redux|@reduxjs/toolkit|immer)/)',
   ],
   moduleNameMapper: {
     '^msw/node$': '<rootDir>/../../../node_modules/msw/lib/node/index.js', // <-- key fix

@@ -12,25 +12,25 @@ export type GameInstanceContainerPropsT = TestableComponentT & {
 };
 
 export const GameInstanceContainer: FC<GameInstanceContainerPropsT> = ({ gameInstanceId }) => {
-  const { isLoading, isError, appErrCode, data: gameInstanceModel } = useGameInstanceModel(gameInstanceId);
-  const { onError } = useAppErrorHandling();
+  const { isLoading, isError, appErrCode, data: gameInstanceModelData } = useGameInstanceModel(gameInstanceId);
+  const { onAppError } = useAppErrorHandling();
 
   useEffect(() => {
     if (isError) {
-      onError(appErrCode);
+      onAppError(appErrCode);
     }
-  }, [isError, onError, appErrCode]);
+  }, [isError, onAppError, appErrCode]);
 
-  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
+  if (isLoading) return <RnuiActivityIndicator testID="RnuiActivityIndicator-tid" size="large"/>;
   if (isError) {
     return null;
   }
 
   return (
     <GameInstanceView
-      testID="game-instance-view-tid"
-      gameInstanceExposedInfo={gameInstanceModel.gameInstanceExposedInfo}
-      gameInstanceChatMessages={gameInstanceModel.gameInstanceChatMessages}
+      testID="GameInstanceView-tid"
+      gameInstanceExposedInfo={gameInstanceModelData.gameInstanceExposedInfo}
+      gameInstanceChatMessages={gameInstanceModelData.gameInstanceChatMessages}
     />
   );
 };
