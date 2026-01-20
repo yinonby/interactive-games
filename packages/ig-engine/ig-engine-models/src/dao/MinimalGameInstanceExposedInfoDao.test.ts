@@ -9,10 +9,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-1",
       minimalGameConfig: {
         gameConfigId: "game-1",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -23,10 +25,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-2",
       minimalGameConfig: {
         gameConfigId: "game-2",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -37,10 +41,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-3",
       minimalGameConfig: {
         gameConfigId: "game-3",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -63,10 +69,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-1",
       minimalGameConfig: {
         gameConfigId: "game-1",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -77,10 +85,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-2",
       minimalGameConfig: {
         gameConfigId: "game-2",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "player",
       playerStatus: "playing",
@@ -98,10 +108,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-1",
       minimalGameConfig: {
         gameConfigId: "game-1",
-        gameName: "AA",
         kind: "joint-game",
+        gameName: "AA",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",
@@ -112,10 +124,12 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       invitationCode: "invt-code-gid-2",
       minimalGameConfig: {
         gameConfigId: "game-2",
-        gameName: "BB",
         kind: "joint-game",
+        gameName: "BB",
         maxDurationMinutes: 30,
-        maxParticipants: 4
+        gamePrice: "free",
+        maxParticipants: 4,
+        imageAssetName: "escape-room-1",
       },
       playerRole: "admin",
       playerStatus: "playing",

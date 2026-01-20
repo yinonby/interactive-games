@@ -45,8 +45,9 @@ describe("MinimalGameCardView", () => {
           kind: "joint-game",
           gameName: "Test Game",
           maxDurationMinutes: 30,
+          gamePrice: "free",
           maxParticipants: 4,
-          imageAssetName: "treasure-hunt",
+          imageAssetName: "treasure-hunt-1",
         }}
       />
     );
@@ -73,8 +74,9 @@ describe("MinimalGameCardView", () => {
           kind: "joint-game",
           gameName: "Test Game",
           maxDurationMinutes: 30,
+          gamePrice: "free",
           maxParticipants: 4,
-          imageAssetName: "treasure-hunt",
+          imageAssetName: "treasure-hunt-1",
         }}
       />
     );
@@ -104,8 +106,9 @@ describe("MinimalGameCardView", () => {
           kind: "joint-game",
           gameName: "Test Game",
           maxDurationMinutes: 30,
+          gamePrice: "free",
           maxParticipants: 4,
-          imageAssetName: "treasure-hunt",
+          imageAssetName: "treasure-hunt-1",
         }}
       />
     );
@@ -135,8 +138,9 @@ describe("MinimalGameCardView", () => {
           kind: "joint-game",
           gameName: "Free Game",
           maxDurationMinutes: 10,
+          gamePrice: "free",
           maxParticipants: 2,
-          gamePrice: undefined,
+          imageAssetName: "escape-room-1",
         }}
       />
     );
@@ -162,9 +166,9 @@ describe("MinimalGameCardView", () => {
           kind: "joint-game",
           gameName: "Free Game",
           maxDurationMinutes: 10,
+          gamePrice: "free",
           maxParticipants: 2,
           imageUrl: "fake-url",
-          gamePrice: undefined,
         }}
       />
     );

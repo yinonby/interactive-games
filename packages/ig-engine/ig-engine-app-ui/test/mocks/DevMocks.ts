@@ -1,77 +1,70 @@
 
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, MinimalGameConfigT } from "@ig/engine-models";
 
-export const devAvailableMinimalGameConfigs: MinimalGameConfigT[] = [{
-  gameConfigId: "treasure-hunt-2",
+const secretIslandMinimalConfig: MinimalGameConfigT = {
+  gameConfigId: "treasure-hunt-secret-island", // this game is already joined in this dev preset
   kind: "joint-game",
-  gameName: "Treasure Hunt 1",
+  gameName: "Treasure Hunt - Secret Island",
   maxDurationMinutes: 60,
-  maxParticipants: 6,
-}, {
-  gameConfigId: "treasure-hunt-6",
-  kind: "joint-game",
-  gameName: "Treasure Hunt 6",
   gamePrice: {
-    priceRate: 1.99,
+    priceRate: 5,
     priceCurrency: "EUR",
   },
-  maxDurationMinutes: 60,
-  maxParticipants: 6,
-  imageUrl: "https://img.freepik.com/free-vector/hand-drawn-flat-design-treasure-hunt_23-2149318677.jpg",
-}, {
-  gameConfigId: "treasure-hunt-7",
-  kind: "joint-game",
-  gameName: "Free Treasure Hunt 7",
-  maxDurationMinutes: 60,
-  maxParticipants: 6,
-}, {
-  gameConfigId: "treasure-hunt-8",
-  kind: "joint-game",
-  gameName: "Free Treasure Hunt 8",
-  maxDurationMinutes: 60,
-  maxParticipants: 6,
-}, {
-  gameConfigId: "treasure-hunt-9",
-  kind: "joint-game",
-  gameName: "Free Treasure Hunt 9",
-  maxDurationMinutes: 60,
-  maxParticipants: 6,
-}, {
-  gameConfigId: "treasure-hunt-10",
-  kind: "joint-game",
-  gameName: "Free Treasure Hunt 10",
-  maxDurationMinutes: 60,
   maxParticipants: 6,
   imageAssetName: "treasure-hunt-1",
-}, {
-  gameConfigId: "treasure-hunt-11",
+}
+
+const escapeRoomMinimalConfig: MinimalGameConfigT = {
+  gameConfigId: "escape-room-harry-potter",
   kind: "joint-game",
-  gameName: "Free Escape Room 11",
+  gameName: "Escape Room - Harry Potter",
   maxDurationMinutes: 60,
+  gamePrice: "free",
   maxParticipants: 6,
   imageAssetName: "escape-room-1",
-}, {
-  gameConfigId: "treasure-hunt-12",
+}
+
+const wordleEnMinimalConfig: MinimalGameConfigT = {
+  gameConfigId: "wordle-english",
   kind: "joint-game",
-  gameName: "Free Treasure Hunt 12",
+  gameName: "Wordle - English",
   maxDurationMinutes: 60,
+  gamePrice: "free",
   maxParticipants: 6,
-}]
+  imageAssetName: "wordle-1",
+}
+
+const wordleEsMinimalConfig: MinimalGameConfigT = {
+  gameConfigId: "wordle-spanish",
+  kind: "joint-game",
+  gameName: "Wordle - Spanish",
+  maxDurationMinutes: 60,
+  gamePrice: "free",
+  maxParticipants: 6,
+  imageAssetName: "wordle-1",
+}
+
+const wordleFrMinimalConfig: MinimalGameConfigT = {
+  gameConfigId: "wordle-french",
+  kind: "joint-game",
+  gameName: "Wordle - French",
+  maxDurationMinutes: 60,
+  gamePrice: "free",
+  maxParticipants: 6,
+  imageAssetName: "wordle-1",
+}
+
+export const devAvailableMinimalGameConfigs: MinimalGameConfigT[] = [
+  secretIslandMinimalConfig,
+  wordleEsMinimalConfig,
+  wordleFrMinimalConfig,
+]
 
 export const devExternalGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
-  gameInstanceId: "giid-treasure-hunt-10",
-  invitationCode: "invt-code-giid-treasure-hunt-10",
+  gameInstanceId: "giid-wordle-french",
+  invitationCode: "invt-code-giid-wordle-french",
   gameConfig: {
-    gameConfigId: "treasure-hunt-10",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 10",
-    gamePrice: {
-      priceRate: 5,
-      priceCurrency: "EUR",
-    },
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
-    imageAssetName: "treasure-hunt-10",
+    ...wordleFrMinimalConfig,
     extraTimeMinutes: 10,
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
@@ -101,16 +94,7 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
   gameInstanceId: "giid-1",
   invitationCode: "invt-code-giid-1",
   gameConfig: {
-    gameConfigId: "treasure-hunt-1",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 1",
-    gamePrice: {
-      priceRate: 5,
-      priceCurrency: "EUR",
-    },
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
-    imageAssetName: "treasure-hunt-1",
+    ...secretIslandMinimalConfig,
     extraTimeMinutes: 10,
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
@@ -138,11 +122,35 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
   gameInstanceId: "giid-2",
   invitationCode: "invt-code-giid-2",
   gameConfig: {
-    gameConfigId: "treasure-hunt-2",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 2",
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
+    ...escapeRoomMinimalConfig,
+    extraTimeMinutes: 10,
+    extraTimeLimitMinutes: 20,
+    levelConfigs: [],
+  },
+  playerRole: "player",
+  playerStatus: "playing",
+  gameStatus: "in-process",
+  otherPlayerExposedInfos: [{
+    playerUserId: "user-5",
+    playerNickname: "player 5",
+    playerRole: "player",
+    playerStatus: "playing",
+  }, {
+    playerUserId: "user-6",
+    playerNickname: "player 6",
+    playerRole: "admin",
+    playerStatus: "suspended",
+  }, {
+    playerUserId: "user-7",
+    playerNickname: "player 7",
+    playerRole: "player",
+    playerStatus: "invited",
+  }],
+}, {
+  gameInstanceId: "giid-3",
+  invitationCode: "invt-code-giid-3",
+  gameConfig: {
+    ...wordleEnMinimalConfig,
     extraTimeMinutes: 10,
     extraTimeLimitMinutes: 20,
     levelConfigs: [],
@@ -150,57 +158,6 @@ export const devGameInstanceExposedInfos: GameInstanceExposedInfoT[] = [{
   playerRole: "player",
   playerStatus: "playing",
   gameStatus: "not-started",
-  otherPlayerExposedInfos: [],
-}, {
-  gameInstanceId: "giid-5",
-  invitationCode: "invt-code-giid-5",
-  gameConfig: {
-    gameConfigId: "treasure-hunt-5",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 5",
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
-    extraTimeMinutes: 10,
-    extraTimeLimitMinutes: 20,
-    levelConfigs: [],
-  },
-  playerRole: "player",
-  playerStatus: "playing",
-  gameStatus: "in-process",
-  otherPlayerExposedInfos: [],
-}, {
-  gameInstanceId: "giid-4",
-  invitationCode: "invt-code-giid-4",
-  gameConfig: {
-    gameConfigId: "treasure-hunt-4",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 4",
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
-    extraTimeMinutes: 10,
-    extraTimeLimitMinutes: 20,
-    levelConfigs: [],
-  },
-  playerRole: "admin",
-  playerStatus: "playing",
-  gameStatus: "ended",
-  otherPlayerExposedInfos: [],
-}, {
-  gameInstanceId: "giid-3",
-  invitationCode: "invt-code-giid-3",
-  gameConfig: {
-    gameConfigId: "treasure-hunt-3",
-    kind: "joint-game",
-    gameName: "Treasure Hunt 3",
-    maxDurationMinutes: 60,
-    maxParticipants: 6,
-    extraTimeMinutes: 10,
-    extraTimeLimitMinutes: 20,
-    levelConfigs: [],
-  },
-  playerRole: "player",
-  playerStatus: "playing",
-  gameStatus: "in-process",
   otherPlayerExposedInfos: [],
 }];
 

@@ -1,9 +1,9 @@
 
 import type {
   AppConfigContextT, AppLocalizationContextT, AppTranslationKeyT,
-  GameImageTypeT, GamesUiUrlPathsAdapter
+  GamesUiUrlPathsAdapter
 } from "@ig/engine-app-ui";
-import type { GameInstanceIdT } from "@ig/engine-models";
+import type { AppImageAssetT, GameInstanceIdT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import type { RnuiImageSourceT } from "@ig/rnui";
 
@@ -34,7 +34,7 @@ export const initEngineAppUiMocks = () => {
 
     const imagesSourceMap = {
       ["treasure-hunt-1"]: { uri: "http://example.com/cover.png" },
-    } as Record<GameImageTypeT, RnuiImageSourceT>;
+    } as Record<AppImageAssetT, RnuiImageSourceT>;
     const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
       buildGamesDashboardUrlPath: (): string => "mockedPathGamesDashboard",
       buildGamesAcceptInviteUrlPath: (invitationCode: string): string => `mockedPathGamesAcceptInvite/${invitationCode}`,

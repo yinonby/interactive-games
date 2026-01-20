@@ -5,14 +5,14 @@ import { RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 
 export type PriceViewPropsT = {
-  price: PriceT | undefined,
+  price: PriceT | "free",
   testID?: string,
 };
 
 export const PriceView: FC<PriceViewPropsT> = ({ price }) => {
   const { t } = useAppLocalization();
 
-  if (price === undefined || price.priceRate === 0) {
+  if (price === "free" || price.priceRate === 0) {
     return (
       <RnuiText>{t("common:free")}</RnuiText>
     );

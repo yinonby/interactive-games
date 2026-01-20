@@ -1,19 +1,19 @@
 
+import type { AppImageAssetT } from '@ig/engine-models';
 import {
   type RnuiImageSourceT
 } from "@ig/rnui";
 import React, { createContext, useContext, type PropsWithChildren } from 'react';
-import type { GameImageTypeT } from "../../types/GameImageTypes";
 import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "../../types/GameUiConfigTypes";
 
 export interface AppConfigContextT {
-  imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
+  imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
   gameUiConfig: GameUiConfigT,
   gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter,
 }
 
 type AppConfigProviderPropsT = {
-  imagesSourceMap: Record<GameImageTypeT, RnuiImageSourceT>,
+  imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
   gameUiConfig: GameUiConfigT,
   gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter,
 };
