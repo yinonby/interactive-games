@@ -1,4 +1,5 @@
 
+import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-app-ui';
 import type { GameInstanceIdT, UserIdT } from "@ig/engine-models";
 import { usePostGameInstanceChatMessageMutation } from "../../model/rtk/GameInstanceRtkApi";
 
@@ -16,11 +17,14 @@ export function useGameInstanceController(): GameInstanceControllerT {
     playerUserId: UserIdT,
     chatMessage: string
   ): Promise<void> => {
-    await postGameInstanceChatMessage({
+    const { error } = await postGameInstanceChatMessage({
       gameInstanceId: gameInstanceId,
       playerUserId: playerUserId,
       chatMessage: chatMessage,
     });
+    if (error !== undefined) {
+      throw new AppError(extractAppErrorCodeFromUnknownObject(error));
+    }
   };
 
   return {

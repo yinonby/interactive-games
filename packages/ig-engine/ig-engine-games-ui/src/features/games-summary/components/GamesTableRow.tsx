@@ -21,11 +21,6 @@ export const GamesTableRow: FC<GamesTableRowPropsT> = ({ minimalGameInstanceExpo
       <RnuiTableCell testID="games-table-cell-tid" >
         <GameStatusView gameStatus={minimalGameInstanceExposedInfo.gameStatus} />
       </RnuiTableCell>
-      <RnuiTableCell testID="games-table-cell-tid" >
-        <RnuiText testID="user-role-text-tid">
-          {minimalGameInstanceExposedInfo.playerRole === "admin" ? "Admin" : "Player"}
-        </RnuiText>
-      </RnuiTableCell>
       <RnuiTableCell testID="games-table-cell-tid" endContent>
         <GameActionButton
           gamesUiUrlPathsAdapter={gamesUiUrlPathsAdapter}

@@ -1,5 +1,6 @@
 
 import type { MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
+import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
@@ -37,46 +38,24 @@ describe('GamesTableView', () => {
     getByTestId('game-table-tid');
     getByTestId('game-table-header-tid');
 
-    expect(getAllByTestId('game-table-title-tid')).toHaveLength(4);
+    expect(getAllByTestId('game-table-title-tid')).toHaveLength(3);
     getByText(buildMockedTranslation("games:gameName"));
     getByText(buildMockedTranslation("common:status"));
-    getByText(buildMockedTranslation("common:role"));
 
     expect(queryByTestId('games-table-row-tid')).toBeNull();
   });
 
   it('renders games list when games exist', () => {
-    const minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[] = [{
-      gameInstanceId: "gid-1",
-      invitationCode: "invt-code-gid-1",
-      minimalGameConfig: {
-        gameConfigId: "game-1",
-        kind: "joint-game",
-        gameName: 'Poker Night',
-        maxDurationMinutes: 30,
-        gamePrice: "free",
-        maxParticipants: 4,
-        imageAssetName: "escape-room-1",
-      },
-      playerRole: "admin",
-      playerStatus: "playing",
-      gameStatus: "in-process",
-    }, {
-      gameInstanceId: "gid-2",
-      invitationCode: "invt-code-gid-2",
-      minimalGameConfig: {
-        gameConfigId: "game-2",
-        kind: "joint-game",
-        gameName: 'Chess Match',
-        maxDurationMinutes: 30,
-        gamePrice: "free",
-        maxParticipants: 4,
-        imageAssetName: "escape-room-1",
-      },
-      playerRole: "player",
-      playerStatus: "playing",
-      gameStatus: "in-process",
-    }];
+    const minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[] = [
+      buildTestMinimalGameInstanceExposedInfo({
+        minimalGameConfig: buildTestMinimalGameConfig({ gameName: "game-1" }),
+        gameStatus: 'ended',
+      }),
+      buildTestMinimalGameInstanceExposedInfo({
+        minimalGameConfig: buildTestMinimalGameConfig({ gameName: "game-2" }),
+        gameStatus: 'ended',
+      }),
+    ];
 
     const { getAllByTestId, getByTestId } = render(
       <GamesTableView minimalGameInstanceExposedInfos={minimalGameInstanceExposedInfos} />
@@ -84,7 +63,7 @@ describe('GamesTableView', () => {
 
     getByTestId('game-table-tid');
     getByTestId('game-table-header-tid');
-    expect(getAllByTestId('game-table-title-tid')).toHaveLength(4);
+    expect(getAllByTestId('game-table-title-tid')).toHaveLength(3);
     expect(getAllByTestId('games-table-row-tid')).toHaveLength(2);
   });
 });

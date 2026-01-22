@@ -1,29 +1,27 @@
 
-import type { UserConfigT } from "@ig/engine-models";
+import type { GamesUserConfigT } from '@ig/engine-models';
 import { renderHook } from '@testing-library/react-native';
-import { useUserConfigModel } from './UserConfigModel';
-import { useGetUserConfigQuery, type UseGetUserConfigQueryResultT } from './UserConfigRtkApi';
+import { useGamesUserConfigModel } from './GamesUserConfigModel';
+import { useGetGamesUserConfigQuery, type UseGetGamesUserConfigQueryResultT } from './GamesUserConfigRtkApi';
 
-jest.mock('./UserConfigRtkApi');
+jest.mock('./GamesUserConfigRtkApi');
 
 const mockedUseGetUserConfigQuery =
-  useGetUserConfigQuery as jest.MockedFunction<typeof useGetUserConfigQuery>;
+  useGetGamesUserConfigQuery as jest.MockedFunction<typeof useGetGamesUserConfigQuery>;
 
-describe('UserConfigModel', () => {
+describe('GamesUserConfigModel', () => {
   it('returns loading state when query is loading', () => {
     mockedUseGetUserConfigQuery.mockReturnValue({
       isLoading: true,
       isError: false,
-      data: undefined,
       refetch: jest.fn(),
-    } as UseGetUserConfigQueryResultT);
+    } as UseGetGamesUserConfigQueryResultT);
 
-    const { result } = renderHook(() => useUserConfigModel());
+    const { result } = renderHook(() => useGamesUserConfigModel());
 
     expect(result.current).toEqual({
       isLoading: true,
       isError: false,
-      data: undefined,
     });
   });
 
@@ -33,15 +31,14 @@ describe('UserConfigModel', () => {
       isError: true,
       error: { appErrCode: "apiError:server" },
       refetch: jest.fn(),
-    } as UseGetUserConfigQueryResultT);
+    } as UseGetGamesUserConfigQueryResultT);
 
-    const { result } = renderHook(() => useUserConfigModel());
+    const { result } = renderHook(() => useGamesUserConfigModel());
 
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
-      data: undefined,
     });
   });
 
@@ -49,11 +46,10 @@ describe('UserConfigModel', () => {
     mockedUseGetUserConfigQuery.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: undefined,
       refetch: jest.fn(),
-    } as UseGetUserConfigQueryResultT);
+    } as UseGetGamesUserConfigQueryResultT);
 
-    const { result } = renderHook(() => useUserConfigModel());
+    const { result } = renderHook(() => useGamesUserConfigModel());
 
     expect(result.current).toEqual({
       isLoading: false,
@@ -63,9 +59,7 @@ describe('UserConfigModel', () => {
   });
 
   it('returns data', () => {
-    const userConfig: UserConfigT = {
-      userId: "user-1",
-      username: "user a",
+    const gamesUserConfig: GamesUserConfigT = {
       minimalGameInstanceExposedInfos: [],
     }
 
@@ -73,17 +67,17 @@ describe('UserConfigModel', () => {
       isLoading: false,
       isError: false,
       data: {
-        userConfig: userConfig,
+        gamesUserConfig: gamesUserConfig,
       },
       refetch: jest.fn(),
-    } as UseGetUserConfigQueryResultT);
+    } as UseGetGamesUserConfigQueryResultT);
 
-    const { result } = renderHook(() => useUserConfigModel());
+    const { result } = renderHook(() => useGamesUserConfigModel());
 
     expect(result.current).toEqual({
       isLoading: false,
       isError: false,
-      data: userConfig,
+      data: { gamesUserConfig },
     });
   });
 });

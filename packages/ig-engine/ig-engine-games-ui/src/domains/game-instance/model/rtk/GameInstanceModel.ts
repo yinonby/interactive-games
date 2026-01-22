@@ -1,12 +1,14 @@
 
-import { extractAppErrorCodeFromAppRtkError, type ModelT } from "@ig/engine-app-ui";
+import { extractAppErrorCodeFromUnknownObject, type ModelT } from "@ig/engine-app-ui";
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, GameInstanceIdT } from "@ig/engine-models";
 import { useGetGameInstanceChatQuery, useGetGameInstanceQuery } from "./GameInstanceRtkApi";
 
-export type GameInstanceModelT = ModelT<{
+export type GameInstanceModelDataT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
   gameInstanceChatMessages: GameInstanceChatMessageT[],
-}>;
+};
+
+export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
 
 export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInstanceModelT => {
   const {
@@ -31,13 +33,13 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     return {
       isLoading: false,
       isError: true,
-      appErrCode: extractAppErrorCodeFromAppRtkError(gameInstanceError),
+      appErrCode: extractAppErrorCodeFromUnknownObject(gameInstanceError),
     }
   } else if (isChatError) {
     return {
       isLoading: false,
       isError: true,
-      appErrCode: extractAppErrorCodeFromAppRtkError(chatError),
+      appErrCode: extractAppErrorCodeFromUnknownObject(chatError),
     }
   } else if (gameInstanceResponse === undefined || gameInstanceChatResponse === undefined) {
     return {

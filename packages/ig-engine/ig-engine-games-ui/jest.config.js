@@ -12,6 +12,8 @@ export default {
     'node_modules/(?!(msw|until-async|expo|@expo|expo-constants|expo-modules-core|react-native|@react-native|react-redux|@reduxjs/toolkit|immer)/)',
   ],
   moduleNameMapper: {
+    '^@test/(.*)$': '<rootDir>/test/$1',
+    '@ig/engine-models/test-utils': '<rootDir>/../ig-engine-models/test/test-index.ts',
     '^msw/node$': '<rootDir>/../../../node_modules/msw/lib/node/index.js', // <-- key fix
   },
 }

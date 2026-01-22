@@ -1,12 +1,12 @@
+import type { GamesConfigT, GamesUserConfigT } from '../game/GamesConfigTypes';
 import type {
   ChatMsgIdT,
   GameConfigIdT,
   GameInstanceChatMessageT,
   GameInstanceExposedInfoT,
-  GameInstanceIdT, MinimalGameConfigT
+  GameInstanceIdT
 } from "../game/GameTypes";
 import type { UserIdT } from "../game/UserTypes";
-import type { UserConfigT } from "../user/UserTypes";
 
 // get::app-config
 export type GetAppConfigResponseT = {
@@ -15,12 +15,12 @@ export type GetAppConfigResponseT = {
 
 // get::games/games-config
 export type GetGamesConfigResponseT = {
-  availableMinimalGameConfigs: MinimalGameConfigT[],
+  gamesConfig: GamesConfigT,
 }
 
 // get::games/user-config
-export type GetUserConfigResponseT = {
-  userConfig: UserConfigT
+export type GetGamesUserConfigResponseT = {
+  gamesUserConfig: GamesUserConfigT,
 }
 
 // post::games/user-config/play-game

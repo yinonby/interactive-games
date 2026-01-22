@@ -8,7 +8,7 @@ jest.mock('../../model/rtk/GameInstanceRtkApi');
 describe('useGameInstanceController', () => {
   it('calls postGameInstanceChatMessage with the provided data', async () => {
     const usePostGameInstanceChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, "usePostGameInstanceChatMessageMutation");
-    const postGameInstanceChatMessageMock = jest.fn().mockResolvedValue(undefined);
+    const postGameInstanceChatMessageMock = jest.fn().mockResolvedValue({ data: {}});
 
     (usePostGameInstanceChatMessageMutationSpy as jest.Mock).mockReturnValue(
       [postGameInstanceChatMessageMock]
@@ -26,5 +26,20 @@ describe('useGameInstanceController', () => {
       chatMessage: "Hello world",
       playerUserId: "user-1"
     });
+  });
+
+  it('handles error thrown by postGameInstanceChatMessage', async () => {
+    const usePostGameInstanceChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, "usePostGameInstanceChatMessageMutation");
+    const postGameInstanceChatMessageMock = jest.fn().mockResolvedValue({ error: {}});
+
+    (usePostGameInstanceChatMessageMutationSpy as jest.Mock).mockReturnValue(
+      [postGameInstanceChatMessageMock]
+    );
+
+    const { result } = renderHook(() => useGameInstanceController());
+
+    await expect(result.current.onSendChatMessage('giid-1', "user-1", "Hello world")).rejects.toThrow();
+
+    expect(postGameInstanceChatMessageMock).toHaveBeenCalledTimes(1);
   });
 });

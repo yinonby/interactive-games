@@ -3,7 +3,7 @@ import type { AppDispatch } from "@ig/engine-app-ui";
 import type { GameInstanceUpdateWebSocketMsgKindT, GameInstanceWebSocketMessagePayloadT } from "@ig/engine-models";
 import { gameInstanceRtkApiUtil } from "../../model/rtk/GameInstanceRtkApi";
 
-export const handleGameInstanceWebSocketMessage = (
+export const handleGamesInstanceWebSocketMessage = (
   msgKind: GameInstanceUpdateWebSocketMsgKindT,
   payload: GameInstanceWebSocketMessagePayloadT,
   dispatch: AppDispatch,

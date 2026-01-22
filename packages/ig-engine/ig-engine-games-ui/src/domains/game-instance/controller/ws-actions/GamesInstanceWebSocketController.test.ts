@@ -1,5 +1,5 @@
 
-import { handleGameInstanceWebSocketMessage } from "./GameInstanceWebSocketController";
+import { handleGamesInstanceWebSocketMessage } from "./GamesInstanceWebSocketController";
 
 // 🔹 mock the RTK API util
 jest.mock("../../model/rtk/GameInstanceRtkApi", () => ({
@@ -13,7 +13,7 @@ import type { AppDispatch } from "@ig/engine-app-ui";
 import type { GameInstanceUpdateWebSocketMsgKindT } from "@ig/engine-models";
 import { gameInstanceRtkApiUtil } from "../../model/rtk/GameInstanceRtkApi";
 
-describe("handleGameInstanceWebSocketMessage", () => {
+describe("handleGamesInstanceWebSocketMessage", () => {
   const dispatch = jest.fn() as unknown as AppDispatch;
   const invalidateTagsSpy = jest.spyOn(gameInstanceRtkApiUtil, 'invalidateTags');
 
@@ -29,7 +29,7 @@ describe("handleGameInstanceWebSocketMessage", () => {
       invalidateResult
     );
 
-    handleGameInstanceWebSocketMessage(
+    handleGamesInstanceWebSocketMessage(
       "gamesGameInstanceUpdate",
       { gameInstanceId: "giid-1" },
       dispatch
@@ -46,7 +46,7 @@ describe("handleGameInstanceWebSocketMessage", () => {
 
   it("throws on invalid message kind", () => {
     expect(() =>
-      handleGameInstanceWebSocketMessage(
+      handleGamesInstanceWebSocketMessage(
         "invalid-message" as GameInstanceUpdateWebSocketMsgKindT,
         { gameInstanceId: "giid-1" },
         dispatch

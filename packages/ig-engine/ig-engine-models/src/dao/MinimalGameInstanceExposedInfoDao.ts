@@ -19,8 +19,6 @@ export class MinimalGameInstanceExposedInfoDao {
       } else {
         return 1
       }
-    } else if (this.config.playerRole !== otherMgii.playerRole) {
-      return this.config.playerRole === "admin" ? -1 : 1;
     } else {
       return this.config.minimalGameConfig.gameName.localeCompare(otherMgii.minimalGameConfig.gameName);
     }

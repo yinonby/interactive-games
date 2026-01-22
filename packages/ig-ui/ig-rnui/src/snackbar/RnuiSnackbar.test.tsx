@@ -1,8 +1,8 @@
 
-import { fireEvent, render } from "@testing-library/react-native";
+import { fireEvent, render } from '@testing-library/react-native';
 import * as RNP from 'react-native-paper';
-import type { RnuiSnackbarMessageInfoT } from "../types/RnuiSnackbarTypes";
-import { RnuiSnackbar } from "./RnuiSnackbar";
+import type { RnuiSnackbarMessageInfoT } from '../types/RnuiSnackbarTypes';
+import { RnuiSnackbar } from './RnuiSnackbar';
 
 // mocks
 
@@ -22,7 +22,7 @@ jest.mock('react-native-paper', () => {
 
     return (
       <View {...props}>
-        {props.action && <Pressable testID="close-btn-tid" onPress={handlePress}/>}
+        {props.action && <Pressable testID='close-btn-tid' onPress={handlePress}/>}
         {props.children}
       </View>
     );
@@ -34,7 +34,7 @@ jest.mock('react-native-paper', () => {
   };
 });
 
-jest.mock("../text/RnuiText", () => {
+jest.mock('../text/RnuiText', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { Text } = require('react-native');
 
@@ -45,14 +45,14 @@ jest.mock("../text/RnuiText", () => {
 
 // tests
 
-describe("RnuiSnackbar", () => {
-  const useThemeSpy = jest.spyOn(RNP, "useTheme");
-  const infoBackgroundColor = "green";
-  const infoTextColor = "red";
-  const warnBackgroundColor = "green";
-  const warnTextColor = "red";
-  const errBackgroundColor = "green";
-  const errTextColor = "red";
+describe('RnuiSnackbar', () => {
+  const useThemeSpy = jest.spyOn(RNP, 'useTheme');
+  const infoBackgroundColor = 'green';
+  const infoTextColor = 'red';
+  const warnBackgroundColor = 'green';
+  const warnTextColor = 'red';
+  const errBackgroundColor = 'green';
+  const errTextColor = 'red';
   const startTimeTs = 2500;
 
   beforeAll(() => {
@@ -73,13 +73,13 @@ describe("RnuiSnackbar", () => {
     jest.setSystemTime(startTimeTs);
   })
 
-  it("renders message", () => {
+  it('renders message', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
@@ -91,16 +91,16 @@ describe("RnuiSnackbar", () => {
     );
 
     // message rendered
-    getByText("Test message");
+    getByText('Test message');
   });
 
-  it("computes duration and calls onDismiss when duration elapses", () => {
+  it('computes duration and calls onDismiss when duration elapses', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
@@ -108,14 +108,14 @@ describe("RnuiSnackbar", () => {
 
     jest.advanceTimersByTime(1000);
 
-    let calledKey = "";
+    let calledKey = '';
     const onDismiss = jest.fn((k: string) => { calledKey = k; });
 
     const { getByTestId } = render(
       <RnuiSnackbar index={index} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
     // remaining duration = (displayStartTs + durationMs) - now = (now-1000+5000)-now = 4000
     expect(snack.props.duration).toBe(4000);
     expect(onDismiss).not.toHaveBeenCalled();
@@ -128,11 +128,11 @@ describe("RnuiSnackbar", () => {
     expect(calledKey).toBe(uniqueKey);
   });
 
-  it("doesn't render when duration is 0 (snackbar expired)", () => {
+  it('does not render when duration is 0 (snackbar expired)', () => {
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
-      uniqueKey: "uk3",
-      message: "Expired",
-      level: "warn",
+      uniqueKey: 'uk3',
+      message: 'Expired',
+      level: 'warn',
       withCloseButton: false,
       displayStartTs: startTimeTs, // started 10s ago
       durationMs: 1000, // only 1s duration
@@ -146,15 +146,15 @@ describe("RnuiSnackbar", () => {
       <RnuiSnackbar index={1} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = queryByTestId("snackbar-tid");
+    const snack = queryByTestId('snackbar-tid');
     expect(snack).toBeNull();
   });
 
-  it("does not provide an action when withCloseButton is false", () => {
+  it('does not provide an action when withCloseButton is false', () => {
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
-      uniqueKey: "uk2",
-      message: "No close",
-      level: "info",
+      uniqueKey: 'uk2',
+      message: 'No close',
+      level: 'info',
       withCloseButton: false,
       displayStartTs: startTimeTs,
       durationMs: 2000,
@@ -166,35 +166,35 @@ describe("RnuiSnackbar", () => {
       <RnuiSnackbar index={0} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
 
     // action should be undefined when no close button
     expect(snack.props.action).toBeUndefined();
 
     // close button should not be present
-    expect(queryByTestId("close-btn-tid")).toBeNull();
+    expect(queryByTestId('close-btn-tid')).toBeNull();
   });
 
-  it("calls onDismiss when close button pressed", () => {
+  it('calls onDismiss when close button pressed', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
     };
 
-    let calledKey = "";
+    let calledKey = '';
     const onDismiss = jest.fn((k: string) => { calledKey = k; });
 
     const { getByTestId } = render(
       <RnuiSnackbar index={index} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
 
     // close button exists and pressing it should trigger onDismiss with uniqueKey
     expect(snack.props.action).toBeDefined();
@@ -202,7 +202,7 @@ describe("RnuiSnackbar", () => {
     expect(onDismiss).not.toHaveBeenCalled();
 
     // onDismiss is called when button is pressed
-    const closeBtn = getByTestId("close-btn-tid");
+    const closeBtn = getByTestId('close-btn-tid');
     fireEvent.press(closeBtn);
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(calledKey).toBe(uniqueKey);
@@ -212,13 +212,13 @@ describe("RnuiSnackbar", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
-  it("uses correct styles for info snackbar, with button", () => {
+  it('uses correct styles for info snackbar, with button', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
@@ -230,20 +230,20 @@ describe("RnuiSnackbar", () => {
       <RnuiSnackbar index={index} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
 
     expect(snack.props.style.backgroundColor).toBe(infoBackgroundColor);
     expect(snack.props.action).toBeDefined();
     expect(snack.props.action.textColor).toBe(infoTextColor);
   });
 
-  it("uses correct styles for warn snackbar, with button", () => {
+  it('uses correct styles for warn snackbar, with button', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
@@ -255,20 +255,20 @@ describe("RnuiSnackbar", () => {
       <RnuiSnackbar index={index} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
 
     expect(snack.props.style.backgroundColor).toBe(warnBackgroundColor);
     expect(snack.props.action).toBeDefined();
     expect(snack.props.action.textColor).toBe(warnTextColor);
   });
 
-  it("uses correct styles for err snackbar, with button", () => {
+  it('uses correct styles for err snackbar, with button', () => {
     const index = 2;
-    const uniqueKey = "uk1";
+    const uniqueKey = 'uk1';
     const snackbarMsgInfo: RnuiSnackbarMessageInfoT = {
       uniqueKey,
-      message: "Test message",
-      level: "err",
+      message: 'Test message',
+      level: 'err',
       withCloseButton: true,
       displayStartTs: startTimeTs,
       durationMs: 5000, // 5s duration
@@ -280,7 +280,7 @@ describe("RnuiSnackbar", () => {
       <RnuiSnackbar index={index} snackbarMsgInfo={snackbarMsgInfo} onDismiss={onDismiss} />
     );
 
-    const snack = getByTestId("snackbar-tid");
+    const snack = getByTestId('snackbar-tid');
 
     expect(snack.props.style.backgroundColor).toBe(errBackgroundColor);
     expect(snack.props.action).toBeDefined();

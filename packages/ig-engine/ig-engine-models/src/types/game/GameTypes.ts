@@ -43,14 +43,12 @@ export type MinimalGameInstanceExposedInfoT = {
   gameInstanceId: GameInstanceIdT,
   invitationCode: string,
   minimalGameConfig: MinimalGameConfigT,
-  playerRole: PlayerRoleT,
-  playerStatus: PlayerStatusT,
   gameStatus: GameStatusT,
+  playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
 }
 
 export type GameInstanceExposedInfoT = Omit<MinimalGameInstanceExposedInfoT, "minimalGameConfig"> & {
   gameConfig: GameConfigT,
-  otherPlayerExposedInfos: PlayerExposedInfoT[],
 }
 
 export type PlayerRoleT = "admin" | "player";

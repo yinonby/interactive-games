@@ -1,14 +1,15 @@
 
-import { useRnuiSnackbar } from "@ig/rnui";
+import { useRnuiSnackbar } from '@ig/rnui';
 import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
-import type { AppErrorCodeT } from "../../types/AppRtkTypes";
-import { useAppLocalization } from "../localization/AppLocalizationProvider";
+import { AppError, type AppErrorCodeT } from '../../types/AppErrorTypes';
+import { useAppLocalization } from '../localization/AppLocalizationProvider';
 
 export const APP_ERROR_HANDLING_DEFAULT_SNACKBAR_DURATION_MS = 5000;
 export const APP_ERROR_HANDLING_MAX_HISTORY = 5;
 
 export interface AppErrorHandlingContextT {
-  onError: (appErrCode: AppErrorCodeT) => void,
+  onAppError: (appErrCode: AppErrorCodeT) => void,
+  onUnknownError: (error: unknown) => void,
 }
 
 const AppErrorHandlingContext = createContext<AppErrorHandlingContextT | undefined>(undefined);
@@ -43,9 +44,14 @@ export const AppErrorHandlingProvider: React.FC<PropsWithChildren<AppErrorHandli
     }
   }
 
-  const handleError = (appErrCode: AppErrorCodeT): void => {
+  const handleAppError = (appErrCode: AppErrorCodeT): void => {
     setRequestedAppErrCodes(prev => [appErrCode, ...prev]);
     return;
+  }
+
+  const handleUnknownError = (error: unknown): void => {
+    const appErrCode: AppErrorCodeT = (error instanceof AppError) ? error.appErrCode : 'appError:unknown';
+    setRequestedAppErrCodes(prev => [appErrCode, ...prev]);
   }
 
   useEffect(() => {
@@ -61,7 +67,7 @@ export const AppErrorHandlingProvider: React.FC<PropsWithChildren<AppErrorHandli
 
           onShowSnackbar({
             message: t(requestedAppErrCode),
-            level: "err",
+            level: 'err',
             durationMs: errorDurationMs,
             withCloseButton: true,
           });
@@ -73,7 +79,8 @@ export const AppErrorHandlingProvider: React.FC<PropsWithChildren<AppErrorHandli
   }, [requestedAppErrCodes, lastAppErrCodeInfos, onShowSnackbar]);
 
   const value: AppErrorHandlingContextT = {
-    onError: handleError,
+    onAppError: handleAppError,
+    onUnknownError: handleUnknownError,
   }
 
   return (

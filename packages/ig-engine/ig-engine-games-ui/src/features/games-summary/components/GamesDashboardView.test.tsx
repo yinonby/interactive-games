@@ -35,8 +35,8 @@ jest.mock('./AvailableGamesView', () => {
   };
 });
 
-describe('HomeView', () => {
-  it('renders GamesSummaryView and AddGameView', () => {
+describe('GamesDashboardView', () => {
+  it('renders correctly', () => {
     const { getByTestId } = render(<GamesDashboardView />);
 
     expect(getByTestId('GamesSummaryView-tid')).toBeTruthy();

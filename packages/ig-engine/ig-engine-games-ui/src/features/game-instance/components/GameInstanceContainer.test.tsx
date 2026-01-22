@@ -1,6 +1,7 @@
 
 import { __engineAppUiMocks } from "@ig/engine-app-ui";
-import type { GameInstanceExposedInfoT, GameInstanceIdT } from "@ig/engine-models";
+import { type GameInstanceExposedInfoT, type GameInstanceIdT } from "@ig/engine-models";
+import { buildTestGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GameInstanceModel from "../../../domains/game-instance/model/rtk/GameInstanceModel";
@@ -11,18 +12,16 @@ jest.mock('./GameInstanceView', () => {
   const { View } = require('react-native');
 
   return {
-    GameInstanceView: () => (
-      <View testID="GameInstanceView-tid" />
-    ),
+    GameInstanceView: View
   };
 });
 
 describe('GameInstanceView', () => {
-  const { onErrorMock } = __engineAppUiMocks;
+  const { onAppErrorMock } = __engineAppUiMocks;
   const useGameInstanceModelSpy = jest.spyOn(GameInstanceModel, 'useGameInstanceModel');
   const gameInstanceId1: GameInstanceIdT = "gid-1";
 
-  it('renders loading screen', () => {
+  it('renders loading view', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: true,
       isError: false,
@@ -32,7 +31,7 @@ describe('GameInstanceView', () => {
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
+    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
   });
 
   it('renders error', () => {
@@ -46,30 +45,13 @@ describe('GameInstanceView', () => {
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(onErrorMock).toHaveBeenCalledWith("apiError:server");
+    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
-  it('renders empty state when there are no games', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
+  it('renders correctly when there is data', () => {
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: gameInstanceId1,
-      invitationCode: gameInstanceId1,
-      gameConfig: {
-        gameConfigId: "treasure-hunt-1",
-        kind: "joint-game",
-        gameName: "Treasure Hunt 1",
-        maxDurationMinutes: 60,
-        gamePrice: "free",
-        maxParticipants: 6,
-        imageAssetName: "escape-room-1",
-        extraTimeMinutes: 10,
-        extraTimeLimitMinutes: 20,
-        levelConfigs: [],
-      },
-      playerRole: "admin",
-      playerStatus: "playing",
-      gameStatus: "in-process",
-      otherPlayerExposedInfos: [],
-    }
+    });
 
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: false,
@@ -80,12 +62,12 @@ describe('GameInstanceView', () => {
       },
     });
 
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(
-      queryByTestId("GameInstanceView-tid")
-    ).toBeTruthy();
+    const view = getByTestId("GameInstanceView-tid");
+    expect(view.props.gameInstanceExposedInfo).toEqual({ gameInstanceId: gameInstanceId1 });
+    expect(view.props.gameInstanceChatMessages).toEqual([]);
   });
 });

@@ -39,7 +39,7 @@ export const createAppRtkBaseQuery = (): BaseQueryFn<
       logger.warn("An error ocurred in AppRtkBaseQuery", error);
 
       return {
-        error: extractAppRtkError(error)
+        error: extractAppRtkError(error),
       };
     }
   };

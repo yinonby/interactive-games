@@ -5,7 +5,7 @@ import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from "
 import React, { useEffect, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useGamesConfigModel } from "../../../domains/games-config/model/rtk/GamesConfigModel";
-import { useUserConfigModel } from "../../../domains/user-config/model/rtk/UserConfigModel";
+import { useGamesUserConfigModel } from "../../../domains/user-config/model/rtk/GamesUserConfigModel";
 import { MinimalGameCardView } from "./MinimalGameCardView";
 
 export type AvailableGamesViewPropsT = object;
@@ -20,7 +20,7 @@ const getNonJoinedMinimalGameConfigs = (
 
 export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
   const { t } = useAppLocalization();
-  const { onError } = useAppErrorHandling();
+  const { onAppError } = useAppErrorHandling();
   const {
     isLoading: isAppConfigLoading,
     isError: isAppConfigError,
@@ -31,16 +31,16 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     isLoading: isUserConfigLoading,
     isError: isUserConfigError,
     appErrCode: userConfigErrCode,
-    data: userConfigModel,
-  } = useUserConfigModel();
+    data: gamesUserConfigModel,
+  } = useGamesUserConfigModel();
 
   useEffect(() => {
     if (isAppConfigError) {
-      onError(appConfigErrCode);
+      onAppError(appConfigErrCode);
     } else if (isUserConfigError) {
-      onError(userConfigErrCode);
+      onAppError(userConfigErrCode);
     }
-  }, [isAppConfigError, appConfigErrCode, isUserConfigError, userConfigErrCode, onError]);
+  }, [isAppConfigError, appConfigErrCode, isUserConfigError, userConfigErrCode, onAppError]);
 
   if (isAppConfigLoading || isUserConfigLoading) return (
     <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>
@@ -50,8 +50,9 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     return null;
   }
 
-  const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(appConfigModel.availableMinimalGameConfigs,
-    userConfigModel.minimalGameInstanceExposedInfos);
+  const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(
+    appConfigModel.gamesConfig.availableMinimalGameConfigs,
+    gamesUserConfigModel.gamesUserConfig.minimalGameInstanceExposedInfos);
 
   return (
     <View >

@@ -13,7 +13,8 @@
     "lint:eslint": "eslint -c ./.eslint.config.ts ./src ./test ./index.ts",
     "lint:fix": "npm run lint:eslint -- --fix",
     "lint:cycles": "madge --circular --extensions ts,tsx,js .",
-    "test:unit": "NODE_ENV=testing jest",
+    "test:unit": "NODE_ENV=test jest",
+    "ut": "npm run test:unit",
     "cover:unit": "npm run test:unit -- --coverage"
   },
   "dependencies": {

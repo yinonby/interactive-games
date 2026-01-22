@@ -26,9 +26,6 @@ export const GamesTableView: FC<GamesTableViewPropsT> = ({ minimalGameInstanceEx
         <RnuiTableTitle testID="game-table-title-tid">
           <RnuiText>{t("common:status")}</RnuiText>
         </RnuiTableTitle>
-        <RnuiTableTitle testID="game-table-title-tid">
-          <RnuiText>{t("common:role")}</RnuiText>
-        </RnuiTableTitle>
         <RnuiTableTitle testID="game-table-title-tid" endContent><></></RnuiTableTitle>
       </RnuiTableHeader>
       {[...minimalGameInstanceExposedInfos].sort(compareGames).map((e, index) =>

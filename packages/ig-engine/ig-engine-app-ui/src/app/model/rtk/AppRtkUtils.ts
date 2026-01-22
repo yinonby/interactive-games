@@ -1,7 +1,7 @@
 
-import type { AppApiServerErrorCodeT } from "@ig/engine-models";
-import type { SerializedError } from "@reduxjs/toolkit";
-import type { AppErrorCodeT, AppRtkErrorT } from "../../../types/AppRtkTypes";
+import { type ApiServerErrorCodeT } from "@ig/engine-models";
+import type { AppErrorCodeT } from '../../../types/AppErrorTypes';
+import { AppRtkErrorT } from "../../../types/AppRtkTypes";
 
 export const extractAppRtkError = (error: unknown): AppRtkErrorT => {
   let status = 500;
@@ -13,8 +13,8 @@ export const extractAppRtkError = (error: unknown): AppRtkErrorT => {
       status = error.status;
     }
 
-    if ("apiErrCode" in error && typeof error.apiErrCode === "string" && error.apiErrCode.startsWith("apiError:")) {
-      appErrCode = error.apiErrCode as AppApiServerErrorCodeT;
+    if ("apiServerErrCode" in error && typeof error.apiServerErrCode === "string") {
+      appErrCode = error.apiServerErrCode as ApiServerErrorCodeT;
     }
 
     if ("message" in error && typeof error.message === "string") {
@@ -25,12 +25,21 @@ export const extractAppRtkError = (error: unknown): AppRtkErrorT => {
   return {
     status: status,
     appErrCode: appErrCode,
-    errMsg: errMsg,
-  }
+    errMsg: errMsg
+  };
 }
 
-export function extractAppErrorCodeFromAppRtkError(error: AppRtkErrorT | SerializedError): AppErrorCodeT {
-  if (typeof error === "object" && error !== null && "appErrCode" in error) {
+function hasAppErrCode(error: unknown): error is { appErrCode: AppErrorCodeT } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'appErrCode' in error &&
+    typeof error.appErrCode === 'string'
+  );
+}
+
+export function extractAppErrorCodeFromUnknownObject(error: unknown): AppErrorCodeT {
+  if (hasAppErrCode(error)) {
     return error.appErrCode;
   }
   return "appError:unknown";

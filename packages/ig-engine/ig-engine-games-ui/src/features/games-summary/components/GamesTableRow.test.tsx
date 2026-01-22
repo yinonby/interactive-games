@@ -1,5 +1,7 @@
 
+import { __engineAppUiMocks, type AppConfigContextT, type GamesUiUrlPathsAdapter } from '@ig/engine-app-ui';
 import type { MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
+import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import type { GameStatusViewPropsT } from "../../game-instance/components/GameStatusView";
@@ -30,6 +32,16 @@ jest.mock('../../game-instance/components/GameStatusView', () => {
 // tests
 
 describe('GamesTableRow', () => {
+  const { useAppConfigMock } = __engineAppUiMocks;
+  const buildGameInstanceDashboardUrlPathMock = jest.fn();
+
+  // mock curUserId
+  useAppConfigMock.mockReturnValue({
+    gamesUiUrlPathsAdapter: {
+      buildGameInstanceDashboardUrlPath: buildGameInstanceDashboardUrlPathMock,
+    } as unknown as GamesUiUrlPathsAdapter,
+  } as AppConfigContextT);
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -38,62 +50,26 @@ describe('GamesTableRow', () => {
     jest.clearAllMocks();
   });
 
-  it('renders game row, admin', () => {
-    const minimalGameInstanceExposedInfo: MinimalGameInstanceExposedInfoT = {
+  it('renders games summary table row', () => {
+    const minimalGameInstanceExposedInfo: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
       gameInstanceId: "gid-1",
-      invitationCode: "invt-code-gid-1",
-      minimalGameConfig: {
-        gameConfigId: "game-1",
-        kind: "joint-game",
+      minimalGameConfig: buildTestMinimalGameConfig({
         gameName: 'Poker Night',
-        maxDurationMinutes: 30,
-        gamePrice: "free",
-        maxParticipants: 4,
-        imageAssetName: "escape-room-1",
-      },
-      playerRole: "admin",
-      playerStatus: "playing",
+      }),
       gameStatus: "in-process",
-    };
+    });
 
     const { getByTestId, getAllByTestId } = render(
       <GamesTableRow minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
     );
 
+    // verify calls
+    expect(buildGameInstanceDashboardUrlPathMock).toHaveBeenCalledWith(minimalGameInstanceExposedInfo.gameInstanceId);
+
+    // verify components
     getByTestId('games-table-row-tid');
-    expect(getAllByTestId('games-table-cell-tid')).toHaveLength(4);
+    expect(getAllByTestId('games-table-cell-tid')).toHaveLength(3);
     getByTestId('game-name-text-tid');
-    getByTestId('user-role-text-tid');
-    getByTestId('pui-link-tid');
-    getByTestId('open-game-btn-tid');
-  });
-
-  it('renders game row, player', () => {
-    const minimalGameInstanceExposedInfo: MinimalGameInstanceExposedInfoT = {
-      gameInstanceId: "gid-1",
-      invitationCode: "invt-code-gid-1",
-      minimalGameConfig: {
-        gameConfigId: "game-1",
-        kind: "joint-game",
-        gameName: 'Poker Night',
-        maxDurationMinutes: 30,
-        gamePrice: "free",
-        maxParticipants: 4,
-        imageAssetName: "escape-room-1",
-      },
-      playerRole: "player",
-      playerStatus: "playing",
-      gameStatus: "in-process",
-    };
-
-    const { getByTestId, getAllByTestId } = render(
-      <GamesTableRow minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
-    );
-
-    getByTestId('games-table-row-tid');
-    expect(getAllByTestId('games-table-cell-tid')).toHaveLength(4);
-    getByTestId('game-name-text-tid');
-    getByTestId('user-role-text-tid');
     getByTestId('pui-link-tid');
     getByTestId('open-game-btn-tid');
   });

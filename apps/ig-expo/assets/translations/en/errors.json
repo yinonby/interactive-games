@@ -5,6 +5,10 @@
   "appError": {
     "networkError": "A network error has occurred, please make sure you have internet connectivity and try again",
     "invalidResponse": "An unexpected server error has occurred, please refresh your page or app",
-    "unknown": "An known error has occurred, please refresh your page or app"
+    "unknown": "An unknown error has occurred, please refresh your page or app"
+  },
+  "gamesApiError": {
+    "invalidInvitationCode": "The invitation code is invalid",
+    "gameInstanceAlreadyJoined": "You have already joined this game"
   }
 }

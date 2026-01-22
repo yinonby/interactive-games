@@ -15,7 +15,12 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-const gamesConfigResponse: GetGamesConfigResponseT = { availableMinimalGameConfigs: [] };
+const gamesConfigResponse: GetGamesConfigResponseT = {
+  gamesConfig: {
+    availableMinimalGameConfigs: []
+  }
+};
+
 export const server = setupServer(
   http.get(apiUrl + '/games/games-config', () => {
     return HttpResponse.json(gamesConfigResponse);

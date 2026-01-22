@@ -12,7 +12,7 @@ describe("InviteView", () => {
   const baseGameInstance: GameInstanceExposedInfoT = {
     invitationCode: "ABC123",
     gameConfig: { maxParticipants: 4 } as unknown as GameConfigIdT,
-    otherPlayerExposedInfos: [],
+    playerExposedInfos: [],
   } as unknown as GameInstanceExposedInfoT;
 
   it("renders component properly", () => {
