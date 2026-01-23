@@ -4,6 +4,7 @@
   "role": "Role",
   "duration": "Duration",
   "minutes": "{{minutes}} min.",
+  "unlimited": "Unlimited",
   "price": "Price",
   "free": "Free",
   "nickname": "Nickname",

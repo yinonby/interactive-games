@@ -2,7 +2,7 @@
 import { appRtkApi } from "@ig/engine-app-ui";
 import type {
   GameConfigIdT, GetGamesUserConfigResponseT,
-  PostAcceptInviteResponseT, PostPlayGameResponseT
+  PostAcceptInviteResponseT, PostAddGameInstanceResponseT, PostPlayGameResponseT
 } from "@ig/engine-models";
 
 const gamesUserConfigRtkApi = appRtkApi.injectEndpoints({
@@ -32,6 +32,15 @@ const gamesUserConfigRtkApi = appRtkApi.injectEndpoints({
       }),
       invalidatesTags: ['GamesUserConfigTag'],
     }),
+
+    addGameInstance: builder.mutation<PostAddGameInstanceResponseT, string>({
+      query: (gameConfigId: GameConfigIdT) => ({
+        url: '/games/user-config/add-game-instance',
+        method: 'POST',
+        data: { gameConfigId },
+      }),
+      invalidatesTags: ['GamesUserConfigTag'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -40,6 +49,7 @@ export const {
   useGetGamesUserConfigQuery,
   useGamesPlayGameMutation,
   useGamesAcceptInviteMutation,
+  useAddGameInstanceMutation,
   util: gamesUserConfigRtkApiUtil,
   endpoints: gamesUserConfigRtkApiEndpoints,
   reducer: gamesUserConfigRtkApiReducer,
@@ -48,3 +58,4 @@ export const {
 
 export type UseGetGamesUserConfigQueryResultT = ReturnType<typeof useGetGamesUserConfigQuery>;
 export type UseGamesPlayGameMutationResultT = ReturnType<typeof useGamesPlayGameMutation>;
+export type UseAddGameInstanceMutationResultT = ReturnType<typeof useAddGameInstanceMutation>;

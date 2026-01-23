@@ -12,7 +12,10 @@ export type RnuiStylesT = {
     borderRadius?: number,
     paddingHorizontal?: number,
     paddingVertical?: number,
-  }
+  },
+  tableRow?: {
+    denseMinHeight?: number,
+  },
 }
 
 export interface RnuiContextT {

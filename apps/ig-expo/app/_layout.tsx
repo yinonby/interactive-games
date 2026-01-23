@@ -23,9 +23,10 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Game & More' }} />
         <Stack.Screen name="app/games/index" options={{ title: 'Game & More / Games' }} />
-        <Stack.Screen name="app/games/dashboard" options={{ title: 'Game & More / Games Dashboard' }} />
+        <Stack.Screen name="app/games/dashboard" options={{ title: 'Game & More / All Games' }} />
         <Stack.Screen name="app/games/accept-invite/[invitationCode]" options={{ title: 'Game & More / Accept Invitation' }} />
-        <Stack.Screen name="app/games/[gameInstanceId]/dashboard" options={{ title: 'Game & More / Game' }} />
+        <Stack.Screen name="app/games/[gameConfigId]/dashboard" options={{ title: 'Game & More / Your Games' }} />
+        <Stack.Screen name="app/games/instance/[gameInstanceId]/dashboard" options={{ title: 'Game & More / Game Dashboard' }} />
       </Stack>
     </AppRootLayout>
   )

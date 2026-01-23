@@ -2,8 +2,15 @@
 import { StyleSheet } from 'react-native';
 
 export const useGenericStyles = () => StyleSheet.create({
+  verticalSpacing: {
+    gap: 8,
+  },
   flexRow: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  flexRowReverse: {
+    flexDirection: 'row-reverse',
     alignItems: "center",
   },
   flexRowAlignTop: {
@@ -19,4 +26,7 @@ export const useGenericStyles = () => StyleSheet.create({
   spacingEnd: {
     marginEnd: 8,
   },
+  alignTextToTableCell: {
+    paddingStart: 16,
+  }
 });

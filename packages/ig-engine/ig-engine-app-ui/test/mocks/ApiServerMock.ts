@@ -1,61 +1,47 @@
 
 import type { HttpAdapter, HttpMethod } from "@ig/client-utils";
 import {
-  type GameConfigIdT, type GameInstanceChatMessageT,
+  type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
   type GetAppConfigResponseT,
   type GetGameInstanceChatResponseT,
   type GetGameInstanceResponseT,
   type GetGamesConfigResponseT,
-  type GetGamesUserConfigResponseT, type MinimalGameConfigT,
+  type GetGamesUserConfigResponseT,
   type PostGameInstanceChatMessageParamT,
   type PostGameInstanceChatMessageResponseT
 } from "@ig/engine-models";
-import type { LoggerAdapter } from "@ig/lib";
+import { generateUuidv4, type LoggerAdapter } from "@ig/lib";
 import { getLocalUserId } from '../../src/app/layout/AppConfigUtils';
 import { useClientLogger } from "../../src/app/providers/useClientLogger";
 import {
+  devAllGameConfigs,
   devAllGameInstanceExposedInfos,
   devAvailableMinimalGameConfigs, devChatMessages,
+  devJoinedGameConfigs,
 } from "./DevMocks";
 
-const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<string> => {
-  const minimalGameConfig: MinimalGameConfigT | undefined =
-    devAvailableMinimalGameConfigs.find(e => e.gameConfigId === gameConfigId);
-  const gameInstanceId = "giid-" + gameConfigId;
+const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
+  const gameConfig: GameConfigT | undefined =
+    devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
   const curUserId = await getLocalUserId();
 
-  if (minimalGameConfig === undefined) {
+  if (gameConfig === undefined) {
     throw { status: 500, apiErrCode: "apiError:server" };
   }
   if (curUserId === null) {
     throw { status: 500, apiErrCode: "apiError:server" };
   }
 
-  const gameInstanceExposedInfo = devAllGameInstanceExposedInfos.find(e => e.gameInstanceId === gameInstanceId);
-  if (gameInstanceExposedInfo !== undefined) {
+  const joinedGameConfig: GameConfigT | undefined =
+    devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
+
+  if (joinedGameConfig !== undefined) {
     throw { status: 500, apiErrCode: "apiError:server" };
   }
 
-  devAllGameInstanceExposedInfos.push({
-    gameInstanceId: gameInstanceId,
-    invitationCode: "invt-code-" + gameInstanceId,
-    gameConfig: {
-      ...minimalGameConfig,
-      extraTimeMinutes: 10,
-      extraTimeLimitMinutes: 20,
-      levelConfigs: [],
-    },
-    gameStatus: "in-process",
-    playerExposedInfos: [{
-      playerUserId: curUserId,
-      playerNickname: "my nickname",
-      playerRole: "admin",
-      playerStatus: "playing",
-    }],
-  })
-  return gameInstanceId;
+  devJoinedGameConfigs.push(gameConfig);
 }
 
 const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
@@ -83,6 +69,37 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
   });
 
   return gameInstanceExposedInfo.gameInstanceId;
+}
+
+const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
+  const gameInstanceId = "giid-" + gameConfigId + '-' + generateUuidv4().slice(0, 8);
+  const curUserId = await getLocalUserId();
+
+  if (curUserId === null) {
+    throw { status: 500, apiErrCode: "apiError:server" };
+  }
+
+  const joinedGameConfig: GameConfigT | undefined =
+    devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
+
+  if (joinedGameConfig === undefined) {
+    throw { status: 500, apiErrCode: "apiError:server" };
+  }
+
+  devAllGameInstanceExposedInfos.push({
+    gameInstanceId: gameInstanceId,
+    invitationCode: "invt-code-" + gameInstanceId,
+    gameConfig: joinedGameConfig,
+    gameStatus: "in-process",
+    playerExposedInfos: [{
+      playerUserId: curUserId,
+      playerNickname: "my nickname",
+      playerRole: "admin",
+      playerStatus: "playing",
+    }],
+  });
+
+  return gameInstanceId;
 }
 
 const getGameInstanceChatMessages = (gameInstanceId: GameInstanceIdT): GameInstanceChatMessageT[] => {
@@ -119,6 +136,7 @@ export class ApiServerMock implements HttpAdapter {
     } else if (options.url === "/games/user-config") {
       const curUserId = await getLocalUserId();
       const gamesUserConfig: GamesUserConfigT = {
+        joinedGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
         minimalGameInstanceExposedInfos: devAllGameInstanceExposedInfos
           .filter(e => e.playerExposedInfos.find(e2 => e2.playerUserId === curUserId))
           .map(e => ({
@@ -132,11 +150,15 @@ export class ApiServerMock implements HttpAdapter {
       return response as TResponse;
     } else if (options.url === "/games/user-config/play-game") {
       const data: { gameConfigId: GameConfigIdT } = options.data as unknown as { gameConfigId: GameConfigIdT };
-      const gameInstanceId: GameInstanceIdT = await handlePlayGame(data.gameConfigId);
-      return { gameInstanceId: gameInstanceId } as TResponse;
+      await handlePlayGame(data.gameConfigId);
+      return { status: 'ok' } as TResponse;
     } else if (options.url === "/games/user-config/accept-invite") {
       const data: { invitationCode: string } = options.data as unknown as { invitationCode: string };
       const gameInstanceId: GameInstanceIdT = await handleAcceptInvite(data.invitationCode);
+      return { gameInstanceId: gameInstanceId } as TResponse;
+    } else if (options.url === "/games/user-config/add-game-instance") {
+      const data: { gameConfigId: GameConfigIdT } = options.data as unknown as { gameConfigId: GameConfigIdT };
+      const gameInstanceId: GameInstanceIdT = await handleAddGameInstance(data.gameConfigId);
       return { gameInstanceId: gameInstanceId } as TResponse;
     } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("chat/message")) {
       const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;

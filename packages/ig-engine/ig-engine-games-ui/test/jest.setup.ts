@@ -33,6 +33,7 @@ declare module "@ig/platform-ui" {
 type UseAppConfigFnT = typeof import('@ig/engine-app-ui')['useAppConfig'];
 type BuildGamesDashboardUrlPathMockFnT = GamesUiUrlPathsAdapter['buildGamesDashboardUrlPath'];
 type BuildGamesAcceptInviteUrlPathFnT = GamesUiUrlPathsAdapter['buildGamesAcceptInviteUrlPath'];
+type BuildGameDashboardUrlPathFnT = GamesUiUrlPathsAdapter['buildGameDashboardUrlPath'];
 type BuildGameInstanceDashboardUrlPathMockFnT = GamesUiUrlPathsAdapter['buildGameInstanceDashboardUrlPath'];
 
 declare module "@ig/engine-app-ui" {
@@ -43,6 +44,7 @@ declare module "@ig/engine-app-ui" {
     useAppConfigMock: jest.MockedFunction<UseAppConfigFnT>,
     buildGamesDashboardUrlPathMock: jest.MockedFunction<BuildGamesDashboardUrlPathMockFnT>,
     buildGamesAcceptInviteUrlPathMock: jest.MockedFunction<BuildGamesAcceptInviteUrlPathFnT>,
+    buildGameDashboardUrlPathMock: jest.MockedFunction<BuildGameDashboardUrlPathFnT>,
     buildGameInstanceDashboardUrlPathMock: jest.MockedFunction<BuildGameInstanceDashboardUrlPathMockFnT>,
   };
 }

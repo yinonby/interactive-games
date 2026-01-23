@@ -5,6 +5,7 @@ import { type RnuiImagePropsT, type RnuiImageSourceT } from "@ig/rnui";
 export const getMinimalGameConfigImageProps = (
   minimalGameConfig: MinimalGameConfigT,
   imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
+  includeFreeLabel = true,
 ): RnuiImagePropsT | undefined => {
   let rnuiImageProps: RnuiImagePropsT | undefined = undefined;
 
@@ -17,7 +18,7 @@ export const getMinimalGameConfigImageProps = (
   } else {
     rnuiImageProps = { imageSource: minimalGameConfig.imageUrl, height: 200 };
   }
-  if (rnuiImageProps !== undefined &&
+  if (includeFreeLabel && rnuiImageProps !== undefined &&
     (minimalGameConfig.gamePrice === "free" || minimalGameConfig.gamePrice.priceRate === 0)
   ) {
     rnuiImageProps.imgLabelProps = {

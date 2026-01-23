@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from "@ig/engine-app-ui";
-import { buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import { buildTestGameConfig } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
@@ -65,6 +65,7 @@ describe('GamesSummaryView', () => {
       isError: false,
       data: {
         gamesUserConfig: {
+          joinedGameConfigs: [],
           minimalGameInstanceExposedInfos: []
         }
       },
@@ -85,10 +86,11 @@ describe('GamesSummaryView', () => {
       isError: false,
       data:  {
         gamesUserConfig: {
-          minimalGameInstanceExposedInfos: [
-            buildTestMinimalGameInstanceExposedInfo({}),
-            buildTestMinimalGameInstanceExposedInfo({}),
+          joinedGameConfigs: [
+            buildTestGameConfig({}),
+            buildTestGameConfig({}),
           ],
+          minimalGameInstanceExposedInfos: [],
         }
       },
     });

@@ -1,7 +1,11 @@
 
 import { type ReactNode } from 'react';
 
-export type PlatformUiLinkPropsT = {
+export type TestableComponentT = {
+  testID?: string;
+};
+
+export type PlatformUiLinkPropsT = TestableComponentT & {
   href: string,
   push?: boolean,
   asChild?: boolean,

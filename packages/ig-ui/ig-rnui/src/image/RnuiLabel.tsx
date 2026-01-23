@@ -51,7 +51,7 @@ export const RnuiLabel: FC<RnuiLabelPropsT> = (props) => {
   );
 };
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   label: {
     paddingHorizontal: 8,
     paddingVertical: 4,

@@ -29,7 +29,7 @@ export type PostPlayGameRequestBodyT = {
 }
 
 export type PostPlayGameResponseT = {
-  gameInstanceId: GameInstanceIdT,
+  status: 'ok',
 }
 
 // post::games/user-config/accept-invite
@@ -38,6 +38,15 @@ export type PostAcceptInviteRequestBodyT = {
 }
 
 export type PostAcceptInviteResponseT = {
+  gameInstanceId: GameInstanceIdT,
+}
+
+// post::games/user-config/add-game-instance
+export type PostAddGameInstanceRequestBodyT = {
+  gameConfigId: GameConfigIdT,
+}
+
+export type PostAddGameInstanceResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 

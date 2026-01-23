@@ -35,6 +35,7 @@ export const initRnuiMocks = () => {
       RnuiQrCode: View,
       RnuiActivityIndicator: View,
       useRnuiSnackbar: jest.fn(),
+      RnuiErrorBoundary: View,
     };
   });
 }

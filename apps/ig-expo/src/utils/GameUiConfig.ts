@@ -28,7 +28,8 @@ export const useGamesUiUrlPathsAdapter = (): GamesUiUrlPathsAdapter => {
   return {
     buildGamesDashboardUrlPath: () => "/app/games/dashboard",
     buildGamesAcceptInviteUrlPath: (invitationCode: string) => `app/games/accept-invite/${invitationCode}`,
-    buildGameInstanceDashboardUrlPath: (gameInstanceId: string) => `app/games/${gameInstanceId}/dashboard`,
+    buildGameDashboardUrlPath: (gameConfigId: string) => `app/games/${gameConfigId}/dashboard`,
+    buildGameInstanceDashboardUrlPath: (gameInstanceId: string) => `app/games/instance/${gameInstanceId}/dashboard`,
   }
 }
 

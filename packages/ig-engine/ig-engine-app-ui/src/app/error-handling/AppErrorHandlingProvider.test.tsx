@@ -3,6 +3,7 @@ import * as Rnui from '@ig/rnui';
 import { jest } from '@jest/globals';
 import { render } from '@testing-library/react-native';
 import React, { act, type ReactNode } from 'react';
+import { View } from 'react-native';
 import { AppError, type AppErrorCodeT } from '../../types/AppErrorTypes';
 import type { AppTranslationKeyT } from '../../types/CommonTranslationTypes';
 import {
@@ -19,12 +20,55 @@ jest.mock('../localization/AppLocalizationProvider', () => {
   };
 });
 
+jest.mock('./AppErrorPage', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    AppErrorPage: View,
+  };
+});
+
 describe('AppErrorHandlingProvider', () => {
   const useRnuiSnackbarSpy = jest.spyOn(Rnui, 'useRnuiSnackbar');
 
   beforeEach(() => {
     jest.setSystemTime(0);
     useRnuiSnackbarSpy.mockReset();
+  });
+
+  it('renders properly', () => {
+    const onShowSnackbarMock = jest.fn();
+    useRnuiSnackbarSpy.mockReturnValue({ onShowSnackbar: onShowSnackbarMock });
+
+    const { getByTestId } = render(
+      <AppErrorHandlingProvider>
+        <View testID='View-tid' />
+      </AppErrorHandlingProvider>
+    );
+
+    getByTestId('RnuiErrorBoundary-tid');
+    getByTestId('View-tid');
+  });
+
+  it('checks that ErrorBoundary renders the correct page', () => {
+    const onShowSnackbarMock = jest.fn();
+    useRnuiSnackbarSpy.mockReturnValue({ onShowSnackbar: onShowSnackbarMock });
+
+    // first, render the provider
+    const { getByTestId } = render(
+      <AppErrorHandlingProvider>
+        <View />
+      </AppErrorHandlingProvider>
+    );
+
+    const errorBoundary = getByTestId('RnuiErrorBoundary-tid');
+
+    // then, render the error page
+    const { getByTestId: getByTestId2 } = render(errorBoundary.props.renderErrorNode());
+
+    // verify error page rendered
+    getByTestId2('AppErrorPage-tid');
   });
 
   it('calls onAppError, uses default duration', () => {

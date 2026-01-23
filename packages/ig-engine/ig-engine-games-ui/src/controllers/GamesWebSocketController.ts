@@ -8,7 +8,7 @@ import type {
 import type { LoggerAdapter } from "@ig/lib";
 import {
   handleGamesInstanceWebSocketMessage
-} from "../domains/game-instance/controller/ws-actions/GamesInstanceWebSocketController";
+} from "../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController";
 import {
   handleGamesUserConfigWebSocketMessage
 } from "../domains/user-config/controller/ws-actions/GamesUserConfigWebSocketController";

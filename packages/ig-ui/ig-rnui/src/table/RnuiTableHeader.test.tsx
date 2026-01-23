@@ -1,24 +1,16 @@
 
 import { render } from '@testing-library/react-native';
-import type { FC } from "react";
-import { Text } from "react-native";
-import { RnuiTableHeader, type RnuiTableHeaderPropsT } from "./RnuiTableHeader";
+import { StyleSheet, Text } from "react-native";
+import { RnuiTableHeader } from "./RnuiTableHeader";
 
 // Mock react-native-paper Button
 jest.mock('react-native-paper', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
-  // Outer dumb component holds all props
-  const RnpTextInputMock: FC<RnuiTableHeaderPropsT> = ({ ...props }) => {
-    return (
-      <View {...props} testID="cut-test-id" />
-    );
-  };
-
   return {
     DataTable: {
-      Header: (props: RnuiTableHeaderPropsT) => <RnpTextInputMock {...props} />,
+      Header: View,
     }
   };
 });
@@ -29,9 +21,17 @@ describe('RnuiTableHeader', () => {
       <RnuiTableHeader ><Text testID="text-test-id">Hello</Text></RnuiTableHeader>
     );
 
-    const cut = getByTestId('cut-test-id');
-    const text = getByTestId('text-test-id');
-    expect(cut).toBeTruthy();
-    expect(text).toBeTruthy();
+    getByTestId('DataTableHeader-tid');
+    getByTestId('text-test-id');
+  });
+
+  it('renders correctly with noHorizontalPadding', () => {
+    const { getByTestId } = render(
+      <RnuiTableHeader noHorizontalPadding><Text testID="text-test-id">Hello</Text></RnuiTableHeader>
+    );
+
+    const header = getByTestId('DataTableHeader-tid');
+    const headerStyle = StyleSheet.flatten(header.props.style);
+    expect(headerStyle.paddingHorizontal).toEqual(0);
   });
 });

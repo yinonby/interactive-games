@@ -1,8 +1,9 @@
 
-import { useRnuiSnackbar } from '@ig/rnui';
-import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { RnuiErrorBoundary, useRnuiSnackbar, type TestableComponentT } from '@ig/rnui';
+import React, { createContext, useContext, useEffect, useState, type PropsWithChildren, type ReactNode } from 'react';
 import { AppError, type AppErrorCodeT } from '../../types/AppErrorTypes';
 import { useAppLocalization } from '../localization/AppLocalizationProvider';
+import { AppErrorPage } from './AppErrorPage';
 
 export const APP_ERROR_HANDLING_DEFAULT_SNACKBAR_DURATION_MS = 5000;
 export const APP_ERROR_HANDLING_MAX_HISTORY = 5;
@@ -12,9 +13,9 @@ export interface AppErrorHandlingContextT {
   onUnknownError: (error: unknown) => void,
 }
 
-const AppErrorHandlingContext = createContext<AppErrorHandlingContextT | undefined>(undefined);
+export const AppErrorHandlingContext = createContext<AppErrorHandlingContextT | undefined>(undefined);
 
-type AppErrorHandlingProviderPropsT = {
+type AppErrorHandlingProviderPropsT = TestableComponentT & {
   errorDurationMs?: number,
   maxHistory?: number,
 };
@@ -78,6 +79,10 @@ export const AppErrorHandlingProvider: React.FC<PropsWithChildren<AppErrorHandli
     }
   }, [requestedAppErrCodes, lastAppErrCodeInfos, onShowSnackbar]);
 
+  const renderErrorNode = (): ReactNode => {
+    return <AppErrorPage testID='AppErrorPage-tid' />;
+  }
+
   const value: AppErrorHandlingContextT = {
     onAppError: handleAppError,
     onUnknownError: handleUnknownError,
@@ -85,7 +90,9 @@ export const AppErrorHandlingProvider: React.FC<PropsWithChildren<AppErrorHandli
 
   return (
     <AppErrorHandlingContext.Provider value={value}>
-      {children}
+      <RnuiErrorBoundary testID='RnuiErrorBoundary-tid' renderErrorNode={renderErrorNode}>
+        {children}
+      </RnuiErrorBoundary>
     </AppErrorHandlingContext.Provider>
   );
 };

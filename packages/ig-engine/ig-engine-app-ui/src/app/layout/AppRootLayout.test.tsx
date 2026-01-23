@@ -43,8 +43,11 @@ jest.mock('../localization/AppLocalizationProvider', () => {
 });
 
 jest.mock('../error-handling/AppErrorHandlingProvider', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
   return {
-    AppErrorHandlingProvider: ({ children }: { children: ReactNode }) => children,
+    AppErrorHandlingProvider: View,
   };
 });
 
@@ -55,8 +58,8 @@ jest.mock('./AppConfigProvider', () => {
 });
 
 describe('AppRootLayout', () => {
-  it('renders children correctly', () => {
-    const { getByText } = render(
+  it('renders correctly', () => {
+    const { getByText, getByTestId } = render(
       <AppRootLayout
         imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
         theme={{} as MD3Theme}
@@ -69,25 +72,12 @@ describe('AppRootLayout', () => {
       </AppRootLayout>
     );
 
+    // verify all providers are rendered
+    getByTestId('reactReduxMock-tid');
+    getByTestId('AppErrorHandlingProvider-tid');
+    getByTestId('gameLayoutWrapper-tid');
+
     // Check that the child text is rendered
-    expect(getByText('Test Child')).toBeTruthy();
-  });
-
-  it('renders wrappers', () => {
-    const { getByTestId } = render(
-      <AppRootLayout
-        imagesSourceMap={{} as Record<AppImageAssetT, RnuiImageSourceT>}
-        theme={{} as MD3Theme}
-        rnuiStyles={{} as RnuiStylesT}
-        gameUiConfig={{} as GameUiConfigT}
-        gamesUiUrlPathsAdapter={{} as GamesUiUrlPathsAdapter}
-        appWebSocketMsgHandlers={[]}
-      >
-        <Text>Child</Text>
-      </AppRootLayout>
-    );
-
-    expect(getByTestId('reactReduxMock-tid')).toBeTruthy();
-    expect(getByTestId('gameLayoutWrapper-tid')).toBeTruthy();
+    getByText('Test Child');
   });
 });

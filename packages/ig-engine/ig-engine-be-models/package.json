@@ -14,7 +14,7 @@
     "lint:fix": "npm run lint:eslint -- --fix",
     "lint:cycles": "madge --circular --extensions ts,tsx,js .",
     "test:unit": "cross-env NODE_ENV=test LOG_LEVEL=SILENT vitest",
-    "ut": "npm run test:unit",
+    "ut": "npm run test:unit --",
     "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
     "cover:unit": "npm run test:unit -- run --coverage"
   },
