@@ -47,7 +47,7 @@ export const RnuiImage: FC<RnuiImagePropsT> = ({
   );
 };
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     width: "100%",
     overflow: "hidden",

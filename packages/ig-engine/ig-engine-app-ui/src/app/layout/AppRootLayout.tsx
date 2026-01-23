@@ -33,7 +33,7 @@ export const AppRootLayout: React.FC<AppRootLayoutPropsT> = (props) => {
     <RnuiProvider theme={theme} rnuiStyles={rnuiStyles}>
       <AppLocalizationProvider>
         {/* AppErrorHandlingProvider depends on RnuiProvider::RnuiSnackbarProvider and AppLocalizationProvider */}
-        <AppErrorHandlingProvider>
+        <AppErrorHandlingProvider testID='AppErrorHandlingProvider-tid'>
           <AppConfigProvider
             imagesSourceMap={imagesSourceMap}
             gameUiConfig={gameUiConfig}

@@ -1,7 +1,7 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from "@ig/engine-app-ui";
-import type { GamesConfigT, GamesUserConfigT } from '@ig/engine-models';
-import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import type { GameConfigT, GamesConfigT, GamesUserConfigT } from '@ig/engine-models';
+import { buildTestGameConfig } from '@ig/engine-models/test-utils';
 import { render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
@@ -9,12 +9,12 @@ import * as GamesConfigModel from "../../../domains/games-config/model/rtk/Games
 import * as GamesUserConfigModel from "../../../domains/user-config/model/rtk/GamesUserConfigModel";
 import { AvailableGamesView } from "./AvailableGamesView";
 
-jest.mock("./MinimalGameCardView", () => {
+jest.mock("./JoinableGameCardView", () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    MinimalGameCardView: View,
+    JoinableGameCardView: View,
   };
 });
 
@@ -80,16 +80,12 @@ describe("AvailableGamesView", () => {
 
   it('renders "No games are available" when user has joined all available games', () => {
     const availableMinimalGameConfigs = [
-      buildTestMinimalGameConfig({ gameConfigId: "g1" }),
-      buildTestMinimalGameConfig({ gameConfigId: "g2" }),
+      buildTestGameConfig({ gameConfigId: "g1" }),
+      buildTestGameConfig({ gameConfigId: "g2" }),
     ];
-    const minimalGameInstanceExposedInfos = [
-      buildTestMinimalGameInstanceExposedInfo({
-        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g1" }),
-      }),
-      buildTestMinimalGameInstanceExposedInfo({
-        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g2" }),
-      }),
+    const joinedGameConfigs: GameConfigT[] = [
+      buildTestGameConfig({ gameConfigId: "g1" }),
+      buildTestGameConfig({ gameConfigId: "g2" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
@@ -106,7 +102,8 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          minimalGameInstanceExposedInfos: minimalGameInstanceExposedInfos
+          joinedGameConfigs: joinedGameConfigs,
+          minimalGameInstanceExposedInfos: []
         }
       }
     });
@@ -120,13 +117,11 @@ describe("AvailableGamesView", () => {
 
   it('renders "Available games:" and grid when there are non-joined games', () => {
     const availableMinimalGameConfigs = [
-      buildTestMinimalGameConfig({ gameConfigId: "g1" }),
-      buildTestMinimalGameConfig({ gameConfigId: "g2" }),
+      buildTestGameConfig({ gameConfigId: "g1" }),
+      buildTestGameConfig({ gameConfigId: "g2" }),
     ];
-    const minimalGameInstanceExposedInfos = [
-      buildTestMinimalGameInstanceExposedInfo({
-        minimalGameConfig: buildTestMinimalGameConfig({ gameConfigId: "g1" }),
-      }),
+    const joinedGameConfigs: GameConfigT[] = [
+      buildTestGameConfig({ gameConfigId: "g1" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
@@ -143,7 +138,8 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          minimalGameInstanceExposedInfos: minimalGameInstanceExposedInfos
+          joinedGameConfigs: joinedGameConfigs,
+          minimalGameInstanceExposedInfos: []
         }
       }
     });

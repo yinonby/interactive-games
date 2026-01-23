@@ -1,35 +1,32 @@
 
 import { useAppLocalization } from "@ig/engine-app-ui";
-import { MinimalGameInstanceExposedInfoDao, type MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
+import { type GameConfigT } from "@ig/engine-models";
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { GamesTableRow } from "./GamesTableRow";
 
-const compareGames = (mgii1: MinimalGameInstanceExposedInfoT, mgii2: MinimalGameInstanceExposedInfoT): number => {
-  return (new MinimalGameInstanceExposedInfoDao(mgii1)).compare(new MinimalGameInstanceExposedInfoDao(mgii2));
+const compareGames = (mg1: GameConfigT, mg2: GameConfigT): number => {
+  return mg1.gameName.localeCompare(mg2.gameName);
 }
 
 export type GamesTableViewPropsT = {
-  minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[],
+  joinedGameConfigs: GameConfigT[],
   testID?: string,
 };
 
-export const GamesTableView: FC<GamesTableViewPropsT> = ({ minimalGameInstanceExposedInfos }) => {
+export const GamesTableView: FC<GamesTableViewPropsT> = ({ joinedGameConfigs }) => {
   const { t } = useAppLocalization();
 
   return (
-    <RnuiTable testID="game-table-tid">
-      <RnuiTableHeader testID="game-table-header-tid">
-        <RnuiTableTitle testID="game-table-title-tid">
+    <RnuiTable testID="RnuiTable-tid">
+      <RnuiTableHeader testID="RnuiTableHeader-tid">
+        <RnuiTableTitle testID="RnuiTableTitle-tid">
           <RnuiText>{t("games:gameName")}</RnuiText>
         </RnuiTableTitle>
-        <RnuiTableTitle testID="game-table-title-tid">
-          <RnuiText>{t("common:status")}</RnuiText>
-        </RnuiTableTitle>
-        <RnuiTableTitle testID="game-table-title-tid" endContent><></></RnuiTableTitle>
+        <RnuiTableTitle testID="RnuiTableTitle-tid" endContent><></></RnuiTableTitle>
       </RnuiTableHeader>
-      {[...minimalGameInstanceExposedInfos].sort(compareGames).map((e, index) =>
-        <GamesTableRow key={index} minimalGameInstanceExposedInfo={e}/>
+      {[...joinedGameConfigs].sort(compareGames).map((e, index) =>
+        <GamesTableRow testID='GamesTableRow-tid' key={index} joinedGameConfig={e}/>
       )}
     </RnuiTable>
   );

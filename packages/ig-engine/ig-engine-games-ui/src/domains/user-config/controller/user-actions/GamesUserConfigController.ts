@@ -2,13 +2,15 @@
 import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-app-ui';
 import type { GameConfigIdT, GameInstanceIdT } from "@ig/engine-models";
 import {
+  useAddGameInstanceMutation,
   useGamesAcceptInviteMutation,
   useGamesPlayGameMutation
 } from "../../model/rtk/GamesUserConfigRtkApi";
 
 export type GamesUserConfigControllerT = {
-  onPlayGame: (gameConfigId: GameConfigIdT) => Promise<GameInstanceIdT | null>,
+  onPlayGame: (gameConfigId: GameConfigIdT) => Promise<void>,
   onAcceptInvite: (invitationCode: string) => Promise<GameInstanceIdT>,
+  onAddGameInstance: (gameConfigId: GameConfigIdT) => Promise<GameInstanceIdT>,
 }
 
 export function useGamesUserConfigController(): GamesUserConfigControllerT {
@@ -18,14 +20,15 @@ export function useGamesUserConfigController(): GamesUserConfigControllerT {
   const [
     acceptInvite,
   ] = useGamesAcceptInviteMutation();
+  const [
+    addGameInstance,
+  ] = useAddGameInstanceMutation();
 
-  const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT | null> => {
-    const { error, data: postPlayGameResponse } = await playGame(gameConfigId);
+  const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
+    const { error } = await playGame(gameConfigId);
     if (error !== undefined) {
       throw new AppError(extractAppErrorCodeFromUnknownObject(error));
     }
-
-    return postPlayGameResponse.gameInstanceId;
   };
 
   const handleAcceptInvite = async (invitationCode: string): Promise<GameInstanceIdT> => {
@@ -38,8 +41,19 @@ export function useGamesUserConfigController(): GamesUserConfigControllerT {
     return postAcceptInviteResponse.gameInstanceId;
   };
 
+  const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
+    await Promise.resolve();
+    const { error, data: postAcceptInviteResponse } = await addGameInstance(gameConfigId);
+    if (error !== undefined) {
+      throw new AppError(extractAppErrorCodeFromUnknownObject(error));
+    }
+
+    return postAcceptInviteResponse.gameInstanceId;
+  };
+
   return {
     onPlayGame: handlePlayGame,
     onAcceptInvite: handleAcceptInvite,
+    onAddGameInstance: handleAddGameInstance,
   }
 }

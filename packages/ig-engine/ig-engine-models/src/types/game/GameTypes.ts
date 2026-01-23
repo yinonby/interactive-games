@@ -1,16 +1,16 @@
 
 import type { XOR } from '@ig/lib';
 import type { AppImageAssetT } from '../app/AppTypes';
-import type { GameStatusT } from "./GameStateTypes";
-import type { LevelConfigT } from "./LevelTypes";
-import type { UserIdT } from "./UserTypes";
+import type { GameStatusT } from './GameStateTypes';
+import type { LevelConfigT } from './LevelTypes';
+import type { UserIdT } from './UserTypes';
 
 export type GameConfigIdT = string;
 
-export type CurrencyT = "EUR" | "USD";
+export type CurrencyT = 'EUR' | 'USD';
 export const currencyToSymbol: Record<CurrencyT, string> = {
-  "USD": "$",
-  "EUR": "€",
+  'USD': '$',
+  'EUR': '€',
 }
 
 export type PriceT = {
@@ -20,10 +20,10 @@ export type PriceT = {
 
 export type MinimalGameConfigT = {
   gameConfigId: GameConfigIdT,
-  kind: "joint-game",
+  kind: 'joint-game',
   gameName: string,
-  maxDurationMinutes: number,
-  gamePrice: PriceT | "free",
+  maxDurationMinutes: number | 'unlimited',
+  gamePrice: PriceT | 'free',
   maxParticipants: number,
 } & XOR<
   { imageAssetName: AppImageAssetT },
@@ -32,7 +32,7 @@ export type MinimalGameConfigT = {
 
 export type GameConfigT = MinimalGameConfigT & {
   extraTimeMinutes: number,
-  extraTimeLimitMinutes: number,
+  extraTimeLimitMinutes: number | 'unlimited',
   levelConfigs: LevelConfigT[],
 }
 
@@ -47,12 +47,12 @@ export type MinimalGameInstanceExposedInfoT = {
   playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
 }
 
-export type GameInstanceExposedInfoT = Omit<MinimalGameInstanceExposedInfoT, "minimalGameConfig"> & {
+export type GameInstanceExposedInfoT = Omit<MinimalGameInstanceExposedInfoT, 'minimalGameConfig'> & {
   gameConfig: GameConfigT,
 }
 
-export type PlayerRoleT = "admin" | "player";
-export type PlayerStatusT = "invited" | "playing" | "suspended";
+export type PlayerRoleT = 'admin' | 'player';
+export type PlayerStatusT = 'invited' | 'playing' | 'suspended';
 
 export type PlayerExposedInfoT = {
   playerUserId: UserIdT,

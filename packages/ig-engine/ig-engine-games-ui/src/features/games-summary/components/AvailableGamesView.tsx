@@ -1,22 +1,22 @@
 
-import { useAppErrorHandling, useAppLocalization } from "@ig/engine-app-ui";
-import type { MinimalGameConfigT, MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
+import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import type { MinimalGameConfigT } from "@ig/engine-models";
 import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useGamesConfigModel } from "../../../domains/games-config/model/rtk/GamesConfigModel";
 import { useGamesUserConfigModel } from "../../../domains/user-config/model/rtk/GamesUserConfigModel";
-import { MinimalGameCardView } from "./MinimalGameCardView";
-
-export type AvailableGamesViewPropsT = object;
+import { JoinableGameCardView } from "./JoinableGameCardView";
 
 const getNonJoinedMinimalGameConfigs = (
   availableMinimalGameConfigs: MinimalGameConfigT[],
-  minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[],
+  joinedGameConfigs: MinimalGameConfigT[],
 ): MinimalGameConfigT[] => {
-  return availableMinimalGameConfigs.filter(e => !minimalGameInstanceExposedInfos
-    .find(e2 => e2.minimalGameConfig.gameConfigId === e.gameConfigId));
+  return availableMinimalGameConfigs.filter(e => !joinedGameConfigs
+    .find(e2 => e2.gameConfigId === e.gameConfigId));
 };
+
+export type AvailableGamesViewPropsT = object;
 
 export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
   const { t } = useAppLocalization();
@@ -33,6 +33,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     appErrCode: userConfigErrCode,
     data: gamesUserConfigModel,
   } = useGamesUserConfigModel();
+  const genericStyles = useGenericStyles();
 
   useEffect(() => {
     if (isAppConfigError) {
@@ -52,31 +53,27 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
 
   const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(
     appConfigModel.gamesConfig.availableMinimalGameConfigs,
-    gamesUserConfigModel.gamesUserConfig.minimalGameInstanceExposedInfos);
+    gamesUserConfigModel.gamesUserConfig.joinedGameConfigs);
 
   return (
-    <View >
+    <View style={genericStyles.verticalSpacing}>
       {nonJoinedMinimalGameConfigs.length === 0 &&
-        <View style={styles.spacingBottom} >
-          <RnuiText testID="no-available-games-text-tid" variant="titleSmall" >
-            {t("games:noGamesAbailable")}
-          </RnuiText>
-        </View>
+        <RnuiText testID="no-available-games-text-tid" variant="titleSmall" >
+          {t("games:noGamesAbailable")}
+        </RnuiText>
       }
 
       {nonJoinedMinimalGameConfigs.length > 0 &&
-        <View style={[styles.spacingBottom]} >
-          <RnuiText testID="available-games-text-tid" variant="titleSmall" >
-            {t("games:abailableGames")}
-          </RnuiText>
-        </View>
+        <RnuiText testID="available-games-text-tid" variant="titleSmall" >
+          {t("games:abailableGames")}
+        </RnuiText>
       }
 
       {nonJoinedMinimalGameConfigs.length > 0 &&
         <RnuiMasonryGrid testID="grid-tid" itemFadeInDurationMsOptions={[200, 190, 180, 170, 160, 150]}>
           {nonJoinedMinimalGameConfigs.map((e, index) => (
             <RnuiGridItem testID="grid-item-tid" key={index} xs={12} sm={6} md={4} lg={3} xl={2} >
-              <MinimalGameCardView testID="game-card-view-tid" minimalGameConfig={e} />
+              <JoinableGameCardView testID="game-card-view-tid" minimalGameConfig={e} />
             </RnuiGridItem>
           ))}
         </RnuiMasonryGrid>
@@ -84,9 +81,3 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  spacingBottom: {
-    marginBottom: 8,
-  },
-});

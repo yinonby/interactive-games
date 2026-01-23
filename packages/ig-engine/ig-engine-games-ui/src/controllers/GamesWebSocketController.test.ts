@@ -13,7 +13,7 @@ jest.mock(
 );
 
 jest.mock(
-  '../domains/game-instance/controller/ws-actions/GamesInstanceWebSocketController',
+  '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController',
   () => ({
     handleGamesInstanceWebSocketMessage: jest.fn(),
   })
@@ -26,7 +26,7 @@ import {
 
 import {
   handleGamesInstanceWebSocketMessage,
-} from '../domains/game-instance/controller/ws-actions/GamesInstanceWebSocketController';
+} from '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController';
 
 // tests
 

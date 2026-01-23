@@ -1,5 +1,5 @@
 
-import React, { FC, ReactNode, useEffect, useRef, type ReactElement } from "react";
+import React, { FC, ReactNode, useEffect, useRef, type PropsWithChildren, type ReactElement } from "react";
 import { Animated, StyleSheet, View, ViewStyle } from "react-native";
 import { useRnuiDimensions } from "../theme/RnuiDimensionsProvider";
 import { RnuiGridItemPropsT } from "./RnuiGridItem";
@@ -45,10 +45,9 @@ const AnimatedGridCell: FC<AnimatedGridCellProps> = ({ children, style }) => {
 
 type RnuiGridProps = {
   spacing?: number;
-  children: ReactElement<RnuiGridItemPropsT>[];
 };
 
-export const RnuiGrid: FC<RnuiGridProps> = ({
+export const RnuiGrid: FC<PropsWithChildren<RnuiGridProps>> = ({
   spacing = 8,
   children,
 }) => {

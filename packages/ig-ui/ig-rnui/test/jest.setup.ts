@@ -1,6 +1,7 @@
 
 import '@testing-library/jest-native/extend-expect';
 import type { Animated } from 'react-native';
+import { initPlatformUiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/PlatformUiMocks';
 
 // use fake timers in tests
 
@@ -11,6 +12,8 @@ beforeAll(() => {
 afterAll(() => {
   jest.useRealTimers();
 });
+
+initPlatformUiMocks();
 
 // mock libraries that contain ES modules (with export)
 

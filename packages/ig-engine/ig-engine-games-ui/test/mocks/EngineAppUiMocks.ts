@@ -39,11 +39,13 @@ export const initEngineAppUiMocks = () => {
     } as Record<AppImageAssetT, RnuiImageSourceT>;
     const buildGamesDashboardUrlPathMock = jest.fn();
     const buildGamesAcceptInviteUrlPathMock = jest.fn();
+    const buildGameDashboardUrlPathMock = jest.fn();
     const buildGameInstanceDashboardUrlPathMock = jest.fn();
     const gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter = {
-      buildGamesDashboardUrlPath: buildGamesDashboardUrlPathMock,//(): string => "mockedPathGamesDashboard",
-      buildGamesAcceptInviteUrlPath: buildGamesAcceptInviteUrlPathMock,//(invitationCode: string): string => `mockedPathGamesAcceptInvite/${invitationCode}`,
-      buildGameInstanceDashboardUrlPath: buildGameInstanceDashboardUrlPathMock,//(gameInstanceId: GameInstanceIdT) => `mockedPathGamesInstance/${gameInstanceId}`,
+      buildGamesDashboardUrlPath: buildGamesDashboardUrlPathMock,
+      buildGamesAcceptInviteUrlPath: buildGamesAcceptInviteUrlPathMock,
+      buildGameDashboardUrlPath: buildGameDashboardUrlPathMock,
+      buildGameInstanceDashboardUrlPath: buildGameInstanceDashboardUrlPathMock,
     } as GamesUiUrlPathsAdapter;
     const useAppConfigMock = jest.fn((): AppConfigContextT => ({
       imagesSourceMap: imagesSourceMap,
@@ -72,6 +74,7 @@ export const initEngineAppUiMocks = () => {
         useAppConfigMock,
         buildGamesDashboardUrlPathMock,
         buildGamesAcceptInviteUrlPathMock,
+        buildGameDashboardUrlPathMock,
         buildGameInstanceDashboardUrlPathMock,
       },
     };

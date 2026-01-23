@@ -1,6 +1,9 @@
 
 export const initPlatformUiMocks = () => {
   jest.mock('@ig/platform-ui', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { View } = require('react-native');
+
     const navigateMock = jest.fn();
     const navigateReplaceMock = jest.fn();
     const getItemMock = jest.fn();
@@ -16,6 +19,7 @@ export const initPlatformUiMocks = () => {
         getItem: getItemMock,
         setItem: setItemMock,
       }),
+      PlatformUiLink: View,
 
       // expose for tests
       __puiMocks: {

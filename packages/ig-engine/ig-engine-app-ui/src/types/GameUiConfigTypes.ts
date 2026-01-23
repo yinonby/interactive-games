@@ -10,5 +10,6 @@ export type GameUiConfigT = {
 export interface GamesUiUrlPathsAdapter {
   buildGamesDashboardUrlPath: () => string,
   buildGamesAcceptInviteUrlPath: (invitationCode: string) => string,
+  buildGameDashboardUrlPath: (gameConfigId: string) => string,
   buildGameInstanceDashboardUrlPath: (gameInstanceId: string) => string,
 }

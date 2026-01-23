@@ -8,6 +8,7 @@ export type CommonTranslationKeyT =
   | "common:role"
   | "common:duration"
   | "common:minutes"
+  | "common:unlimited"
   | "common:price"
   | "common:free"
   | "common:nickname"

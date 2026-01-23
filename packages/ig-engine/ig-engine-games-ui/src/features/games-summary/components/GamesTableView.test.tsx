@@ -1,10 +1,9 @@
 
-import type { MinimalGameInstanceExposedInfoT } from "@ig/engine-models";
-import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import type { GameConfigT } from '@ig/engine-models';
+import { buildTestGameConfig } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
-import type { GamesTableRowPropsT } from "./GamesTableRow";
 import { GamesTableView } from './GamesTableView';
 
 // --------------------
@@ -16,7 +15,7 @@ jest.mock('./GamesTableRow', () => {
   const { View } = require('react-native');
 
   return {
-    GamesTableRow: (props: GamesTableRowPropsT) => <View testID="games-table-row-tid"  {...props} />
+    GamesTableRow: View
   };
 });
 
@@ -30,40 +29,33 @@ describe('GamesTableView', () => {
   });
 
   it('renders empty table', () => {
-    const minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[] = [];
+    const joinedGameConfigs: GameConfigT[] = [];
     const { getAllByTestId, getByTestId, queryByTestId, getByText } = render(
-      <GamesTableView minimalGameInstanceExposedInfos={minimalGameInstanceExposedInfos} />
+      <GamesTableView joinedGameConfigs={joinedGameConfigs} />
     );
 
-    getByTestId('game-table-tid');
-    getByTestId('game-table-header-tid');
+    getByTestId('RnuiTable-tid');
+    getByTestId('RnuiTableHeader-tid');
 
-    expect(getAllByTestId('game-table-title-tid')).toHaveLength(3);
+    expect(getAllByTestId('RnuiTableTitle-tid')).toHaveLength(2);
     getByText(buildMockedTranslation("games:gameName"));
-    getByText(buildMockedTranslation("common:status"));
 
-    expect(queryByTestId('games-table-row-tid')).toBeNull();
+    expect(queryByTestId('GamesTableRow-tid')).toBeNull();
   });
 
   it('renders games list when games exist', () => {
-    const minimalGameInstanceExposedInfos: MinimalGameInstanceExposedInfoT[] = [
-      buildTestMinimalGameInstanceExposedInfo({
-        minimalGameConfig: buildTestMinimalGameConfig({ gameName: "game-1" }),
-        gameStatus: 'ended',
-      }),
-      buildTestMinimalGameInstanceExposedInfo({
-        minimalGameConfig: buildTestMinimalGameConfig({ gameName: "game-2" }),
-        gameStatus: 'ended',
-      }),
+    const joinedGameConfigs: GameConfigT[] = [
+      buildTestGameConfig({ gameName: "game-1" }),
+      buildTestGameConfig({ gameName: "game-2" }),
     ];
 
     const { getAllByTestId, getByTestId } = render(
-      <GamesTableView minimalGameInstanceExposedInfos={minimalGameInstanceExposedInfos} />
+      <GamesTableView joinedGameConfigs={joinedGameConfigs} />
     );
 
-    getByTestId('game-table-tid');
-    getByTestId('game-table-header-tid');
-    expect(getAllByTestId('game-table-title-tid')).toHaveLength(3);
-    expect(getAllByTestId('games-table-row-tid')).toHaveLength(2);
+    getByTestId('RnuiTable-tid');
+    getByTestId('RnuiTableHeader-tid');
+    expect(getAllByTestId('RnuiTableTitle-tid')).toHaveLength(2);
+    expect(getAllByTestId('GamesTableRow-tid')).toHaveLength(2);
   });
 });
