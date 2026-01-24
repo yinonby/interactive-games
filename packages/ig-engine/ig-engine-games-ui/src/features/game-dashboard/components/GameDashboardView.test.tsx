@@ -1,9 +1,9 @@
 
 import { __engineAppUiMocks } from '@ig/engine-app-ui';
-import { buildTestGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import { buildTestGameConfig } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
+import * as GameModel from '../../../domains/game/model/rtk/GameModel';
 import { GameDashboardView } from './GameDashboardView';
 
 // mocks
@@ -17,12 +17,12 @@ jest.mock('./GameConfigCardView', () => {
   };
 });
 
-jest.mock('./GameInstanceView', () => {
+jest.mock('./GameInstanceSummaryView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    GameInstanceView: View,
+    GameInstanceSummaryView: View,
   };
 });
 
@@ -30,14 +30,14 @@ jest.mock('./GameInstanceView', () => {
 
 describe('GameDashboardView', () => {
   const { onAppErrorMock } = __engineAppUiMocks;
-  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
+  const useGameModelSpy = jest.spyOn(GameModel, 'useGameModel');
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders loading screen', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    useGameModelSpy.mockReturnValue({
       isLoading: true,
       isError: false,
     });
@@ -51,7 +51,7 @@ describe('GameDashboardView', () => {
   });
 
   it('renders error', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    useGameModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
@@ -67,17 +67,11 @@ describe('GameDashboardView', () => {
 
   it('renders properly', async () => {
     const joinedGameConfig = buildTestGameConfig({ gameName: 'g1' });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    useGameModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        gamesUserConfig: {
-          joinedGameConfigs: [joinedGameConfig],
-          minimalGameInstanceExposedInfos: [
-            buildTestMinimalGameInstanceExposedInfo({}),
-            buildTestMinimalGameInstanceExposedInfo({}),
-          ]
-        }
+        gameInstanceIds: ['giid-1', 'giid-2'],
       },
     });
 
@@ -86,6 +80,6 @@ describe('GameDashboardView', () => {
     );
 
     getByTestId('GameConfigCardView-tid');
-    expect(getAllByTestId('GameInstanceView-tid')).toHaveLength(2);
+    expect(getAllByTestId('GameInstanceSummaryView-tid')).toHaveLength(2);
   });
 });

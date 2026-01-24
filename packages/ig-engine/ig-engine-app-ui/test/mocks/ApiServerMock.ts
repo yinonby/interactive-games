@@ -72,7 +72,7 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
   return gameInstanceExposedInfo.gameInstanceId;
 }
 
-const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
+const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
   const gameInstanceId = "giid-" + gameConfigId + '-' + generateUuidv4().slice(0, 8);
   const curUserId = await getLocalUserId();
 
@@ -104,6 +104,11 @@ const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameI
   });
 
   return gameInstanceId;
+}
+
+const getGameInstanceIds = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT[]> => {
+  return devAllGameInstanceExposedInfos.filter(e => e.gameConfig.gameConfigId === gameConfigId)
+    .map(e => e.gameInstanceId);
 }
 
 const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
@@ -152,15 +157,8 @@ export class ApiServerMock implements HttpAdapter {
       }
       return response as TResponse;
     } else if (options.url === "/games/user-config") {
-      const curUserId = await getLocalUserId();
       const gamesUserConfig: GamesUserConfigT = {
         joinedGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
-        minimalGameInstanceExposedInfos: devAllGameInstanceExposedInfos
-          .filter(e => e.playerExposedInfos.find(e2 => e2.playerUserId === curUserId))
-          .map(e => ({
-            ...e,
-            minimalGameConfig: e.gameConfig,
-          })),
       }
       const response: GetGamesUserConfigResponseT = {
         gamesUserConfig: gamesUserConfig,
@@ -174,10 +172,14 @@ export class ApiServerMock implements HttpAdapter {
       const data: { invitationCode: string } = options.data as unknown as { invitationCode: string };
       const gameInstanceId: GameInstanceIdT = await handleAcceptInvite(data.invitationCode);
       return { gameInstanceId: gameInstanceId } as TResponse;
-    } else if (options.url === "/games/user-config/add-game-instance") {
+    } else if (options.url === "/games/user-config/create-game-instance") {
       const data: { gameConfigId: GameConfigIdT } = options.data as unknown as { gameConfigId: GameConfigIdT };
-      const gameInstanceId: GameInstanceIdT = await handleAddGameInstance(data.gameConfigId);
+      const gameInstanceId: GameInstanceIdT = await handleCreateGameInstance(data.gameConfigId);
       return { gameInstanceId: gameInstanceId } as TResponse;
+    } else if (options.url.startsWith("/games/game/") && options.url.endsWith("game-instance-ids")) {
+      const gameConfigId: GameConfigIdT = options.url.split("/")[3] as GameConfigIdT;
+      const gameInstanceIds: GameInstanceIdT[] = await getGameInstanceIds(gameConfigId);
+      return { gameInstanceIds: gameInstanceIds } as TResponse;
     } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("chat/message")) {
       const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
       const data: PostGameInstanceChatMessageParamsT = options.data as unknown as PostGameInstanceChatMessageParamsT;

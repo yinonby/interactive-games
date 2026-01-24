@@ -103,7 +103,6 @@ describe("AvailableGamesView", () => {
       data: {
         gamesUserConfig: {
           joinedGameConfigs: joinedGameConfigs,
-          minimalGameInstanceExposedInfos: []
         }
       }
     });
@@ -139,7 +138,6 @@ describe("AvailableGamesView", () => {
       data: {
         gamesUserConfig: {
           joinedGameConfigs: joinedGameConfigs,
-          minimalGameInstanceExposedInfos: []
         }
       }
     });

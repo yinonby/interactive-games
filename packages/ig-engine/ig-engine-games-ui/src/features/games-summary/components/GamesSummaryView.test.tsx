@@ -66,7 +66,6 @@ describe('GamesSummaryView', () => {
       data: {
         gamesUserConfig: {
           joinedGameConfigs: [],
-          minimalGameInstanceExposedInfos: []
         }
       },
     });
@@ -90,7 +89,6 @@ describe('GamesSummaryView', () => {
             buildTestGameConfig({}),
             buildTestGameConfig({}),
           ],
-          minimalGameInstanceExposedInfos: [],
         }
       },
     });

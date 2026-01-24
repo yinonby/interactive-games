@@ -16,12 +16,12 @@ jest.mock('../../common/game-config/GameImageCard', () => {
   };
 });
 
-jest.mock('./AddGameInstanceButton', () => {
+jest.mock('./CreateGameInstanceButton', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    AddGameInstanceButton: View,
+    CreateGameInstanceButton: View,
   };
 });
 
@@ -46,6 +46,6 @@ describe('GameConfigCardView', () => {
 
     getByTestId('GameImageCard-tid');
     getByTestId('GameConfigSummaryView-tid');
-    getByTestId('AddGameInstanceButton-tid');
+    getByTestId('CreateGameInstanceButton-tid');
   });
 });

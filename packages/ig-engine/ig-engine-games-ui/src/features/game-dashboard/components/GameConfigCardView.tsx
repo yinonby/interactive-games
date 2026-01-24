@@ -6,7 +6,7 @@ import { View } from 'react-native';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { GameImageCard } from '../../common/game-config/GameImageCard';
 import { GameConfigSummaryView } from '../../games-summary/components/GameConfigSummaryView';
-import { AddGameInstanceButton } from './AddGameInstanceButton';
+import { CreateGameInstanceButton } from './CreateGameInstanceButton';
 
 export type GameConfigCardViewPropsT = TestableComponentT & {
   gameConfig: GameConfigT,
@@ -21,7 +21,7 @@ export const GameConfigCardView: FC<GameConfigCardViewPropsT> = ({ gameConfig })
         <GameConfigSummaryView testID='GameConfigSummaryView-tid' gameConfig={gameConfig} />
 
         <View style={{ flexDirection: "row" }}>
-          <AddGameInstanceButton testID='AddGameInstanceButton-tid' gameConfigId={gameConfig.gameConfigId} />
+          <CreateGameInstanceButton testID='CreateGameInstanceButton-tid' gameConfigId={gameConfig.gameConfigId} />
         </View>
       </View>
     </GameImageCard>

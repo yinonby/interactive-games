@@ -50,7 +50,7 @@ describe('JoinableGameCardView', () => {
     useUserConfigControllerSpy.mockReturnValue({
       onPlayGame: onPlayGameMock,
       onAcceptInvite: jest.fn(),
-      onAddGameInstance: jest.fn(),
+      onCreateGameInstance: jest.fn(),
     } as GamesUserConfigControllerT);
 
     onPlayGameMock.mockResolvedValue('game-instance-123');
@@ -80,7 +80,7 @@ describe('JoinableGameCardView', () => {
     useUserConfigControllerSpy.mockReturnValue({
       onPlayGame: onPlayGameMock,
       onAcceptInvite: jest.fn(),
-      onAddGameInstance: jest.fn(),
+      onCreateGameInstance: jest.fn(),
     } as GamesUserConfigControllerT);
 
     onPlayGameMock.mockResolvedValue('giid-123');
@@ -114,7 +114,7 @@ describe('JoinableGameCardView', () => {
     useUserConfigControllerSpy.mockReturnValue({
       onPlayGame: onPlayGameMock,
       onAcceptInvite: jest.fn(),
-      onAddGameInstance: jest.fn(),
+      onCreateGameInstance: jest.fn(),
     } as GamesUserConfigControllerT);
 
     const error = "ERR";
