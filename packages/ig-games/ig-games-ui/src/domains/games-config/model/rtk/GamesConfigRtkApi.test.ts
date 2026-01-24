@@ -1,6 +1,6 @@
 
 import { Axios, type HttpAdapter } from '@ig/client-utils';
-import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath, useClientLogger, type AppRtkHttpAdapterGeneratorProvider } from "@ig/engine-app-ui";
+import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath, useClientLogger, type AppRtkHttpAdapterGeneratorProvider } from "@ig/engine-ui";
 import type { GetGamesConfigResponseT } from '@ig/games-models';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';

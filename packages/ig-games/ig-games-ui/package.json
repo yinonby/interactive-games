@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@ig/client-utils": "*",
-    "@ig/engine-app-ui": "*",
+    "@ig/engine-ui": "*",
     "@ig/engine-models": "*",
     "@ig/games-models": "*",
     "@ig/platform-ui": "*",

@@ -1,12 +1,12 @@
 
 import { configureStore } from '@reduxjs/toolkit';
-import { useClientLogger } from '../../../app/providers/useClientLogger';
 import type { GameUiConfigT } from "../../../types/GameUiConfigTypes";
+import { useClientLogger } from '../../providers/useClientLogger';
 import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from "../rtk/AppRtkApi";
 import { appRtkHttpAdapterGenerator } from './AppReduxUtils';
 import {
-  gameUiConfigReducer,
-  gameUiConfigReducerPath
+    gameUiConfigReducer,
+    gameUiConfigReducerPath
 } from "./GameUiConfigReducer";
 
 export const createReduxStore = (gameUiConfig: GameUiConfigT) => configureStore({

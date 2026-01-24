@@ -1,10 +1,10 @@
 
-import { useAppErrorHandling, useAppLocalization } from '@ig/engine-app-ui';
+import { useAppErrorHandling, useAppLocalization } from '@ig/engine-ui';
 import type { GameInstanceIdT } from '@ig/games-models';
 import { RnuiButton } from '@ig/rnui';
 import React, { type FC } from 'react';
 import {
-  useGameInstanceController
+    useGameInstanceController
 } from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
 

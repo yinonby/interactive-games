@@ -1,5 +1,5 @@
 
-import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "@ig/engine-app-ui";
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "@ig/engine-ui";
 import type { RnuiStylesT } from "@ig/rnui";
 
 export const useGameUiConfig = (): GameUiConfigT => {

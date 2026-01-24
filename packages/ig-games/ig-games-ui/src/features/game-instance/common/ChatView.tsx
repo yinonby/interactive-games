@@ -1,14 +1,14 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type {
-  GameInstanceChatMessageT,
-  GameInstanceExposedInfoT, PlayerExposedInfoT
+    GameInstanceChatMessageT,
+    GameInstanceExposedInfoT, PlayerExposedInfoT
 } from '@ig/games-models';
 import { RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
 import React, { useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
 import {
-  useGameInstanceController
+    useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 

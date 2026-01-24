@@ -2,7 +2,7 @@
 
 import '@testing-library/jest-native/extend-expect';
 // figure out why cannot export these from @ig/rn-testing
-import type { GamesUiUrlPathsAdapter } from '@ig/engine-app-ui';
+import type { GamesUiUrlPathsAdapter } from '@ig/engine-ui';
 import { initPlatformUiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/PlatformUiMocks';
 import { initReactNativeMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/ReactNativeMocks';
 import { initRnuiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/RnuiMocks';
@@ -30,13 +30,13 @@ declare module "@ig/platform-ui" {
   };
 }
 
-type UseAppConfigFnT = typeof import('@ig/engine-app-ui')['useAppConfig'];
+type UseAppConfigFnT = typeof import('@ig/engine-ui')['useAppConfig'];
 type BuildGamesDashboardUrlPathMockFnT = GamesUiUrlPathsAdapter['buildGamesDashboardUrlPath'];
 type BuildGamesAcceptInviteUrlPathFnT = GamesUiUrlPathsAdapter['buildGamesAcceptInviteUrlPath'];
 type BuildGameDashboardUrlPathFnT = GamesUiUrlPathsAdapter['buildGameDashboardUrlPath'];
 type BuildGameInstanceDashboardUrlPathMockFnT = GamesUiUrlPathsAdapter['buildGameInstanceDashboardUrlPath'];
 
-declare module "@ig/engine-app-ui" {
+declare module "@ig/engine-ui" {
   export const __engineAppUiMocks: {
     loggerErrorMock: jest.Mock,
     onAppErrorMock: jest.Mock,

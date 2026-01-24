@@ -1,5 +1,5 @@
 
-import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import { RnuiActivityIndicator, RnuiCard, RnuiText } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';

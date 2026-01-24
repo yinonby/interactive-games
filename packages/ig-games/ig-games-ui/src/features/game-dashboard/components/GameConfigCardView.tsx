@@ -1,5 +1,5 @@
 
-import { useGenericStyles } from "@ig/engine-app-ui";
+import { useGenericStyles } from "@ig/engine-ui";
 import type { GameConfigT } from '@ig/games-models';
 import React, { type FC } from 'react';
 import { View } from 'react-native';

@@ -1,5 +1,5 @@
 
-import { __engineAppUiMocks } from "@ig/engine-app-ui";
+import { __engineAppUiMocks } from "@ig/engine-ui";
 import { __puiMocks } from "@ig/platform-ui";
 import { render, waitFor } from "@testing-library/react-native";
 import React from "react";

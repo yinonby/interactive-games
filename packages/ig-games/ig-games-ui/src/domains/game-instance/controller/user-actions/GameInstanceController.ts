@@ -1,6 +1,6 @@
 
-import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-app-ui';
 import type { UserIdT } from '@ig/engine-models';
+import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-ui';
 import type { GameInstanceIdT } from '@ig/games-models';
 import { usePostGameInstanceChatMessageMutation, useStartGameMutation } from "../../model/rtk/GameInstanceRtkApi";
 

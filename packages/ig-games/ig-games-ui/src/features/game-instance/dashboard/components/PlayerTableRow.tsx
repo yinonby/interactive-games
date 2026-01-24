@@ -1,5 +1,5 @@
 
-import { playerRoleToStr, playerStatusToStr, useAppLocalization } from "@ig/engine-app-ui";
+import { playerRoleToStr, playerStatusToStr, useAppLocalization } from "@ig/engine-ui";
 import type { PlayerExposedInfoT } from '@ig/games-models';
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';

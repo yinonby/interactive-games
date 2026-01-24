@@ -1,14 +1,14 @@
 
-import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-app-ui';
+import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-ui';
 import {
-  type GameInstanceChatMessageT, type GameInstanceExposedInfoT
+    type GameInstanceChatMessageT, type GameInstanceExposedInfoT
 } from '@ig/games-models';
 import { buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/games-models/test-utils';
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
 import {
-  useGameInstanceController
+    useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
 import { ChatView } from "./ChatView";
 

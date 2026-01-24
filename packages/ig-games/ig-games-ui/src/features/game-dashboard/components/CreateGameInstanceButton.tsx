@@ -1,11 +1,11 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization } from "@ig/engine-ui";
 import type { GameConfigIdT, GameInstanceIdT } from '@ig/games-models';
 import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton } from "@ig/rnui";
 import React, { type FC } from 'react';
 import {
-  useGamesUserConfigController
+    useGamesUserConfigController
 } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 

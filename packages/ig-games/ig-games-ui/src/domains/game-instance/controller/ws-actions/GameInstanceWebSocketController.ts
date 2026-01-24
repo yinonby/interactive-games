@@ -1,5 +1,5 @@
 
-import type { AppDispatch } from "@ig/engine-app-ui";
+import type { AppDispatch } from "@ig/engine-ui";
 import type { GamesInstanceUpdateWebSocketMsgKindT, GamesInstanceWebSocketMessagePayloadT } from '@ig/games-models';
 import { gameInstanceRtkApiUtil } from "../../model/rtk/GameInstanceRtkApi";
 

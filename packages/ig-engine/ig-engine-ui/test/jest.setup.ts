@@ -1,9 +1,9 @@
 
 import '@testing-library/jest-native/extend-expect';
 // figure out why cannot export these from @ig/rn-testing
-import { initPlatformUiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/PlatformUiMocks';
-import { initReactNativeMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/ReactNativeMocks';
-import { initRnuiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/RnuiMocks';
+import { initPlatformUiMocks } from '@ig/rn-testing/src/mocks/PlatformUiMocks';
+import { initReactNativeMocks } from '@ig/rn-testing/src/mocks/ReactNativeMocks';
+import { initRnuiMocks } from '@ig/rn-testing/src/mocks/RnuiMocks';
 import { initClientUtilsMocks } from './mocks/LoggerMocks';
 
 beforeAll(() => {

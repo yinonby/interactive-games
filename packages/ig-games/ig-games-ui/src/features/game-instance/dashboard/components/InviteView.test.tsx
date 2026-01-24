@@ -1,5 +1,5 @@
 
-import { useAppConfig } from "@ig/engine-app-ui";
+import { useAppConfig } from "@ig/engine-ui";
 import type { GameConfigIdT, GameInstanceExposedInfoT } from '@ig/games-models';
 import { fireEvent, render } from "@testing-library/react-native";
 import React, { act } from "react";

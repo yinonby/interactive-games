@@ -1,10 +1,10 @@
 
-import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-app-ui';
+import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-ui';
 import type { GameConfigIdT, GameInstanceIdT } from '@ig/games-models';
 import {
-  useCreateGameInstanceMutation,
-  useGamesAcceptInviteMutation,
-  useGamesPlayGameMutation
+    useCreateGameInstanceMutation,
+    useGamesAcceptInviteMutation,
+    useGamesPlayGameMutation
 } from "../../model/rtk/GamesUserConfigRtkApi";
 
 export type GamesUserConfigControllerT = {

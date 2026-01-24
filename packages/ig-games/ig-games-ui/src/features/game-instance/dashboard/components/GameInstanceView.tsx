@@ -1,5 +1,5 @@
 
-import { useAppConfig, useClientLogger, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useClientLogger, useGenericStyles } from "@ig/engine-ui";
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from '@ig/games-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from "@ig/rnui";
 import React, { type FC } from 'react';

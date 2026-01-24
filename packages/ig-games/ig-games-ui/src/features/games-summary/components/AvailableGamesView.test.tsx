@@ -1,5 +1,5 @@
 
-import { __engineAppUiMocks, type AppErrorCodeT } from "@ig/engine-app-ui";
+import { __engineAppUiMocks, type AppErrorCodeT } from "@ig/engine-ui";
 import type { GameConfigT, GamesConfigT, GamesUserConfigT } from '@ig/games-models';
 import { buildTestGameConfig } from '@ig/games-models/test-utils';
 import { render } from "@testing-library/react-native";

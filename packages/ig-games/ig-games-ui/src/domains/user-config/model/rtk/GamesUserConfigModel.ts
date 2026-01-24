@@ -1,5 +1,5 @@
 
-import { type ModelT, extractAppErrorCodeFromUnknownObject } from "@ig/engine-app-ui";
+import { type ModelT, extractAppErrorCodeFromUnknownObject } from "@ig/engine-ui";
 import type { GamesUserConfigT } from '@ig/games-models';
 import { useGetGamesUserConfigQuery } from "./GamesUserConfigRtkApi";
 

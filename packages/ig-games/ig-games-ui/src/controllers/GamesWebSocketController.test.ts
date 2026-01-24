@@ -1,5 +1,5 @@
 
-import { useClientLogger, type AppDispatch } from '@ig/engine-app-ui';
+import { useClientLogger, type AppDispatch } from '@ig/engine-ui';
 import type { GamesWebSocketMessagePayloadT, GamesWebSocketMsgKindT } from '@ig/games-models';
 import type { LoggerAdapter } from '@ig/lib';
 import { handleGamesWebSocketMessage } from './GamesWebSocketController';

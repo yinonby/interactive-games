@@ -1,5 +1,5 @@
 
-import { extractAppErrorCodeFromUnknownObject, type ModelT } from "@ig/engine-app-ui";
+import { extractAppErrorCodeFromUnknownObject, type ModelT } from "@ig/engine-ui";
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, GameInstanceIdT } from '@ig/games-models';
 import { useGetGameInstanceChatQuery, useGetGameInstanceQuery } from "./GameInstanceRtkApi";
 

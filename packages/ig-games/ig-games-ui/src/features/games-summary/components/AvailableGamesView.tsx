@@ -1,5 +1,5 @@
 
-import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type { MinimalGameConfigT } from '@ig/games-models';
 import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from "@ig/rnui";
 import React, { useEffect, type FC } from 'react';

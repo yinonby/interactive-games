@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type { GameInstanceExposedInfoT } from '@ig/games-models';
 import { RnuiButton, RnuiCopyToClipboard, RnuiQrCode, RnuiText } from "@ig/rnui";
 import type React from "react";
