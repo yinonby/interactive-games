@@ -1,5 +1,15 @@
 
-import type { ApiServerErrorCodeT } from "@ig/engine-models";
+import { type GamesApiServerErrorCodeT } from '@ig/games-models';
+
+export type AppApiServerErrorT = {
+  status: number;
+  apiErrCode?: ApiServerErrorCodeT;
+};
+
+export type ApiServerErrorCodeT =
+  | GamesApiServerErrorCodeT
+  | "apiError:server"
+;
 
 export type AppErrorCodeT =
   | ApiServerErrorCodeT

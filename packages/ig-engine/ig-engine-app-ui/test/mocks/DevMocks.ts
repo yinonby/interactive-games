@@ -1,5 +1,5 @@
 
-import type { GameConfigT, GameInstanceChatMessageT, GameInstanceExposedInfoT, MinimalGameConfigT } from "@ig/engine-models";
+import type { GameConfigT, GameInstanceChatMessageT, GameInstanceExposedInfoT, MinimalGameConfigT } from '@ig/games-models';
 
 const secretIslandMinimalConfig: GameConfigT = {
   gameConfigId: "treasure-hunt-secret-island", // this game is already joined in this dev preset

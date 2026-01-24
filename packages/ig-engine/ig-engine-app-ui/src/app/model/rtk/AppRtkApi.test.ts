@@ -1,6 +1,6 @@
 
 import { Axios, type HttpAdapter } from '@ig/client-utils';
-import type { GetAppConfigResponseT } from "@ig/engine-models";
+import type { GetAppConfigResponseT } from '@ig/engine-models';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';

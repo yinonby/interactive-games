@@ -1,8 +1,8 @@
 
 import type { WebSocketAdapter } from "@ig/client-utils";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import { render } from "@testing-library/react-native";
 import React from "react";
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from '../../types/AppWebSocketMsgTypes';
 import { WebSocketProvider } from "./WebSocketProvider";
 
 // mocks

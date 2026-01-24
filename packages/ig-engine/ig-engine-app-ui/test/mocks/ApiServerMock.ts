@@ -1,10 +1,10 @@
 
 import type { HttpAdapter, HttpMethod } from '@ig/client-utils';
+import type { GetAppConfigResponseT } from '@ig/engine-models';
 import {
   type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
-  type GetAppConfigResponseT,
   type GetGameInstanceChatResponseT,
   type GetGameInstanceResponseT,
   type GetGamesConfigResponseT,
@@ -12,7 +12,7 @@ import {
   type PostGameInstanceChatMessageParamsT,
   type PostGameInstanceChatMessageResponseT,
   type PostGameInstanceStartResponseT
-} from '@ig/engine-models';
+} from '@ig/games-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/lib';
 import { getLocalUserId } from '../../src/app/layout/AppConfigUtils';
 import { useClientLogger } from '../../src/app/providers/useClientLogger';

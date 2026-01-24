@@ -1,4 +1,4 @@
-import type { PlayerRoleT, PlayerStatusT } from '@ig/engine-models';
+import type { PlayerRoleT, PlayerStatusT } from '@ig/games-models';
 
 export type GamesTranslationKeyT =
   | 'games:noGamesAbailable'

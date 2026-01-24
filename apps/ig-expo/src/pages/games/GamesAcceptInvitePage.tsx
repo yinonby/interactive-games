@@ -1,5 +1,5 @@
 
-import { GamesAcceptInvitePageContent } from "@ig/engine-games-ui";
+import { GamesAcceptInvitePageContent } from "@ig/games-ui";
 
 export default function GamesAcceptInvitePage({ invitationCode }: { invitationCode: string }) {
   return (

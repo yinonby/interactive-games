@@ -1,5 +1,5 @@
 
-import { GamesDashboardPageContent } from "@ig/engine-games-ui";
+import { GamesDashboardPageContent } from "@ig/games-ui";
 
 export default function GamesDashboardPage() {
   return (
