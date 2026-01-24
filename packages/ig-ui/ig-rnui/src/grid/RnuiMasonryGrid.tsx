@@ -193,22 +193,24 @@ export const RnuiMasonryGrid: FC<RnuiMasonryGridPropsT> = ({
       })}
 
       {/* Masonry layer */}
-      {positions.map((item) => (
-        <Animated.View
-          testID="animated-view-tid"
-          key={item.key}
-          style={{
-            position: "absolute",
-            top: item.top,
-            left: `${item.left}%`,
-            width: `${item.width}%`,
-            padding: spacing / 2,
-            opacity: fadingOpacityAnimation[item.key] ?? 1,
-          }}
-        >
-          {item.element}
-        </Animated.View>
-      ))}
+      <View style={{ margin: -spacing / 2 }}>
+        {positions.map((item) => (
+          <Animated.View
+            testID="animated-view-tid"
+            key={item.key}
+            style={{
+              position: "absolute",
+              top: item.top,
+              left: `${item.left}%`,
+              width: `${item.width}%`,
+              padding: spacing / 2,
+              opacity: fadingOpacityAnimation[item.key] ?? 1,
+            }}
+          >
+            {item.element}
+          </Animated.View>
+        ))}
+      </View>
     </View>
   );
 };
