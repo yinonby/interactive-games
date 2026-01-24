@@ -1,7 +1,7 @@
 
 import type { WebSocketAdapter, WebSocketMessageHandlerT } from "@ig/client-utils";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from '../../src/types/AppWebSocketMsgTypes';
 
 export class WebSocketClientMock
   implements WebSocketAdapter<AppWebSocketRcvMsgKindT, never, AppWebSocketMessagePayloadT>
@@ -20,7 +20,7 @@ export class WebSocketClientMock
   subscribe(handler: WebSocketMessageHandlerT<AppWebSocketRcvMsgKindT, AppWebSocketMessagePayloadT>): () => boolean {
     // set mocked msg every 10 seconds to refresh user config
     setInterval(() => handler("gamesUserConfigUpdate"), 10000);
-    setInterval(() => handler("gamesGameInstanceUpdate", { gameInstanceId: "gid-1" }), 10000);
+    setInterval(() => handler("gamesInstanceUpdate", { gameInstanceId: "gid-1" }), 10000);
     return () => true;
   }
 }

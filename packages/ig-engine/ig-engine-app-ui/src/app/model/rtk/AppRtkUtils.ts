@@ -1,6 +1,5 @@
 
-import { type ApiServerErrorCodeT } from "@ig/engine-models";
-import type { AppErrorCodeT } from '../../../types/AppErrorTypes';
+import type { ApiServerErrorCodeT, AppErrorCodeT } from '../../../types/AppErrorTypes';
 import { AppRtkErrorT } from "../../../types/AppRtkTypes";
 
 export const extractAppRtkError = (error: unknown): AppRtkErrorT => {

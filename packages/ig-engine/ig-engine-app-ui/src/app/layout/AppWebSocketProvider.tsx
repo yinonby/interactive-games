@@ -1,8 +1,8 @@
 
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import { type FC, type PropsWithChildren } from 'react';
 import { useDispatch } from "react-redux";
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from '../../types/AppWebSocketMsgTypes';
 import type { AppDispatch } from "../model/reducers/AppReduxStore";
 import { useClientLogger } from "../providers/useClientLogger";
 import { useWsClient } from "../providers/useWsClient";

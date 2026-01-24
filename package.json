@@ -35,6 +35,7 @@
     "packages/ig-dev-lib/*",
     "packages/ig-ui/*",
     "packages/ig-engine/*",
+    "packages/ig-games/*",
     "apps/*"
   ],
   "devDependencies": {

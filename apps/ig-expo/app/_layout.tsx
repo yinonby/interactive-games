@@ -3,7 +3,7 @@ import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
 import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
 import { AppRootLayout, initI18n } from "@ig/engine-app-ui";
-import { handleGamesWebSocketMessage } from "@ig/engine-games-ui";
+import { handleGamesWebSocketMessage } from "@ig/games-ui";
 import { Stack } from "expo-router";
 
 // init i18n must be made once, before any rendering, because i18n is a singleton

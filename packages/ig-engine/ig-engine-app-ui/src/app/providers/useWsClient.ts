@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 
 import { WebSocketClient, type WebSocketAdapter } from "@ig/client-utils";
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from "@ig/engine-models";
 import type { LoggerAdapter } from "@ig/lib";
 import { WebSocketClientMock } from "../../../test/mocks/WebSocketClientMock";
+import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from '../../types/AppWebSocketMsgTypes';
 import { useClientLogger } from "./useClientLogger";
 
 export function useWsClient(
