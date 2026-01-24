@@ -66,7 +66,7 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
     playerUserId: curUserId,
     playerNickname: "my nickname",
     playerRole: "player",
-    playerStatus: "playing",
+    playerStatus: "active",
   });
 
   return gameInstanceExposedInfo.gameInstanceId;
@@ -99,7 +99,7 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
       playerUserId: curUserId,
       playerNickname: "my nickname",
       playerRole: "admin",
-      playerStatus: "playing",
+      playerStatus: "active",
     }],
   });
 

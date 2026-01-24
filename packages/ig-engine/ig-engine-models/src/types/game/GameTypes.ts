@@ -52,7 +52,7 @@ export type GameInstanceExposedInfoT = Omit<MinimalGameInstanceExposedInfoT, 'mi
 }
 
 export type PlayerRoleT = 'admin' | 'player';
-export type PlayerStatusT = 'invited' | 'playing' | 'suspended';
+export type PlayerStatusT = 'invited' | 'active' | 'suspended';
 
 export type PlayerExposedInfoT = {
   playerUserId: UserIdT,

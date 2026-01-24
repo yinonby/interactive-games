@@ -1,5 +1,5 @@
 
-import { useAppLocalization } from "@ig/engine-app-ui";
+import { playerRoleToStr, playerStatusToStr, useAppLocalization } from "@ig/engine-app-ui";
 import type { PlayerExposedInfoT } from "@ig/engine-models";
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
@@ -17,25 +17,29 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = (props) => {
   const { t } = useAppLocalization();
   const youStr = isCurUser ? " (" + t("common:you", { postProcess: 'lowercase' }) + ")" : "";
   const textVariant = isCurUser ? "titleSmall" : undefined;
+  const playerRoleStr = t(playerRoleToStr[playerExposedInfo.playerRole]);
+  const playerStatusStr = t(playerStatusToStr[playerExposedInfo.playerStatus]);
 
-  let statusOnSurfaceColor: string | undefined = undefined;
-  if (playerExposedInfo.playerStatus === "playing") {
-    statusOnSurfaceColor = "green";
+  let textColor: string | undefined = undefined;
+  if (playerExposedInfo.playerStatus === "invited") {
+    textColor = "gray";
   } else if (playerExposedInfo.playerStatus === "suspended") {
-    statusOnSurfaceColor = "red";
+    textColor = "red";
   }
 
   return (
     <RnuiTableRow testID="table-row-tid" noHorizontalPadding dense>
       <RnuiTableCell testID="RnuiTableCell-tid">
-        <RnuiText variant={textVariant}>{playerExposedInfo.playerNickname + youStr}</RnuiText>
+        <RnuiText variant={textVariant} theme={{ colors: { onSurface: textColor } }}>
+          {playerExposedInfo.playerNickname + youStr}
+        </RnuiText>
       </RnuiTableCell>
       <RnuiTableCell testID="RnuiTableCell-tid">
-        <RnuiText variant={textVariant}>{playerExposedInfo.playerRole}</RnuiText>
+        <RnuiText variant={textVariant} theme={{ colors: { onSurface: textColor } }}>{playerRoleStr}</RnuiText>
       </RnuiTableCell>
       <RnuiTableCell testID="RnuiTableCell-tid">
-        <RnuiText variant={textVariant} testID="status-text-tid" theme={{ colors: { onSurface: statusOnSurfaceColor } }}>
-          {playerExposedInfo.playerStatus}
+        <RnuiText variant={textVariant} testID="status-text-tid" theme={{ colors: { onSurface: textColor } }}>
+          {playerStatusStr}
         </RnuiText>
       </RnuiTableCell>
       {withAdminButtons && isCurUserAdminPlayer && isCurUser &&
@@ -43,7 +47,7 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = (props) => {
       }
       {withAdminButtons && isCurUserAdminPlayer && !isCurUser &&
         <RnuiTableCell testID="RnuiTableCell-buttons-tid" endContent>
-          {playerExposedInfo.playerStatus === "playing" &&
+          {playerExposedInfo.playerStatus === "active" &&
             <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
               {t("games:suspend")}
             </RnuiButton>

@@ -20,7 +20,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId, getAllByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={false}
@@ -41,7 +41,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -58,7 +58,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -87,12 +87,12 @@ describe("PlayerTableRow", () => {
     expect(statusText.props.theme.colors.onSurface).toBe(undefined);
   });
 
-  it("renders green status color when player is playing", () => {
+  it("renders green status color when player is active", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -126,7 +126,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId, getByText } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
