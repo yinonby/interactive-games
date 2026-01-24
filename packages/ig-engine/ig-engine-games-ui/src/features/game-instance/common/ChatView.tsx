@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
 import type {
   GameInstanceChatMessageT,
   GameInstanceExposedInfoT, PlayerExposedInfoT
@@ -56,13 +56,18 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
   const { curUserId } = useAppConfig();
+  const { onUnknownError } = useAppErrorHandling();
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =
     getChatMessageWithPlayerNicknames(gameInstanceChatMessages, gameInstanceExposedInfo.playerExposedInfos);
 
   const handlePress = async (): Promise<void> => {
-    await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, curUserId, chatMessage);
-    setChatMessage("");
+    try {
+      await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, curUserId, chatMessage);
+      setChatMessage("");
+    } catch (error: unknown) {
+      onUnknownError(error);
+    }
   }
 
   return (
@@ -71,7 +76,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
 
       <View style={{ maxHeight: 200 }}>
         <FlatList<ChatMessageWithPlayerNicknameT>
-          testID="chat-msg-list-tid"
+          testID="FlatList-tid"
           ref={listRef}
           data={chatMessageWithPlayerNicknames}
           keyExtractor={(m, index) => index.toString()}
@@ -88,7 +93,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
 
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 16 }}>
         <RnuiTextInput
-          testID="new-msg-input-tid"
+          testID="RnuiTextInput-tid"
           submitBehavior="submit"
           style={genericStyles.flex1}
           value={chatMessage}

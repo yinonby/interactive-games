@@ -2,7 +2,8 @@
 import { appRtkApi } from "@ig/engine-app-ui";
 import type {
   GameInstanceIdT, GetGameInstanceChatResponseT,
-  GetGameInstanceResponseT, PostGameInstanceChatMessageParamT, PostGameInstanceChatMessageResponseT
+  GetGameInstanceResponseT, PostGameInstanceChatMessageParamsT, PostGameInstanceChatMessageResponseT,
+  PostGameInstanceStartResponseT
 } from "@ig/engine-models";
 
 const gameInstanceRtkApi = appRtkApi.injectEndpoints({
@@ -15,6 +16,14 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
       providesTags: (result, error, gameInstanceId) => [{ type: 'GamesInstanceTag', id: gameInstanceId }],
     }),
 
+    startGame: builder.mutation<PostGameInstanceStartResponseT, GameInstanceIdT>({
+      query: (gameInstanceId: GameInstanceIdT) => ({
+        url: `/games/game-instance/${gameInstanceId}/start`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, gameInstanceId) => [{ type: 'GamesInstanceTag', id: gameInstanceId }],
+    }),
+
     getGameInstanceChat: builder.query<GetGameInstanceChatResponseT, GameInstanceIdT>({
       query: (gameInstanceId: GameInstanceIdT) => ({
         url: `/games/game-instance/${gameInstanceId}/chat`,
@@ -23,13 +32,13 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
       providesTags: (result, error, gameInstanceId) => [{ type: 'GamesInstanceChatTag', id: gameInstanceId }],
     }),
 
-    postGameInstanceChatMessage: builder.mutation<PostGameInstanceChatMessageResponseT, PostGameInstanceChatMessageParamT>({
-      query: (param: PostGameInstanceChatMessageParamT) => ({
-        url: `/games/game-instance/${param.gameInstanceId}/chat/message`,
+    postGameInstanceChatMessage: builder.mutation<PostGameInstanceChatMessageResponseT, PostGameInstanceChatMessageParamsT>({
+      query: (params: PostGameInstanceChatMessageParamsT) => ({
+        url: `/games/game-instance/${params.gameInstanceId}/chat/message`,
         method: 'POST',
-        data: { chatMessage: param.chatMessage, playerUserId: param.playerUserId },
+        data: { chatMessage: params.chatMessage, playerUserId: params.playerUserId },
       }),
-      invalidatesTags: (result, error, param) => [{ type: 'GamesInstanceChatTag', id: param.gameInstanceId }],
+      invalidatesTags: (result, error, params) => [{ type: 'GamesInstanceChatTag', id: params.gameInstanceId }],
     }),
   }),
   overrideExisting: false,
@@ -37,6 +46,7 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
 
 export const {
   useGetGameInstanceQuery,
+  useStartGameMutation,
   useGetGameInstanceChatQuery,
   usePostGameInstanceChatMessageMutation,
   util: gameInstanceRtkApiUtil,
@@ -46,4 +56,5 @@ export const {
 } = gameInstanceRtkApi;
 
 export type UseGetGameInstanceQueryResultT = ReturnType<typeof useGetGameInstanceQuery>;
+export type UseStartGameMutationResultT = ReturnType<typeof useStartGameMutation>;
 export type UseGetGameInstanceChatQueryResultT = ReturnType<typeof useGetGameInstanceChatQuery>;

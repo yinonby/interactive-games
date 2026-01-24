@@ -19,12 +19,10 @@ export const GameConfigSummaryView: FC<GameConfigSummaryViewPropsT> = ({ gameCon
     t("common:minutes", { minutes: gameConfig.extraTimeLimitMinutes });
 
   return (
-    <View>
-      <View style={genericStyles.spacingBottom} >
-        <RnuiText variant="titleSmall" >
-          {gameConfig.gameName}
-        </RnuiText>
-      </View>
+    <View style={genericStyles.verticalSpacing}>
+      <RnuiText variant="titleSmall" >
+        {gameConfig.gameName}
+      </RnuiText>
 
       <RnuiTable>
         <MinimalGameConfigTableRows testID='MinimalGameConfigTableRows-tid' minimalGameConfig={gameConfig} />

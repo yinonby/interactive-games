@@ -1,4 +1,5 @@
 
+import type { GameStateT } from '../../src/types/game/GameStateTypes';
 import type {
   GameConfigT,
   GameInstanceExposedInfoT, MinimalGameConfigT,
@@ -31,3 +32,7 @@ export const buildTestGameInstanceExposedInfo = (overrides: Partial<GameInstance
 export const buildTestPlayerExposedInfo = (overrides: Partial<PlayerExposedInfoT>) => ({
   ...overrides
 } as PlayerExposedInfoT);
+
+export const buildTestGameState = (overrides: Partial<GameStateT>) => ({
+  ...overrides
+} as GameStateT);

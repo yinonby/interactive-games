@@ -24,51 +24,112 @@ jest.mock("../../../domains/game-instance/controller/user-actions/GameInstanceCo
 const mockedUseGameInstanceController = useGameInstanceController as unknown as jest.Mock;
 
 describe("ChatView", () => {
-  const onSendChatMessage = jest.fn().mockResolvedValue(undefined);
-  mockedUseGameInstanceController.mockReturnValue({ onSendChatMessage });
-  const { useAppConfigMock } = __engineAppUiMocks;
+  const onSendChatMessageMock = jest.fn();
+  const { useAppConfigMock, onUnknownErrorMock } = __engineAppUiMocks;
+  mockedUseGameInstanceController.mockReturnValue({
+    onSendChatMessage: onSendChatMessageMock
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("displays chat messages with nicknames, excludes unknown players, and sends new message", async () => {
+  it("displays chat messages with nicknames, excludes unknown players", async () => {
+    // setup mocks
+    onSendChatMessageMock.mockImplementation(async () => {});
     const mockedCurUserId = "mockedId";
     useAppConfigMock.mockReturnValue({
       curUserId: mockedCurUserId,
     } as AppConfigContextT);
 
+    // render
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: "gi1",
       playerExposedInfos: [
         buildTestPlayerExposedInfo({ playerUserId: "user2", playerNickname: "Alice" }),
       ],
     });
-
     const messages: GameInstanceChatMessageT[] = [
       { chatMsgId: "m1", playerUserId: "user1", msgText: "hello me" } as GameInstanceChatMessageT,
       { chatMsgId: "m2", playerUserId: "user2", msgText: "hi" } as GameInstanceChatMessageT,
       { chatMsgId: "m3", playerUserId: "unknown", msgText: "secret" } as GameInstanceChatMessageT,
     ];
-
     const { getByTestId, getByText } = render(
       <ChatView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={messages} />
     );
 
+    // verify components
     getByText(buildMockedTranslation("common:chat"));
 
-    const list = getByTestId("chat-msg-list-tid");
+    const list = getByTestId("FlatList-tid");
     expect(list.props.data.length).toBe(1); // Only 2 messages with known players
+  });
 
-    fireEvent(getByTestId('new-msg-input-tid'), 'onChangeText', 'new message');
+  it("sends new message", async () => {
+    // setup mocks
+    onSendChatMessageMock.mockImplementation(async () => { });
+    const mockedCurUserId = "mockedId";
+    useAppConfigMock.mockReturnValue({
+      curUserId: mockedCurUserId,
+    } as AppConfigContextT);
 
+    // render
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+      gameInstanceId: "gi1",
+    });
+    const { getByTestId } = render(
+      <ChatView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+    );
+
+    // set new message in text input
+    fireEvent(getByTestId('RnuiTextInput-tid'), 'onChangeText', 'new message');
+
+    // simulate press button
     const sendBtn = getByTestId("send-msg-btn-tid");
     await act(async () => {
       fireEvent.press(sendBtn);
     });
 
-    expect(onSendChatMessage).toHaveBeenCalledWith("gi1", mockedCurUserId, "new message");
-    const newMsgInput = getByTestId("new-msg-input-tid");
+    // verify calls
+    expect(onSendChatMessageMock).toHaveBeenCalledWith("gi1", mockedCurUserId, "new message");
+    expect(onUnknownErrorMock).not.toHaveBeenCalled();
+
+    // verify text input reset
+    const newMsgInput = getByTestId("RnuiTextInput-tid");
     expect(newMsgInput.props.value).toBe("");
+  });
+
+  it("sends new message, handles error", async () => {
+    // setup mocks
+    onSendChatMessageMock.mockRejectedValue('ERR');
+    const mockedCurUserId = "mockedId";
+    useAppConfigMock.mockReturnValue({
+      curUserId: mockedCurUserId,
+    } as AppConfigContextT);
+
+    // render
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+      gameInstanceId: "gi1",
+    });
+    const { getByTestId } = render(
+      <ChatView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+    );
+
+    // set new message in text input
+    fireEvent(getByTestId('RnuiTextInput-tid'), 'onChangeText', 'new message');
+
+    // simulate press button
+    const sendBtn = getByTestId("send-msg-btn-tid");
+    await act(async () => {
+      fireEvent.press(sendBtn);
+    });
+
+    // verify calls
+    expect(onSendChatMessageMock).toHaveBeenCalledWith("gi1", mockedCurUserId, "new message");
+    expect(onUnknownErrorMock).toHaveBeenCalledWith('ERR');
+
+    // verify text input reset
+    const newMsgInput = getByTestId("RnuiTextInput-tid");
+    expect(newMsgInput.props.value).toBe("new message");
   });
 });
