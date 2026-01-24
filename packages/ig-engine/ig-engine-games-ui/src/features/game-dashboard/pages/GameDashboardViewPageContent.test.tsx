@@ -59,7 +59,6 @@ describe("GameDashboardViewPageContent", () => {
       data: {
         gamesUserConfig: {
           joinedGameConfigs: [],
-          minimalGameInstanceExposedInfos: []
         }
       },
     });
@@ -80,7 +79,6 @@ describe("GameDashboardViewPageContent", () => {
       data: {
         gamesUserConfig: {
           joinedGameConfigs: [joinedGameConfig],
-          minimalGameInstanceExposedInfos: []
         }
       },
     });

@@ -24,7 +24,7 @@ describe("GamesAcceptInviteView", () => {
     useGamesUserConfigControllerSpy.mockReturnValue({
       onPlayGame: jest.fn(),
       onAcceptInvite: onAcceptInviteMock,
-      onAddGameInstance: jest.fn(),
+      onCreateGameInstance: jest.fn(),
     });
   });
 

@@ -7,10 +7,12 @@ import {
 } from "@ig/engine-app-ui";
 import type {
   GameConfigT,
+  GameInstanceExposedInfoT,
   GamesUserConfigT,
-  GetGamesUserConfigResponseT, MinimalGameInstanceExposedInfoT,
-  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostAddGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
+  GetGamesUserConfigResponseT,
+  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
 } from "@ig/engine-models";
+import { buildTestGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -29,22 +31,12 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
 
 let mockedGamesUserConfig: GamesUserConfigT = {
   joinedGameConfigs: [],
-  minimalGameInstanceExposedInfos: [],
 };
+let mockedGameInstanceExposedInfos: GameInstanceExposedInfoT[];
 
 export const server = setupServer(
   http.get(apiUrl + '/games/user-config', () => {
     return HttpResponse.json({ gamesUserConfig: mockedGamesUserConfig });
-  }),
-
-  http.post(apiUrl + '/games/user-config', async ({ request }) => {
-    const body = await request.json() as { gameCode: string };
-
-    mockedGamesUserConfig.minimalGameInstanceExposedInfos.push({
-      gameInstanceId: "giid-" + body.gameCode,
-    } as MinimalGameInstanceExposedInfoT);
-
-    return new HttpResponse(null, { status: 200 });
   }),
 
   http.post(apiUrl + '/games/user-config/play-game', async ({ request }) => {
@@ -63,26 +55,33 @@ export const server = setupServer(
   http.post(apiUrl + '/games/user-config/accept-invite', async ({ request }) => {
     const body = await request.json() as PostAcceptInviteRequestBodyT;
 
+    const gameConfigId = "gcid-" + body.invitationCode;
     const gameInstanceId = "giid-" + body.invitationCode;
-    mockedGamesUserConfig.minimalGameInstanceExposedInfos.push({
+
+    mockedGamesUserConfig.joinedGameConfigs.push({
+      gameConfigId: gameConfigId,
+    } as GameConfigT);
+
+    mockedGameInstanceExposedInfos.push(buildTestGameInstanceExposedInfo({
       gameInstanceId: gameInstanceId,
-    } as MinimalGameInstanceExposedInfoT);
+    }));
 
     const response: PostAcceptInviteResponseT = {
+      gameConfigId: gameConfigId,
       gameInstanceId: gameInstanceId,
     };
     return HttpResponse.json(response);
   }),
 
-  http.post(apiUrl + '/games/user-config/add-game-instance', async ({ request }) => {
+  http.post(apiUrl + '/games/user-config/create-game-instance', async ({ request }) => {
     const body = await request.json() as PostPlayGameRequestBodyT;
 
     const gameInstanceId = "giid-" + body.gameConfigId;
-    mockedGamesUserConfig.minimalGameInstanceExposedInfos.push({
+    mockedGameInstanceExposedInfos.push(buildTestGameInstanceExposedInfo({
       gameInstanceId: gameInstanceId,
-    } as MinimalGameInstanceExposedInfoT);
+    }));
 
-    const response: PostAddGameInstanceResponseT = {
+    const response: PostCreateGameInstanceResponseT = {
       gameInstanceId: gameInstanceId,
     };
     return HttpResponse.json(response);
@@ -108,13 +107,14 @@ describe('GamesUserConfigRtkApi', () => {
   beforeAll(() => {
     server.listen();
   });
-  afterEach(() => {
-    server.resetHandlers();
-
+  beforeEach(() => {
     mockedGamesUserConfig = {
       joinedGameConfigs: [],
-      minimalGameInstanceExposedInfos: [],
     };
+    mockedGameInstanceExposedInfos = [];
+  })
+  afterEach(() => {
+    server.resetHandlers();
   });
   afterAll(() => server.close());
 
@@ -131,11 +131,10 @@ describe('GamesUserConfigRtkApi', () => {
     }
     expect(getGamesUserConfigResponse.gamesUserConfig).toEqual({
       joinedGameConfigs: [],
-      minimalGameInstanceExposedInfos: [],
     });
   });
 
-  it('posts a play-game request and invalidates cache', async () => {
+  it('posts a play-game request, expects invalidated tags to cause user-config update', async () => {
     const store = createTestStore();
 
     // Initial fetch
@@ -147,7 +146,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.minimalGameInstanceExposedInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
@@ -181,7 +180,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.minimalGameInstanceExposedInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
@@ -199,11 +198,10 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse2: GetGamesUserConfigResponseT = result2.data;
-    expect(getGamesUserConfigResponse2.gamesUserConfig.minimalGameInstanceExposedInfos.length).toEqual(1);
-    expect(getGamesUserConfigResponse2.gamesUserConfig.minimalGameInstanceExposedInfos[0].gameInstanceId).toEqual("giid-INVT_12");
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameConfigs.length).toEqual(1);
   });
 
-  it('posts an add-game-instance request and invalidates cache', async () => {
+  it('posts an create-game-instance request and invalidates cache', async () => {
     const store = createTestStore();
 
     // Initial fetch
@@ -215,11 +213,11 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.minimalGameInstanceExposedInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
-      gamesUserConfigRtkApiEndpoints.addGameInstance.initiate('GAME_123')
+      gamesUserConfigRtkApiEndpoints.createGameInstance.initiate('GAME_123')
     );
 
     // Re-fetch after invalidation
@@ -233,7 +231,6 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse2: GetGamesUserConfigResponseT = result2.data;
-    expect(getGamesUserConfigResponse2.gamesUserConfig.minimalGameInstanceExposedInfos.length).toEqual(1);
-    expect(getGamesUserConfigResponse2.gamesUserConfig.minimalGameInstanceExposedInfos[0].gameInstanceId).toEqual("giid-GAME_123");
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameConfigs.length).toEqual(0);
   });
 });

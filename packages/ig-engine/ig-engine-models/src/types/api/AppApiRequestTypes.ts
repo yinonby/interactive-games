@@ -38,19 +38,29 @@ export type PostAcceptInviteRequestBodyT = {
 }
 
 export type PostAcceptInviteResponseT = {
+  gameConfigId: GameConfigIdT,
   gameInstanceId: GameInstanceIdT,
 }
 
-// post::games/user-config/add-game-instance
-export type PostAddGameInstanceRequestBodyT = {
+// post::games/user-config/create-game-instance
+export type PostCreateGameInstanceRequestBodyT = {
   gameConfigId: GameConfigIdT,
 }
 
-export type PostAddGameInstanceResponseT = {
+export type PostCreateGameInstanceResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
-// get::games/game-instancev
+// get::game/<id>/game-instances
+export type GetGameInstancesRequestT = {
+  gameConfigId: GameConfigIdT,
+}
+
+export type GetGameInstancesResponseT = {
+  gameInstanceIds: GameInstanceIdT[],
+}
+
+// get::games/game-instance/<id>
 export type GetGameInstanceRequestT = {
   gameInstanceId: GameInstanceIdT,
 }

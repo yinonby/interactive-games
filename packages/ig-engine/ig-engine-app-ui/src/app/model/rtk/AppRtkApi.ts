@@ -8,7 +8,7 @@ export const appRtkApi = createApi({
   baseQuery: createAppRtkBaseQuery(),
   tagTypes: [
     'AppConfigContextTag',
-    'GamesConfigTag', 'GamesUserConfigTag', 'GamesInstanceTag', 'GamesInstanceChatTag'
+    'GamesConfigTag', 'GamesUserConfigTag', 'GameTag', 'GamesInstanceTag', 'GamesInstanceChatTag'
   ],
   endpoints: builder => ({
     getAppConfig: builder.query<GetAppConfigResponseT, void>({

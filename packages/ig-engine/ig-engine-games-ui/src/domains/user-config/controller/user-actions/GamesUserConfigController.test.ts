@@ -10,7 +10,7 @@ describe('useGamesUserConfigController', () => {
   it('calls playGame with the provided gameConfigId, fails', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const playGameMock = jest.fn().mockResolvedValue({ error: {} });
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -21,7 +21,7 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -37,7 +37,7 @@ describe('useGamesUserConfigController', () => {
   it('calls playGame with the provided gameConfigId, succeeds', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const playGameMock = jest.fn().mockResolvedValue({ data: { gameInstanceId: 'GIID-1' }});
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -48,7 +48,7 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -66,7 +66,7 @@ describe('useGamesUserConfigController', () => {
   it('calls acceptInvite with the provided gameConfigId, fails', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const acceptInviteMock = jest.fn().mockResolvedValue({ error: {} });
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -77,7 +77,7 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [acceptInviteMock, jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -93,7 +93,7 @@ describe('useGamesUserConfigController', () => {
   it('calls acceptInvite with the provided gameConfigId, succeeds', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const acceptInviteMock = jest.fn().mockResolvedValue({ data: { gameInstanceId: 'GIID-2' }});
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -104,7 +104,7 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [acceptInviteMock, jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -123,7 +123,7 @@ describe('useGamesUserConfigController', () => {
   it('calls addGameInstanc with the provided gameConfigId, fails', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const addGameInstancMock = jest.fn().mockResolvedValue({ error: {} });
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -134,14 +134,14 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [addGameInstancMock, jest.fn() as any]
     );
 
     const { result } = renderHook(() => useGamesUserConfigController());
 
-    await expect(result.current.onAddGameInstance('GAME_CONFIG_11')).rejects.toThrow();
+    await expect(result.current.onCreateGameInstance('GAME_CONFIG_11')).rejects.toThrow();
 
     expect(addGameInstancMock).toHaveBeenCalledTimes(1);
     expect(addGameInstancMock).toHaveBeenCalledWith('GAME_CONFIG_11');
@@ -150,7 +150,7 @@ describe('useGamesUserConfigController', () => {
   it('calls addGameInstanc with the provided gameConfigId, succeeds', async () => {
     const useGamesPlayGameMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesPlayGameMutation');
     const useGamesAcceptInviteMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useGamesAcceptInviteMutation');
-    const useAddGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useAddGameInstanceMutation');
+    const useCreateGameInstanceMutationSpy = jest.spyOn(GamesUserConfigRtkApi, 'useCreateGameInstanceMutation');
     const addGameInstancMock = jest.fn().mockResolvedValue({ data: { gameInstanceId: 'GIID-1' }});
 
     useGamesPlayGameMutationSpy.mockReturnValue(
@@ -161,7 +161,7 @@ describe('useGamesUserConfigController', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
-    useAddGameInstanceMutationSpy.mockReturnValue(
+    useCreateGameInstanceMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [addGameInstancMock, jest.fn() as any]
     );
@@ -169,7 +169,7 @@ describe('useGamesUserConfigController', () => {
     const { result } = renderHook(() => useGamesUserConfigController());
 
     await act(async () => {
-      await result.current.onAddGameInstance('GAME_CONFIG_11');
+      await result.current.onCreateGameInstance('GAME_CONFIG_11');
     });
 
     expect(addGameInstancMock).toHaveBeenCalledTimes(1);

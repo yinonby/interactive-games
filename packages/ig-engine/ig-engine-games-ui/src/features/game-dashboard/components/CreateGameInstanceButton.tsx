@@ -9,20 +9,20 @@ import {
 } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 
-export type AddGameInstanceButtonPropsT = TestableComponentT & {
+export type CreateGameInstanceButtonPropsT = TestableComponentT & {
   gameConfigId: GameConfigIdT,
 };
 
-export const AddGameInstanceButton: FC<AddGameInstanceButtonPropsT> = ({ gameConfigId }) => {
+export const CreateGameInstanceButton: FC<CreateGameInstanceButtonPropsT> = ({ gameConfigId }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
-  const { onAddGameInstance } = useGamesUserConfigController();
+  const { onCreateGameInstance } = useGamesUserConfigController();
   const { navigate } = usePlatformUiNavigation();
   const { onUnknownError } = useAppErrorHandling();
 
-  const handleAddGameInstance = async (): Promise<void> => {
+  const handleCreateGameInstance = async (): Promise<void> => {
     try {
-      const gameInstanceId: GameInstanceIdT = await onAddGameInstance(gameConfigId);
+      const gameInstanceId: GameInstanceIdT = await onCreateGameInstance(gameConfigId);
       const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
       navigate(url);
     } catch (error: unknown) {
@@ -31,7 +31,7 @@ export const AddGameInstanceButton: FC<AddGameInstanceButtonPropsT> = ({ gameCon
   }
 
   return (
-    <RnuiButton testID="RnuiButton-tid" size="xs" mode="outlined" onPress={handleAddGameInstance}>
+    <RnuiButton testID="RnuiButton-tid" size="xs" mode="outlined" onPress={handleCreateGameInstance}>
       {t("games:createNewPlayersGroup")}
     </RnuiButton>
   );

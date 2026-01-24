@@ -2,7 +2,7 @@
 import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-app-ui';
 import type { GameConfigIdT, GameInstanceIdT } from "@ig/engine-models";
 import {
-  useAddGameInstanceMutation,
+  useCreateGameInstanceMutation,
   useGamesAcceptInviteMutation,
   useGamesPlayGameMutation
 } from "../../model/rtk/GamesUserConfigRtkApi";
@@ -10,7 +10,7 @@ import {
 export type GamesUserConfigControllerT = {
   onPlayGame: (gameConfigId: GameConfigIdT) => Promise<void>,
   onAcceptInvite: (invitationCode: string) => Promise<GameInstanceIdT>,
-  onAddGameInstance: (gameConfigId: GameConfigIdT) => Promise<GameInstanceIdT>,
+  onCreateGameInstance: (gameConfigId: GameConfigIdT) => Promise<GameInstanceIdT>,
 }
 
 export function useGamesUserConfigController(): GamesUserConfigControllerT {
@@ -21,8 +21,8 @@ export function useGamesUserConfigController(): GamesUserConfigControllerT {
     acceptInvite,
   ] = useGamesAcceptInviteMutation();
   const [
-    addGameInstance,
-  ] = useAddGameInstanceMutation();
+    createGameInstance,
+  ] = useCreateGameInstanceMutation();
 
   const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
     const { error } = await playGame(gameConfigId);
@@ -41,9 +41,9 @@ export function useGamesUserConfigController(): GamesUserConfigControllerT {
     return postAcceptInviteResponse.gameInstanceId;
   };
 
-  const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
+  const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
     await Promise.resolve();
-    const { error, data: postAcceptInviteResponse } = await addGameInstance(gameConfigId);
+    const { error, data: postAcceptInviteResponse } = await createGameInstance(gameConfigId);
     if (error !== undefined) {
       throw new AppError(extractAppErrorCodeFromUnknownObject(error));
     }
@@ -54,6 +54,6 @@ export function useGamesUserConfigController(): GamesUserConfigControllerT {
   return {
     onPlayGame: handlePlayGame,
     onAcceptInvite: handleAcceptInvite,
-    onAddGameInstance: handleAddGameInstance,
+    onCreateGameInstance: handleCreateGameInstance,
   }
 }

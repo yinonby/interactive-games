@@ -1,13 +1,14 @@
 
-import type { MinimalGameInstanceExposedInfoT } from '@ig/engine-models';
-import { buildTestGameState, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import { __engineAppUiMocks } from '@ig/engine-app-ui';
+import { buildTestGameInstanceExposedInfo, buildTestGameState } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
+import * as GameInstanceModel from '../../../domains/game-instance/model/rtk/GameInstanceModel';
 import { GameInstanceSummaryView } from './GameInstanceSummaryView';
 
 // mocks
 
-jest.mock('../../game-instance/common/GameStatusView', () => {
+jest.mock('../../../features/game-instance/common/GameStatusView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -16,7 +17,7 @@ jest.mock('../../game-instance/common/GameStatusView', () => {
   };
 });
 
-jest.mock('../../game-instance/dashboard/components/PlayersTableView', () => {
+jest.mock('../../../features/game-instance/dashboard/components/PlayersTableView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -25,22 +26,81 @@ jest.mock('../../game-instance/dashboard/components/PlayersTableView', () => {
   };
 });
 
+jest.mock('./OpenGameInstanceButtonLink', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    OpenGameInstanceButtonLink: View,
+  };
+});
+
 // tests
 
-describe('GameInstanceSummaryView', () => {
-  it('renders properly', async () => {
-    const minimalGameInstanceExposedInfo: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
-      gameInstanceId: 'ABC',
-      gameState: buildTestGameState({ gameStatus: 'ended' }),
+describe('GameInstanceView', () => {
+  const { onAppErrorMock } = __engineAppUiMocks;
+  const useGameInstanceModelSpy = jest.spyOn(GameInstanceModel, 'useGameInstanceModel');
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const gameInstanceId = 'ABC';
+
+  it('renders loading screen', () => {
+    // setup mocks
+    useGameInstanceModelSpy.mockReturnValue({
+      isLoading: true,
+      isError: false,
     });
 
-    const { getByTestId } = render(
-      <GameInstanceSummaryView minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
+    // render
+    const { queryByTestId } = render(
+      <GameInstanceSummaryView gameInstanceId={gameInstanceId} />
     );
 
-    const gameStatusView = getByTestId('GameStatusView-tid');
-    expect(gameStatusView.props.gameStatus).toEqual('ended');
+    // verify components
+    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
+  });
 
+  it('renders error', () => {
+  // setup mocks
+    useGameInstanceModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: true,
+      appErrCode: "apiError:server",
+    });
+
+    // render
+    render(
+      <GameInstanceSummaryView gameInstanceId={gameInstanceId} />
+    );
+
+    // verify calls
+    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
+  });
+
+  it('renders properly', async () => {
+    // setup mocks
+    useGameInstanceModelSpy.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        gameInstanceExposedInfo: buildTestGameInstanceExposedInfo({
+          gameState: buildTestGameState({ gameStatus: 'ended' })
+        }),
+        gameInstanceChatMessages: [],
+      },
+    });
+
+    // render
+    const { getByTestId } = render(
+      <GameInstanceSummaryView gameInstanceId={gameInstanceId} />
+    );
+
+    // verify components
+    getByTestId('GameStatusView-tid');
     getByTestId('PlayersTableView-tid');
+    getByTestId('OpenGameInstanceButtonLink-tid');
   });
 });

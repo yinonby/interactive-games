@@ -5,40 +5,40 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
-import { AddGameInstanceButton } from './AddGameInstanceButton';
+import { CreateGameInstanceButton } from './CreateGameInstanceButton';
 
 // tests
 
-describe('AddGameInstanceButton', () => {
+describe('CreateGameInstanceButton', () => {
   const {
     onUnknownErrorMock,
     buildGameInstanceDashboardUrlPathMock,
   } = __engineAppUiMocks;
   const { navigateMock } = __puiMocks;
   const useUserConfigControllerSpy = jest.spyOn(GamesUserConfigController, 'useGamesUserConfigController');
-  const onAddGameInstanceMock = jest.fn();
+  const onCreateGameInstanceMock = jest.fn();
   const gameConfigId = 'ABC';
 
   useUserConfigControllerSpy.mockReturnValue({
-    onAddGameInstance: onAddGameInstanceMock,
+    onCreateGameInstance: onCreateGameInstanceMock,
   } as unknown as GamesUserConfigControllerT);
 
   it('renders properly', async () => {
     const { getByTestId } = render(
-      <AddGameInstanceButton gameConfigId={gameConfigId} />
+      <CreateGameInstanceButton gameConfigId={gameConfigId} />
     );
 
     getByTestId('RnuiButton-tid');
   });
 
-  it('handles button click, onAddGameInstance succeeds', async () => {
+  it('handles button click, onCreateGameInstance succeeds', async () => {
     // setup mocks
-    onAddGameInstanceMock.mockResolvedValueOnce("giid-123");
+    onCreateGameInstanceMock.mockResolvedValueOnce("giid-123");
     buildGameInstanceDashboardUrlPathMock.mockReturnValue('mockedUrl');
 
     // render
     const { getByTestId } = render(
-      <AddGameInstanceButton gameConfigId={gameConfigId} />
+      <CreateGameInstanceButton gameConfigId={gameConfigId} />
     );
 
     // click
@@ -47,24 +47,24 @@ describe('AddGameInstanceButton', () => {
 
     // verify calls
     await waitFor(() => {
-      expect(onAddGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
+      expect(onCreateGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
     });
     expect(buildGameInstanceDashboardUrlPathMock).toHaveBeenCalledWith("giid-123");
     expect(navigateMock).toHaveBeenCalledWith('mockedUrl');
   });
 
-  it('handles button click, onAddGameInstance throws error', async () => {
-    onAddGameInstanceMock.mockRejectedValue('ERR');
+  it('handles button click, onCreateGameInstance throws error', async () => {
+    onCreateGameInstanceMock.mockRejectedValue('ERR');
 
     const { getByTestId } = render(
-      <AddGameInstanceButton gameConfigId={gameConfigId} />
+      <CreateGameInstanceButton gameConfigId={gameConfigId} />
     );
 
     const btn = getByTestId('RnuiButton-tid');
     fireEvent(btn, 'onPress');
 
     await waitFor(() => {
-      expect(onAddGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
+      expect(onCreateGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
     });
 
     expect(onUnknownErrorMock).toHaveBeenCalledWith('ERR');
