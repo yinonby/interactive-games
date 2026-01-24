@@ -4,11 +4,11 @@ import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import * as GameInstanceController from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
-import { StartGameButtonLink } from './StartGameButtonLink';
+import { StartGameButton } from './StartGameButton';
 
 // tests
 
-describe('StartGameButtonLink', () => {
+describe('StartGameButton', () => {
   const {
     onUnknownErrorMock,
   } = __engineAppUiMocks;
@@ -27,7 +27,7 @@ describe('StartGameButtonLink', () => {
   it('renders properly', async () => {
     // render
     const { getByTestId, getByText } = render(
-      <StartGameButtonLink gameInstanceId={gameInstanceId} />
+      <StartGameButton gameInstanceId={gameInstanceId} />
     );
 
     // verify components
@@ -41,7 +41,7 @@ describe('StartGameButtonLink', () => {
 
     // render
     const { getByTestId } = render(
-      <StartGameButtonLink gameInstanceId={gameInstanceId} />
+      <StartGameButton gameInstanceId={gameInstanceId} />
     );
 
     // simulate press
@@ -61,7 +61,7 @@ describe('StartGameButtonLink', () => {
 
     // render
     const { getByTestId } = render(
-      <StartGameButtonLink gameInstanceId={gameInstanceId} />
+      <StartGameButton gameInstanceId={gameInstanceId} />
     );
 
     // simulate press
