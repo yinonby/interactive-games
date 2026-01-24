@@ -8,11 +8,11 @@ import {
 } from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
 
-export type StartGameButtonLinkPropsT = TestableComponentT & {
+export type StartGameButtonPropsT = TestableComponentT & {
   gameInstanceId: GameInstanceIdT,
 };
 
-export const StartGameButtonLink: FC<StartGameButtonLinkPropsT> = (props) => {
+export const StartGameButton: FC<StartGameButtonPropsT> = (props) => {
   const { gameInstanceId } = props;
   const { t } = useAppLocalization();
   const { onStartGame } = useGameInstanceController();

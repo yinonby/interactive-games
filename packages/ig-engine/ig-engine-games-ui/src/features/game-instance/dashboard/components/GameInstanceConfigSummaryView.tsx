@@ -5,7 +5,7 @@ import { RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { GameStatusView } from '../../common/GameStatusView';
-import { StartGameButtonLink } from './StartGameButtonLink';
+import { StartGameButton } from './StartGameButton';
 
 export type GameInstanceConfigSummaryViewPropsT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
@@ -37,9 +37,11 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
         {t('games:maxParticipants') + ': ' +  gameConfig.maxParticipants}
       </RnuiText>
 
-      <View style={[genericStyles.flexRowAlignTop]} >
-        <StartGameButtonLink testID='StartGameButtonLink-tid' gameInstanceId={gameInstanceExposedInfo.gameInstanceId} />
-      </View>
+      {gameInstanceExposedInfo.gameState.gameStatus === 'not-started' &&
+        <View style={[genericStyles.flexRowAlignTop]} >
+          <StartGameButton testID='StartGameButton-tid' gameInstanceId={gameInstanceExposedInfo.gameInstanceId} />
+        </View>
+      }
     </View>
   );
 };
