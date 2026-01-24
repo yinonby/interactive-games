@@ -104,12 +104,14 @@ export const RnuiGrid: FC<PropsWithChildren<RnuiGridProps>> = ({
   pushRow();
 
   return (
-    <View style={[styles.container, { margin: -spacing / 2 }]}>
-      {rows.map((row, index) => (
-        <View testID="grid-row-tid" key={`row-${index}`} style={styles.row}>
-          {row}
-        </View>
-      ))}
+    <View style={{ margin: -spacing / 2 }}>
+      <View style={[styles.container]}>
+        {rows.map((row, index) => (
+          <View testID="grid-row-tid" key={`row-${index}`} style={styles.row}>
+            {row}
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
