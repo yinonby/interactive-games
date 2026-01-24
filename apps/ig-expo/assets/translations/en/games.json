@@ -19,6 +19,9 @@
   "gameEnded": "Game ended",
   "gameNotStarted": "Game not started",
   "gameInProcess": "Game in process",
-  "admin": "Admin",
-  "player": "Player"
+  "playerRoleAdmin": "Admin",
+  "playerRolePlayer": "Player",
+  "playerStatusInvited": "Invited",
+  "playerStatusActive": "Active",
+  "playerStatusSuspended": "Suspended"
 }

@@ -1,3 +1,4 @@
+import type { PlayerRoleT, PlayerStatusT } from '@ig/engine-models';
 
 export type GamesTranslationKeyT =
   | 'games:noGamesAbailable'
@@ -20,6 +21,20 @@ export type GamesTranslationKeyT =
   | 'games:gameEnded'
   | 'games:gameNotStarted'
   | 'games:gameInProcess'
-  | 'games:admin'
-  | 'games:player'
+  | 'games:playerRoleAdmin'
+  | 'games:playerRolePlayer'
+  | 'games:playerStatusInvited'
+  | 'games:playerStatusActive'
+  | 'games:playerStatusSuspended'
 ;
+
+export const playerRoleToStr: Record<PlayerRoleT, GamesTranslationKeyT> = {
+  'admin': 'games:playerRoleAdmin',
+  'player': 'games:playerRolePlayer'
+}
+
+export const playerStatusToStr: Record<PlayerStatusT, GamesTranslationKeyT> = {
+  'invited': 'games:playerStatusInvited',
+  'active': 'games:playerStatusActive',
+  'suspended': 'games:playerStatusSuspended'
+}

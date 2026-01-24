@@ -20,7 +20,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId, getAllByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={false}
@@ -41,7 +41,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -58,7 +58,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -70,7 +70,7 @@ describe("PlayerTableRow", () => {
     getByTestId("RnuiTableCell-buttons-tid");
   });
 
-  it("renders no status color when player is not joined", () => {
+  it("renders gray text color when player is invited", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
@@ -84,15 +84,15 @@ describe("PlayerTableRow", () => {
     />);
 
     const statusText = getByTestId("status-text-tid");
-    expect(statusText.props.theme.colors.onSurface).toBe(undefined);
+    expect(statusText.props.theme.colors.onSurface).toBe('gray');
   });
 
-  it("renders green status color when player is playing", () => {
+  it("renders no text color when player is active", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
@@ -101,10 +101,10 @@ describe("PlayerTableRow", () => {
     />);
 
     const statusText = getByTestId("status-text-tid");
-    expect(statusText.props.theme.colors.onSurface).toBe("green");
+    expect(statusText.props.theme.colors.onSurface).toBe(undefined);
   });
 
-  it("renders red status color when player is suspended", () => {
+  it("renders red text color when player is suspended", () => {
     const otherPlayerExposedInfo: PlayerExposedInfoT = {
       playerUserId: "p1",
       playerNickname: "Alice",
@@ -126,7 +126,7 @@ describe("PlayerTableRow", () => {
       playerUserId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
-      playerStatus: "playing",
+      playerStatus: "active",
     };
     const { getByTestId, getByText } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
