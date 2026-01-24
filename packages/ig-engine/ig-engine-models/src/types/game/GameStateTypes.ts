@@ -3,19 +3,20 @@
 
 export type GameStateT = {
   gameStatus: GameStatusT,
-  startTimeTs: number | null,
-  finishTimeTs: number | null,
-  levelStatuses: LevelStatusT[],
+  startTimeTs?: number,
+  lastGivenExtraTimeTs?: number,
+  finishTimeTs?: number,
+  levelStates: LevelStateT[],
 }
 
-export type GameStatusT = "not-started" | "in-process" | "ended";
+export type GameStatusT = 'not-started' | 'in-process' | 'ended';
 
 // level
 
 export type LevelStateT = {
   levelStatus: LevelStatusT,
-  startTimeTs: number | null,
-  solvedTimeTs: number | null,
+  startTimeTs?: number,
+  solvedTimeTs?: number,
 }
 
-export type LevelStatusT = "not-solved" | "solved";
+export type LevelStatusT = 'not-started' | 'not-solved' | 'solved';

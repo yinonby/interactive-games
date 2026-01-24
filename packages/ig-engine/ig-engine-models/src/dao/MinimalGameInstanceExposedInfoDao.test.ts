@@ -1,5 +1,5 @@
 
-import { buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@test/utils/TestUtils';
+import { buildTestGameState, buildTestMinimalGameConfig, buildTestMinimalGameInstanceExposedInfo } from '@test/utils/TestUtils';
 import type { MinimalGameInstanceExposedInfoT } from "../types/game/GameTypes";
 import { MinimalGameInstanceExposedInfoDao } from "./MinimalGameInstanceExposedInfoDao";
 
@@ -9,19 +9,25 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       minimalGameConfig: buildTestMinimalGameConfig({
         gameName: "AA",
       }),
-      gameStatus: 'not-started',
+      gameState: buildTestGameState({
+        gameStatus: 'not-started',
+      })
     });
     const mgiiInProcess: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
       minimalGameConfig: buildTestMinimalGameConfig({
         gameName: "AA",
       }),
-      gameStatus: 'in-process',
+      gameState: buildTestGameState({
+        gameStatus: 'in-process',
+      })
     });
     const mgiiEnded: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
       minimalGameConfig: buildTestMinimalGameConfig({
         gameName: "AA",
       }),
-      gameStatus: 'ended',
+      gameState: buildTestGameState({
+        gameStatus: 'ended',
+      })
     });
     const mgiiNotStartedDao = new MinimalGameInstanceExposedInfoDao(mgiiNotStarted);
     const mgiiInProcessDao = new MinimalGameInstanceExposedInfoDao(mgiiInProcess);
@@ -40,13 +46,17 @@ describe('MinimalGameInstanceExposedInfoDao', () => {
       minimalGameConfig: buildTestMinimalGameConfig({
         gameName: "AA",
       }),
-      gameStatus: 'not-started',
+      gameState: buildTestGameState({
+        gameStatus: 'not-started',
+      })
     });
     const mgiiBB: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
       minimalGameConfig: buildTestMinimalGameConfig({
         gameName: "BB",
       }),
-      gameStatus: 'not-started',
+      gameState: buildTestGameState({
+        gameStatus: 'not-started',
+      })
     });
     const mgiiAADao = new MinimalGameInstanceExposedInfoDao(mgiiAA);
     const mgiiBBDao = new MinimalGameInstanceExposedInfoDao(mgiiBB);

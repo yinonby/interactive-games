@@ -11,11 +11,11 @@ export class MinimalGameInstanceExposedInfoDao {
   public compare = (otherMgiiDao: MinimalGameInstanceExposedInfoDao): number => {
     const otherMgii: MinimalGameInstanceExposedInfoT = otherMgiiDao.getConfig();
 
-    if (this.config.gameStatus !== otherMgii.gameStatus) {
-      if (this.config.gameStatus === "in-process") {
+    if (this.config.gameState.gameStatus !== otherMgii.gameState.gameStatus) {
+      if (this.config.gameState.gameStatus === "in-process") {
         return -1;
-      } else if (this.config.gameStatus === "not-started") {
-        return otherMgii.gameStatus === "in-process" ? 1 : -1;
+      } else if (this.config.gameState.gameStatus === "not-started") {
+        return otherMgii.gameState.gameStatus === "in-process" ? 1 : -1;
       } else {
         return 1
       }

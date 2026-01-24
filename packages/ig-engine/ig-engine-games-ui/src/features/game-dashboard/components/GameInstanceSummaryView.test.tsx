@@ -1,6 +1,6 @@
 
 import type { MinimalGameInstanceExposedInfoT } from '@ig/engine-models';
-import { buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
+import { buildTestGameState, buildTestMinimalGameInstanceExposedInfo } from '@ig/engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { GameInstanceSummaryView } from './GameInstanceSummaryView';
@@ -31,13 +31,16 @@ describe('GameInstanceSummaryView', () => {
   it('renders properly', async () => {
     const minimalGameInstanceExposedInfo: MinimalGameInstanceExposedInfoT = buildTestMinimalGameInstanceExposedInfo({
       gameInstanceId: 'ABC',
+      gameState: buildTestGameState({ gameStatus: 'ended' }),
     });
 
     const { getByTestId } = render(
       <GameInstanceSummaryView minimalGameInstanceExposedInfo={minimalGameInstanceExposedInfo} />
     );
 
-    getByTestId('GameStatusView-tid');
+    const gameStatusView = getByTestId('GameStatusView-tid');
+    expect(gameStatusView.props.gameStatus).toEqual('ended');
+
     getByTestId('PlayersTableView-tid');
   });
 });

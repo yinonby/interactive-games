@@ -1,7 +1,7 @@
 
 import type { XOR } from '@ig/lib';
 import type { AppImageAssetT } from '../app/AppTypes';
-import type { GameStatusT } from './GameStateTypes';
+import type { GameStateT } from './GameStateTypes';
 import type { LevelConfigT } from './LevelTypes';
 import type { UserIdT } from './UserTypes';
 
@@ -43,7 +43,7 @@ export type MinimalGameInstanceExposedInfoT = {
   gameInstanceId: GameInstanceIdT,
   invitationCode: string,
   minimalGameConfig: MinimalGameConfigT,
-  gameStatus: GameStatusT,
+  gameState: GameStateT,
   playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
 }
 

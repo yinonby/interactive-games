@@ -50,7 +50,7 @@ export type PostAddGameInstanceResponseT = {
   gameInstanceId: GameInstanceIdT,
 }
 
-// get::games/game-instance
+// get::games/game-instancev
 export type GetGameInstanceRequestT = {
   gameInstanceId: GameInstanceIdT,
 }
@@ -59,12 +59,21 @@ export type GetGameInstanceResponseT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
 }
 
+// post::games/game-instance/<id>/start
+export type PostGameInstanceStartRequestT = {
+  gameInstanceId: GameInstanceIdT,
+}
+
+export type PostGameInstanceStartResponseT = {
+  status: 'ok',
+}
+
 // get::games/game-instance/<id>/chat
 export type GetGameInstanceChatResponseT = {
   chatMessages: GameInstanceChatMessageT[],
 }
 
-export type PostGameInstanceChatMessageParamT = {
+export type PostGameInstanceChatMessageParamsT = {
   gameInstanceId: GameInstanceIdT,
   playerUserId: UserIdT,
   chatMessage: string,

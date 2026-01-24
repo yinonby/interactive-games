@@ -3,7 +3,7 @@ import { useAppConfig, useClientLogger, useGenericStyles } from "@ig/engine-app-
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from "@ig/engine-models";
 import { RnuiCard, RnuiGrid, RnuiGridItem } from "@ig/rnui";
 import React, { type FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import type { TestableComponentT } from "../../../../types/ComponentTypes";
 import { GameImageCard } from '../../../common/game-config/GameImageCard';
 import { ChatView } from "../../common/ChatView";
@@ -34,7 +34,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const isCurUserAdminPlayer = curPlayerExposedInfo.playerRole === "admin";
 
   return (
-    <View testID='container-tid' style={styles.container}>
+    <View testID='container-tid'>
       <RnuiGrid>
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={3} xl={4} >
           <View>
@@ -78,17 +78,3 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-  },
-  spacingBottom: {
-    marginBottom: 8,
-  },
-  spacingEnd: {
-    marginEnd: 8,
-  },
-  flex1: {
-    flex: 1,
-  },
-});

@@ -9,8 +9,9 @@ import {
   type GetGameInstanceResponseT,
   type GetGamesConfigResponseT,
   type GetGamesUserConfigResponseT,
-  type PostGameInstanceChatMessageParamT,
-  type PostGameInstanceChatMessageResponseT
+  type PostGameInstanceChatMessageParamsT,
+  type PostGameInstanceChatMessageResponseT,
+  type PostGameInstanceStartResponseT
 } from "@ig/engine-models";
 import { generateUuidv4, type LoggerAdapter } from "@ig/lib";
 import { getLocalUserId } from '../../src/app/layout/AppConfigUtils';
@@ -90,7 +91,10 @@ const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameI
     gameInstanceId: gameInstanceId,
     invitationCode: "invt-code-" + gameInstanceId,
     gameConfig: joinedGameConfig,
-    gameStatus: "in-process",
+    gameState: {
+      gameStatus: 'not-started',
+      levelStates: [],
+    },
     playerExposedInfos: [{
       playerUserId: curUserId,
       playerNickname: "my nickname",
@@ -100,6 +104,20 @@ const handleAddGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameI
   });
 
   return gameInstanceId;
+}
+
+const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
+  const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
+    e.gameInstanceId === gameInstanceId
+  );
+  if (gameInstanceExposedInfo === undefined) {
+    throw new Error("Game instance not found");
+  }
+
+  gameInstanceExposedInfo.gameState = {
+    ...gameInstanceExposedInfo.gameState,
+    gameStatus: 'in-process',
+  };
 }
 
 const getGameInstanceChatMessages = (gameInstanceId: GameInstanceIdT): GameInstanceChatMessageT[] => {
@@ -129,7 +147,7 @@ export class ApiServerMock implements HttpAdapter {
         !devAllGameInstanceExposedInfos.find(e2 => e2.gameConfig.gameConfigId ===  e.gameConfigId));
       const response: GetGamesConfigResponseT = {
         gamesConfig: {
-          availableMinimalGameConfigs: availableMinimalGameConfigs,
+          availableMinimalGameConfigs: [...availableMinimalGameConfigs], // clone this array so it is not frozen
         }
       }
       return response as TResponse;
@@ -162,7 +180,7 @@ export class ApiServerMock implements HttpAdapter {
       return { gameInstanceId: gameInstanceId } as TResponse;
     } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("chat/message")) {
       const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
-      const data: PostGameInstanceChatMessageParamT = options.data as unknown as PostGameInstanceChatMessageParamT;
+      const data: PostGameInstanceChatMessageParamsT = options.data as unknown as PostGameInstanceChatMessageParamsT;
 
       const chatMessage: GameInstanceChatMessageT = {
         gameInstanceId: gameInstanceId,
@@ -184,6 +202,14 @@ export class ApiServerMock implements HttpAdapter {
         chatMessages: getGameInstanceChatMessages(gameInstanceId),
       }
       return response as TResponse;
+    } else if (options.url.startsWith("/games/game-instance/") && options.url.endsWith("start")) {
+      const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
+      handleStartGame(gameInstanceId);
+
+      const response: PostGameInstanceStartResponseT = {
+        status: 'ok',
+      }
+      return response as TResponse;
     } else if (options.url.startsWith("/games/game-instance/")) {
       const gameInstanceId: GameInstanceIdT = options.url.split("/")[3] as GameInstanceIdT;
       const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
@@ -193,7 +219,7 @@ export class ApiServerMock implements HttpAdapter {
         throw new Error("Game instance not found");
       }
       const response: GetGameInstanceResponseT = {
-        gameInstanceExposedInfo: gameInstanceExposedInfo,
+        gameInstanceExposedInfo: {...gameInstanceExposedInfo}, // clone this array so it is not frozen
       }
       return response as TResponse;
     } else {
