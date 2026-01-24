@@ -1,5 +1,5 @@
 
-import { __engineAppUiMocks } from "@ig/engine-app-ui";
+import { __engineAppUiMocks } from "@ig/engine-ui";
 import { type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-models/test-utils';
 import { render } from '@testing-library/react-native';

@@ -1,5 +1,5 @@
 
-import { useAppLocalization } from "@ig/engine-app-ui";
+import { useAppLocalization } from "@ig/engine-ui";
 import { currencyToSymbol, type PriceT } from '@ig/games-models';
 import { RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';

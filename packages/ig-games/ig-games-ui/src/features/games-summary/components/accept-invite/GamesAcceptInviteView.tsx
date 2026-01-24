@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppErrorHandling } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling } from "@ig/engine-ui";
 import type { GameInstanceIdT } from '@ig/games-models';
 import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiActivityIndicator } from "@ig/rnui";

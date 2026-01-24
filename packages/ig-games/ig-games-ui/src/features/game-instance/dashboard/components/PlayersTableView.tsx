@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppLocalization, useClientLogger } from "@ig/engine-app-ui";
+import { useAppConfig, useAppLocalization, useClientLogger } from "@ig/engine-ui";
 import { comparePlayersForDisplaySort, type PlayerExposedInfoT } from '@ig/games-models';
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';

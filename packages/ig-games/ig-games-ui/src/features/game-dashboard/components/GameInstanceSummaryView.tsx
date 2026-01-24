@@ -1,5 +1,5 @@
 
-import { useAppErrorHandling, useGenericStyles } from '@ig/engine-app-ui';
+import { useAppErrorHandling, useGenericStyles } from '@ig/engine-ui';
 import type { GameInstanceIdT } from '@ig/games-models';
 import { RnuiActivityIndicator } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';

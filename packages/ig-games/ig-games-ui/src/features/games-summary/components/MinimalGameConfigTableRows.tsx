@@ -1,5 +1,5 @@
 
-import { useAppLocalization } from "@ig/engine-app-ui";
+import { useAppLocalization } from "@ig/engine-ui";
 import type { MinimalGameConfigT } from '@ig/games-models';
 import { RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';

@@ -1,24 +1,24 @@
 
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import {
-  appRtkApiReducerPath,
-  useClientLogger,
-  type AppRtkHttpAdapterGeneratorProvider
-} from "@ig/engine-app-ui";
+    appRtkApiReducerPath,
+    useClientLogger,
+    type AppRtkHttpAdapterGeneratorProvider
+} from "@ig/engine-ui";
 import type {
-  GameConfigT,
-  GameInstanceExposedInfoT,
-  GamesUserConfigT,
-  GetGamesUserConfigResponseT,
-  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
+    GameConfigT,
+    GameInstanceExposedInfoT,
+    GamesUserConfigT,
+    GetGamesUserConfigResponseT,
+    PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
 } from '@ig/games-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
-  gamesUserConfigRtkApiEndpoints, gamesUserConfigRtkApiMiddleware,
-  gamesUserConfigRtkApiReducer
+    gamesUserConfigRtkApiEndpoints, gamesUserConfigRtkApiMiddleware,
+    gamesUserConfigRtkApiReducer
 } from "./GamesUserConfigRtkApi";
 
 const apiUrl = 'https://api.test';

@@ -1,18 +1,18 @@
 
+import type { AppImageAssetT } from '@ig/engine-models';
 import type {
   AppConfigContextT, AppLocalizationContextT, AppTranslationKeyT,
   GamesUiUrlPathsAdapter
-} from "@ig/engine-app-ui";
-import type { AppImageAssetT } from '@ig/engine-models';
+} from "@ig/engine-ui";
 import type { LoggerAdapter } from "@ig/lib";
 import type { RnuiImageSourceT } from "@ig/rnui";
 
 export const buildMockedTranslation = (tKey: AppTranslationKeyT) => "mocked-t-" + tKey;
 
 export const initEngineAppUiMocks = () => {
-  jest.mock('@ig/engine-app-ui', () => {
-    const actual = jest.requireActual<typeof import('@ig/engine-app-ui')>(
-      '@ig/engine-app-ui'
+  jest.mock('@ig/engine-ui', () => {
+    const actual = jest.requireActual<typeof import('@ig/engine-ui')>(
+      '@ig/engine-ui'
     );
 
     const onAppErrorMock = jest.fn();

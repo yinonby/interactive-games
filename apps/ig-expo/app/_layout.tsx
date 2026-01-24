@@ -2,7 +2,7 @@
 import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
 import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
-import { AppRootLayout, initI18n } from "@ig/engine-app-ui";
+import { AppRootLayout, initI18n } from "@ig/engine-ui";
 import { handleGamesWebSocketMessage } from "@ig/games-ui";
 import { Stack } from "expo-router";
 

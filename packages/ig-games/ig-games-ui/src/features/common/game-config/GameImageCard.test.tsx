@@ -1,6 +1,6 @@
 
-import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-app-ui';
 import type { AppImageAssetT } from '@ig/engine-models';
+import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-ui';
 import { buildTestMinimalGameConfig } from '@ig/games-models/test-utils';
 import type { RnuiImagePropsT, RnuiImageSourceT } from '@ig/rnui';
 import { render } from '@testing-library/react-native';

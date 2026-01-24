@@ -1,5 +1,5 @@
 
-import { __engineAppUiMocks } from '@ig/engine-app-ui';
+import { __engineAppUiMocks } from '@ig/engine-ui';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';

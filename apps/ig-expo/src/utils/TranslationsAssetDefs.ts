@@ -1,8 +1,8 @@
 
 import type {
-  AppErrorCodeT, CommonTranslationKeyT,
-  GamesTranslationKeyT
-} from "@ig/engine-app-ui";
+    AppErrorCodeT, CommonTranslationKeyT,
+    GamesTranslationKeyT
+} from "@ig/engine-ui";
 import enCommonTranslationsJson from "../../assets/translations/en/common.json";
 import enErrosTranslationsJson from "../../assets/translations/en/errors.json";
 import enGamesTranslationsJson from "../../assets/translations/en/games.json";

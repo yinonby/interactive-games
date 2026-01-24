@@ -1,5 +1,5 @@
 
-import { appRtkApi } from "@ig/engine-app-ui";
+import { appRtkApi } from "@ig/engine-ui";
 import type { GetGamesConfigResponseT } from '@ig/games-models';
 
 const gamesConfigRtkApi = appRtkApi.injectEndpoints({

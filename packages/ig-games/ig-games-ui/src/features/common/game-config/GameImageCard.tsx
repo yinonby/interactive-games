@@ -1,5 +1,5 @@
 
-import { useAppConfig } from "@ig/engine-app-ui";
+import { useAppConfig } from "@ig/engine-ui";
 import type { MinimalGameConfigT } from '@ig/games-models';
 import { RnuiCard, type RnuiImagePropsT } from "@ig/rnui";
 import React, { type FC, type PropsWithChildren } from 'react';

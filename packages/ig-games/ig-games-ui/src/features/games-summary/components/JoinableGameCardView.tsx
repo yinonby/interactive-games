@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type { MinimalGameConfigT } from '@ig/games-models';
 import { usePlatformUiNavigation } from "@ig/platform-ui";
 import { RnuiButton, RnuiTable, RnuiText } from "@ig/rnui";

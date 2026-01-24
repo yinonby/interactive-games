@@ -1,5 +1,5 @@
 
-import { useAppLocalization } from "@ig/engine-app-ui";
+import { useAppLocalization } from "@ig/engine-ui";
 import { RnuiBlinker } from "@ig/rnui";
 import { type FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';

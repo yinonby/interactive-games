@@ -1,5 +1,5 @@
 
-import { __engineAppUiMocks } from '@ig/engine-app-ui';
+import { __engineAppUiMocks } from '@ig/engine-ui';
 import { buildTestMinimalGameConfig } from '@ig/games-models/test-utils';
 import { __puiMocks } from '@ig/platform-ui';
 import { act, fireEvent, render } from '@testing-library/react-native';

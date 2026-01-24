@@ -4,8 +4,8 @@ import type { GetAppConfigResponseT } from '@ig/engine-models';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { useClientLogger } from '../../../app/providers/useClientLogger';
 import type { AppRtkHttpAdapterGeneratorProvider } from '../../../types/AppRtkTypes';
+import { useClientLogger } from '../../providers/useClientLogger';
 import { appRtkApiEndpoints, appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from "./AppRtkApi";
 
 const apiUrl = 'https://api.test';

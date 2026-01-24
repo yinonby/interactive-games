@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization } from "@ig/engine-app-ui";
+import { useAppConfig, useAppErrorHandling, useAppLocalization } from "@ig/engine-ui";
 import type { GameInstanceIdT } from '@ig/games-models';
 import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTextInput } from "@ig/rnui";

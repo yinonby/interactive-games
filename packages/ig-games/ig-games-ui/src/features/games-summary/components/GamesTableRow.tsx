@@ -1,5 +1,5 @@
 
-import { useAppConfig, useAppLocalization, type GamesUiUrlPathsAdapter } from "@ig/engine-app-ui";
+import { useAppConfig, useAppLocalization, type GamesUiUrlPathsAdapter } from "@ig/engine-ui";
 import { type GameConfigT } from '@ig/games-models';
 import { PlatformUiLink } from "@ig/platform-ui";
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";

@@ -9,7 +9,7 @@ jest.mock("../../model/rtk/GamesUserConfigRtkApi", () => ({
 }));
 
 // 🔹 import mocked util AFTER jest.mock
-import type { AppDispatch } from "@ig/engine-app-ui";
+import type { AppDispatch } from "@ig/engine-ui";
 import type { GamesUserConfigeWebSocketMsgKindT } from '@ig/games-models';
 import { gamesUserConfigRtkApiUtil } from "../../model/rtk/GamesUserConfigRtkApi";
 
