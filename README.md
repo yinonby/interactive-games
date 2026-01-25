@@ -50,6 +50,15 @@ The repository is organized as follows:
 
 ---
 
+#### Backend
+
+- DB
+  - **Mongo DB**: A no-sql database.
+    - **mongoose**: A Node.js client to access the DB.
+    - **mongodb-memory-server**: An in-memory Node.js Mongo DB instance for rapid development and testing.
+
+---
+
 ### Architecture
 
 This repository was created with a few design paradigms in mind:
