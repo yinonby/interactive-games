@@ -1,5 +1,6 @@
 
 import { buildTestGameConfig } from '@ig/games-models/test-utils';
+import { MIN_TO_MS } from '@ig/lib';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
@@ -20,7 +21,7 @@ describe('GameConfigSummaryView', () => {
   it('renders correctly', async () => {
     const gameConfig = buildTestGameConfig({
       gameName: 'g1',
-      extraTimeLimitMinutes: 6,
+      extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
     })
 
     const { getByText, getByTestId } = render(
@@ -41,7 +42,7 @@ describe('GameConfigSummaryView', () => {
   it('renders correctly, extraTimeLimit is unlimited', async () => {
     const gameConfig = buildTestGameConfig({
       gameName: 'g1',
-      extraTimeLimitMinutes: 'unlimited',
+      extraTimeLimitDurationInfo: { kind: 'unlimited' },
     })
 
     const { getByText } = render(

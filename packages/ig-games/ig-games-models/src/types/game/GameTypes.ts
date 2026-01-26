@@ -1,37 +1,24 @@
 
-import type { AppImageAssetT, UserIdT } from '@ig/engine-models';
-import type { XOR } from '@ig/lib';
+import type { UserIdT } from '@ig/engine-models';
+import type { DurationInfoT, ImageInfoT, PriceInfoT } from './CommonTypes';
 import type { GameStateT } from './GameStateTypes';
 import type { LevelConfigT } from './LevelTypes';
 
 export type GameConfigIdT = string;
 
-export type CurrencyT = 'EUR' | 'USD';
-export const currencyToSymbol: Record<CurrencyT, string> = {
-  'USD': '$',
-  'EUR': '€',
-}
-
-export type PriceT = {
-  priceRate: number,
-  priceCurrency: CurrencyT,
-}
-
 export type MinimalGameConfigT = {
   gameConfigId: GameConfigIdT,
   kind: 'joint-game',
   gameName: string,
-  maxDurationMinutes: number | 'unlimited',
-  gamePrice: PriceT | 'free',
+  maxDurationInfo: DurationInfoT,
+  gamePriceInfo: PriceInfoT,
   maxParticipants: number,
-} & XOR<
-  { imageAssetName: AppImageAssetT },
-  { imageUrl: string }
->
+  imageInfo: ImageInfoT,
+}
 
 export type GameConfigT = MinimalGameConfigT & {
   extraTimeMinutes: number,
-  extraTimeLimitMinutes: number | 'unlimited',
+  extraTimeLimitDurationInfo: DurationInfoT,
   levelConfigs: LevelConfigT[],
 }
 
