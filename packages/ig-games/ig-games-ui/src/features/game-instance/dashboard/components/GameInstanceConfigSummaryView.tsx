@@ -1,6 +1,7 @@
 
 import { useAppLocalization, useGenericStyles } from '@ig/engine-ui';
 import type { GameInstanceExposedInfoT } from '@ig/games-models';
+import { MS_TO_MIN } from '@ig/lib';
 import { RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -16,6 +17,9 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
   const gameConfig = gameInstanceExposedInfo.gameConfig;
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
+  const durationMinStr =  gameConfig.maxDurationInfo.kind === 'limited' ?
+    t('common:minutes', { minutes: MS_TO_MIN(gameConfig.maxDurationInfo.durationMs) }) :
+    t('common:unlimited');
 
   return (
     <View style={genericStyles.verticalSpacing}>
@@ -30,7 +34,7 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
       </View>
 
       <RnuiText testID='duration-text-tid'>
-        {t('common:duration') + ': ' + t('common:minutes', { minutes: gameConfig.maxDurationMinutes })}
+        {t('common:duration') + ': ' + durationMinStr}
       </RnuiText>
 
       <RnuiText testID='max-participants-tid'>

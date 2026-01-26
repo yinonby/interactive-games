@@ -6,6 +6,7 @@ import {
   buildTestGameConfig, buildTestGameInstanceExposedInfo,
   buildTestGameState
 } from '@ig/games-models/test-utils';
+import { MIN_TO_MS } from '@ig/lib';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
@@ -34,7 +35,7 @@ describe('GameInstanceConfigSummaryView', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameConfig: buildTestGameConfig({
         gameName: 'Treasure Hunt 1',
-        maxDurationMinutes: 60,
+        maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
@@ -61,7 +62,7 @@ describe('GameInstanceConfigSummaryView', () => {
       gameInstanceId: 'giid-1',
       gameConfig: buildTestGameConfig({
         gameName: 'Treasure Hunt 1',
-        maxDurationMinutes: 60,
+        maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
@@ -80,7 +81,7 @@ describe('GameInstanceConfigSummaryView', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameConfig: buildTestGameConfig({
         gameName: 'Treasure Hunt 1',
-        maxDurationMinutes: 60,
+        maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
@@ -93,5 +94,24 @@ describe('GameInstanceConfigSummaryView', () => {
     />);
 
     expect(queryByTestId('StartGameButton-tid')).toBeNull();
+  });
+
+  it('renders properly when max duration is unlimited', () => {
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+      gameConfig: buildTestGameConfig({
+        gameName: 'Treasure Hunt 1',
+        maxDurationInfo: { kind: 'unlimited' },
+        maxParticipants: 6,
+      }),
+      gameState: buildTestGameState({
+        gameStatus: 'in-process',
+      }),
+    });
+
+    const { getByText } = render(<GameInstanceConfigSummaryView
+      gameInstanceExposedInfo={gameInstanceExposedInfo}
+    />);
+
+    getByText(buildMockedTranslation('common:duration') + ': ' + buildMockedTranslation('common:unlimited'));
   });
 });

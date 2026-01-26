@@ -1,5 +1,6 @@
 
 import { buildTestMinimalGameConfig } from '@ig/games-models/test-utils';
+import { MIN_TO_MS } from '@ig/lib';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
@@ -20,8 +21,8 @@ describe('MinimalGameConfigTableRows', () => {
     const { getByText } = render(
       <MinimalGameConfigTableRows
         minimalGameConfig={buildTestMinimalGameConfig({
-          maxDurationMinutes: 6,
-          gamePrice: 'free',
+          maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
+          gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
         })}
       />
@@ -38,8 +39,8 @@ describe('MinimalGameConfigTableRows', () => {
     const { getByText } = render(
       <MinimalGameConfigTableRows
         minimalGameConfig={buildTestMinimalGameConfig({
-          maxDurationMinutes: 'unlimited',
-          gamePrice: 'free',
+          maxDurationInfo: { kind: 'unlimited' },
+          gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
         })}
       />

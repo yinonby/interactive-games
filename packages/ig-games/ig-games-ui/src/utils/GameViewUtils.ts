@@ -10,17 +10,18 @@ export const getMinimalGameConfigImageProps = (
 ): RnuiImagePropsT | undefined => {
   let rnuiImageProps: RnuiImagePropsT | undefined = undefined;
 
-  if (minimalGameConfig.imageAssetName !== undefined) {
-    const gameImageType = minimalGameConfig.imageAssetName as AppImageAssetT;
+  if (minimalGameConfig.imageInfo.kind === 'asset') {
+    const gameImageType: AppImageAssetT = minimalGameConfig.imageInfo.imageAssetName;
     const imageSource: RnuiImageSourceT | undefined = imagesSourceMap[gameImageType]
     if (imageSource !== undefined) {
       rnuiImageProps = { imageSource: imageSource, height: 200 };
     }
   } else {
-    rnuiImageProps = { imageSource: minimalGameConfig.imageUrl, height: 200 };
+    rnuiImageProps = { imageSource: minimalGameConfig.imageInfo.imageUrl, height: 200 };
   }
+
   if (includeFreeLabel && rnuiImageProps !== undefined &&
-    (minimalGameConfig.gamePrice === "free" || minimalGameConfig.gamePrice.priceRate === 0)
+    (minimalGameConfig.gamePriceInfo.kind === "free" || minimalGameConfig.gamePriceInfo.priceRate === 0)
   ) {
     rnuiImageProps.imgLabelProps = {
       text: "free",

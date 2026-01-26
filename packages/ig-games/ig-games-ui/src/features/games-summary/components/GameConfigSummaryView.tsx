@@ -1,6 +1,7 @@
 
 import { useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type { GameConfigT } from '@ig/games-models';
+import { MS_TO_MIN } from '@ig/lib';
 import { RnuiTable, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -14,9 +15,9 @@ export type GameConfigSummaryViewPropsT = TestableComponentT & {
 export const GameConfigSummaryView: FC<GameConfigSummaryViewPropsT> = ({ gameConfig }) => {
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
-  const extraTimeLimitMinutesStr = gameConfig.extraTimeLimitMinutes === 'unlimited' ?
+  const extraTimeLimitMinutesStr = gameConfig.extraTimeLimitDurationInfo.kind === 'unlimited' ?
     t("common:unlimited") :
-    t("common:minutes", { minutes: gameConfig.extraTimeLimitMinutes });
+    t("common:minutes", { minutes: MS_TO_MIN(gameConfig.extraTimeLimitDurationInfo.durationMs) });
 
   return (
     <View style={genericStyles.verticalSpacing}>

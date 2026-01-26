@@ -1,6 +1,7 @@
 
 import { __engineAppUiMocks } from '@ig/engine-ui';
 import { buildTestMinimalGameConfig } from '@ig/games-models/test-utils';
+import { MIN_TO_MS } from '@ig/lib';
 import { __puiMocks } from '@ig/platform-ui';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
@@ -92,10 +93,10 @@ describe('JoinableGameCardView', () => {
           gameConfigId: 'gcid-1',
           kind: 'joint-game',
           gameName: 'Test Game',
-          maxDurationMinutes: 30,
-          gamePrice: 'free',
+          maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(30) },
+          gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
-          imageAssetName: 'treasure-hunt-1',
+          imageInfo: { kind: 'asset', imageAssetName: 'treasure-hunt-1' },
         }}
       />
     );
@@ -126,10 +127,10 @@ describe('JoinableGameCardView', () => {
           gameConfigId: 'gcid-1',
           kind: 'joint-game',
           gameName: 'Test Game',
-          maxDurationMinutes: 30,
-          gamePrice: 'free',
+          maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(30) },
+          gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
-          imageAssetName: 'treasure-hunt-1',
+          imageInfo: { kind: 'asset', imageAssetName: 'treasure-hunt-1' },
         }}
       />
     );

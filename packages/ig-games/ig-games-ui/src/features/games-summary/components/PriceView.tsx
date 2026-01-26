@@ -1,26 +1,26 @@
 
 import { useAppLocalization } from "@ig/engine-ui";
-import { currencyToSymbol, type PriceT } from '@ig/games-models';
+import { currencyToSymbol, PriceInfoT } from '@ig/games-models';
 import { RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 
 export type PriceViewPropsT = {
-  price: PriceT | "free",
+  priceInfo: PriceInfoT,
   testID?: string,
 };
 
-export const PriceView: FC<PriceViewPropsT> = ({ price }) => {
+export const PriceView: FC<PriceViewPropsT> = ({ priceInfo }) => {
   const { t } = useAppLocalization();
 
-  if (price === "free" || price.priceRate === 0) {
+  if (priceInfo.kind === "free" || priceInfo.priceRate === 0) {
     return (
       <RnuiText>{t("common:free")}</RnuiText>
     );
   } else {
-    const symbol = currencyToSymbol[price.priceCurrency];
+    const symbol = currencyToSymbol[priceInfo.priceCurrency];
     return (
       <RnuiText>
-        {symbol}{price.priceRate} {price.priceCurrency}
+        {symbol}{priceInfo.priceRate} {priceInfo.priceCurrency}
       </RnuiText>
     );
   }
