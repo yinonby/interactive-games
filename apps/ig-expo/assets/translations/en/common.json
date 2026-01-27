@@ -1,0 +1,15 @@
+{
+  "open": "Open",
+  "status": "status",
+  "role": "Role",
+  "duration": "Duration",
+  "minutes": "{{minutes}} min.",
+  "unlimited": "Unlimited",
+  "price": "Price",
+  "free": "Free",
+  "nickname": "Nickname",
+  "chat": "Chat",
+  "copyLink": "Copy link",
+  "share": "Share",
+  "you": "You"
+}

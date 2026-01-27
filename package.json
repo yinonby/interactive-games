@@ -1,0 +1,45 @@
+{
+  "name": "interactive-games",
+  "version": "1.0.0",
+  "description": "An online platform for people to play games together",
+  "homepage": "https://github.com/yinonby/interactive-games#readme",
+  "bugs": {
+    "url": "https://github.com/yinonby/interactive-games/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yinonby/interactive-games.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "test": "npm run husky:verify:setup && ./scripts/python/run-all-tests.py",
+    "cover:report": "npm run cover:report:produce && npm run cover:report:open",
+    "cover:report:produce": "./scripts/python/produce-coverage-report.py",
+    "cover:report:open": "./scripts/python/open-coverage-report.py",
+    "clean": "npm run clean:modules",
+    "reinstall": "npm run clean && npm install",
+    "clean:modules": "for x in $(find . -name node_modules); do rm -rf $x; done; rm package-lock.json",
+    "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
+    "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",
+    "husky:verify:configured": "[ -f \".husky/pre-push\" ]",
+    "pre-push": "npm run pre-push:no-local-changes && npm test",
+    "pre-push:no-local-changes": "[ ! -n \"$(git status --porcelain)\" ]",
+    "integration": "npm test",
+    "prepare": "husky"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/ig-lib/*",
+    "packages/ig-dev-lib/*",
+    "packages/ig-ui/*",
+    "packages/ig-engine/*",
+    "packages/ig-games/*",
+    "apps/*"
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "nyc": "^17.1.0"
+  }
+}

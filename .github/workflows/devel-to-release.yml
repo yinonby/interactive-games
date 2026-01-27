@@ -1,0 +1,87 @@
+
+name: Devel to Release
+
+on:
+  # Triggers the workflow on push request events but only for the "devel" branch
+  push:
+    branches:
+      - devel
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job takes care of running all tests
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Step 1: Checkout the code, must fetch all parents so that the later merge has related histories
+      # - Github actions fetches a specific commit (the one that triggered this action), and forces origin/devel
+      #   to point to it.
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test
+
+  # This job takes care of merging code into other branches, once tests passed
+  merge:
+    needs: test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target:
+          - main
+          - release
+
+    steps:
+      # This is a new job, must checkout again
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Configure git
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+
+      # Fetch latest target branch info from the remote
+      - name: Fetch target branch
+        run: git fetch origin ${{ matrix.target }}:${{ matrix.target }}
+
+      # Checkout target branch
+      - name: Checkout target branch
+        run: git checkout ${{ matrix.target }}
+
+      # Merge devel into target with a merge commit (--no-ff ensures a merge commit)
+      # origin/devel points to the commit that triggered this workflow, and 'fetch-depth: 0' guarantees
+      # it has related histories with target
+      - name: Merge source into target branch
+        run: git merge --no-ff origin/devel -m "Merge origin/devel into ${{ matrix.target }}"
+
+      # Push updated target branch
+      - name: Push the target to the origin
+        run: git push origin ${{ matrix.target }}

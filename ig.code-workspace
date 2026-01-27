@@ -1,0 +1,44 @@
+{
+  "folders": [
+    {
+      "path": "./"
+    }
+  ],
+  "settings": {
+    "workbench.tree.expandMode": "doubleClick",
+    "git.ignoreLimitWarning": true,
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "typescript.preferences.preferTypeOnlyAutoImports": true,
+    "typescript.preferences.quoteStyle": "single",
+    "javascript.preferences.quoteStyle": "single",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "editor.rulers": [
+      120
+    ],
+    "editor.scrollBeyondLastLine": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit",
+      "source.fixAll.eslint": "explicit",
+    },
+    "editor.suggest.insertMode": "insert",
+    "editor.formatOnPaste": true,
+    "editor.autoIndent": "full",
+    "explorer.confirmDragAndDrop": false,
+    "eslint.format.enable": true,
+    "[typescript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "eslint.useFlatConfig": true,
+    "files.trimTrailingWhitespace": true,
+  }
+}

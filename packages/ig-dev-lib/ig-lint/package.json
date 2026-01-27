@@ -1,0 +1,17 @@
+{
+  "name": "@ig/lint",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "8.12.2",
+    "eslint": "^9.15.0",
+    "madge": "^8.0.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.15.0"
+  },
+  "scripts": {
+    "test": "echo nothing to do"
+  }
+}

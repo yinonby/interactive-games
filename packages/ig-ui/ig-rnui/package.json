@@ -1,0 +1,41 @@
+{
+  "name": "@ig/rnui",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run tsc && npm run lint && npm run cover:unit",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.ts ./src ./test ./index.ts",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "test:unit": "jest",
+    "ut": "npm run test:unit --",
+    "cover:unit": "npm run test:unit -- --coverage"
+  },
+  "dependencies": {
+    "@ig/lib": "*",
+    "@react-native-clipboard/clipboard": "^1.16.3",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-paper": "^5.14.5",
+    "react-native-qrcode-styled": "^0.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@ig/lint": "*",
+    "@ig/rn-testing": "*",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^14.0.0",
+    "jiti": "^2.6.1",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.51.0"
+  }
+}
