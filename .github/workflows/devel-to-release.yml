@@ -15,8 +15,8 @@ permissions:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called " test-and-release"
-  test-and-release:
+  # This job takes care of running all tests
+  test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -45,24 +45,43 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # Step 5: Push to release branch if tests succeed
-      - name: Push to release branch
-        if: ${{ success() }}
+  # This job takes care of merging code into other branches, once tests passed
+  merge:
+    needs: test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target:
+          - main
+          - release
+
+    steps:
+      # This is a new job, must checkout again
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Configure git
+      - name: Configure git user
         run: |
-          # Configure git user
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
-          # Fetch latest release branch info from the remote
-          git fetch origin release:release
+      # Fetch latest target branch info from the remote
+      - name: Fetch target branch
+        run: git fetch origin ${{ matrix.target }}:${{ matrix.target }}
 
-          # Checkout release branch
-          git checkout release
+      # Checkout target branch
+      - name: Checkout target branch
+        run: git checkout ${{ matrix.target }}
 
-          # Merge devel into release with a merge commit (--no-ff ensures a merge commit)
-          # origin/devel points to the commit that triggered this workflow, and 'fetch-depth: 0' guarantees
-          # it has related histories with release
-          git merge --no-ff origin/devel -m "Merge origin/devel into release"
+      # Merge devel into target with a merge commit (--no-ff ensures a merge commit)
+      # origin/devel points to the commit that triggered this workflow, and 'fetch-depth: 0' guarantees
+      # it has related histories with target
+      - name: Merge source into target branch
+        run: git merge --no-ff origin/devel -m "Merge origin/devel into ${{ matrix.target }}"
 
-          # Push updated release branch
-          git push origin release
+      # Push updated target branch
+      - name: Push the target to the origin
+        run: git push origin ${{ matrix.target }}
