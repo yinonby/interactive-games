@@ -9,10 +9,10 @@ export const baseViteUserConfig: ViteUserConfig = {
     testTimeout: 5000,
     coverage: {
       provider: "istanbul", // "v8" | "istanbul"
-      thresholds: { statements: 100 },
+      thresholds: { statements: 100, functions: 100, branches: 100, lines: 100 },
       reporter: ["text", "json"],
       reportsDirectory: ".coverage_output",
-      exclude: ["src/types", "test"],
+      exclude: ["src/types", "test", ".pm2.ecosystem.config.cjs"],
     },
   },
 }
