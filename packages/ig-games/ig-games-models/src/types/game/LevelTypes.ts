@@ -1,17 +1,33 @@
+import type { ImageInfoT } from './CommonTypes'
 
-import type { GeoLocationCoordsT } from "@ig/lib";
-
-// level
-
-export type LevelConfigT = {
+export type LevelExposedConfigT = {
   levelName?: string,
-} & (
-  GeoLocationPuzzleConfigT
-);
+} & ({
+  kind: 'wordle',
+  wordlePuzzleExposedConfig: WordlePuzzleExposedConfigT
+} | {
+  kind: 'code',
+  codePuzzleExposedConfig: CodePuzzleExposedConfigT
+})
 
-export type GeoLocationPuzzleConfigT = {
-  levelName: string,
-  kind: "geo-location-puzzle",
-  initialMapCenter: GeoLocationCoordsT,
-  initialMapRadiusMeters: number,
+export type WordlePuzzleExposedConfigT = {
+  wordLength: number,
+}
+
+export type CodePuzzleExposedConfigT = {
+  kind: 'alphabetic' | 'numeric' | 'alphanumeric',
+  codeLength: number,
+  accessories?: CodePuzzleAccessoryT[],
+  usedAccessories?: CodePuzzleAccessoryT[],
+  instructions?: CodePuzzleInstructionT[],
+}
+
+export type CodePuzzleAccessoryT = {
+  kind: 'image',
+  imageInfo: ImageInfoT,
+}
+
+export type CodePuzzleInstructionT = {
+  kind: 'text',
+  text: string,
 }

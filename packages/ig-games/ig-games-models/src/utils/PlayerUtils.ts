@@ -1,5 +1,5 @@
 
-import type { PlayerExposedInfoT } from '../types/game/GameTypes';
+import type { PlayerExposedInfoT } from '../types/game/GameInstanceTypes';
 
 export const comparePlayersForDisplaySort = (p1: PlayerExposedInfoT, p2: PlayerExposedInfoT): number => {
   const rolePriority1 = p1.playerRole === 'admin' ? 0 : 1;

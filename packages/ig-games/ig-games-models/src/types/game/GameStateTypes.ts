@@ -9,7 +9,7 @@ export type GameStateT = {
   levelStates: LevelStateT[],
 }
 
-export type GameStatusT = 'not-started' | 'in-process' | 'ended';
+export type GameStatusT = 'notStarted' | 'inProcess' | 'ended';
 
 // level
 
@@ -19,4 +19,4 @@ export type LevelStateT = {
   solvedTimeTs?: number,
 }
 
-export type LevelStatusT = 'not-started' | 'not-solved' | 'solved';
+export type LevelStatusT = 'notStarted' | 'notSolved' | 'solved';

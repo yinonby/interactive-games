@@ -1,14 +1,12 @@
 
+import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '../../src/types/game/GameInstanceTypes';
 import type { GameStateT } from '../../src/types/game/GameStateTypes';
 import type {
-  GameConfigT,
-  GameInstanceExposedInfoT, MinimalGameConfigT,
-  MinimalGameInstanceExposedInfoT,
-  PlayerExposedInfoT
+  GameConfigT, MinimalGameConfigT,
 } from '../../src/types/game/GameTypes';
 
-if (process.env.NODE_ENV !== "test") {
-  throw new Error("TestUtils should only be used in testing");
+if (process.env.NODE_ENV !== 'test') {
+  throw new Error('TestUtils should only be used in testing');
 }
 
 export const buildTestMinimalGameConfig = (overrides: Partial<MinimalGameConfigT>) => ({
@@ -19,11 +17,24 @@ export const buildTestGameConfig = (overrides: Partial<GameConfigT>) => ({
   ...overrides
 } as GameConfigT);
 
-export const buildTestMinimalGameInstanceExposedInfo = (
-  overrides: Partial<MinimalGameInstanceExposedInfoT>
-): MinimalGameInstanceExposedInfoT => ({
-    ...overrides
-} as MinimalGameInstanceExposedInfoT);
+
+const baseGameConfig: GameConfigT = {
+  gameConfigId: 'gameConfigId1',
+  kind: 'jointGame',
+  gameName: 'gameName1',
+  maxDurationInfo: { kind: 'unlimited' },
+  gamePriceInfo: { kind: 'free' },
+  maxParticipants: 2,
+  imageInfo: { kind: 'url', imageUrl: 'imageUrl1' },
+  extraTimeMinutes: 2,
+  extraTimeLimitDurationInfo: { kind: 'unlimited' },
+  levelConfigs: [],
+};
+
+export const buildFullTestGameConfig = (overrides: Partial<Omit<GameConfigT, 'imageAssetName'>>): GameConfigT => ({
+  ...baseGameConfig,
+  ...overrides,
+});
 
 export const buildTestGameInstanceExposedInfo = (overrides: Partial<GameInstanceExposedInfoT>) => ({
   ...overrides

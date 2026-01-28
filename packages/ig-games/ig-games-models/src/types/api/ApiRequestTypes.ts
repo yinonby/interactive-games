@@ -1,18 +1,15 @@
 
 import type { UserIdT } from '@ig/engine-models';
-import type { GamesConfigT, GamesUserConfigT } from '../game/GamesConfigTypes';
 import type {
   ChatMsgIdT,
-  GameConfigIdT,
   GameInstanceChatMessageT,
   GameInstanceExposedInfoT,
   GameInstanceIdT
+} from '../game/GameInstanceTypes';
+import type { GamesUserConfigT } from '../game/GamesConfigTypes';
+import type {
+  GameConfigIdT
 } from "../game/GameTypes";
-
-// get::games/games-config
-export type GetGamesConfigResponseT = {
-  gamesConfig: GamesConfigT,
-}
 
 // get::games/user-config
 export type GetGamesUserConfigResponseT = {

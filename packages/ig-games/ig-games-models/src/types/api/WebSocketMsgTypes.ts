@@ -1,7 +1,7 @@
 
 import type {
   GameInstanceIdT
-} from "../game/GameTypes";
+} from "../game/GameInstanceTypes";
 
 // gamesUserConfigUpdate
 export type GamesUserConfigeWebSocketMsgKindT = "gamesUserConfigUpdate";
