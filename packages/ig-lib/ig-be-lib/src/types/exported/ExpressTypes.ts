@@ -1,14 +1,20 @@
 
 import type { Router } from 'express';
+import type { PackageDb } from './DbTypes';
 
 export type ExpressAppStarterInfoT = {
-  listerPort: number,
   appInfo: ExpressAppInfoT,
-  dbInfo: ExpressAppDbInfoT,
-  expressPluginContainers: {
-    route: string,
-    expressPlugin: ExpressPluginT,
-  }[],
+  corsAllowOrigins?: string[],
+  listerPort: number,
+  dbInfo?: ExpressAppDbInfoT,
+  expressPluginContainers: ExpressPluginContainerT<unknown>[],
+}
+
+export type ExpressPluginContainerT<DB_ADP_T> = {
+  getDbAdapterCb?: () => PackageDb & DB_ADP_T; // decided by the top level app
+  route: string, // decided by the top level app
+  expressPlugin: ExpressPluginT<DB_ADP_T>,
+  postInitCb?: (dbAdapter: DB_ADP_T | null) => Promise<void>,
 }
 
 export type ExpressAppInfoT = {
@@ -27,7 +33,6 @@ export type ExpressAppDbInfoT = ({
   tableNamePrefix: string,
 }
 
-export interface ExpressPluginT {
-  initRouter(appInfo: ExpressAppInfoT): Router;
-  initDb: (dbInfo: ExpressAppDbInfoT) => Promise<void>;
+export interface ExpressPluginT<DB_ADP_T> {
+  initRouter(appInfo: ExpressAppInfoT, dbAdapter: DB_ADP_T | null): Promise<Router>;
 }
