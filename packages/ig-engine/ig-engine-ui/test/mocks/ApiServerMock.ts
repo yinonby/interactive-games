@@ -7,7 +7,6 @@ import {
   type GamesUserConfigT,
   type GetGameInstanceChatResponseT,
   type GetGameInstanceResponseT,
-  type GetGamesConfigResponseT,
   type GetGamesUserConfigResponseT,
   type PostGameInstanceChatMessageParamsT,
   type PostGameInstanceChatMessageResponseT,
@@ -19,8 +18,8 @@ import { useClientLogger } from '../../src/app/providers/useClientLogger';
 import {
   devAllGameConfigs,
   devAllGameInstanceExposedInfos,
-  devAvailableMinimalGameConfigs, devChatMessages,
-  devJoinedGameConfigs,
+  devChatMessages,
+  devJoinedGameConfigs
 } from './DevMocks';
 
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
@@ -92,7 +91,7 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     invitationCode: 'invt-code-' + gameInstanceId,
     gameConfig: joinedGameConfig,
     gameState: {
-      gameStatus: 'not-started',
+      gameStatus: 'notStarted',
       levelStates: [],
     },
     playerExposedInfos: [{
@@ -118,13 +117,13 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
   if (gameInstanceExposedInfo === undefined) {
     throw new Error('Game instance not found');
   }
-  if (gameInstanceExposedInfo.gameState.gameStatus !== 'not-started') {
+  if (gameInstanceExposedInfo.gameState.gameStatus !== 'notStarted') {
     throw new Error('Game already started');
   }
 
   gameInstanceExposedInfo.gameState = {
     ...gameInstanceExposedInfo.gameState,
-    gameStatus: 'in-process',
+    gameStatus: 'inProcess',
     startTimeTs: Date.now(),
   };
 }
@@ -149,15 +148,6 @@ export class ApiServerMock implements HttpAdapter {
     if (options.url === '/app-config') {
       const response: GetAppConfigResponseT = {
         version: '1.0.0',
-      }
-      return response as TResponse;
-    } else if (options.url === '/games/games-config') {
-      const availableMinimalGameConfigs = devAvailableMinimalGameConfigs.filter(e =>
-        !devAllGameInstanceExposedInfos.find(e2 => e2.gameConfig.gameConfigId ===  e.gameConfigId));
-      const response: GetGamesConfigResponseT = {
-        gamesConfig: {
-          availableMinimalGameConfigs: [...availableMinimalGameConfigs], // clone this array so it is not frozen
-        }
       }
       return response as TResponse;
     } else if (options.url === '/games/user-config') {

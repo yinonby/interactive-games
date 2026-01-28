@@ -1,6 +1,8 @@
 
 import { BeLogger } from './BeLogger';
 
+vi.unmock('./BeLogger');
+
 describe('BeLogger', () => {
   const dateStr = "2024-01-01T10:00:00.000Z";
 

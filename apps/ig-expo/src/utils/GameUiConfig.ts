@@ -1,11 +1,20 @@
 
 import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "@ig/engine-ui";
 import type { RnuiStylesT } from "@ig/rnui";
+import Constants from 'expo-constants';
+
+const getEnvVar = (envVarName: string): string => {
+  const envVar: string | undefined = Constants.expoConfig?.extra?.env[envVarName];
+  if (!envVar) {
+    throw new Error("Missing env var: " + envVarName);
+  }
+  return envVar;
+}
 
 export const useGameUiConfig = (): GameUiConfigT => {
-  const apiUrl: string | undefined = process.env.EXPO_PUBLIC__GAME_UI__API_URL;
-  const wssUrl: string | undefined = process.env.EXPO_PUBLIC__GAME_UI__WSS_URL;
-  const appUrl: string | undefined = process.env.EXPO_PUBLIC__GAME_UI__APP_URL;
+  const apiUrl: string | undefined = getEnvVar('apiUrl');
+  const wssUrl: string | undefined = getEnvVar('wssUrl');
+  const appUrl: string | undefined = getEnvVar('appUrl');
 
   if (apiUrl === undefined) {
     throw new Error("Game api url not initialized");

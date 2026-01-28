@@ -1,10 +1,13 @@
 
-import type { GameConfigT, GameInstanceChatMessageT, GameInstanceExposedInfoT, MinimalGameConfigT } from '@ig/games-models';
+import type {
+  GameConfigT, GameInstanceChatMessageT,
+  GameInstanceExposedInfoT, MinimalGameConfigT
+} from '@ig/games-models';
 import { MIN_TO_MS } from '@ig/lib';
 
 const secretIslandMinimalConfig: GameConfigT = {
   gameConfigId: 'treasure-hunt-secret-island', // this game is already joined in this dev preset
-  kind: 'joint-game',
+  kind: 'jointGame',
   gameName: 'Treasure Hunt - Secret Island',
   maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
   gamePriceInfo: { kind: 'notFree', priceRate: 5, priceCurrency: 'EUR' },
@@ -19,7 +22,7 @@ const secretIslandMinimalConfig: GameConfigT = {
 
 const escapeRoomMinimalConfig: GameConfigT = {
   gameConfigId: 'escape-room-harry-potter',
-  kind: 'joint-game',
+  kind: 'jointGame',
   gameName: 'Escape Room - Harry Potter',
   maxDurationInfo: { kind: 'unlimited' },
   gamePriceInfo: { kind: 'free' },
@@ -34,7 +37,7 @@ const escapeRoomMinimalConfig: GameConfigT = {
 
 const wordleEnMinimalConfig: GameConfigT = {
   gameConfigId: 'wordle-english',
-  kind: 'joint-game',
+  kind: 'jointGame',
   gameName: 'Wordle - English',
   maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
   gamePriceInfo: { kind: 'free' },
@@ -49,7 +52,7 @@ const wordleEnMinimalConfig: GameConfigT = {
 
 const wordleEsMinimalConfig: GameConfigT = {
   gameConfigId: 'wordle-spanish',
-  kind: 'joint-game',
+  kind: 'jointGame',
   gameName: 'Wordle - Spanish',
   maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
   gamePriceInfo: { kind: 'free' },
@@ -64,7 +67,7 @@ const wordleEsMinimalConfig: GameConfigT = {
 
 const wordleFrMinimalConfig: GameConfigT = {
   gameConfigId: 'wordle-french',
-  kind: 'joint-game',
+  kind: 'jointGame',
   gameName: 'Wordle - French',
   maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
   gamePriceInfo: { kind: 'free' },

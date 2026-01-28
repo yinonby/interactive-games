@@ -20,12 +20,14 @@
   },
   "dependencies": {
     "@ig/lib": "*",
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.1.5"
   },
   "devDependencies": {
     "@ig/lint": "*",
     "@ig/vitest": "*",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
     "cross-env": "^7.0.3",

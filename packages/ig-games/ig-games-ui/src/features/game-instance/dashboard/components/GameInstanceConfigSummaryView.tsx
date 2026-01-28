@@ -41,7 +41,7 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
         {t('games:maxParticipants') + ': ' +  gameConfig.maxParticipants}
       </RnuiText>
 
-      {gameInstanceExposedInfo.gameState.gameStatus === 'not-started' &&
+      {gameInstanceExposedInfo.gameState.gameStatus === 'notStarted' &&
         <View style={[genericStyles.flexRowAlignTop]} >
           <StartGameButton testID='StartGameButton-tid' gameInstanceId={gameInstanceExposedInfo.gameInstanceId} />
         </View>

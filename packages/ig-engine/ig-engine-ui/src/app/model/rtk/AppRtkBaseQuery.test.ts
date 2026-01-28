@@ -143,4 +143,42 @@ describe('AppRtkBaseQuery', () => {
       },
     });
   });
+
+  it('returns data on successful graphql request', async () => {
+    const requestMock: jest.Mock = jest.fn();
+    const httpAdapterMock: HttpAdapter = {
+      request: requestMock,
+    }
+    generateHttpAdapterMock.mockReturnValueOnce(httpAdapterMock);
+
+    const responseData = { foo: 'bar' };
+    const response = { data: responseData };
+    requestMock.mockResolvedValueOnce(response);
+
+    const baseQuery = createAppRtkBaseQuery();
+
+    const result = await baseQuery(
+      {
+        url: apiUrl + '/test',
+        kind: 'graphql',
+        graphql: { document: '' }
+      },
+      api,
+      extraOptions
+    );
+
+    expect(requestMock).toHaveBeenCalledTimes(1);
+    expect(requestMock).toHaveBeenCalledWith({
+      url: apiUrl + '/test',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apollo-require-preflight': 'true',
+      },
+      data: { query: '' },
+    });
+    expect(result).toEqual({
+      data: responseData,
+    });
+  });
 });

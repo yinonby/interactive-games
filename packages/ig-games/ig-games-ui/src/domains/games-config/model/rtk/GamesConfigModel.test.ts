@@ -1,17 +1,17 @@
 
-import type { GetGamesConfigResponseT } from '@ig/games-models';
+import type { GetMinimalGameConfigsResultT } from '@ig/games-models';
 import { useGamesConfigModel } from "./GamesConfigModel";
 import * as GamesConfigRtkApi from "./GamesConfigRtkApi";
 
 describe("useGamesConfigModel", () => {
-  const useGetGamesConfigQuerySpy = jest.spyOn(GamesConfigRtkApi, 'useGetGamesConfigQuery');
+  const useGetMinimalGameConfigsQuerySpy = jest.spyOn(GamesConfigRtkApi, 'useGetMinimalGameConfigsQuery');
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it("returns loading state when query is loading", () => {
-    useGetGamesConfigQuerySpy.mockReturnValue({
+    useGetMinimalGameConfigsQuerySpy.mockReturnValue({
       isLoading: true,
       isError: false,
       refetch: jest.fn(),
@@ -24,7 +24,7 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns error state when query reports an error", () => {
-    useGetGamesConfigQuerySpy.mockReturnValue({
+    useGetMinimalGameConfigsQuerySpy.mockReturnValue({
       isLoading: false,
       isError: true,
       error: { appErrCode: "apiError:server" },
@@ -39,7 +39,7 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns error state when data is undefined (no payload)", () => {
-    useGetGamesConfigQuerySpy.mockReturnValue({
+    useGetMinimalGameConfigsQuerySpy.mockReturnValue({
       isLoading: false,
       isError: false,
       refetch: jest.fn(),
@@ -53,22 +53,20 @@ describe("useGamesConfigModel", () => {
   });
 
   it("returns data when query succeeds", () => {
-    const mockedResponse: GetGamesConfigResponseT = {
-      gamesConfig: {
-        availableMinimalGameConfigs: [],
-      }
+    const mockedResult: GetMinimalGameConfigsResultT = {
+      minimalGameConfigs: [],
     };
-    useGetGamesConfigQuerySpy.mockReturnValue({
+    useGetMinimalGameConfigsQuerySpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: mockedResponse,
+      data: mockedResult,
       refetch: jest.fn(),
     });
 
     expect(useGamesConfigModel()).toEqual({
       isLoading: false,
       isError: false,
-      data: { gamesConfig: mockedResponse.gamesConfig },
+      data: { minimalGameConfigs: mockedResult.minimalGameConfigs },
     });
   });
 });

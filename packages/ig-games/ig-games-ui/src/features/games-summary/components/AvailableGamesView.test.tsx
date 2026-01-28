@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from "@ig/engine-ui";
-import type { GameConfigT, GamesConfigT, GamesUserConfigT } from '@ig/games-models';
+import type { GameConfigT, GamesUserConfigT } from '@ig/games-models';
 import { buildTestGameConfig } from '@ig/games-models/test-utils';
 import { render } from "@testing-library/react-native";
 import React from "react";
@@ -65,7 +65,7 @@ describe("AvailableGamesView", () => {
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { gamesConfig: {} as GamesConfigT },
+      data: { minimalGameConfigs: [] },
     });
     useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
@@ -92,9 +92,7 @@ describe("AvailableGamesView", () => {
       isLoading: false,
       isError: false,
       data: {
-        gamesConfig: {
-          availableMinimalGameConfigs: availableMinimalGameConfigs
-        }
+        minimalGameConfigs: availableMinimalGameConfigs,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({
@@ -127,9 +125,7 @@ describe("AvailableGamesView", () => {
       isLoading: false,
       isError: false,
       data: {
-        gamesConfig: {
-          availableMinimalGameConfigs: availableMinimalGameConfigs
-        }
+        minimalGameConfigs: availableMinimalGameConfigs,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({

@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from 'vitest';
-import type { PlayerExposedInfoT } from '../types/game/GameTypes';
+import type { PlayerExposedInfoT } from '../types/game/GameInstanceTypes';
 import { comparePlayersForDisplaySort } from './PlayerUtils';
 
 describe('comparePlayersForDisplaySort', () => {
