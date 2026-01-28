@@ -10,7 +10,11 @@
 The repository is organized as follows:
 
 - **`apps/`**: Contains minimal applications, each using packages provided in the `packages/` folder.
-- **`packages/`**: Contains shared code and utilities.
+- **`apps/ig-api`**: Backend **Express** app, serves GraphQL queries.
+  - This is a minimal package. It uses a library module to initialize Express, connect to the DB, and setup the plugins.
+- **`apps/ig-expo`**: Client **Expo** app, used both for web and mobile.
+  - This package only contains the routes and assets. The actual components are provided by UI plugins (in `packages/`).
+- **`packages/`**: Contains all the plugins required for the app, as well as shared code and utilities.
 
 ---
 
@@ -57,6 +61,11 @@ The repository is organized as follows:
     - **mongoose**: A Node.js client to access the DB.
     - **mongodb-memory-server**: An in-memory Node.js Mongo DB instance for rapid development and testing.
 
+- API
+  - **Express**: A Node.js web framework for serving HTTP requests using middlewares and routing.
+  - **GraphQL**: A query language and runtime for APIs, where clients request exactly the data they need from a strongly typed schema.
+  - **Apollo Server**: A GraphQL server to serve the schemas and connect them with resolvers.
+
 ---
 
 ### Architecture
@@ -68,3 +77,23 @@ This repository was created with a few design paradigms in mind:
 The client code uses a primary **feature/domain** design, where code responsible for UI features is separated from code responsible for accessing API.
 - The **features** strictly contain UI components with no logic whatsoever.
 - The **domains** use RTK queries to access the API and provide an abstraction layer to the **features** layer. The **domains** also provide **websocket handlers** to handle messages sent from the server.
+
+#### API Backend Design: Express => GraphQL => Business Logic => DB Adapter => MongoDB
+
+The API backend is built in 3 logical layers:
+- The **Query** layer:
+  - The main **/graphql** API endpoint is mounted on an Express router, for which an Apollo Server middleware is provided. This middleware connects the HTTP requests with the GraphQL schema.
+  - The schema is connected with the business logic layer using resolvers.
+  - Authorization is enforced, using GraphQL directives.
+  - This layer recieves a database adapter instance, and pass it on to the business logic layer. Replacing the database is as passing another database adapter at this point (and, implementing that adapter for the new database).
+- The **Business Logic** layer:
+  - Recieves raw HTTP data.
+  - Retrieves data from the database adapter layer if necessary.
+  - Makes validation.
+  - Makes updates through the database adapter.
+  - Returns a result.
+- The **Database Adapter** layer:
+  - The backend is built so that the database is completely isolated from the business logic.
+  - A database adapter presents the business logic layer with an interface to the database, hiding both the database operations, as well as the database itself.
+  - Database adapters can use whatever database provider they want (MongoDB / MySQL / PostgreSQL).
+
