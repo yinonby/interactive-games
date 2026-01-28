@@ -20,6 +20,7 @@ describe("WebSocketClient", () => {
   });
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).WebSocket = vi.fn((url: string) => {
       wsInstance = new WebSocketMock(url);
       return wsInstance;

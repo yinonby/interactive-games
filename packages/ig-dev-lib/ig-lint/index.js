@@ -1,9 +1,10 @@
 // @ts-check
 
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.strict,
   tseslint.configs.stylistic,
@@ -35,7 +36,7 @@ export default tseslint.config(
       "require-await": "off",
       "@typescript-eslint/require-await": "error",
       "@typescript-eslint/no-floating-promises": "error",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/no-extraneous-class": "off",
       "@typescript-eslint/consistent-type-exports": "error",

@@ -39,7 +39,7 @@ describe('GameInstanceConfigSummaryView', () => {
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
-        gameStatus: 'in-process',
+        gameStatus: 'inProcess',
       }),
     });
 
@@ -57,7 +57,7 @@ describe('GameInstanceConfigSummaryView', () => {
     getByText(buildMockedTranslation('games:maxParticipants') + ': 6');
   });
 
-  it('renders start button when game status is not-started', () => {
+  it('renders start button when game status is notStarted', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'giid-1',
       gameConfig: buildTestGameConfig({
@@ -66,7 +66,7 @@ describe('GameInstanceConfigSummaryView', () => {
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
-        gameStatus: 'not-started',
+        gameStatus: 'notStarted',
       }),
     });
 
@@ -77,7 +77,7 @@ describe('GameInstanceConfigSummaryView', () => {
     getByTestId('StartGameButton-tid');
   });
 
-  it('does not render start button when game status is not not-started', () => {
+  it('does not render start button when game status is not notStarted', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameConfig: buildTestGameConfig({
         gameName: 'Treasure Hunt 1',
@@ -85,7 +85,7 @@ describe('GameInstanceConfigSummaryView', () => {
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
-        gameStatus: 'in-process',
+        gameStatus: 'inProcess',
       }),
     });
 
@@ -104,7 +104,7 @@ describe('GameInstanceConfigSummaryView', () => {
         maxParticipants: 6,
       }),
       gameState: buildTestGameState({
-        gameStatus: 'in-process',
+        gameStatus: 'inProcess',
       }),
     });
 

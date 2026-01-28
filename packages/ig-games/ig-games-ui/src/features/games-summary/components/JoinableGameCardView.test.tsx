@@ -91,7 +91,7 @@ describe('JoinableGameCardView', () => {
       <JoinableGameCardView
         minimalGameConfig={{
           gameConfigId: 'gcid-1',
-          kind: 'joint-game',
+          kind: 'jointGame',
           gameName: 'Test Game',
           maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(30) },
           gamePriceInfo: { kind: 'free' },
@@ -125,7 +125,7 @@ describe('JoinableGameCardView', () => {
       <JoinableGameCardView
         minimalGameConfig={{
           gameConfigId: 'gcid-1',
-          kind: 'joint-game',
+          kind: 'jointGame',
           gameName: 'Test Game',
           maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(30) },
           gamePriceInfo: { kind: 'free' },

@@ -1,12 +1,12 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from "@ig/engine-ui";
-import type { GamesConfigT } from '@ig/games-models';
-import { useGetGamesConfigQuery } from "./GamesConfigRtkApi";
+import type { MinimalGameConfigT } from '@ig/games-models';
+import { useGetMinimalGameConfigsQuery } from "./GamesConfigRtkApi";
 
-export type GamesConfigModelT = ModelT<{ gamesConfig: GamesConfigT }>;
+export type GamesConfigModelT = ModelT<{ minimalGameConfigs: MinimalGameConfigT[] }>;
 
 export const useGamesConfigModel = (): GamesConfigModelT => {
-  const { isLoading, isError, error, data: gamesConfigResponse } = useGetGamesConfigQuery();
+  const { isLoading, isError, error, data: getMinimalGameConfigsResponse } = useGetMinimalGameConfigsQuery();
 
   if (isLoading) {
     return {
@@ -19,7 +19,7 @@ export const useGamesConfigModel = (): GamesConfigModelT => {
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(error),
     }
-  } else if (gamesConfigResponse === undefined) {
+  } else if (getMinimalGameConfigsResponse === undefined) {
     return {
       isLoading: false,
       isError: true,
@@ -31,7 +31,7 @@ export const useGamesConfigModel = (): GamesConfigModelT => {
     isLoading: false,
     isError: false,
     data: {
-      gamesConfig: gamesConfigResponse.gamesConfig,
+      minimalGameConfigs: getMinimalGameConfigsResponse.minimalGameConfigs,
     }
   }
 }

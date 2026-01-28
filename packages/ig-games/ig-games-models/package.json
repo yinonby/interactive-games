@@ -19,8 +19,10 @@
     "cover:unit": "npm run test:unit -- run --coverage"
   },
   "dependencies": {
+    "@ig/engine-models": "*",
     "@ig/lib": "*",
-    "@ig/engine-models": "*"
+    "graphql": "^16.12.0",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
     "@ig/lint": "*",

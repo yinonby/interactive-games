@@ -9,7 +9,7 @@ import {
 } from "./GameUiConfigReducer";
 
 export const appRtkHttpAdapterGenerator: AppRtkHttpAdapterGeneratorProvider = {
-  generateHttpAdapter: (api: BaseQueryApi): HttpAdapter | null => {
+  generateHttpAdapter: (api: BaseQueryApi, url?: string): HttpAdapter | null => {
     const state: GameUiConfigPartialReducerStateT = api.getState() as unknown as GameUiConfigPartialReducerStateT;
     const gameUiConfig: GameUiConfigT | null = state[gameUiConfigReducerPath].gameUiConfig;
 
@@ -17,7 +17,7 @@ export const appRtkHttpAdapterGenerator: AppRtkHttpAdapterGeneratorProvider = {
       return null;
     }
 
-    if (gameUiConfig.isDevel) {
+    if (gameUiConfig.isDevel && (url === undefined || !url?.endsWith('/graphql'))) {
       return new ApiServerMock(gameUiConfig.apiUrl);
     }
     return new Axios(gameUiConfig.apiUrl);

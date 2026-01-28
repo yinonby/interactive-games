@@ -25,7 +25,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     isLoading: isAppConfigLoading,
     isError: isAppConfigError,
     appErrCode: appConfigErrCode,
-    data: appConfigModel
+    data: gamesConfigModel
   } = useGamesConfigModel();
   const {
     isLoading: isUserConfigLoading,
@@ -52,7 +52,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
   }
 
   const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(
-    appConfigModel.gamesConfig.availableMinimalGameConfigs,
+    gamesConfigModel.minimalGameConfigs,
     gamesUserConfigModel.gamesUserConfig.joinedGameConfigs);
 
   return (
