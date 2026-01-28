@@ -1,7 +1,8 @@
 // @ts-check
 
-import TsEslintConfig from "@ig/lint";
+import TsEslintConfig from '@ig/lint';
+import { defineConfig } from 'eslint/config';
 
-export default [
-  ...TsEslintConfig
-];
+export default defineConfig(
+  TsEslintConfig,
+);
