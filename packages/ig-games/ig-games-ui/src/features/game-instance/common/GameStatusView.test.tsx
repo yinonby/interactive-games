@@ -7,7 +7,7 @@ import { GameStatusView } from './GameStatusView';
 describe('GameStatusView', () => {
   it('renders "not started" state', () => {
     const { getByText, queryByTestId, getByTestId } = render(
-      <GameStatusView gameStatus="not-started" />
+      <GameStatusView gameStatus="notStarted" />
     );
 
     getByText(buildMockedTranslation("games:gameNotStarted"));
@@ -23,7 +23,7 @@ describe('GameStatusView', () => {
 
   it('renders "in process" state with blinker', () => {
     const { getByText, getByTestId, queryByTestId } = render(
-      <GameStatusView gameStatus="in-process" />
+      <GameStatusView gameStatus="inProcess" />
     );
 
     getByText(buildMockedTranslation("games:gameInProcess"));

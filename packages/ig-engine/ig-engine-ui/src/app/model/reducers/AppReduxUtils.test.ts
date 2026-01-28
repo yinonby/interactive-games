@@ -34,7 +34,7 @@ describe('AppReduxUtils', () => {
     expect(Axios).not.toHaveBeenCalled();
   });
 
-  it('returns ApiServerMock when gameUiConfig.isDevel is true', () => {
+  it('returns ApiServerMock when gameUiConfig.isDevel is true and url is undefined', () => {
     const apiUrl = 'http://dev.example';
     const api = {
       getState: () => ({ [gameUiConfigReducerPath]: { gameUiConfig: { isDevel: true, apiUrl } } }),
@@ -44,6 +44,30 @@ describe('AppReduxUtils', () => {
     expect(ApiServerMock).toHaveBeenCalledTimes(1);
     expect((ApiServerMock as jest.Mock).mock.calls[0][0]).toBe(apiUrl);
     expect(adapter).toEqual({ __mockType: 'ApiServerMock', url: apiUrl });
+  });
+
+  it('returns ApiServerMock when gameUiConfig.isDevel is true and url does not end with /graphql', () => {
+    const apiUrl = 'http://dev.example';
+    const api = {
+      getState: () => ({ [gameUiConfigReducerPath]: { gameUiConfig: { isDevel: true, apiUrl } } }),
+    } as unknown as BaseQueryApi;
+
+    const adapter = appRtkHttpAdapterGenerator.generateHttpAdapter(api, 'url/graphql/get');
+    expect(ApiServerMock).toHaveBeenCalledTimes(1);
+    expect((ApiServerMock as jest.Mock).mock.calls[0][0]).toBe(apiUrl);
+    expect(adapter).toEqual({ __mockType: 'ApiServerMock', url: apiUrl });
+  });
+
+  it('returns Axios when gameUiConfig.isDevel is true and url is not undefined and ends with /graphql', () => {
+    const apiUrl = 'http://dev.example';
+    const api = {
+      getState: () => ({ [gameUiConfigReducerPath]: { gameUiConfig: { isDevel: true, apiUrl } } }),
+    } as unknown as BaseQueryApi;
+
+    const adapter = appRtkHttpAdapterGenerator.generateHttpAdapter(api, 'url/graphql');
+    expect(Axios).toHaveBeenCalledTimes(1);
+    expect((Axios as jest.Mock).mock.calls[0][0]).toBe(apiUrl);
+    expect(adapter).toEqual({ __mockType: 'Axios', url: apiUrl });
   });
 
   it('returns Axios when gameUiConfig.isDevel is false', () => {

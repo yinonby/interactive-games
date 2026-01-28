@@ -7,19 +7,28 @@ import { extractAppRtkError } from "./AppRtkUtils";
 
 export const createAppRtkBaseQuery = (): BaseQueryFn<
   {
-    url: string;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    data?: unknown;
+    url: string,
+    kind?: undefined,
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    data?: unknown,
+  } | {
+    url: string,
+    kind: 'graphql',
+    graphql: {
+      document: string; // GraphQL query string
+      variables?: Record<string, string | number | object>;
+    };
   },
   unknown,
   AppRtkErrorT
 > =>
-  async ({ url, method, data }, api: BaseQueryApi) => {
+  async (args, api: BaseQueryApi) => {
+    const { url } = args;
     const { appRtkHttpAdapterGeneratorProvider, logger } = api.extra as {
       appRtkHttpAdapterGeneratorProvider: AppRtkHttpAdapterGeneratorProvider,
       logger: LoggerAdapter,
     }
-    const httpAdapter: HttpAdapter | null = appRtkHttpAdapterGeneratorProvider.generateHttpAdapter(api);
+    const httpAdapter: HttpAdapter | null = appRtkHttpAdapterGeneratorProvider.generateHttpAdapter(api, url);
 
     try {
       if (httpAdapter === null) {
@@ -28,6 +37,25 @@ export const createAppRtkBaseQuery = (): BaseQueryFn<
         throw new Error("Unexpected error when generating an httpAdapter");
       }
 
+      // --------- GraphQL path ----------
+      if (args.kind === 'graphql') {
+        const { graphql } = args;
+        const { document, variables } = graphql;
+
+        const result = await httpAdapter.request({
+          url: url,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apollo-require-preflight': 'true',
+          },
+          data: { query: document, variables },
+        }) as { data: object };
+        return { data: result.data }; // GraphQL responses usually have { data, errors }
+      }
+
+        // --------- REST path ----------
+      const { method, data } = args;
       const result = await httpAdapter.request({
         url,
         method,

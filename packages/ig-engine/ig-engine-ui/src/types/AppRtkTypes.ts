@@ -4,7 +4,7 @@ import type { BaseQueryApi } from '@reduxjs/toolkit/query';
 import type { AppErrorCodeT } from './AppErrorTypes';
 
 export interface AppRtkHttpAdapterGeneratorProvider {
-  generateHttpAdapter: (api: BaseQueryApi) => HttpAdapter | null;
+  generateHttpAdapter: (api: BaseQueryApi, url?: string) => HttpAdapter | null;
 }
 
 export type AppRtkErrorT = {

@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@ig/client-utils": "*",
-    "@ig/engine-ui": "*",
     "@ig/engine-models": "*",
+    "@ig/engine-ui": "*",
     "@ig/games-models": "*",
     "@ig/platform-ui": "*",
     "@ig/rnui": "*",

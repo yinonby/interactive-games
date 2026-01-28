@@ -6,16 +6,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
 export type GameStatusViewPropsT = TestableComponentT &{
-  gameStatus: 'not-started' | 'in-process' | 'ended';
+  gameStatus: 'notStarted' | 'inProcess' | 'ended';
 };
 
 export const GameStatusView: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
   // Determine status color and text
   let statusColor = 'red';
 
-  if (gameStatus === 'not-started') {
+  if (gameStatus === 'notStarted') {
     statusColor = 'orange';
-  } else if (gameStatus === 'in-process') {
+  } else if (gameStatus === 'inProcess') {
     statusColor = 'green';
   }
 
@@ -24,8 +24,8 @@ export const GameStatusView: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
       testID="status-view"
       style={styles.statusContainer}
     >
-      {gameStatus === "in-process" && <RnuiBlinker testID="blinker" color="green" durationMs={1000} />}
-      {gameStatus !== "in-process" &&
+      {gameStatus === "inProcess" && <RnuiBlinker testID="blinker" color="green" durationMs={1000} />}
+      {gameStatus !== "inProcess" &&
         <View
         testID="status-circle"
         style={[
@@ -45,9 +45,9 @@ const GameStatusText: FC<GameStatusViewPropsT> = ({ gameStatus }) => {
   // Determine status color and text
   let statusText = t("games:gameEnded");
 
-  if (gameStatus === 'not-started') {
+  if (gameStatus === 'notStarted') {
     statusText = t("games:gameNotStarted");
-  } else if (gameStatus === 'in-process') {
+  } else if (gameStatus === 'inProcess') {
     statusText = t("games:gameInProcess");
   }
 

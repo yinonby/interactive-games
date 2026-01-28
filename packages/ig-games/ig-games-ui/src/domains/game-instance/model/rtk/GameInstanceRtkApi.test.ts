@@ -1,21 +1,21 @@
 
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import {
-    appRtkApiReducerPath,
-    useClientLogger, type AppRtkHttpAdapterGeneratorProvider
+  appRtkApiReducerPath,
+  useClientLogger, type AppRtkHttpAdapterGeneratorProvider
 } from '@ig/engine-ui';
 import type {
-    GameInstanceExposedInfoT,
-    GetGameInstanceChatResponseT, GetGameInstanceResponseT, PostGameInstanceChatMessageResponseT,
-    PostGameInstanceStartResponseT
+  GameInstanceExposedInfoT,
+  GetGameInstanceChatResponseT, GetGameInstanceResponseT, PostGameInstanceChatMessageResponseT,
+  PostGameInstanceStartResponseT
 } from '@ig/games-models';
 import { buildTestGameState } from '@ig/games-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import {
-    gameInstanceRtkApiEndpoints,
-    gameInstanceRtkApiMiddleware, gameInstanceRtkApiReducer
+  gameInstanceRtkApiEndpoints,
+  gameInstanceRtkApiMiddleware, gameInstanceRtkApiReducer
 } from './GameInstanceRtkApi';
 
 const apiUrl = 'https://api.test';
@@ -39,7 +39,7 @@ export const server = setupServer(
 
   // post start game
   http.post(apiUrl + '/games/game-instance/giid-1/start', () => {
-    gameInstanceExposedInfoMock1.gameState.gameStatus = 'in-process';
+    gameInstanceExposedInfoMock1.gameState.gameStatus = 'inProcess';
     const response: PostGameInstanceStartResponseT = {
       status: 'ok',
     };
@@ -95,7 +95,7 @@ describe('GameInstanceRtkApi', () => {
   beforeEach(() => {
     gameInstanceExposedInfoMock1 = {
       gameInstanceId: 'giid-1',
-      gameState: buildTestGameState({ gameStatus: 'not-started' }),
+      gameState: buildTestGameState({ gameStatus: 'notStarted' }),
     } as GameInstanceExposedInfoT;
   })
   afterEach(() => {
@@ -139,7 +139,7 @@ describe('GameInstanceRtkApi', () => {
       throw new Error('result1.data is undefined');
     }
     const getGameInstanceResponse1: GetGameInstanceResponseT = result1.data;
-    expect(getGameInstanceResponse1.gameInstanceExposedInfo.gameState.gameStatus).toEqual('not-started');
+    expect(getGameInstanceResponse1.gameInstanceExposedInfo.gameState.gameStatus).toEqual('notStarted');
 
     // start game
     const result2 = await store.dispatch(
@@ -157,7 +157,7 @@ describe('GameInstanceRtkApi', () => {
       throw new Error('result3.data is undefined');
     }
     const getGameInstanceResponse3: GetGameInstanceResponseT = result3.data;
-    expect(getGameInstanceResponse3.gameInstanceExposedInfo.gameState.gameStatus).toEqual('in-process');
+    expect(getGameInstanceResponse3.gameInstanceExposedInfo.gameState.gameStatus).toEqual('inProcess');
 
     // return
     const response: PostGameInstanceStartResponseT = result2.data;
