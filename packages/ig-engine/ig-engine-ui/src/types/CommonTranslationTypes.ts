@@ -1,6 +1,6 @@
 
+import type { GamesTranslationKeyT } from '@ig/games-ui-models';
 import type { AppErrorCodeT } from "./AppErrorTypes";
-import type { GamesTranslationKeyT } from "./GamesTranslationsTypes";
 
 export type CommonTranslationKeyT =
   | "common:open"

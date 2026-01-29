@@ -1,6 +1,7 @@
 
-import { playerRoleToStr, playerStatusToStr, useAppLocalization } from "@ig/engine-ui";
-import type { PlayerExposedInfoT } from '@ig/games-models';
+import { useAppLocalization } from "@ig/engine-ui";
+import { type PlayerExposedInfoT } from '@ig/games-models';
+import { playerRoleToTranslationKey, playerStatusToTranslationKey } from '@ig/games-ui-models';
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
 import type { TestableComponentT } from "../../../../types/ComponentTypes";
@@ -17,8 +18,8 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = (props) => {
   const { t } = useAppLocalization();
   const youStr = isCurUser ? " (" + t("common:you", { postProcess: 'lowercase' }) + ")" : "";
   const textVariant = isCurUser ? "titleSmall" : undefined;
-  const playerRoleStr = t(playerRoleToStr[playerExposedInfo.playerRole]);
-  const playerStatusStr = t(playerStatusToStr[playerExposedInfo.playerStatus]);
+  const playerRoleStr = t(playerRoleToTranslationKey[playerExposedInfo.playerRole]);
+  const playerStatusStr = t(playerStatusToTranslationKey[playerExposedInfo.playerStatus]);
 
   let textColor: string | undefined = undefined;
   if (playerExposedInfo.playerStatus === "invited") {

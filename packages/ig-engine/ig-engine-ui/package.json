@@ -21,6 +21,7 @@
     "@ig/client-utils": "*",
     "@ig/engine-models": "*",
     "@ig/games-models": "*",
+    "@ig/games-ui-models": "*",
     "@ig/platform-ui": "*",
     "@ig/rnui": "*",
     "@reduxjs/toolkit": "^2.11.2",

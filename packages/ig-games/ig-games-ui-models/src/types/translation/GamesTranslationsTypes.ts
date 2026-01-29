@@ -28,12 +28,12 @@ export type GamesTranslationKeyT =
   | 'games:playerStatusSuspended'
 ;
 
-export const playerRoleToStr: Record<PlayerRoleT, GamesTranslationKeyT> = {
+export const playerRoleToTranslationKey: Record<PlayerRoleT, GamesTranslationKeyT> = {
   'admin': 'games:playerRoleAdmin',
   'player': 'games:playerRolePlayer'
 }
 
-export const playerStatusToStr: Record<PlayerStatusT, GamesTranslationKeyT> = {
+export const playerStatusToTranslationKey: Record<PlayerStatusT, GamesTranslationKeyT> = {
   'invited': 'games:playerStatusInvited',
   'active': 'games:playerStatusActive',
   'suspended': 'games:playerStatusSuspended'
