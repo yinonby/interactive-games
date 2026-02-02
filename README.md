@@ -12,6 +12,8 @@ The repository is organized as follows:
 - **`apps/`**: Contains minimal applications, each using packages provided in the `packages/` folder.
 - **`apps/ig-api`**: Backend **Express** app, serves GraphQL queries.
   - This is a minimal package. It uses a library module to initialize Express, connect to the DB, and setup the plugins.
+- **`python/apps/ig-ws`**: Backend websocket server, notifying connected clients when there are updates.
+  - Reads messages that are published to Redis, and relays the information to the relevant clients.
 - **`apps/ig-expo`**: Client **Expo** app, used both for web and mobile.
   - This package only contains the routes and assets. The actual components are provided by UI plugins (in `packages/`).
 - **`packages/`**: Contains all the plugins required for the app, as well as shared code and utilities.
@@ -35,22 +37,11 @@ The repository is organized as follows:
     - Handles dynamic tags for selective refetching.
     - Integrates seamlessly with Redux.
 
-- Real-Time Updates
-  - **WebSockets**: Notify clients in real-time when relevant data updates occur, enabling live updates in apps and web clients.
+- Real-Time Client Updates
+  - **WebSockets**: Notify clients in real-time when relevant data updates occur, enabling live client updates.
 
 - Localization / Internationalization
   - **i18next**: A framework that adapts the UI to different languages, regions, and cultural conventions.
-
-- Testing
-  - **Vitest**: A modern test environment with advanced TypeScript features, also supporting coverage (via **istanbul**).
-  - **Jest** and **React Testing Library**: Widely used pair for React Native testing and coverage (via **istanbul**).
-  - **Eslint**: With presets for react-native/expo.
-  - **Madge**: A tool used to ascertain no circular dependencies exist.
-
-#### CI/CD
-  - **NYC**: A tool used to create an HTML coverage report for the entire project.
-  - **Husky**: A tool to control git hooks in teams.
-  - **GitHub Actions**: A CI/CD platform that automates workflows like building, testing, and deploying code directly from a GitHub repository.
 
 ---
 
@@ -61,10 +52,38 @@ The repository is organized as follows:
     - **mongoose**: A Node.js client to access the DB.
     - **mongodb-memory-server**: An in-memory Node.js Mongo DB instance for rapid development and testing.
 
-- API
+- API Server
   - **Express**: A Node.js web framework for serving HTTP requests using middlewares and routing.
   - **GraphQL**: A query language and runtime for APIs, where clients request exactly the data they need from a strongly typed schema.
   - **Apollo Server**: A GraphQL server to serve the schemas and connect them with resolvers.
+
+- Message Broker
+  - **Redis**: An in-memory data store used as a message broker, known for extremely fast reads and writes.
+
+- WebSocket Server
+  - Python **websockets**: A set of libraries that let Python applications open persistent, two-way, real-time communication channels over WebSocket connections.
+  - Python **redis**: A **Redis** client utility.
+
+---
+
+#### Testing and CI/CD
+
+- Testing: Node
+  - **Vitest**: A modern test environment with advanced TypeScript features, also supporting coverage (via **istanbul**).
+  - **Jest** and **React Testing Library**: Widely used pair for React Native testing and coverage (via **istanbul**).
+  - **Eslint**: With presets for react-native/expo.
+  - **Madge**: A tool used to ascertain no circular dependencies exist.
+  - **NYC**: A tool used to create an HTML coverage report for the entire project.
+
+- Testing: Python
+  - **poetry**: Python package management.
+  - **pytest**: A python testing tool.
+  - **mypy** and **ruff**: Python tools used to type-check, lint, and format.
+  - **make** and **Makefile**: A build automation tool that reads a Makefile to determine how to run a set of commands.
+
+- CI/CD
+  - **Husky**: A tool to control git hooks in teams.
+  - **GitHub Actions**: A CI/CD platform that automates workflows like building, testing, and deploying code directly from a GitHub repository.
 
 ---
 

@@ -1,0 +1,11 @@
+
+.venv
+.py_coverage
+
+__pycache__
+.mypy_cache
+.pytest_cache
+.ruff_cache
+
+# local/secret environment files
+.env.*local
