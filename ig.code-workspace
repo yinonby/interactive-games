@@ -1,8 +1,8 @@
 {
   "folders": [
-    {
-      "path": "./"
-    }
+    { "name": "IG-WS", "path": "./python/apps/ig-ws" },
+    { "name": "IG-PY-LIB", "path": "./python/packages/ig-py-lib" },
+    { "name": "IG-ROOT", "path": "./" },
   ],
   "settings": {
     "workbench.tree.expandMode": "doubleClick",

@@ -1,0 +1,9 @@
+[run]
+omit =
+    */*_test.py
+    */__init__.py
+data_file = .py_coverage
+
+[report]
+show_missing = True
+fail_under = 100
