@@ -11,7 +11,6 @@ vi.mock("axios", () => ({
 
 describe("Axios HttpProvider", () => {
   const baseUrl = "https://api.test";
-  const axiosProvider = new Axios(baseUrl);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -25,6 +24,7 @@ describe("Axios HttpProvider", () => {
       data: responseData,
     });
 
+    const axiosProvider = new Axios(baseUrl);
     const result = await axiosProvider.request<typeof responseData>({
       url: "/test",
       method: "GET",
@@ -35,6 +35,32 @@ describe("Axios HttpProvider", () => {
       url: "https://api.test/test",
       method: "GET",
       data: undefined,
+      withCredentials: true,
+    });
+
+    expect(result).toEqual(responseData);
+  });
+
+  it("performs a GET request without credentials", async () => {
+    const responseData = { ok: true };
+    const mockedAxiosRequest = vi.mocked(axios.request);
+
+    mockedAxiosRequest.mockResolvedValue({
+      data: responseData,
+    });
+
+    const axiosProvider = new Axios(baseUrl, false);
+    const result = await axiosProvider.request<typeof responseData>({
+      url: "/test",
+      method: "GET",
+    });
+
+    expect(axios.request).toHaveBeenCalledOnce();
+    expect(axios.request).toHaveBeenCalledWith({
+      url: "https://api.test/test",
+      method: "GET",
+      data: undefined,
+      withCredentials: false,
     });
 
     expect(result).toEqual(responseData);
@@ -49,6 +75,7 @@ describe("Axios HttpProvider", () => {
       data: responseData,
     });
 
+    const axiosProvider = new Axios(baseUrl);
     const result = await axiosProvider.request<typeof responseData, typeof requestBody>({
       url: "/users",
       method: "POST",
@@ -60,6 +87,7 @@ describe("Axios HttpProvider", () => {
       url: "https://api.test/users",
       method: "POST",
       data: requestBody,
+      withCredentials: true,
     });
 
     expect(result).toEqual(responseData);
