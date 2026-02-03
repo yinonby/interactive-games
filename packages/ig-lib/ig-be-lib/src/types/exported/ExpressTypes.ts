@@ -10,10 +10,11 @@ export type ExpressAppStarterInfoT = {
   expressPluginContainers: ExpressPluginContainerT<unknown>[],
 }
 
-export type ExpressPluginContainerT<DB_ADP_T> = {
+export type ExpressPluginContainerT<DB_ADP_T, CNF_T = never> = {
   getDbAdapterCb?: () => PackageDb & DB_ADP_T; // decided by the top level app
   route: string, // decided by the top level app
-  expressPlugin: ExpressPluginT<DB_ADP_T>,
+  expressPlugin: ExpressPluginT<DB_ADP_T, CNF_T>,
+  pluginConfig?: CNF_T,
   postInitCb?: (dbAdapter: DB_ADP_T | null) => Promise<void>,
 }
 
@@ -33,6 +34,6 @@ export type ExpressAppDbInfoT = ({
   tableNamePrefix: string,
 }
 
-export interface ExpressPluginT<DB_ADP_T> {
-  initRouter(appInfo: ExpressAppInfoT, dbAdapter: DB_ADP_T | null): Promise<Router>;
+export interface ExpressPluginT<DB_ADP_T, CNF_T = never> {
+  initRouter(appInfo: ExpressAppInfoT, dbAdapter: DB_ADP_T | null, pluginConfig?: CNF_T): Promise<Router>;
 }

@@ -17,7 +17,10 @@ export const appRtkHttpAdapterGenerator: AppRtkHttpAdapterGeneratorProvider = {
       return null;
     }
 
-    if (gameUiConfig.isDevel && (url === undefined || !url?.endsWith('/graphql'))) {
+    if (gameUiConfig.isDevel && (
+      url === undefined ||
+      (url !== '/app-config' && url !== '/login' && !url?.endsWith('/graphql'))
+    )) {
       return new ApiServerMock(gameUiConfig.apiUrl);
     }
     return new Axios(gameUiConfig.apiUrl);

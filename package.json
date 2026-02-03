@@ -40,6 +40,7 @@
     "packages/ig-dev-lib/*",
     "packages/ig-ui/*",
     "packages/ig-engine/*",
+    "packages/ig-auth/*",
     "packages/ig-games/*",
     "apps/*"
   ],

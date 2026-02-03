@@ -1,10 +1,6 @@
 
 import { appRtkApi } from "@ig/engine-ui";
-import { getMinimalGameConfigsQuery, type MinimalGameConfigT } from '@ig/games-models';
-
-export type GetMinimalGameConfigsResultT = {
-  minimalGameConfigs: MinimalGameConfigT[],
-}
+import { getMinimalGameConfigsQuery, type GetMinimalGameConfigsResultT } from '@ig/games-models';
 
 const gamesConfigRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,7 +1,7 @@
 
 import type { LoggerAdapter } from '@ig/lib';
 import express, { Router } from 'express';
-import type { ExpressAppStarterInfoT } from '../types/exported/ExpressTypes';
+import type { ExpressAppStarterInfoT, ExpressPluginContainerT } from '../types/exported/ExpressTypes';
 import { ExpressApp } from './ExpressApp';
 
 vi.mock('express');
@@ -132,7 +132,7 @@ describe('ExpressApp', () => {
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, null);
+    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, null, undefined);
   });
 
   it('should init routes, with db adapter', async () => {
@@ -156,7 +156,34 @@ describe('ExpressApp', () => {
     await expressApp.startApp();
 
     expect(getDbAdapterCbMock).toHaveBeenCalled();
-    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, 'MOCKDBADAPTER');
+    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, 'MOCKDBADAPTER', undefined);
+  });
+
+  it('should init routes, with plugin config', async () => {
+    const getDbAdapterCbMock = vi.fn();
+    getDbAdapterCbMock.mockReturnValue('MOCKDBADAPTER');
+
+    const initRouterMock = vi.fn();
+
+    type PluginConfigT = { userId: string };
+    const pluginConfig: PluginConfigT = { userId: 'USER1' };
+    const pluginContainer: ExpressPluginContainerT<unknown, { userId: string }> = {
+      pluginConfig: pluginConfig,
+      route: '',
+      expressPlugin: {
+        initRouter: initRouterMock,
+      },
+    }
+
+    const mockStarterInfo: ExpressAppStarterInfoT = {
+      listerPort: 1287,
+      appInfo: { appVersion: '1.1' },
+      expressPluginContainers: [pluginContainer as ExpressPluginContainerT<unknown>],
+    };
+    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
+    await expressApp.startApp();
+
+    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, null, pluginConfig);
   });
 
   it('should call post init callback, without db adapter', async () => {

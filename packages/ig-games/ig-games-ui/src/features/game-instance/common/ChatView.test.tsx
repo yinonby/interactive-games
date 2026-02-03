@@ -1,14 +1,15 @@
 
-import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-ui';
+import { __authUiMocks } from '@ig/auth-ui';
+import { __engineAppUiMocks } from '@ig/engine-ui';
 import {
-    type GameInstanceChatMessageT, type GameInstanceExposedInfoT
+  type GameInstanceChatMessageT, type GameInstanceExposedInfoT
 } from '@ig/games-models';
 import { buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/games-models/test-utils';
 import { act, fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { buildMockedTranslation } from "../../../../test/mocks/EngineAppUiMocks";
 import {
-    useGameInstanceController
+  useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
 import { ChatView } from "./ChatView";
 
@@ -25,7 +26,9 @@ const mockedUseGameInstanceController = useGameInstanceController as unknown as 
 
 describe("ChatView", () => {
   const onSendChatMessageMock = jest.fn();
-  const { useAppConfigMock, onUnknownErrorMock } = __engineAppUiMocks;
+  const { onUnknownErrorMock } = __engineAppUiMocks;
+  const { useAuthMock } = __authUiMocks;
+
   mockedUseGameInstanceController.mockReturnValue({
     onSendChatMessage: onSendChatMessageMock
   });
@@ -38,9 +41,9 @@ describe("ChatView", () => {
     // setup mocks
     onSendChatMessageMock.mockImplementation(async () => {});
     const mockedCurUserId = "mockedId";
-    useAppConfigMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       curUserId: mockedCurUserId,
-    } as AppConfigContextT);
+    });
 
     // render
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
@@ -69,9 +72,9 @@ describe("ChatView", () => {
     // setup mocks
     onSendChatMessageMock.mockImplementation(async () => { });
     const mockedCurUserId = "mockedId";
-    useAppConfigMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       curUserId: mockedCurUserId,
-    } as AppConfigContextT);
+    });
 
     // render
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
@@ -103,9 +106,9 @@ describe("ChatView", () => {
     // setup mocks
     onSendChatMessageMock.mockRejectedValue('ERR');
     const mockedCurUserId = "mockedId";
-    useAppConfigMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       curUserId: mockedCurUserId,
-    } as AppConfigContextT);
+    });
 
     // render
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({

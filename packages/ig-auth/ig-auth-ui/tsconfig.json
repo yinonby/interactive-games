@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "babel.config.cjss",
+    "metro.config.js",
+    "jest.config.js",
+    "../../**/dist/**/*",
+    "../../**/*.spec.tsx"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"], // Include DOM types if using web + RN
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "declaration": false,
+    "declarationMap": false,
+    "types": ["node", "jest"],
+    "paths": {
+      "@/*": ["src/*"],
+    }
+  }
+}

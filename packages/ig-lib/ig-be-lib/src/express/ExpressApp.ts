@@ -98,7 +98,7 @@ export class ExpressApp {
       const dbAdapter = expressPluginContainer.getDbAdapterCb ? expressPluginContainer.getDbAdapterCb() : null;
 
       const router = await expressPluginContainer.expressPlugin
-        .initRouter(this.expressAppStarterInfo.appInfo, dbAdapter);
+        .initRouter(this.expressAppStarterInfo.appInfo, dbAdapter, expressPluginContainer.pluginConfig);
 
       this.app.use(expressPluginContainer.route, router);
     }
