@@ -1,5 +1,6 @@
 
-import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-ui';
+import { __authUiMocks } from '@ig/auth-ui';
+import { __engineAppUiMocks } from '@ig/engine-ui';
 import type { PlayerExposedInfoT } from '@ig/games-models';
 import { render } from "@testing-library/react-native";
 import React from "react";
@@ -20,13 +21,14 @@ jest.mock('./PlayerTableRow', () => {
 // tests
 
 describe("PlayersTableView", () => {
-  const { useAppConfigMock, loggerErrorMock } = __engineAppUiMocks;
+  const { loggerErrorMock } = __engineAppUiMocks;
+  const { useAuthMock } = __authUiMocks;
 
   // mock curUserId
   const curUserId = "userIdMock";
-  useAppConfigMock.mockReturnValue({
+  useAuthMock.mockReturnValue({
     curUserId: curUserId,
-  } as AppConfigContextT);
+  });
 
   it("does not render when current user is not in players list", () => {
     const playerExposedInfo: PlayerExposedInfoT = {

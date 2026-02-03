@@ -1,5 +1,6 @@
 
-import { useAppConfig, useAppLocalization, useClientLogger } from "@ig/engine-ui";
+import { useAuth } from '@ig/auth-ui';
+import { useAppLocalization, useClientLogger } from "@ig/engine-ui";
 import { comparePlayersForDisplaySort, type PlayerExposedInfoT } from '@ig/games-models';
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from "@ig/rnui";
 import React, { type FC } from 'react';
@@ -16,7 +17,7 @@ export const PlayersTableView: FC<PlayersTableViewPropsT> = (props) => {
   const { playerExposedInfos, withAdminButtons } = props;
   const { t } = useAppLocalization();
   const logger = useClientLogger();
-  const { curUserId } = useAppConfig();
+  const { curUserId } = useAuth();
 
   const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerUserId === curUserId);
   if (curPlayerExposedInfo === undefined) {

@@ -12,9 +12,10 @@ export type JWTPayload = Record<string, unknown>;
 /**
  * Options for signing the JWT
  */
+export type JwtAlgorithmT = jwt.Algorithm;
 export interface JWTSignOptions {
-  expiresIn: number; // e.g., '1h', '7d', 3600
-  algorithm: jwt.Algorithm;   // HS256, RS256, etc.
+  expiresInMs: number; // e.g., '1h', '7d', 3600
+  algorithm: JwtAlgorithmT;   // HS256, RS256, etc.
 }
 
 /**
@@ -30,7 +31,7 @@ export function buildJWT(
   options: JWTSignOptions
 ): string {
   const signOptions: SignOptions = {
-    expiresIn: options.expiresIn,
+    expiresIn: options.expiresInMs,
     algorithm: options.algorithm,
   };
 

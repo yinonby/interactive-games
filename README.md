@@ -9,14 +9,14 @@
 
 The repository is organized as follows:
 
-- **`apps/`**: Contains minimal applications, each using packages provided in the `packages/` folder.
+- **`apps/`** and  **`python/apps/`**: Contains minimal applications, each using packages provided in the `packages/` folder.
+- **`packages/`** and  **`python/packages/`**: Contains all the plugins required for the app, as well as shared code and utilities.
 - **`apps/ig-api`**: Backend **Express** app, serves GraphQL queries.
   - This is a minimal package. It uses a library module to initialize Express, connect to the DB, and setup the plugins.
 - **`python/apps/ig-ws`**: Backend websocket server, notifying connected clients when there are updates.
   - Reads messages that are published to Redis, and relays the information to the relevant clients.
 - **`apps/ig-expo`**: Client **Expo** app, used both for web and mobile.
   - This package only contains the routes and assets. The actual components are provided by UI plugins (in `packages/`).
-- **`packages/`**: Contains all the plugins required for the app, as well as shared code and utilities.
 
 ---
 
@@ -63,6 +63,9 @@ The repository is organized as follows:
 - WebSocket Server
   - Python **websockets**: A set of libraries that let Python applications open persistent, two-way, real-time communication channels over WebSocket connections.
   - Python **redis**: A **Redis** client utility.
+
+- Authentication
+  - JWT is used to set an authenticaion cookie token for each client.
 
 ---
 

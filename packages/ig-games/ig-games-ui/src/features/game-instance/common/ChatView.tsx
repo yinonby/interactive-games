@@ -1,14 +1,15 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
+import { useAuth } from '@ig/auth-ui';
+import { useAppErrorHandling, useAppLocalization, useGenericStyles } from "@ig/engine-ui";
 import type {
-    GameInstanceChatMessageT,
-    GameInstanceExposedInfoT, PlayerExposedInfoT
+  GameInstanceChatMessageT,
+  GameInstanceExposedInfoT, PlayerExposedInfoT
 } from '@ig/games-models';
 import { RnuiIconButton, RnuiText, RnuiTextInput } from "@ig/rnui";
 import React, { useRef, useState, type FC } from 'react';
 import { FlatList, View } from 'react-native';
 import {
-    useGameInstanceController
+  useGameInstanceController
 } from "../../../domains/game-instance/controller/user-actions/GameInstanceController";
 import type { TestableComponentT } from "../../../types/ComponentTypes";
 
@@ -55,7 +56,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   const [chatMessage, setChatMessage] = useState("");
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
-  const { curUserId } = useAppConfig();
+  const { curUserId } = useAuth();
   const { onUnknownError } = useAppErrorHandling();
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =

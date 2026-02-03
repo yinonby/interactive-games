@@ -3,6 +3,7 @@
 import '@testing-library/jest-native/extend-expect';
 // figure out why cannot export these from @ig/rn-testing
 import type { GamesUiUrlPathsAdapter } from '@ig/engine-ui';
+import { initAuthUiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/AuthUiMocks';
 import { initPlatformUiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/PlatformUiMocks';
 import { initReactNativeMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/ReactNativeMocks';
 import { initRnuiMocks } from '../../../ig-dev-lib/ig-rn-testing/src/mocks/RnuiMocks';
@@ -20,6 +21,7 @@ initReactNativeMocks();
 initRnuiMocks();
 initEngineAppUiMocks();
 initPlatformUiMocks();
+initAuthUiMocks();
 
 declare module "@ig/platform-ui" {
   export const __puiMocks: {
@@ -46,5 +48,11 @@ declare module "@ig/engine-ui" {
     buildGamesAcceptInviteUrlPathMock: jest.MockedFunction<BuildGamesAcceptInviteUrlPathFnT>,
     buildGameDashboardUrlPathMock: jest.MockedFunction<BuildGameDashboardUrlPathFnT>,
     buildGameInstanceDashboardUrlPathMock: jest.MockedFunction<BuildGameInstanceDashboardUrlPathMockFnT>,
+  };
+}
+
+declare module "@ig/auth-ui" {
+  export const __authUiMocks: {
+    useAuthMock: jest.Mock,
   };
 }

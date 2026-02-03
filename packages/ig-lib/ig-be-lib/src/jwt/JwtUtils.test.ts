@@ -12,7 +12,7 @@ describe("buildJWT", () => {
       role: "admin",
     };
 
-    const token = buildJWT(payload, secret, { expiresIn: 60, algorithm: "HS512" });
+    const token = buildJWT(payload, secret, { expiresInMs: 60, algorithm: "HS512" });
 
     const decoded = jwt.verify(token, secret) as jwt.JwtPayload;
 
@@ -23,7 +23,7 @@ describe("buildJWT", () => {
   it("should respect expiresIn option", () => {
     const payload: JWTPayload = { foo: "bar" };
 
-    const token = buildJWT(payload, secret, { expiresIn: 60, algorithm: "HS512" });
+    const token = buildJWT(payload, secret, { expiresInMs: 60, algorithm: "HS512" });
 
     const decoded = jwt.verify(token, secret) as jwt.JwtPayload;
 
@@ -45,7 +45,7 @@ describe("buildJWT", () => {
   it("should use the specified algorithm", () => {
     const payload: JWTPayload = { test: true };
 
-    const token = buildJWT(payload, secret, { expiresIn: 60, algorithm: "HS512" });
+    const token = buildJWT(payload, secret, { expiresInMs: 60, algorithm: "HS512" });
 
     const decoded = jwt.decode(token, { complete: true });
 
@@ -59,7 +59,7 @@ describe("buildJWT", () => {
   it("should throw if secret is invalid", () => {
     const payload: JWTPayload = { foo: "bar" };
 
-    const token = buildJWT(payload, secret, { expiresIn: 60, algorithm: "HS512" });
+    const token = buildJWT(payload, secret, { expiresInMs: 60, algorithm: "HS512" });
 
     expect(() => {
       jwt.verify(token, "wrong-secret");
