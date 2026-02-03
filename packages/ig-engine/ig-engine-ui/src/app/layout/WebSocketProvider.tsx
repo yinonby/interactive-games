@@ -17,7 +17,10 @@ export function WebSocketProvider<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T>(
 
   useEffect(() => {
     wsClientRef.current.connect();
-    return () => wsClientRef.current.disconnect();
+
+    return () => {
+      wsClientRef.current.disconnect();
+    }
   }, []);
 
   useEffect(() => {

@@ -4,11 +4,11 @@ import {
   appRtkApiMiddleware, appRtkApiReducer,
   appRtkApiReducerPath, useClientLogger, type AppRtkHttpAdapterGeneratorProvider
 } from "@ig/engine-ui";
-import type { GetMinimalGameConfigsResponseT } from '@ig/games-models';
+import type { GetMinimalGameConfigsResponseT, GetMinimalGameConfigsResultT } from '@ig/games-models';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { gamesConfigRtkApiEndpoints, type GetMinimalGameConfigsResultT } from "./GamesConfigRtkApi";
+import { gamesConfigRtkApiEndpoints } from "./GamesConfigRtkApi";
 
 const apiUrl = 'https://api.test';
 
@@ -60,7 +60,6 @@ describe('GamesConfigRtkApi', () => {
     const result = await store.dispatch(
       gamesConfigRtkApiEndpoints.getMinimalGameConfigs.initiate()
     );
-    console.log(result)
     const response: GetMinimalGameConfigsResultT | undefined = result.data;
 
     if (response === undefined) {

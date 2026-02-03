@@ -18,6 +18,7 @@
     "cover:unit": "npm run test:unit -- --coverage"
   },
   "dependencies": {
+    "@ig/auth-ui": "*",
     "@ig/client-utils": "*",
     "@ig/engine-models": "*",
     "@ig/engine-ui": "*",

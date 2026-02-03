@@ -1,5 +1,6 @@
 
-import { useAppConfig, useClientLogger, useGenericStyles } from "@ig/engine-ui";
+import { useAuth } from '@ig/auth-ui';
+import { useClientLogger, useGenericStyles } from "@ig/engine-ui";
 import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from '@ig/games-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from "@ig/rnui";
 import React, { type FC } from 'react';
@@ -19,7 +20,7 @@ export type GameInstanceViewPropsT = TestableComponentT & {
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { playerExposedInfos } = gameInstanceExposedInfo;
-  const { curUserId } = useAppConfig();
+  const { curUserId } = useAuth();
   const gameConfig = gameInstanceExposedInfo.gameConfig;
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();

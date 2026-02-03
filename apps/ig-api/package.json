@@ -25,7 +25,10 @@
     "pm2:start:dev": "npm run 'pm2:start' -- 'ig-api:dev'"
   },
   "dependencies": {
+    "@ig/auth-api": "*",
+    "@ig/engine-db": "*",
     "@ig/games-api": "*",
+    "@ig/games-db": "*",
     "@ig/games-be-models": "*",
     "@ig/lib": "*",
     "dotenv": "^16.6.1",

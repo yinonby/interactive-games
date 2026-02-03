@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
+    "@ig/auth-ui": "*",
     "@ig/engine-ui": "*",
     "@ig/games-ui": "*",
     "@ig/games-ui-models": "*",

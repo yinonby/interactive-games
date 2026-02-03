@@ -1,5 +1,10 @@
 
 // get::app-config
-export type GetAppConfigResponseT = {
+
+export type AppConfigT = {
   version: string,
+}
+
+export type GetAppConfigResponseT = {
+  appConfig: AppConfigT
 }

@@ -16,7 +16,8 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-const appConfigResponse: GetAppConfigResponseT = { version: "1.0.0" };
+const appConfigResponse: GetAppConfigResponseT = { appConfig: { version: '1.0.0' }} as GetAppConfigResponseT;
+
 export const server = setupServer(
   http.get(apiUrl + '/app-config', () => {
     return HttpResponse.json(appConfigResponse);

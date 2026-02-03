@@ -1,5 +1,6 @@
 
-import { __engineAppUiMocks, type AppConfigContextT } from '@ig/engine-ui';
+import { __authUiMocks } from '@ig/auth-ui';
+import { __engineAppUiMocks } from '@ig/engine-ui';
 import type { GameInstanceExposedInfoT } from '@ig/games-models';
 import { buildTestGameConfig, buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/games-models/test-utils';
 import { render } from '@testing-library/react-native';
@@ -54,13 +55,14 @@ jest.mock('../../common/ChatView', () => {
 });
 
 describe('GameInstanceView', () => {
-  const { useAppConfigMock, loggerErrorMock } = __engineAppUiMocks;
+  const { loggerErrorMock } = __engineAppUiMocks;
+  const { useAuthMock } = __authUiMocks;
 
   // mock curUserId
   const curUserIdMock = 'userIdMock';
-  useAppConfigMock.mockReturnValue({
+  useAuthMock.mockReturnValue({
     curUserId: curUserIdMock,
-  } as AppConfigContextT);
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -79,7 +81,7 @@ describe('GameInstanceView', () => {
       <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
     );
 
-    expect(useAppConfigMock).toHaveBeenCalled();
+    expect(useAuthMock).toHaveBeenCalled();
     expect(loggerErrorMock).toHaveBeenCalled();
     expect(queryByTestId('container-tid')).toBeNull();
   });
@@ -100,7 +102,7 @@ describe('GameInstanceView', () => {
       <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
     );
 
-    expect(useAppConfigMock).toHaveBeenCalled();
+    expect(useAuthMock).toHaveBeenCalled();
     expect(loggerErrorMock).not.toHaveBeenCalled();
     getByTestId('container-tid');
     const card = getByTestId('GameImageCard-tid');

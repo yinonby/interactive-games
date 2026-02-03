@@ -2,7 +2,8 @@
 import { useGameTheme, useImageAssetDefs } from "@/src/utils/AssetDefs";
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from "@/src/utils/GameUiConfig";
 import { getI18nResources } from "@/src/utils/TranslationsAssetDefs";
-import { AppRootLayout, initI18n } from "@ig/engine-ui";
+import { AuthProvider } from '@ig/auth-ui';
+import { AppRootLayout, initI18n, useAppErrorHandling, useClientLogger } from "@ig/engine-ui";
 import { handleGamesWebSocketMessage } from "@ig/games-ui";
 import { Stack } from "expo-router";
 
@@ -20,6 +21,24 @@ export default function RootLayout() {
       gamesUiUrlPathsAdapter={useGamesUiUrlPathsAdapter()}
       appWebSocketMsgHandlers={[handleGamesWebSocketMessage]}
     >
+      <InnerLayout/>
+    </AppRootLayout>
+  )
+}
+
+// AuthProvider depends on AppRootLayout for:
+// - redux
+// - useClientLogger
+// - useAppErrorHandling
+function InnerLayout() {
+  const logger = useClientLogger();
+  const { onUnknownError } = useAppErrorHandling();
+
+  return (
+    <AuthProvider
+      logger={logger}
+      onUnknownError={onUnknownError}
+    >
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Game & More' }} />
         <Stack.Screen name="app/games/index" options={{ title: 'Game & More / Games' }} />
@@ -28,6 +47,6 @@ export default function RootLayout() {
         <Stack.Screen name="app/games/[gameConfigId]/dashboard" options={{ title: 'Game & More / Your Games' }} />
         <Stack.Screen name="app/games/instance/[gameInstanceId]/dashboard" options={{ title: 'Game & More / Game Dashboard' }} />
       </Stack>
-    </AppRootLayout>
+    </AuthProvider>
   )
 }

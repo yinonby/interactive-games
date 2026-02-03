@@ -1,19 +1,43 @@
 /* istanbul ignore file -- @preserve */
 
-import type { ExpressAppStarterInfoT, ExpressPluginContainerT } from '@ig/be-lib';
+import { type AuthPluginConfigT, authApiPlugin } from '@ig/auth-api';
+import type { ExpressAppStarterInfoT, ExpressPluginContainerT, JwtAlgorithmT } from '@ig/be-lib';
+import { EngineMongoDb } from '@ig/engine-db';
 import { gamesApiPlugin } from '@ig/games-api';
 import type { GamesDbAdapter } from '@ig/games-be-models';
 import { GamesMongoDb } from '@ig/games-db';
-import { getEnvVarInt, getEnvVarStr } from '@ig/lib';
+import { DAYS_TO_MS, getEnvVarInt, getEnvVarStr } from '@ig/lib';
+import { useAppApiPlugin } from './AppApiPlugin';
 import { loadGameConfigPreset1 } from './presets/GameConfigsPreset';
-
-const isDevel = (): boolean => process.env.NODE_ENV === 'development';
+import { isDevel } from './Utils';
 
 export const useExpressAppStarterInfo = (): ExpressAppStarterInfoT => {
   const listerPort: number = getEnvVarInt('IG_API__APP_LISTEN_PORT');
   const appUrl: string = getEnvVarStr('IG_API__APP_URL');
-
+  const baseDomain = getEnvVarStr('IG_API__BASE_DOMAIN');
+  const jwtSecret = getEnvVarStr('IG_API__AUTH_JWT_SECRET');
+  const jwtAlgorithm = getEnvVarStr('IG_API__AUTH_JWT_ALGORITHM');
+  const jwtExpiresInDays = getEnvVarInt('IG_API__AUTH_JWT_EXPIRY_DAYS');
   const corsAllowOrigins: string[] | undefined = [appUrl];
+
+  const appPluginContainer: ExpressPluginContainerT<unknown> = {
+    route: '/api',
+    expressPlugin: useAppApiPlugin(),
+  }
+
+  const authPluginContainer: ExpressPluginContainerT<unknown, AuthPluginConfigT> = {
+    getDbAdapterCb: () => new EngineMongoDb(),
+    route: '/api/auth',
+    expressPlugin: authApiPlugin,
+    pluginConfig: {
+      jwtSecret: jwtSecret,
+      jwtAlgorithm: jwtAlgorithm as JwtAlgorithmT,
+      jwtExpiresInMs: DAYS_TO_MS(jwtExpiresInDays),
+      jwtCookieDomain: baseDomain,
+      jwtCookieIsSecure: !isDevel(),
+    },
+  }
+
   const gamesPluginContainer: ExpressPluginContainerT<GamesDbAdapter> = {
     getDbAdapterCb: () => new GamesMongoDb(),
     route: '/api/games',
@@ -32,6 +56,8 @@ export const useExpressAppStarterInfo = (): ExpressAppStarterInfoT => {
       tableNamePrefix: '',
     },
     expressPluginContainers: [
+      appPluginContainer as ExpressPluginContainerT<unknown>,
+      authPluginContainer as ExpressPluginContainerT<unknown>,
       gamesPluginContainer as ExpressPluginContainerT<unknown>,
     ],
   }

@@ -1,6 +1,5 @@
 
 import type { HttpAdapter, HttpMethod } from '@ig/client-utils';
-import type { GetAppConfigResponseT } from '@ig/engine-models';
 import {
   type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
@@ -145,12 +144,7 @@ export class ApiServerMock implements HttpAdapter {
   }): Promise<TResponse> {
     this.logger.debug('Mock API Dev Server: request url', this.apiUrl + options.url);
 
-    if (options.url === '/app-config') {
-      const response: GetAppConfigResponseT = {
-        version: '1.0.0',
-      }
-      return response as TResponse;
-    } else if (options.url === '/games/user-config') {
+    if (options.url === '/games/user-config') {
       const gamesUserConfig: GamesUserConfigT = {
         joinedGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
       }

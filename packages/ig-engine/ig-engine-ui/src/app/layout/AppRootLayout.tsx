@@ -34,20 +34,20 @@ export const AppRootLayout: React.FC<AppRootLayoutPropsT> = (props) => {
       <AppLocalizationProvider>
         {/* AppErrorHandlingProvider depends on RnuiProvider::RnuiSnackbarProvider and AppLocalizationProvider */}
         <AppErrorHandlingProvider testID='AppErrorHandlingProvider-tid'>
-          <AppConfigProvider
-            imagesSourceMap={imagesSourceMap}
-            gameUiConfig={gameUiConfig}
-            gamesUiUrlPathsAdapter={gamesUiUrlPathsAdapter}
-          >
-            <ReduxProvider store={reduxStore}>
+          <ReduxProvider store={reduxStore}>
+            <AppConfigProvider
+              imagesSourceMap={imagesSourceMap}
+              gameUiConfig={gameUiConfig}
+              gamesUiUrlPathsAdapter={gamesUiUrlPathsAdapter}
+            >
               {/* AppWebSocketProvider depends on AppConfigProvider and ReduxProvider */}
               <AppWebSocketProvider appWebSocketMsgHandlers={appWebSocketMsgHandlers}>
                 <View style={styles.container} testID="gameLayoutWrapper-tid" >
                   {children}
                 </View>
               </AppWebSocketProvider>
-            </ReduxProvider>
-          </AppConfigProvider>
+            </AppConfigProvider>
+          </ReduxProvider>
         </AppErrorHandlingProvider>
       </AppLocalizationProvider>
     </RnuiProvider>
