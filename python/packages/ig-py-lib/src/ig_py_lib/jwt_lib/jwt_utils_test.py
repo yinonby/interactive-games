@@ -1,4 +1,3 @@
-# tests/test_auth_token_manager.py
 import pytest
 import jwt
 from ig_py_lib import JwtUtils

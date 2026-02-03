@@ -14,7 +14,11 @@
   "author": "",
   "type": "module",
   "scripts": {
+    "start": "npm run start:dev",
+    "start:dev": "./scripts/new-python/run-all-dev.sh",
+
     "test": "npm run husky:verify:setup && ./scripts/python/run-all-tests.py",
+
     "cover:report": "npm run cover:report:produce && npm run cover:report:open",
     "cover:report:produce": "npm run cover:report:produce:npm && npm run cover:report:produce:py",
     "cover:report:produce:npm": "./scripts/python/produce-coverage-report.py",
@@ -22,10 +26,12 @@
     "cover:report:open": "npm run cover:report:open:npm && npm run cover:report:open:py",
     "cover:report:open:npm": "./scripts/python/open-coverage-report.py",
     "cover:report:open:py": "./scripts/new-python/open-py-coverage-report.py",
+
     "reinstall": "npm run clean && npm install",
     "clean": "npm run clean:modules && npm run clean:lock",
     "clean:modules": "for x in $(find . -name node_modules); do rm -rf $x; done",
     "clean:lock": "rm package-lock.json",
+
     "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
     "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",
     "husky:verify:configured": "[ -f \".husky/pre-push\" ]",

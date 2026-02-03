@@ -2,9 +2,12 @@ from abc import ABC, abstractmethod
 
 import websockets
 
+from ig_py_lib.log_lib.logger import PyLogger
+
 
 class WebSocketServer(ABC):
     def __init__(self, ws_server_listen_ip_addr: str, ws_server_listen_port: int):
+        self.logger: PyLogger = PyLogger()
         self.ws_server_listen_ip_addr = ws_server_listen_ip_addr
         self.ws_server_listen_port = ws_server_listen_port
 
@@ -15,7 +18,7 @@ class WebSocketServer(ABC):
         pass
 
     async def start_loop(self) -> None:
-        print(
+        self.logger.log(
             f"WebSocket server starting on {self.ws_server_listen_ip_addr}:{self.ws_server_listen_port}..."
         )
 
@@ -24,7 +27,7 @@ class WebSocketServer(ABC):
             host=self.ws_server_listen_ip_addr,
             port=self.ws_server_listen_port,
         )
-        print(
+        self.logger.log(
             f"WebSocket server listening on {self.ws_server_listen_ip_addr}:{self.ws_server_listen_port}..."
         )
 

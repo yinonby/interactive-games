@@ -2,7 +2,7 @@
 import asyncio
 from collections.abc import Sequence
 
-from ig_py_lib import InterProcessComm
+from ig_py_lib import InterProcessComm, PyLogger
 
 from .app_auth_token_manager import AppAuthTokenManager
 from .app_redis_client import AppRedisClient
@@ -20,6 +20,7 @@ class AppWebSocketProgram:
         ws_server_listen_ip_addr: str,
         ws_server_listen_port: int,
     ):
+        self.logger: PyLogger = PyLogger()
         self.auth_token_manager: AppAuthTokenManager = AppAuthTokenManager(
             jwt_secret=jwt_secret, jwt_algorithms=jwt_algorithms
         )
@@ -49,9 +50,9 @@ class AppWebSocketProgram:
 
         for task in done:
             if task.exception():  # check if it raised an exception
-                print(f"Task {task.get_name()} raised: {task.exception()}")
+                self.logger.warn(f"Task {task.get_name()} raised: {task.exception()}")
             else:
-                print(f"Task {task.get_name()} returned: {task.result()}")
+                self.logger.warn(f"Task {task.get_name()} returned: {task.result()}")
 
         for task in pending:
             task.cancel()
