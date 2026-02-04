@@ -15,17 +15,18 @@
   "type": "module",
   "scripts": {
     "start": "npm run start:dev",
-    "start:dev": "./scripts/new-python/run-all-dev.sh",
+    "start:dev": "./scripts/python/src/start/start-all-dev.sh",
 
-    "test": "npm run husky:verify:setup && ./scripts/python/run-all-tests.py",
+    "test": "npm run husky:verify:setup && npm run test:all",
+    "test:all": "./scripts/python/src/test/test-all.py",
 
     "cover:report": "npm run cover:report:produce && npm run cover:report:open",
     "cover:report:produce": "npm run cover:report:produce:npm && npm run cover:report:produce:py",
-    "cover:report:produce:npm": "./scripts/python/produce-coverage-report.py",
-    "cover:report:produce:py": "./scripts/new-python/produce-py-coverage-report.sh",
+    "cover:report:produce:npm": "./scripts/python/src/coverage/npm/produce-coverage-report.py",
+    "cover:report:produce:py": "./scripts/python/src/coverage/py/produce-py-coverage-report.sh",
     "cover:report:open": "npm run cover:report:open:npm && npm run cover:report:open:py",
-    "cover:report:open:npm": "./scripts/python/open-coverage-report.py",
-    "cover:report:open:py": "./scripts/new-python/open-py-coverage-report.py",
+    "cover:report:open:npm": "./scripts/python/src/coverage/npm/open-coverage-report.py",
+    "cover:report:open:py": "./scripts/python/src/coverage/py/open-py-coverage-report.py",
 
     "reinstall": "npm run clean && npm install",
     "clean": "npm run clean:modules && npm run clean:lock",
