@@ -1,7 +1,7 @@
 
 import type { AuthPluginConfigT } from '@/types/AuthPluginTypes';
-import type { ExpressAppInfoT } from '@ig/be-lib';
-import type { EngineDbAdapter } from '@ig/engine-be-models';
+import type { EngineDbAdapter } from '@ig/app-engine-be-models';
+import type { ExpressAppInfoT } from '@ig/be-utils';
 import type { Router } from 'express';
 import * as graphqlModule from '../graphql/server/GraphqlRouter';
 import { authApiPlugin } from './AuthExpressPlugin';

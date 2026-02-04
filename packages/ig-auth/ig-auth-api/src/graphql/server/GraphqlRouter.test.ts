@@ -1,5 +1,5 @@
 
-import type { EngineDbAdapter } from '@ig/engine-be-models';
+import type { EngineDbAdapter } from '@ig/app-engine-be-models';
 import express from 'express';
 import request from 'supertest';
 import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';

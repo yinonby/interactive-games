@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/engine-models';
+import type { UserIdT } from '@ig/app-engine-models';
 import { useStorage } from '@ig/platform-ui';
 
 // local user id utils

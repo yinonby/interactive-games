@@ -1,6 +1,6 @@
 
-import type { GameUiConfigT, GamesUiUrlPathsAdapter } from "@ig/engine-ui";
-import type { RnuiStylesT } from "@ig/rnui";
+import type { GameUiConfigT, GamesUiUrlPathsAdapter } from '@ig/app-engine-ui';
+import type { RnuiStylesT } from '@ig/rnui';
 import Constants from 'expo-constants';
 
 const getEnvVar = (envVarName: string): string => {

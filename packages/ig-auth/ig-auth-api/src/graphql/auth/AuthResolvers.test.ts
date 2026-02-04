@@ -1,7 +1,7 @@
 
+import type { UserIdT } from '@ig/app-engine-models';
 import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import type { EmailLoginInputT, EmailLoginResultDataT, GuestLoginResultDataT } from '@ig/auth-models';
-import type { UserIdT } from '@ig/engine-models';
 import { createAuthResolvers } from './AuthResolvers';
 
 describe('GameConfigResolvers', () => {

@@ -1,11 +1,11 @@
 /* istanbul ignore file -- @preserve */
 
-import { GameConfigLogic } from '@ig/games-api/src/logic/game-config/GameConfigLogic';
-import type { GameConfigLogicAdapter, GamesDbAdapter } from '@ig/games-be-models';
+import { GameConfigLogic } from '@ig/games-engine-api/src/logic/game-config/GameConfigLogic';
+import type { GameConfigLogicAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
 import type {
   GameConfigT
-} from '@ig/games-models';
-import { MIN_TO_MS } from '@ig/lib';
+} from '@ig/games-engine-models';
+import { MIN_TO_MS } from '@ig/utils';
 
 export const loadGameConfigPreset1 = async (gamesDbAdapter: GamesDbAdapter): Promise<void> => {
   const gameConfigLogicAdapter: GameConfigLogicAdapter = new GameConfigLogic(gamesDbAdapter.getGameConfigsTableAdapter());

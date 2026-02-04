@@ -1,5 +1,5 @@
 
-import type { JwtAlgorithmT } from '@ig/be-lib';
+import type { JwtAlgorithmT } from '@ig/be-utils';
 import type { Request, Response } from 'express';
 
 export type AuthPluginConfigT = {

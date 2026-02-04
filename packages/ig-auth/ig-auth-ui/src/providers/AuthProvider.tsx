@@ -1,9 +1,7 @@
 
-import type { UserIdT } from '@ig/engine-models';
-import type { LoggerAdapter } from '@ig/lib';
-import {
-  RnuiActivityIndicator
-} from "@ig/rnui";
+import type { UserIdT } from '@ig/app-engine-models';
+import { RnuiActivityIndicator } from '@ig/rnui';
+import type { LoggerAdapter } from '@ig/utils';
 import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useAuthController } from '../model/controllers/user-actions/AuthController';
 import { getLocalUserId, setLocalUserId } from './AuthUtils';
