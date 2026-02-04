@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "@ig/auth-api": "*",
-    "@ig/engine-db": "*",
-    "@ig/games-api": "*",
-    "@ig/games-db": "*",
-    "@ig/games-be-models": "*",
-    "@ig/lib": "*",
+    "@ig/app-engine-db": "*",
+    "@ig/games-engine-api": "*",
+    "@ig/games-engine-db": "*",
+    "@ig/games-engine-be-models": "*",
+    "@ig/utils": "*",
     "dotenv": "^16.6.1",
     "express": "^5.2.1"
   },

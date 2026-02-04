@@ -1,7 +1,7 @@
 /* istanbul ignore file -- @preserve */
 
-import type { ExpressAppInfoT, ExpressPluginT } from '@ig/be-lib';
-import type { GetAppConfigResponseT } from '@ig/engine-models';
+import type { GetAppConfigResponseT } from '@ig/app-engine-models';
+import type { ExpressAppInfoT, ExpressPluginT } from '@ig/be-utils';
 import { Router, type Request, type Response } from 'express';
 
 export const useAppApiPlugin = (): ExpressPluginT<unknown> => {

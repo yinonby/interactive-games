@@ -22,9 +22,9 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@ig/auth-ui": "*",
-    "@ig/engine-ui": "*",
-    "@ig/games-ui": "*",
-    "@ig/games-ui-models": "*",
+    "@ig/app-engine-ui": "*",
+    "@ig/games-engine-ui": "*",
+    "@ig/games-engine-ui-models": "*",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",

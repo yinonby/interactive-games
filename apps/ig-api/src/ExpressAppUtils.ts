@@ -1,12 +1,12 @@
 /* istanbul ignore file -- @preserve */
 
+import { EngineMongoDb } from '@ig/app-engine-db';
 import { type AuthPluginConfigT, authApiPlugin } from '@ig/auth-api';
-import type { ExpressAppStarterInfoT, ExpressPluginContainerT, JwtAlgorithmT } from '@ig/be-lib';
-import { EngineMongoDb } from '@ig/engine-db';
-import { gamesApiPlugin } from '@ig/games-api';
-import type { GamesDbAdapter } from '@ig/games-be-models';
-import { GamesMongoDb } from '@ig/games-db';
-import { DAYS_TO_MS, getEnvVarInt, getEnvVarStr } from '@ig/lib';
+import type { ExpressAppStarterInfoT, ExpressPluginContainerT, JwtAlgorithmT } from '@ig/be-utils';
+import { gamesApiPlugin } from '@ig/games-engine-api';
+import type { GamesDbAdapter } from '@ig/games-engine-be-models';
+import { GamesMongoDb } from '@ig/games-engine-db';
+import { DAYS_TO_MS, getEnvVarInt, getEnvVarStr } from '@ig/utils';
 import { useAppApiPlugin } from './AppApiPlugin';
 import { loadGameConfigPreset1 } from './presets/GameConfigsPreset';
 import { isDevel } from './Utils';

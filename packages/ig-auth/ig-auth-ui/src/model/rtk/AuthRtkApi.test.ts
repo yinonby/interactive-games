@@ -1,7 +1,7 @@
 
+import { useClientLogger, type AppRtkHttpAdapterGeneratorProvider } from '@ig/app-engine-ui';
 import type { GuestLoginResponseT, GuestLoginResultT } from '@ig/auth-models';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
-import { useClientLogger, type AppRtkHttpAdapterGeneratorProvider } from '@ig/engine-ui';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';

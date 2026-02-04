@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "allowImportingTsExtensions": true,
+    "types": ["vitest/globals"],
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@ig/games-engine-models/test-utils": ["../ig-games-engine-models/test/test-index.ts"],
+    }
+  },
+}

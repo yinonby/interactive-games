@@ -24,10 +24,9 @@
     "@graphql-tools/schema": "^10.0.31",
     "@ig/auth-be-models": "*",
     "@ig/auth-models": "*",
-    "@ig/be-lib": "*",
-    "@ig/engine-be-models": "*",
-    "@ig/engine-db": "*",
-    "@ig/lib": "*",
+    "@ig/be-utils": "*",
+    "@ig/app-engine-be-models": "*",
+    "@ig/utils": "*",
     "express": "^5.2.1",
     "graphql": "^16.12.0"
   },

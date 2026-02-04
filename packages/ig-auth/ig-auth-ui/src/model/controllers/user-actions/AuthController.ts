@@ -1,6 +1,6 @@
 
-import type { UserIdT } from '@ig/engine-models';
-import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/engine-ui';
+import type { UserIdT } from '@ig/app-engine-models';
+import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/app-engine-ui';
 import { useGuestLoginMutation } from '../../rtk/AuthRtkApi';
 
 export type AuthControllerT = {

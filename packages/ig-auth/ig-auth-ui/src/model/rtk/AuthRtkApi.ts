@@ -1,6 +1,6 @@
 
+import { appRtkApi } from '@ig/app-engine-ui';
 import { guestLoginMutation, type GuestLoginResultT } from '@ig/auth-models';
-import { appRtkApi } from "@ig/engine-ui";
 
 export const authRtkApi = appRtkApi.injectEndpoints({
   endpoints: builder => ({

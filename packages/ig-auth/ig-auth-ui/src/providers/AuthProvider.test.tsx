@@ -1,5 +1,5 @@
 
-import type { LoggerAdapter } from '@ig/lib';
+import type { LoggerAdapter } from '@ig/utils';
 import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from 'react-native';

@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@ig/auth-models": "*",
-    "@ig/engine-models": "*",
-    "@ig/lib": "*",
+    "@ig/app-engine-models": "*",
+    "@ig/utils": "*",
     "express": "^5.2.1"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 
+import type { UsersTableAdapter } from '@ig/app-engine-be-models';
 import type { EmailLoginInputT } from '@ig/auth-models';
-import { CookieUtils, type JwtAlgorithmT } from '@ig/be-lib';
-import type { UsersTableAdapter } from '@ig/engine-be-models';
-import * as IgLib from '@ig/lib';
+import { CookieUtils, type JwtAlgorithmT } from '@ig/be-utils';
+import * as IgLib from '@ig/utils';
 import { type Response } from 'express';
 import { AuthLogic } from './AuthLogic';
 

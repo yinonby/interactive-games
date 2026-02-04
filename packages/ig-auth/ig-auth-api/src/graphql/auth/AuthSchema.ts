@@ -1,9 +1,9 @@
 
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import type { EngineDbAdapter } from '@ig/app-engine-be-models';
 import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import { authGraphqlTypeDefs } from '@ig/auth-models';
-import type { EngineDbAdapter } from '@ig/engine-be-models';
 import type { GraphQLSchema } from 'graphql';
 import { AuthLogic } from '../../logic/auth/AuthLogic';
 import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';

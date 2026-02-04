@@ -1,11 +1,11 @@
 
 import type {
   AppErrorCodeT, CommonTranslationKeyT,
-} from "@ig/engine-ui";
-import type { GamesTranslationKeyT } from '@ig/games-ui-models';
-import enCommonTranslationsJson from "../../assets/translations/en/common.json";
-import enErrosTranslationsJson from "../../assets/translations/en/errors.json";
-import enGamesTranslationsJson from "../../assets/translations/en/games.json";
+} from '@ig/app-engine-ui';
+import type { GamesTranslationKeyT } from '@ig/games-engine-ui-models';
+import enCommonTranslationsJson from '../../assets/translations/en/common.json';
+import enErrosTranslationsJson from '../../assets/translations/en/errors.json';
+import enGamesTranslationsJson from '../../assets/translations/en/games.json';
 
 type ExpandKeyT<K extends string> =
   K extends `${infer A}:${infer B}`
