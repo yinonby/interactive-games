@@ -38,7 +38,7 @@ def stream_logs(fd, prefix):
 
 def run():
     # Setup root path relative to script location
-    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
     processes = []
 
     try:
