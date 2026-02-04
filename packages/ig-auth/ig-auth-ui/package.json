@@ -20,8 +20,8 @@
   "dependencies": {
     "@ig/auth-models": "*",
     "@ig/client-utils": "*",
-    "@ig/engine-models": "*",
-    "@ig/engine-ui": "*",
+    "@ig/app-engine-models": "*",
+    "@ig/app-engine-ui": "*",
     "@ig/rnui": "*",
     "@reduxjs/toolkit": "^2.11.2",
     "dotenv": "^16.4.7",

@@ -1,3 +1,3 @@
 
-export * from "./src/logic/AuthLogicTypes";
+export * from './src/logic/AuthLogicTypes';
 

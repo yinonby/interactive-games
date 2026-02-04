@@ -1,7 +1,7 @@
 
 import { ApolloServer } from '@apollo/server';
+import type { EngineDbAdapter, UsersTableAdapter } from '@ig/app-engine-be-models';
 import { healthQuery, type HealthQuryResultT } from '@ig/auth-models';
-import type { EngineDbAdapter, UsersTableAdapter } from '@ig/engine-be-models';
 import type { Request, Response } from 'express';
 import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from './AuthSchema';

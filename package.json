@@ -43,11 +43,13 @@
   "workspaces": [
     "packages/*",
     "packages/ig-lib/*",
-    "packages/ig-dev-lib/*",
-    "packages/ig-ui/*",
-    "packages/ig-engine/*",
+    "packages/ig-lib/ig-dev-lib/*",
+    "packages/ig-lib/ig-client-lib/*",
+    "packages/ig-lib/ig-be-lib/*",
+    "packages/ig-ui-lib/*",
     "packages/ig-auth/*",
-    "packages/ig-games/*",
+    "packages/ig-app-engine/*",
+    "packages/ig-games/ig-games-engine/*",
     "apps/*"
   ],
   "devDependencies": {

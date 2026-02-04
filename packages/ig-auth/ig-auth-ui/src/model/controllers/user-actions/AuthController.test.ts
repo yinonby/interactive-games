@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/engine-models';
+import type { UserIdT } from '@ig/app-engine-models';
 import { renderHook } from '@testing-library/react-native';
 import * as AuthRtkApi from '../../rtk/AuthRtkApi';
 import { useAuthController } from './AuthController';

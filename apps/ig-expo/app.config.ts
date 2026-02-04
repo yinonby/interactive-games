@@ -1,6 +1,6 @@
 
-import dotenv from "dotenv";
-import type { ConfigContext, ExpoConfig } from "expo/config";
+import dotenv from 'dotenv';
+import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 dotenv.config({ override: true, path: ".env.ig-expo" }); // load env file
 dotenv.config({ override: true, path: `.env.ig-expo.${process.env.NODE_ENV}` }); // load env-specific env file

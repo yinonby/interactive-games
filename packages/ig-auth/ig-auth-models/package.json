@@ -19,7 +19,7 @@
     "cover:unit": "npm run test:unit -- run --coverage"
   },
   "dependencies": {
-    "@ig/lib": "*"
+    "@ig/utils": "*"
   },
   "devDependencies": {
     "@ig/lint": "*",

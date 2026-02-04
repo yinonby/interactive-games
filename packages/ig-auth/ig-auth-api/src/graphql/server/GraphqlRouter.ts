@@ -2,7 +2,7 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import { mergeSchemas } from '@graphql-tools/schema';
-import type { EngineDbAdapter } from '@ig/engine-be-models';
+import type { EngineDbAdapter } from '@ig/app-engine-be-models';
 import { Router } from 'express';
 import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from '../auth/AuthSchema';
