@@ -32,7 +32,7 @@ export const GameInstanceSummaryView: FC<GameInstanceSummaryViewPropsT> = (props
   }
 
   return (
-    <View style={genericStyles.verticalSpacing}>
+    <View style={genericStyles.spacing}>
       <GameStatusView
         testID="GameStatusView-tid"
         gameStatus={gameInstanceModelData.gameInstanceExposedInfo.gameState.gameStatus}

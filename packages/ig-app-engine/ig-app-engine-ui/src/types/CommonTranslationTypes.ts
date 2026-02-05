@@ -16,6 +16,10 @@ export type CommonTranslationKeyT =
   | "common:copyLink"
   | "common:share"
   | "common:you"
+  | "common:submit"
+  | "common:solution"
+  | "common:solutionCorrect"
+  | "common:solutionIncorrect"
 ;
 
-export type AppTranslationKeyT = CommonTranslationKeyT | GamesTranslationKeyT | AppErrorCodeT;
+export type AppTranslationKeyT = AppErrorCodeT | CommonTranslationKeyT | GamesTranslationKeyT;

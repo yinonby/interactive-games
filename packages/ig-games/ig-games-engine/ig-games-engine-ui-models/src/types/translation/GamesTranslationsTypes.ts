@@ -26,6 +26,8 @@ export type GamesTranslationKeyT =
   | 'games:playerStatusInvited'
   | 'games:playerStatusActive'
   | 'games:playerStatusSuspended'
+  | 'games:wordle'
+  | 'games:guessesLeft'
 ;
 
 export const playerRoleToTranslationKey: Record<PlayerRoleT, GamesTranslationKeyT> = {

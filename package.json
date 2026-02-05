@@ -51,6 +51,7 @@
     "packages/ig-auth/*",
     "packages/ig-app-engine/*",
     "packages/ig-games/ig-games-engine/*",
+    "packages/ig-games/ig-games-wordle/*",
     "apps/*"
   ],
   "devDependencies": {

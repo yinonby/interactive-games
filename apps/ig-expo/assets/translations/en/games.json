@@ -23,5 +23,10 @@
   "playerRolePlayer": "Player",
   "playerStatusInvited": "Invited",
   "playerStatusActive": "Active",
-  "playerStatusSuspended": "Suspended"
+  "playerStatusSuspended": "Suspended",
+  "wordle": "Wordle",
+  "guessesLeft": "",
+  "guessesLeft_zero": "No guesses left",
+  "guessesLeft_one": "{{count}} guess left",
+  "guessesLeft_other": "{{count}} guesses left"
 }

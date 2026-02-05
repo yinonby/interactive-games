@@ -34,7 +34,7 @@ const secretIslandGameConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const escapeRoomGameConfig: GameConfigT = {
@@ -49,7 +49,7 @@ const escapeRoomGameConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const wordleEnGameConfig: GameConfigT = {
@@ -64,7 +64,7 @@ const wordleEnGameConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const wordleEsGameConfig: GameConfigT = {
@@ -79,7 +79,7 @@ const wordleEsGameConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const wordleFrGameConfig: GameConfigT = {
@@ -94,6 +94,6 @@ const wordleFrGameConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 

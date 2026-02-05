@@ -4,6 +4,7 @@ export const initRnuiMocks = () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { Text, View } = require('react-native');
     const React = require('react');
+    const onShowSnackbarMock = jest.fn();
 
     const RnuiButton = (props: any) => {
       // Render a View wrapping the children in a Text
@@ -15,6 +16,7 @@ export const initRnuiMocks = () => {
     };
 
     return {
+      __esModule: true,
       RnuiText: Text,
       RnuiButton: RnuiButton,
       RnuiIconButton: View,
@@ -34,8 +36,17 @@ export const initRnuiMocks = () => {
       RnuiCopyToClipboard: View,
       RnuiQrCode: View,
       RnuiActivityIndicator: View,
-      useRnuiSnackbar: jest.fn(),
       RnuiErrorBoundary: View,
+      RnuiCodeInput: View,
+
+      useRnuiSnackbar: () => ({
+        onShowSnackbar: onShowSnackbarMock,
+      }),
+
+      // expose for tests
+      __rnuiMocks: {
+        onShowSnackbarMock,
+      },
     };
   });
 }

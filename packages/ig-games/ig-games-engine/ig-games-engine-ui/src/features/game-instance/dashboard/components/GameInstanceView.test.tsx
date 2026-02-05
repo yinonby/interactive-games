@@ -2,12 +2,21 @@
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { __authUiMocks } from '@ig/auth-ui';
 import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
-import { buildTestGameConfig, buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/games-engine-models/test-utils';
+import { buildTestGameConfig, buildTestGameInstanceExposedInfo, buildTestGameState, buildTestPlayerExposedInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { GameInstanceView } from './GameInstanceView';
 
 // mocks
+
+jest.mock('./InviteView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    InviteView: View,
+  };
+});
 
 jest.mock('../../../common/game-config/GameImageCard', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -27,12 +36,12 @@ jest.mock('./GameInstanceConfigSummaryView', () => {
   };
 });
 
-jest.mock('./InviteView', () => {
+jest.mock('./LevelsView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    InviteView: View,
+    LevelsView: View,
   };
 });
 
@@ -86,7 +95,7 @@ describe('GameInstanceView', () => {
     expect(queryByTestId('container-tid')).toBeNull();
   });
 
-  it('renders correctly, with InviteView for admin', () => {
+  it('renders correctly, with InviteView for admin and LevelsView when game is not notStarted', () => {
     // build gameInstanceExposedInfo
     const gameConfig = buildTestGameConfig({});
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
@@ -96,6 +105,9 @@ describe('GameInstanceView', () => {
         playerUserId: curUserIdMock,
         playerRole: 'admin',
       })],
+      gameState: buildTestGameState({
+        gameStatus: 'inProcess',
+      }),
     });
 
     const { getByTestId } = render(
@@ -104,17 +116,26 @@ describe('GameInstanceView', () => {
 
     expect(useAuthMock).toHaveBeenCalled();
     expect(loggerErrorMock).not.toHaveBeenCalled();
+
     getByTestId('container-tid');
-    const card = getByTestId('GameImageCard-tid');
-    expect(card.props.minimalGameConfig).toEqual(gameConfig)
-    expect(card.props.includeFreeLabel).toEqual(false)
-    getByTestId('GameInstanceConfigSummaryView-tid');
+
+    // first grid item
     getByTestId('InviteView-tid');
+
+    // second grid item
+    const card = getByTestId('GameImageCard-tid');
+    expect(card.props.minimalGameConfig).toEqual(gameConfig);
+    expect(card.props.includeFreeLabel).toEqual(false);
+
+    getByTestId('GameInstanceConfigSummaryView-tid');
+    getByTestId('LevelsView-tid');
+
+    // third grid item
     getByTestId('PlayersView-tid');
     getByTestId('ChatView-tid');
   });
 
-  it('renders correctly, without InviteView for non-admin', () => {
+  it('does not render InviteView for non-admin', () => {
     // build gameInstanceExposedInfo
     const gameConfig = buildTestGameConfig({});
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
@@ -124,6 +145,9 @@ describe('GameInstanceView', () => {
         playerUserId: curUserIdMock,
         playerRole: 'player',
       })],
+      gameState: buildTestGameState({
+        gameStatus: 'inProcess',
+      }),
     });
 
     const { queryByTestId } = render(
@@ -131,5 +155,27 @@ describe('GameInstanceView', () => {
     );
 
     expect(queryByTestId('InviteView-tid')).toBeNull();
+  });
+
+  it('does not render LevelsView when game is notStarted', () => {
+    // build gameInstanceExposedInfo
+    const gameConfig = buildTestGameConfig({});
+    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+      gameInstanceId: 'gid-1',
+      gameConfig: gameConfig,
+      playerExposedInfos: [buildTestPlayerExposedInfo({
+        playerUserId: curUserIdMock,
+        playerRole: 'admin',
+      })],
+      gameState: buildTestGameState({
+        gameStatus: 'notStarted',
+      }),
+    });
+
+    const { queryByTestId } = render(
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+    );
+
+    expect(queryByTestId('LevelsView-tid')).toBeNull();
   });
 });

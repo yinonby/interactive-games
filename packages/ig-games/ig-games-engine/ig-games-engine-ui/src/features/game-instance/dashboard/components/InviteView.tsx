@@ -27,26 +27,18 @@ export const InviteView: FC<InviteViewPropsT> = (props) => {
   return (
     <View>
       <View style={[genericStyles.flexRow]}>
-        <View style={genericStyles.spacingEnd}>
-          <RnuiText testID="invite-code-title-tid">{t("games:invitationCode") + ":"}</RnuiText>
-        </View>
+        <RnuiText testID="invite-code-title-tid">{t("games:invitationCode") + ":"}</RnuiText>
 
-        <View style={genericStyles.spacingEnd}>
-          <RnuiText testID="invite-code-tid" variant="titleSmall">{invitationCode}</RnuiText>
-        </View>
+        <RnuiText testID="invite-code-tid" variant="titleSmall">{invitationCode}</RnuiText>
 
-        <View style={genericStyles.spacingEnd}>
-          <RnuiCopyToClipboard testID="copy-to-clipboard-code-tid" copyText={invitationCode} size="xs" />
-        </View>
+        <RnuiCopyToClipboard testID="copy-to-clipboard-code-tid" copyText={invitationCode} size="xs" />
 
-        <View style={genericStyles.spacingEnd}>
-          <RnuiCopyToClipboard
-            testID="copy-to-clipboard-link-tid"
-            copyText={invitationUrl}
-            text={t("common:copyLink")}
-            size="xs"
-          />
-        </View>
+        <RnuiCopyToClipboard
+          testID="copy-to-clipboard-link-tid"
+          copyText={invitationUrl}
+          text={t("common:copyLink")}
+          size="xs"
+        />
 
         <RnuiButton testID="share-btn-tid" size="xs" onPress={handlePress} disabled={isSaturated}>
           {t("common:share")}
