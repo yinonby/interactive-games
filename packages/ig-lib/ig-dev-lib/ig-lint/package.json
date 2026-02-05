@@ -7,8 +7,8 @@
     "@eslint/js": "^9.15.0",
     "@typescript-eslint/eslint-plugin": "8.12.2",
     "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.5",
     "madge": "^8.0.0",
-    "typescript": "^5.6.3",
     "typescript-eslint": "^8.15.0"
   },
   "scripts": {
