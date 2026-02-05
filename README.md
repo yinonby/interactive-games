@@ -3,6 +3,8 @@
 
 **Games & More** is a **monorepo** designed to host multiple applications and shared packages in a single repository.
 
+<img src="./assets/images/game-play-wordle.png" alt="Wordle Game Play" height="300" />
+
 ---
 
 ### Monorepo Structure
