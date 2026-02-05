@@ -1,24 +1,28 @@
 
 import {
-    type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
-    type GameInstanceExposedInfoT, type GameInstanceIdT,
-    type GamesUserConfigT,
-    type GetGameInstanceChatResponseT,
-    type GetGameInstanceResponseT,
-    type GetGamesUserConfigResponseT,
-    type PostGameInstanceChatMessageParamsT,
-    type PostGameInstanceChatMessageResponseT,
-    type PostGameInstanceStartResponseT
+  type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
+  type GameInstanceExposedInfoT, type GameInstanceIdT,
+  type GamesUserConfigT,
+  type GetGameInstanceChatResponseT,
+  type GetGameInstanceResponseT,
+  type GetGamesUserConfigResponseT,
+  type LevelExposedConfigT,
+  type LevelStateT,
+  type PostGameInstanceChatMessageParamsT,
+  type PostGameInstanceChatMessageResponseT,
+  type PostGameInstanceStartResponseT,
+  type PostGameInstanceSubmitGuessResponseT
 } from '@ig/games-engine-models';
+import type { LetterAnalysisT } from '@ig/games-wordle-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
 import type { HttpAdapter, HttpMethod } from '../../../../ig-lib/ig-client-lib/ig-client-utils';
 import { getLocalUserId } from '../../src/app/layout/AppConfigUtils';
 import { useClientLogger } from '../../src/app/providers/useClientLogger';
 import {
-    devAllGameConfigs,
-    devAllGameInstanceExposedInfos,
-    devChatMessages,
-    devJoinedGameConfigs
+  devAllGameConfigs,
+  devAllGameInstanceExposedInfos,
+  devChatMessages,
+  devJoinedGameConfigs
 } from './DevMocks';
 
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
@@ -85,13 +89,34 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  devAllGameInstanceExposedInfos.push({
+  const levelConfigTolevelState = (levelConfig: LevelExposedConfigT): LevelStateT | null => {
+    if (levelConfig.kind === 'wordle') {
+      const levelState: LevelStateT = {
+        levelStatus: 'notStarted',
+        kind: 'wordle',
+        wordleExposedConfig: levelConfig.wordleExposedConfig,
+        wordleState: {
+          guessDatas: [],
+        },
+      }
+
+      return levelState;
+    } else {
+      return null;
+    }
+  }
+
+  const levelStates: LevelStateT[] = joinedGameConfig.levelExposedConfigs
+    .map(e => levelConfigTolevelState(e))
+    .filter(e => e !== null);
+
+  const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
     gameInstanceId: gameInstanceId,
     invitationCode: 'invt-code-' + gameInstanceId,
     gameConfig: joinedGameConfig,
     gameState: {
       gameStatus: 'notStarted',
-      levelStates: [],
+      levelStates: levelStates,
     },
     playerExposedInfos: [{
       playerUserId: curUserId,
@@ -99,7 +124,9 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
       playerRole: 'admin',
       playerStatus: 'active',
     }],
-  });
+  }
+
+  devAllGameInstanceExposedInfos.push(gameInstanceExposedInfo);
 
   return gameInstanceId;
 }
@@ -120,15 +147,80 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
     throw new Error('Game already started');
   }
 
+  const gameState = {...gameInstanceExposedInfo.gameState};
+  const newLevelStates: LevelStateT[] = gameState.levelStates.map((state, idx) =>
+    (idx === 0) ? {
+      ...state,
+      levelStatus:'levelInProcess',
+      startTimeTs: Date.now(),
+    } : state
+  );
+
   gameInstanceExposedInfo.gameState = {
     ...gameInstanceExposedInfo.gameState,
     gameStatus: 'inProcess',
     startTimeTs: Date.now(),
+    levelStates: newLevelStates,
   };
 }
 
 const getGameInstanceChatMessages = (gameInstanceId: GameInstanceIdT): GameInstanceChatMessageT[] => {
   return devChatMessages.filter(e => e.gameInstanceId === gameInstanceId).sort((e1, e2) => e1.sentTs - e2.sentTs);
+}
+
+const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string): boolean => {
+  const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
+    e.gameInstanceId === gameInstanceId
+  );
+  if (gameInstanceExposedInfo === undefined) {
+    throw new Error('Game instance not found');
+  }
+  if (gameInstanceExposedInfo.gameState.gameStatus !== 'inProcess') {
+    throw new Error('Game not in process');
+  }
+  const gameState = {...gameInstanceExposedInfo.gameState};
+  const tmpCorrectGuess = 'abcde';
+  const isCorrectGuess = guess === tmpCorrectGuess;
+  const isLastLevel = levelIdx === gameState.levelStates.length - 1;
+  const isLastGuess = gameState.levelStates[levelIdx].wordleState.guessDatas.length >=
+    gameState.levelStates[levelIdx].wordleExposedConfig.allowedGuessesNum - 1;
+
+  const letterAnalyses: LetterAnalysisT[] = [];
+  for (let i = 0; i < tmpCorrectGuess.length; i++) {
+    const guessLetter = guess[i];
+    const correctLetter = tmpCorrectGuess[i];
+    if (guessLetter === correctLetter) {
+      letterAnalyses.push('hit');
+    } else if (tmpCorrectGuess.includes(guessLetter)) {
+      letterAnalyses.push('present');
+    } else {
+      letterAnalyses.push('notPresent');
+    }
+  }
+
+  const newLevelStates: LevelStateT[] = gameState.levelStates.map((state, idx) =>
+    (idx === levelIdx && state.kind === 'wordle') ? {
+      ...state,
+      levelStatus: isCorrectGuess ? 'solved' : (isLastGuess ? 'failed' : 'levelInProcess'),
+      solvedTimeTs: Date.now(),
+      wordleState: {
+        ...state.wordleState,
+        guessDatas: [...state.wordleState.guessDatas, {
+          guess: guess,
+          letterAnalyses: letterAnalyses,
+        }],
+        correctSolution: isLastGuess ? tmpCorrectGuess : undefined,
+      }
+    } : state
+  );
+
+  gameInstanceExposedInfo.gameState = {
+    ...gameState,
+    gameStatus: (isLastLevel && (isCorrectGuess || isLastGuess)) ? 'ended' : 'inProcess',
+    levelStates: newLevelStates,
+  };
+
+  return isCorrectGuess;
 }
 
 export class ApiServerMock implements HttpAdapter {
@@ -198,6 +290,16 @@ export class ApiServerMock implements HttpAdapter {
 
       const response: PostGameInstanceStartResponseT = {
         status: 'ok',
+      }
+      return response as TResponse;
+    } else if (options.url.startsWith('/games/game-instance/') && options.url.endsWith('submit-guess')) {
+      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
+      const data = options.data as { levelIdx: number, guess: string };
+
+      const isGuessCorrect = handleSubmitGuess(gameInstanceId, data.levelIdx, data.guess);
+
+      const response: PostGameInstanceSubmitGuessResponseT = {
+        isGuessCorrect: isGuessCorrect,
       }
       return response as TResponse;
     } else if (options.url.startsWith('/games/game-instance/')) {

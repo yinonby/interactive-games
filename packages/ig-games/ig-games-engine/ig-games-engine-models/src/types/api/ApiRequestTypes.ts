@@ -86,3 +86,14 @@ export type PostGameInstanceChatMessageParamsT = {
 export type PostGameInstanceChatMessageResponseT = {
   chatMsgId: ChatMsgIdT,
 }
+
+// post::games/game-instance/<id>/submit-guess
+export type PostGameInstanceSubmitGuessParamsT = {
+  gameInstanceId: GameInstanceIdT,
+  levelIdx: number,
+  guess: string,
+}
+
+export type PostGameInstanceSubmitGuessResponseT = {
+  isGuessCorrect: boolean,
+}

@@ -1,5 +1,5 @@
 
-// game
+import type { WordleExposedConfigT, WordleStateT } from '@ig/games-wordle-models';
 
 export type GameStateT = {
   gameStatus: GameStatusT,
@@ -17,6 +17,10 @@ export type LevelStateT = {
   levelStatus: LevelStatusT,
   startTimeTs?: number,
   solvedTimeTs?: number,
-}
+} & ({
+  kind: 'wordle',
+  wordleExposedConfig: WordleExposedConfigT,
+  wordleState: WordleStateT,
+})
 
-export type LevelStatusT = 'notStarted' | 'notSolved' | 'solved';
+export type LevelStatusT = 'notStarted' | 'levelInProcess' | 'solved' | 'failed';

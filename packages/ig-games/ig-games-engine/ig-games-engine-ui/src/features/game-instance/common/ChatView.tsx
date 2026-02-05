@@ -72,7 +72,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   }
 
   return (
-    <View style={genericStyles.verticalSpacing}>
+    <View style={genericStyles.spacing}>
       <RnuiText testID="chat-title-tid" variant="titleMedium">{t("common:chat")}</RnuiText>
 
       <View style={{ maxHeight: 200 }}>

@@ -34,7 +34,7 @@ export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGa
 
   return (
     <GameImageCard testID='GameImageCard-tid' minimalGameConfig={minimalGameConfig} includeFreeLabel>
-      <View style={genericStyles.verticalSpacing}>
+      <View style={genericStyles.spacing}>
         <RnuiText variant="titleSmall">
           {minimalGameConfig.gameName}
         </RnuiText>

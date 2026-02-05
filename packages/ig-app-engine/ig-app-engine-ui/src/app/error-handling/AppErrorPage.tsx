@@ -13,7 +13,7 @@ export const AppErrorPage: React.FC<PropsWithChildren<AppErrorPagePropsT>> = () 
 
   return (
     <RnuiAppContent>
-      <View style={genericStyles.verticalSpacing}>
+      <View style={genericStyles.spacing}>
         <RnuiText testID='RnuiText-tid'>An unknown error has occurred</RnuiText>
 
         <View style={genericStyles.flexRow}>

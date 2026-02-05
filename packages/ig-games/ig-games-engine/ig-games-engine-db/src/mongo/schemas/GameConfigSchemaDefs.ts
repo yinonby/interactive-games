@@ -62,7 +62,7 @@ export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
     required: true,
   },
 
-  levelConfigs: {
+  levelExposedConfigs: {
     type: [levelConfigSchemaDef],
     _id: false,
     required: true,

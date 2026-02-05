@@ -3,6 +3,7 @@ import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
+import type { GameInstanceControllerT } from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import * as GameInstanceController from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import { StartGameButton } from './StartGameButton';
 
@@ -17,7 +18,7 @@ describe('StartGameButton', () => {
   useGameInstanceControllerSpy.mockReturnValue({
     onStartGame: onStartGameMock,
     onSendChatMessage: jest.fn(),
-  });
+  } as unknown as GameInstanceControllerT);
   const gameInstanceId = 'ABC';
 
   beforeEach(() => {

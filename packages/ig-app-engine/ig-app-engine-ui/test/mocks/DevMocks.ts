@@ -1,7 +1,7 @@
 
 import type {
-    GameConfigT, GameInstanceChatMessageT,
-    GameInstanceExposedInfoT, MinimalGameConfigT
+  GameConfigT, GameInstanceChatMessageT,
+  GameInstanceExposedInfoT, MinimalGameConfigT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
 
@@ -17,7 +17,7 @@ const secretIslandMinimalConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const escapeRoomMinimalConfig: GameConfigT = {
@@ -32,7 +32,7 @@ const escapeRoomMinimalConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const wordleEnMinimalConfig: GameConfigT = {
@@ -47,7 +47,14 @@ const wordleEnMinimalConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [{
+    kind: 'wordle',
+    wordleExposedConfig: {
+      wordLength: 5,
+      allowedGuessesNum: 6,
+      langCode: 'en',
+    }
+  }],
 }
 
 const wordleEsMinimalConfig: GameConfigT = {
@@ -62,7 +69,7 @@ const wordleEsMinimalConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 const wordleFrMinimalConfig: GameConfigT = {
@@ -77,7 +84,7 @@ const wordleFrMinimalConfig: GameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelConfigs: [],
+  levelExposedConfigs: [],
 }
 
 export const devAvailableMinimalGameConfigs: MinimalGameConfigT[] = [

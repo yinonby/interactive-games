@@ -11,5 +11,9 @@
   "chat": "Chat",
   "copyLink": "Copy link",
   "share": "Share",
-  "you": "You"
+  "you": "You",
+  "submit": "Submit",
+  "solution": "Solution",
+  "solutionCorrect": "Solution is correct",
+  "solutionIncorrect": "Solution is incorrect"
 }

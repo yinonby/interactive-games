@@ -1,9 +1,11 @@
 
 import { appRtkApi } from '@ig/app-engine-ui';
 import type {
-    GameInstanceIdT, GetGameInstanceChatResponseT,
-    GetGameInstanceResponseT, PostGameInstanceChatMessageParamsT, PostGameInstanceChatMessageResponseT,
-    PostGameInstanceStartResponseT
+  GameInstanceIdT, GetGameInstanceChatResponseT,
+  GetGameInstanceResponseT, PostGameInstanceChatMessageParamsT, PostGameInstanceChatMessageResponseT,
+  PostGameInstanceStartResponseT,
+  PostGameInstanceSubmitGuessParamsT,
+  PostGameInstanceSubmitGuessResponseT
 } from '@ig/games-engine-models';
 
 const gameInstanceRtkApi = appRtkApi.injectEndpoints({
@@ -40,6 +42,15 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, params) => [{ type: 'GamesInstanceChatTag', id: params.gameInstanceId }],
     }),
+
+    submitGuess: builder.mutation<PostGameInstanceSubmitGuessResponseT, PostGameInstanceSubmitGuessParamsT>({
+      query: (params: PostGameInstanceSubmitGuessParamsT) => ({
+        url: `/games/game-instance/${params.gameInstanceId}/submit-guess`,
+        method: 'POST',
+        data: { levelIdx: params.levelIdx, guess: params.guess },
+      }),
+      invalidatesTags: (result, error, params) => [{ type: 'GamesInstanceTag', id: params.gameInstanceId }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -49,6 +60,7 @@ export const {
   useStartGameMutation,
   useGetGameInstanceChatQuery,
   usePostGameInstanceChatMessageMutation,
+  useSubmitGuessMutation,
   util: gameInstanceRtkApiUtil,
   endpoints: gameInstanceRtkApiEndpoints,
   reducer: gameInstanceRtkApiReducer,

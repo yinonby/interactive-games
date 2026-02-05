@@ -22,9 +22,9 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
     t('common:unlimited');
 
   return (
-    <View style={genericStyles.verticalSpacing}>
+    <View style={genericStyles.spacing}>
       <View style={[genericStyles.flexRowAlignTop]} >
-        <View style={[genericStyles.flex1, genericStyles.spacingEnd]}>
+        <View style={[genericStyles.flex1]}>
           <RnuiText testID='title-tid' variant='titleSmall' >
             {gameConfig.gameName}
           </RnuiText>

@@ -8,6 +8,7 @@ export * from './src/grid/RnuiGrid';
 export * from './src/grid/RnuiGridItem';
 export * from './src/grid/RnuiMasonryGrid';
 export * from './src/image/RnuiImage';
+export * from './src/input/RnuiCodeInput';
 export * from './src/input/RnuiTextInput';
 export * from './src/layout/RnuiAppContent';
 export * from './src/snackbar/RnuiSnackbarProvider';

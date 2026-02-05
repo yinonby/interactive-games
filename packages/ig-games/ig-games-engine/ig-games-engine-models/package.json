@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@ig/app-engine-models": "*",
+    "@ig/games-wordle-models": "*",
     "@ig/utils": "*",
     "graphql": "^16.12.0",
     "graphql-tag": "^2.12.6"
