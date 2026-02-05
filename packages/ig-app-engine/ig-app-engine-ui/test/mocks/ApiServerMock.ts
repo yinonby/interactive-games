@@ -66,7 +66,7 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
 
   gameInstanceExposedInfo.playerExposedInfos.push({
     playerUserId: curUserId,
-    playerNickname: 'my nickname',
+    playerNickname: 'Jim Curry',
     playerRole: 'player',
     playerStatus: 'active',
   });
@@ -120,7 +120,7 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     },
     playerExposedInfos: [{
       playerUserId: curUserId,
-      playerNickname: 'my nickname',
+      playerNickname: 'Jim Curry',
       playerRole: 'admin',
       playerStatus: 'active',
     }],
@@ -179,19 +179,21 @@ const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, gu
     throw new Error('Game not in process');
   }
   const gameState = {...gameInstanceExposedInfo.gameState};
-  const tmpCorrectGuess = 'abcde';
-  const isCorrectGuess = guess === tmpCorrectGuess;
+  const tmpCorrectGuess = 'WORLD';
+  const lowercaseSolution = tmpCorrectGuess.toLowerCase();
+  const lowercaseGuess = guess.toLowerCase();
+  const isCorrectGuess = lowercaseGuess === lowercaseSolution;
   const isLastLevel = levelIdx === gameState.levelStates.length - 1;
   const isLastGuess = gameState.levelStates[levelIdx].wordleState.guessDatas.length >=
     gameState.levelStates[levelIdx].wordleExposedConfig.allowedGuessesNum - 1;
 
   const letterAnalyses: LetterAnalysisT[] = [];
-  for (let i = 0; i < tmpCorrectGuess.length; i++) {
-    const guessLetter = guess[i];
-    const correctLetter = tmpCorrectGuess[i];
+  for (let i = 0; i < lowercaseSolution.length; i++) {
+    const guessLetter = lowercaseGuess[i].toLowerCase();
+    const correctLetter = lowercaseSolution[i];
     if (guessLetter === correctLetter) {
       letterAnalyses.push('hit');
-    } else if (tmpCorrectGuess.includes(guessLetter)) {
+    } else if (lowercaseSolution.includes(guessLetter)) {
       letterAnalyses.push('present');
     } else {
       letterAnalyses.push('notPresent');
