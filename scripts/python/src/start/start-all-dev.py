@@ -53,7 +53,7 @@ def run():
                 cwd=os.path.join(root_dir, app["cwd"]),
                 stdout=slave_fd,
                 stderr=slave_fd,
-                close_fds=True
+                close_fds=True,
             )
             proc.app_name = app["name"]
             processes.append(proc)

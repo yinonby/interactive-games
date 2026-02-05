@@ -17,7 +17,7 @@ export const GameConfigCardView: FC<GameConfigCardViewPropsT> = ({ gameConfig })
 
   return (
     <GameImageCard testID='GameImageCard-tid' minimalGameConfig={gameConfig} includeFreeLabel={false}>
-      <View style={genericStyles.verticalSpacing}>
+      <View style={genericStyles.spacing}>
         <GameConfigSummaryView testID='GameConfigSummaryView-tid' gameConfig={gameConfig} />
 
         <View style={{ flexDirection: "row" }}>

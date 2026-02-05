@@ -10,6 +10,7 @@ import { GameImageCard } from '../../../common/game-config/GameImageCard';
 import { ChatView } from '../../common/ChatView';
 import { GameInstanceConfigSummaryView } from './GameInstanceConfigSummaryView';
 import { InviteView } from './InviteView';
+import { LevelsView } from './LevelsView';
 import { PlayersView } from './PlayersView';
 
 export type GameInstanceViewPropsT = TestableComponentT & {
@@ -37,27 +38,36 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   return (
     <View testID='container-tid'>
       <RnuiGrid>
-        <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={3} xl={4} >
+        <RnuiGridItem key="invite" xs={12} sm={12} md={12} lg={12} xl={12} >
+          {isCurUserAdminPlayer &&
+            <RnuiCard>
+              <InviteView testID="InviteView-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
+            </RnuiCard>
+          }
+        </RnuiGridItem>
+
+        <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
             <GameImageCard testID='GameImageCard-tid' minimalGameConfig={gameConfig} includeFreeLabel={false}>
-              <GameInstanceConfigSummaryView
-                testID="GameInstanceConfigSummaryView-tid"
-                gameInstanceExposedInfo={gameInstanceExposedInfo}
-              />
+              <View style={genericStyles.spacing}>
+                <GameInstanceConfigSummaryView
+                  testID="GameInstanceConfigSummaryView-tid"
+                  gameInstanceExposedInfo={gameInstanceExposedInfo}
+                />
+
+                {gameInstanceExposedInfo.gameState.gameStatus !== 'notStarted' &&
+                  <LevelsView
+                    testID='LevelsView-tid'
+                    gameInstanceExposedInfo={gameInstanceExposedInfo}
+                  />
+                }
+            </View>
             </GameImageCard>
           </View>
         </RnuiGridItem>
 
-        <RnuiGridItem key="players" xs={12} sm={12} md={12} lg={9} xl={8} >
-          <View style={genericStyles.verticalSpacing}>
-            {isCurUserAdminPlayer &&
-              <View>
-                <RnuiCard>
-                  <InviteView testID="InviteView-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
-                </RnuiCard>
-              </View>
-            }
-
+        <RnuiGridItem key="players" xs={12} sm={12} md={12} lg={6} xl={6} >
+          <View style={genericStyles.spacing}>
             <RnuiCard >
               <PlayersView
                 testID="PlayersView-tid"

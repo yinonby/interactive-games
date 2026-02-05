@@ -6,8 +6,12 @@ import type {
 } from '@ig/app-engine-ui';
 import type { RnuiImageSourceT } from '@ig/rnui';
 import type { LoggerAdapter } from '@ig/utils';
+import {
+  buildMockedTranslation as _buildMockedTranslation
+} from '../../../../../ig-app-engine/ig-app-engine-ui/test/test-index';
 
-export const buildMockedTranslation = (tKey: AppTranslationKeyT) => "mocked-t-" + tKey;
+// TODO import buildMockedTranslation in the entire project from g-app-engine-ui/test-utils, and remove this
+export const buildMockedTranslation = _buildMockedTranslation;
 
 export const initEngineAppUiMocks = () => {
   jest.mock('@ig/app-engine-ui', () => {

@@ -17,5 +17,5 @@ export type MinimalGameConfigT = {
 export type GameConfigT = MinimalGameConfigT & {
   extraTimeMinutes: number,
   extraTimeLimitDurationInfo: DurationInfoT,
-  levelConfigs: LevelExposedConfigT[],
+  levelExposedConfigs: LevelExposedConfigT[],
 }

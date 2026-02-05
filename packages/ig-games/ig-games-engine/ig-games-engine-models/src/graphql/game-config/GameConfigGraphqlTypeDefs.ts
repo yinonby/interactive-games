@@ -28,7 +28,7 @@ const gameConfigGraphqlQueryTypeDefs = gql`
     imageInfo: ImageInfo!
     extraTimeMinutes: Int!
     extraTimeLimitDurationInfo: DurationInfo!
-    levelConfigs: [LevelExposedConfig!]!
+    levelExposedConfigs: [LevelExposedConfig!]!
   }
 `;
 
@@ -51,7 +51,7 @@ const gameConfigGraphqlMutationTypeDefs = gql`
     imageInfo: ImageInfoInput
     extraTimeMinutes: Int
     extraTimeLimitDurationInfo: DurationInfoInput
-    levelConfigs: [LevelExposedConfigInput!]
+    levelExposedConfigs: [LevelExposedConfigInput!]
   }
 
   type UpdateGameConfigResult {

@@ -20,7 +20,7 @@ export const GameConfigSummaryView: FC<GameConfigSummaryViewPropsT> = ({ gameCon
     t("common:minutes", { minutes: MS_TO_MIN(gameConfig.extraTimeLimitDurationInfo.durationMs) });
 
   return (
-    <View style={genericStyles.verticalSpacing}>
+    <View style={genericStyles.spacing}>
       <RnuiText variant="titleSmall" >
         {gameConfig.gameName}
       </RnuiText>

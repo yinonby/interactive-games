@@ -56,7 +56,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     gamesUserConfigModel.gamesUserConfig.joinedGameConfigs);
 
   return (
-    <View style={genericStyles.verticalSpacing}>
+    <View style={genericStyles.spacing}>
       {nonJoinedMinimalGameConfigs.length === 0 &&
         <RnuiText testID="no-available-games-text-tid" variant="titleSmall" >
           {t("games:noGamesAbailable")}

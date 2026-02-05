@@ -19,7 +19,7 @@ export const PlayersView: FC<PlayersViewPropsT> = (props) => {
   const genericStyles = useGenericStyles();
 
   return (
-    <View testID="container-tid" style={genericStyles.verticalSpacing}>
+    <View testID="container-tid" style={genericStyles.spacing}>
       <RnuiText testID="players-text-tid" variant="titleMedium">{t("games:players")}</RnuiText>
 
       <PlayersTableView
