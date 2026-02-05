@@ -6,7 +6,10 @@ import type { EmailLoginInputT } from '@ig/auth-models';
 import { buildJWT, CookieUtils, type JwtAlgorithmT } from '@ig/be-utils';
 import { generateUuidv4 } from '@ig/utils';
 import { type Response } from 'express';
-import { AUTH_JWT_COOKIE_NAME, AUTH_JWT_USER_ID_FIELD_NAME } from '../../types/AuthDefs';
+import {
+  AUTH_JWT_COOKIE_NAME,
+  AUTH_JWT_USER_ID_FIELD_NAME
+} from '../../types/AuthDefs';
 
 export class AuthLogic implements AuthLogicAdapter {
   constructor(

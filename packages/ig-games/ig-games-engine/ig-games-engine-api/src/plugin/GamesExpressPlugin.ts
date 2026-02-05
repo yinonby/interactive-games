@@ -1,15 +1,12 @@
 
 import type { ExpressAppInfoT, ExpressPluginT } from '@ig/be-utils';
-import type { GamesDbAdapter } from '@ig/games-engine-be-models';
 import type { Router } from 'express';
 import { createGraphqlRouter } from '../graphql/server/GraphqlRouter';
+import type { GamesPluginConfigT } from '../types/GamesPluginTypes';
 
-export const gamesApiPlugin: ExpressPluginT<GamesDbAdapter> = {
-  initRouter: async (appInfo: ExpressAppInfoT, gamesDbAdapter: GamesDbAdapter | null): Promise<Router> => {
-    if (gamesDbAdapter === null) {
-      throw new Error('Unexpected missing getDbAdapterCb');
-    }
-    const router = await createGraphqlRouter(gamesDbAdapter);
+export const gamesApiPlugin: ExpressPluginT<GamesPluginConfigT> = {
+  initRouter: async (appInfo: ExpressAppInfoT, pluginConfig: GamesPluginConfigT): Promise<Router> => {
+    const router = await createGraphqlRouter(pluginConfig.gamesDbAdapter);
 
     return router;
   },
