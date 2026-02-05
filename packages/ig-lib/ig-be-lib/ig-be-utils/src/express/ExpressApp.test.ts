@@ -1,7 +1,7 @@
 
 import type { LoggerAdapter } from '@ig/utils';
-import express, { Router } from 'express';
-import type { ExpressAppStarterInfoT, ExpressPluginContainerT } from '../types/exported/ExpressTypes';
+import express from 'express';
+import type { ExpressAppStarterInfoT } from '../types/exported/ExpressTypes';
 import { ExpressApp } from './ExpressApp';
 
 vi.mock('express');
@@ -80,11 +80,6 @@ describe('ExpressApp', () => {
       appInfo: { appVersion: '1.1' },
       dbInfo: { dbType: 'mongodb', mongoConnString: 'mongodb://localhost', tableNamePrefix: '' },
       expressPluginContainers: [{
-        route: '',
-        expressPlugin: {
-          // eslint-disable-next-line @typescript-eslint/require-await
-          initRouter: async () => Router(),
-        },
       }],
     };
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
@@ -101,12 +96,7 @@ describe('ExpressApp', () => {
       appInfo: { appVersion: '1.1' },
       dbInfo: { dbType: 'mongodb', mongoConnString: 'mongodb://localhost', tableNamePrefix: '' },
       expressPluginContainers: [{
-        getDbAdapterCb: getDbAdapterCbMock,
-        route: '',
-        expressPlugin: {
-          // eslint-disable-next-line @typescript-eslint/require-await
-          initRouter: async () => Router(),
-        },
+        getPackageDb: getDbAdapterCbMock,
       }],
     };
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
@@ -116,86 +106,57 @@ describe('ExpressApp', () => {
     expect(createTablesMock).toHaveBeenCalledWith(true, '');
   });
 
-  it('should init routes, without db adapter', async () => {
+  it('should not init routes when no route config is given', async () => {
     const initRouterMock = vi.fn();
 
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [{
-        route: '',
-        expressPlugin: {
-          initRouter: initRouterMock,
-        },
       }],
     };
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, null, undefined);
+    expect(initRouterMock).not.toHaveBeenCalled();
   });
 
-  it('should init routes, with db adapter', async () => {
-    const getDbAdapterCbMock = vi.fn();
-    getDbAdapterCbMock.mockReturnValue('MOCKDBADAPTER');
-
+  it('should init routes when route config is given', async () => {
     const initRouterMock = vi.fn();
 
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [{
-        getDbAdapterCb: getDbAdapterCbMock,
-        route: '',
-        expressPlugin: {
-          initRouter: initRouterMock,
-        },
+        routeConfig: {
+          route: '/',
+          expressPlugin: {
+            initRouter: initRouterMock,
+          },
+          pluginConfig: 5,
+        }
       }],
     };
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(getDbAdapterCbMock).toHaveBeenCalled();
-    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, 'MOCKDBADAPTER', undefined);
+    expect(initRouterMock).toHaveBeenCalled();
   });
 
-  it('should init routes, with plugin config', async () => {
-    const getDbAdapterCbMock = vi.fn();
-    getDbAdapterCbMock.mockReturnValue('MOCKDBADAPTER');
-
+  it('should call post init callback, with plugin config', async () => {
     const initRouterMock = vi.fn();
-
-    type PluginConfigT = { userId: string };
-    const pluginConfig: PluginConfigT = { userId: 'USER1' };
-    const pluginContainer: ExpressPluginContainerT<unknown, { userId: string }> = {
-      pluginConfig: pluginConfig,
-      route: '',
-      expressPlugin: {
-        initRouter: initRouterMock,
-      },
-    }
-
-    const mockStarterInfo: ExpressAppStarterInfoT = {
-      listerPort: 1287,
-      appInfo: { appVersion: '1.1' },
-      expressPluginContainers: [pluginContainer as ExpressPluginContainerT<unknown>],
-    };
-    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
-    await expressApp.startApp();
-
-    expect(initRouterMock).toHaveBeenCalledWith(mockStarterInfo.appInfo, null, pluginConfig);
-  });
-
-  it('should call post init callback, without db adapter', async () => {
     const postInitMock = vi.fn();
 
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [{
-        route: '',
-        expressPlugin: {
-          initRouter: vi.fn(),
+        routeConfig: {
+          route: '/',
+          expressPlugin: {
+            initRouter: initRouterMock,
+          },
+          pluginConfig: 5,
         },
         postInitCb: postInitMock,
       }],
@@ -203,32 +164,23 @@ describe('ExpressApp', () => {
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(postInitMock).toHaveBeenCalledWith(null);
+    expect(postInitMock).toHaveBeenCalledWith(mockStarterInfo.expressPluginContainers[0].routeConfig?.pluginConfig);
   });
 
-  it('should call post init callback, with db adapter', async () => {
-    const getDbAdapterCbMock = vi.fn();
-    getDbAdapterCbMock.mockReturnValue('MOCKDBADAPTER');
-
+  it('should call post init callback, without plugin config', async () => {
     const postInitMock = vi.fn();
 
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [{
-        getDbAdapterCb: getDbAdapterCbMock,
-        route: '',
-        expressPlugin: {
-          initRouter: vi.fn(),
-        },
         postInitCb: postInitMock,
       }],
     };
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(getDbAdapterCbMock).toHaveBeenCalled();
-    expect(postInitMock).toHaveBeenCalledWith('MOCKDBADAPTER');
+    expect(postInitMock).toHaveBeenCalledWith(undefined);
   });
 
   it('should listen on given port', async () => {

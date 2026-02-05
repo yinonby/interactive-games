@@ -2,18 +2,16 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import { mergeSchemas } from '@graphql-tools/schema';
-import type { EngineDbAdapter } from '@ig/app-engine-be-models';
 import { Router } from 'express';
 import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from '../auth/AuthSchema';
 
 // returns an express router for this graphql endpoint
 export async function createGraphqlRouter(
-  engineDbAdapter: EngineDbAdapter,
   pluginConfig: AuthPluginConfigT,
 ): Promise<Router> {
   const router = Router();
-  const authSchema = createAuthSchema(engineDbAdapter, pluginConfig);
+  const authSchema = createAuthSchema(pluginConfig);
 
   // create the combined schema
   const schema = mergeSchemas({

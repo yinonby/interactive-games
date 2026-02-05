@@ -1,13 +1,9 @@
 
-import type { JwtAlgorithmT } from '@ig/be-utils';
+import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import type { Request, Response } from 'express';
 
 export type AuthPluginConfigT = {
-  jwtSecret: string,
-  jwtAlgorithm: JwtAlgorithmT,
-  jwtExpiresInMs: number,
-  jwtCookieDomain: string,
-  jwtCookieIsSecure: boolean,
+  getAuthLogicAdapter: () => AuthLogicAdapter,
 }
 
 export interface ApolloContextT {
