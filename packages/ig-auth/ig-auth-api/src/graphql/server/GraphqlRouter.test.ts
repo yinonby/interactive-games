@@ -1,27 +1,19 @@
 
-import type { EngineDbAdapter } from '@ig/app-engine-be-models';
+import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import express from 'express';
 import request from 'supertest';
 import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createGraphqlRouter } from './GraphqlRouter';
 
 describe('GraphqlRouter', () => {
-  // Mock EngineDbAdapter
-  const usersTableAdapterMock = vi.fn();
-  const mockEngineDbAdapter: EngineDbAdapter = {
-    getUsersTableAdapter: vi.fn().mockReturnValue(usersTableAdapterMock),
-  };
+  const authLogicAdapterMock = {} as AuthLogicAdapter;
   const pluginConfig: AuthPluginConfigT = {
-    jwtCookieDomain: 'DOMAIN1',
-    jwtAlgorithm: 'HS256',
-    jwtSecret: 'SECRET',
-    jwtCookieIsSecure: true,
-    jwtExpiresInMs: 100,
+    getAuthLogicAdapter: () => authLogicAdapterMock,
   };
   let app: express.Express;
 
   beforeAll(async () => {
-    const router = await createGraphqlRouter(mockEngineDbAdapter, pluginConfig);
+    const router = await createGraphqlRouter(pluginConfig);
     app = express();
     app.use(express.json());
     app.use(router);

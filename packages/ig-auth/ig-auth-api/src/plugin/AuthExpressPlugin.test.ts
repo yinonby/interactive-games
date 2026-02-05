@@ -1,19 +1,15 @@
 
-import type { AuthPluginConfigT } from '@/types/AuthPluginTypes';
-import type { EngineDbAdapter } from '@ig/app-engine-be-models';
+import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import type { ExpressAppInfoT } from '@ig/be-utils';
 import type { Router } from 'express';
 import * as graphqlModule from '../graphql/server/GraphqlRouter';
+import type { AuthPluginConfigT } from '../types/AuthPluginTypes';
 import { authApiPlugin } from './AuthExpressPlugin';
 
 describe('authApiPlugin', () => {
-  let mockDbAdapter: EngineDbAdapter;
   let mockRouter: Router;
 
   beforeEach(() => {
-    // Mock a DB adapter (methods are irrelevant here)
-    mockDbAdapter = {} as EngineDbAdapter;
-
     // Mock an Express router
     mockRouter = {} as Router;
 
@@ -21,18 +17,16 @@ describe('authApiPlugin', () => {
     vi.spyOn(graphqlModule, 'createGraphqlRouter').mockResolvedValue(mockRouter);
   });
 
-  it('initRouter fails when db adapter is null', async () => {
-    const mockAppInfo = {} as ExpressAppInfoT;
-
-    await expect(authApiPlugin.initRouter(mockAppInfo, null)).rejects.toThrow();
-  });
-
   it('initRouter calls createGraphqlRouter and returns a Router', async () => {
     const mockAppInfo = {} as ExpressAppInfoT;
+    const authLogicAdapterMock = {} as AuthLogicAdapter;
+    const pluginConfig: AuthPluginConfigT = {
+      getAuthLogicAdapter: () => authLogicAdapterMock,
+    };
 
-    const router = await authApiPlugin.initRouter(mockAppInfo, mockDbAdapter, {} as AuthPluginConfigT);
+    const router = await authApiPlugin.initRouter(mockAppInfo, pluginConfig);
 
-    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(mockDbAdapter, {});
+    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(pluginConfig);
     expect(router).toBe(mockRouter);
   });
 });

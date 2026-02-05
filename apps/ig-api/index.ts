@@ -1,6 +1,6 @@
 /* istanbul ignore file -- @preserve */
 
-import { useExpressAppStarterInfo } from '@/ExpressAppUtils';
+import { useExpressAppStarterInfo } from '@/express-app/ExpressAppUtils';
 import { ExpressApp } from '@ig/be-utils';
 import dotenv from 'dotenv';
 

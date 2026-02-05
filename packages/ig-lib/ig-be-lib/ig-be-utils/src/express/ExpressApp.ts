@@ -84,8 +84,8 @@ export class ExpressApp {
     // here need to connect to db
 
     for (const expressPluginContainer of expressPluginContainers) {
-      if (expressPluginContainer.getDbAdapterCb) {
-        const packageDb: PackageDb = expressPluginContainer.getDbAdapterCb();
+      if (expressPluginContainer.getPackageDb !== undefined) {
+        const packageDb: PackageDb = expressPluginContainer.getPackageDb();
         await packageDb.createTables(true, dbInfo.tableNamePrefix);
       }
     }
@@ -95,20 +95,19 @@ export class ExpressApp {
 
   private async initRoutes(): Promise<void> {
     for (const expressPluginContainer of this.expressAppStarterInfo.expressPluginContainers) {
-      const dbAdapter = expressPluginContainer.getDbAdapterCb ? expressPluginContainer.getDbAdapterCb() : null;
+      if (expressPluginContainer.routeConfig !== undefined) {
+        const router = await expressPluginContainer.routeConfig.expressPlugin
+          .initRouter(this.expressAppStarterInfo.appInfo, expressPluginContainer.routeConfig.pluginConfig);
 
-      const router = await expressPluginContainer.expressPlugin
-        .initRouter(this.expressAppStarterInfo.appInfo, dbAdapter, expressPluginContainer.pluginConfig);
-
-      this.app.use(expressPluginContainer.route, router);
+        this.app.use(expressPluginContainer.routeConfig.route, router);
+      }
     }
   }
 
   private async postInit(): Promise<void> {
     for (const expressPluginContainer of this.expressAppStarterInfo.expressPluginContainers) {
-      if (expressPluginContainer.postInitCb) {
-        const dbAdapter = expressPluginContainer.getDbAdapterCb ? expressPluginContainer.getDbAdapterCb() : null;
-        await expressPluginContainer.postInitCb(dbAdapter);
+      if (expressPluginContainer.postInitCb !== undefined) {
+        await expressPluginContainer.postInitCb(expressPluginContainer.routeConfig?.pluginConfig);
       }
     }
   }

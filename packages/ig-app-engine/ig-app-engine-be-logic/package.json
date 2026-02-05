@@ -1,5 +1,5 @@
 {
-  "name": "@ig/api",
+  "name": "@ig/app-engine-be-logic",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
@@ -16,29 +16,19 @@
     "test:unit": "cross-env NODE_ENV=test LOG_LEVEL=SILENT vitest",
     "ut": "npm run test:unit --",
     "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
-    "cover:unit": "npm run test:unit -- run --coverage",
-    "start": "npm run start:dev",
-    "start:dev": "NODE_ENV=development LOG_LEVEL=DBG tsx --no-cache index.ts",
-    "start:dev:inspect": "NODE_ENV=development LOG_LEVEL=DBG tsx --no-cache --inspect index.ts",
-    "start:dev:presets:all": "DEV_PRESETS=all npm run start:dev",
-    "pm2:start": "pm2 start .pm2.ecosystem.config.cjs --only",
-    "pm2:start:dev": "npm run 'pm2:start' -- 'ig-api:dev'"
+    "cover:unit": "npm run test:unit -- run --coverage"
   },
   "dependencies": {
-    "@ig/auth-api": "*",
-    "@ig/app-engine-db": "*",
-    "@ig/app-engine-be-logic": "*",
-    "@ig/games-engine-api": "*",
-    "@ig/games-engine-db": "*",
-    "@ig/games-engine-be-models": "*",
-    "@ig/utils": "*",
-    "dotenv": "^16.6.1",
-    "express": "^5.2.1"
+    "@ig/app-engine-be-models": "*",
+    "@ig/app-engine-models": "*",
+    "@ig/auth-be-models": "*",
+    "@ig/auth-models": "*",
+    "@ig/be-utils": "*",
+    "@ig/utils": "*"
   },
   "devDependencies": {
     "@ig/lint": "*",
     "@ig/vitest": "*",
-    "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
     "cross-env": "^7.0.3",
     "eslint": "^9.15.0",

@@ -1,33 +1,20 @@
 
 import { ApolloServer } from '@apollo/server';
-import type { EngineDbAdapter, UsersTableAdapter } from '@ig/app-engine-be-models';
+import type { AuthLogicAdapter } from '@ig/auth-be-models';
 import { healthQuery, type HealthQuryResultT } from '@ig/auth-models';
 import type { Request, Response } from 'express';
 import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from './AuthSchema';
 
 describe('createAuthSchema', () => {
+  const authLogicAdapterMock = {} as AuthLogicAdapter;
   const pluginConfig: AuthPluginConfigT = {
-    jwtCookieDomain: 'DOMAIN1',
-    jwtAlgorithm: 'HS256',
-    jwtSecret: 'SECRET',
-    jwtCookieIsSecure: true,
-    jwtExpiresInMs: 100,
+    getAuthLogicAdapter: () => authLogicAdapterMock,
   };
 
   it('creates a working schema and resolves guestLogin', async () => {
-    // --- mock table adapter ---
-    const mockTableAdapter: Partial<UsersTableAdapter> = {
-      getUser: vi.fn(),
-    };
-
-    // --- mock db adapter ---
-    const mockDbAdapter: EngineDbAdapter = {
-      getUsersTableAdapter: () => mockTableAdapter as UsersTableAdapter,
-    };
-
     // --- create schema ---
-    const schema = createAuthSchema(mockDbAdapter, pluginConfig);
+    const schema = createAuthSchema(pluginConfig);
 
     // --- create Apollo server ---
     const server = new ApolloServer<ApolloContextT>({ schema });
