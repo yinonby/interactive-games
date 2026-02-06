@@ -1,15 +1,16 @@
 /* istanbul ignore file -- @preserve */
 
-import { GameConfigLogic } from '@ig/games-engine-api/src/logic/game-config/GameConfigLogic';
+import { GameConfigLogic } from '@ig/games-engine-api';
 import type { GameConfigLogicAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
 import type {
-  GameConfigT
+  GameInfoT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
 
 export const loadGameConfigPreset1 = async (gamesDbAdapter: GamesDbAdapter): Promise<void> => {
-  const gameConfigLogicAdapter: GameConfigLogicAdapter = new GameConfigLogic(gamesDbAdapter.getGameConfigsTableAdapter());
-  const gameConfigs: GameConfigT[] = [
+  const gameConfigLogicAdapter: GameConfigLogicAdapter =
+    new GameConfigLogic(gamesDbAdapter.getGameConfigsTableAdapter());
+  const gameInfos: GameInfoT[] = [
     secretIslandGameConfig,
     escapeRoomGameConfig,
     wordleEnGameConfig,
@@ -17,12 +18,12 @@ export const loadGameConfigPreset1 = async (gamesDbAdapter: GamesDbAdapter): Pro
     wordleEsGameConfig,
   ];
 
-  for (const gameConfig of gameConfigs) {
-    await gameConfigLogicAdapter.createGameConfig(gameConfig);
+  for (const gameInfo of gameInfos) {
+    await gameConfigLogicAdapter.createGameConfig(gameInfo.gameConfigId, gameInfo);
   }
 }
 
-const secretIslandGameConfig: GameConfigT = {
+const secretIslandGameConfig: GameInfoT = {
   gameConfigId: 'treasure-hunt-secret-island', // this game is already joined in this dev preset
   kind: 'jointGame',
   gameName: 'Treasure Hunt - Secret Island',
@@ -37,7 +38,7 @@ const secretIslandGameConfig: GameConfigT = {
   levelExposedConfigs: [],
 }
 
-const escapeRoomGameConfig: GameConfigT = {
+const escapeRoomGameConfig: GameInfoT = {
   gameConfigId: 'escape-room-harry-potter',
   kind: 'jointGame',
   gameName: 'Escape Room - Harry Potter',
@@ -52,7 +53,7 @@ const escapeRoomGameConfig: GameConfigT = {
   levelExposedConfigs: [],
 }
 
-const wordleEnGameConfig: GameConfigT = {
+const wordleEnGameConfig: GameInfoT = {
   gameConfigId: 'wordle-english',
   kind: 'jointGame',
   gameName: 'Wordle - English',
@@ -67,7 +68,7 @@ const wordleEnGameConfig: GameConfigT = {
   levelExposedConfigs: [],
 }
 
-const wordleEsGameConfig: GameConfigT = {
+const wordleEsGameConfig: GameInfoT = {
   gameConfigId: 'wordle-spanish',
   kind: 'jointGame',
   gameName: 'Wordle - Spanish',
@@ -82,7 +83,7 @@ const wordleEsGameConfig: GameConfigT = {
   levelExposedConfigs: [],
 }
 
-const wordleFrGameConfig: GameConfigT = {
+const wordleFrGameConfig: GameInfoT = {
   gameConfigId: 'wordle-french',
   kind: 'jointGame',
   gameName: 'Wordle - French',

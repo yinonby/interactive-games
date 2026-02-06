@@ -1,4 +1,5 @@
 
+import { BeLogger } from '@/logger/BeLogger';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose, { type Mongoose } from 'mongoose';
 import { InmemMongoDbServer } from './InmemMongoDbServer';
@@ -22,6 +23,10 @@ describe('InmemMongoDbServer', () => {
   });
 
   describe('startDb', () => {
+    it('should create MongoMemoryServer with given args', async () => {
+      new InmemMongoDbServer(mongoose, new BeLogger());
+    });
+
     it('should create MongoMemoryServer and connect mongoose', async () => {
       vi.mocked(MongoMemoryServer.create).mockResolvedValue(mockMongoMemoryServer);
 

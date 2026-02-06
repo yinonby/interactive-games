@@ -1,6 +1,6 @@
 
 import { buildSchema, parse, print, validate } from 'graphql';
-import { getMinimalGameConfigsQuery, updateGameConfigMutation } from './GameConfigGraphqlClientTypes';
+import { getGameConfigsQuery, updateGameConfigMutation } from './GameConfigGraphqlClientTypes';
 import { gameConfigGraphqlTypeDefs } from './GameConfigGraphqlTypeDefs';
 
 describe('GameConfigGraphqlClientTypes', () => {
@@ -8,9 +8,10 @@ describe('GameConfigGraphqlClientTypes', () => {
   const schema = buildSchema(sdl);
 
   it('client query is valid against the GraphQL schema', () => {
-    const document = parse(getMinimalGameConfigsQuery);
+    const document = parse(getGameConfigsQuery);
     const errors = validate(schema, document);
 
+    console.log(errors[0])
     expect(errors).toHaveLength(0);
   });
 

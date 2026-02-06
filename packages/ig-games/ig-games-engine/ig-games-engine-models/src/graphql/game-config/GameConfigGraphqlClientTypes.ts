@@ -1,37 +1,39 @@
 
+import type { GameConfigT, GameInfoNoIdT, GameInfoT } from '../../types/game/GameTypes';
+
 // query
 
-import type { GameConfigT, MinimalGameConfigT } from '../../types/game/GameTypes';
-
-export type GetMinimalGameConfigsResultT = {
-  minimalGameConfigs: MinimalGameConfigT[],
+export type GetGameConfigsResultT = {
+  gameConfigs: GameConfigT[],
 }
 
-export type GetMinimalGameConfigsResponseT = {
-  data: GetMinimalGameConfigsResultT,
+export type GetGameConfigsResponseT = {
+  data: GetGameConfigsResultT,
 }
 
-export const getMinimalGameConfigsQuery = `
-  query GetMinimalGameConfigs {
-    minimalGameConfigs: getGameConfigs {
+export const getGameConfigsQuery = `
+  query GetGameConfigs {
+    gameConfigs: getGameConfigs {
       gameConfigId
-      kind
-      gameName
-      maxParticipants
-      maxDurationInfo {
+      gameInfoNoId {
         kind
-        durationMs
-      }
-      gamePriceInfo {
-        kind
-        priceRate
-        priceCurrency
-      }
-      maxParticipants
-      imageInfo {
-        kind
-        imageAssetName
-        imageUrl
+        gameName
+        maxParticipants
+        maxDurationInfo {
+          kind
+          durationMs
+        }
+        gamePriceInfo {
+          kind
+          priceRate
+          priceCurrency
+        }
+        maxParticipants
+        imageInfo {
+          kind
+          imageAssetName
+          imageUrl
+        }
       }
     }
   }
@@ -40,8 +42,8 @@ export const getMinimalGameConfigsQuery = `
 // mutation
 
 export type UpdateGameConfigInputT =
-  Pick<GameConfigT, 'gameConfigId'> &
-  Partial<Omit<GameConfigT, 'gameConfigId'>>;
+  Pick<GameInfoT, 'gameConfigId'> &
+  Partial<GameInfoNoIdT>;
 
 export type UpdateGameConfigResultT = {
   status: 'ok';

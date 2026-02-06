@@ -25,15 +25,15 @@ export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
     return null;
   }
 
-  const joinedGameConfigs = gamesUserConfigModel.gamesUserConfig.joinedGameConfigs;
+  const joinedGameInfos = gamesUserConfigModel.gamesUserConfig.joinedGameInfos;
 
   return (
     <View style={genericStyles.spacing}>
-      {joinedGameConfigs.length === 0 &&
+      {joinedGameInfos.length === 0 &&
         <RnuiText variant="titleSmall">{t("games:userNoGamesAbailable")}</RnuiText>
       }
 
-      {joinedGameConfigs.length > 0 &&
+      {joinedGameInfos.length > 0 &&
         <RnuiCard testID="current-games-card-tid">
           <View style={genericStyles.spacing}>
             <View style={genericStyles.alignTextToTableCell}>
@@ -42,7 +42,7 @@ export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
 
             <GamesTableView
               testID="current-games-table-view-tid"
-              joinedGameConfigs={joinedGameConfigs}
+              joinedGameInfos={joinedGameInfos}
             />
           </View>
         </RnuiCard>

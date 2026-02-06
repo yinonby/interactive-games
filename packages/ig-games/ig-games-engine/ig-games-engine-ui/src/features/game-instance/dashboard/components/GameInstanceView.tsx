@@ -6,7 +6,7 @@ import { RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
-import { GameImageCard } from '../../../common/game-config/GameImageCard';
+import { GameImageCard } from '../../../common/game-info/GameImageCard';
 import { ChatView } from '../../common/ChatView';
 import { GameInstanceConfigSummaryView } from './GameInstanceConfigSummaryView';
 import { InviteView } from './InviteView';
@@ -22,7 +22,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { playerExposedInfos } = gameInstanceExposedInfo;
   const { curUserId } = useAuth();
-  const gameConfig = gameInstanceExposedInfo.gameConfig;
+  const gameInfo = gameInstanceExposedInfo.gameInfo;
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();
 
@@ -48,7 +48,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
 
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
-            <GameImageCard testID='GameImageCard-tid' minimalGameConfig={gameConfig} includeFreeLabel={false}>
+            <GameImageCard testID='GameImageCard-tid' minimalGameInfo={gameInfo} includeFreeLabel={false}>
               <View style={genericStyles.spacing}>
                 <GameInstanceConfigSummaryView
                   testID="GameInstanceConfigSummaryView-tid"

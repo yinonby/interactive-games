@@ -1,15 +1,15 @@
 
 import { appRtkApi } from '@ig/app-engine-ui';
-import { getMinimalGameConfigsQuery, type GetMinimalGameConfigsResultT } from '@ig/games-engine-models';
+import { getMinimalGameInfosQuery, type GetMinimalGameInfosResultT } from '@ig/games-engine-models';
 
 const gamesConfigRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMinimalGameConfigs: builder.query<GetMinimalGameConfigsResultT, void>({
+    getMinimalGameInfos: builder.query<GetMinimalGameInfosResultT, void>({
       query: () => ({
         url: '/games/graphql',
         kind: 'graphql',
         graphql: {
-          document: getMinimalGameConfigsQuery,
+          document: getMinimalGameInfosQuery,
         }
       }),
       providesTags: ['GamesConfigTag'],
@@ -19,11 +19,11 @@ const gamesConfigRtkApi = appRtkApi.injectEndpoints({
 });
 
 export const {
-  useGetMinimalGameConfigsQuery,
+  useGetMinimalGameInfosQuery,
   util: gamesConfigRtkApiUtil,
   endpoints: gamesConfigRtkApiEndpoints,
   reducer: gamesConfigRtkApiReducer,
   middleware: gamesConfigRtkApiMiddleware,
 } = gamesConfigRtkApi;
 
-export type UseGetMinimalGameConfigsQueryResultT = ReturnType<typeof useGetMinimalGameConfigsQuery>;
+export type UseGetMinimalGameInfosQueryResultT = ReturnType<typeof useGetMinimalGameInfosQuery>;

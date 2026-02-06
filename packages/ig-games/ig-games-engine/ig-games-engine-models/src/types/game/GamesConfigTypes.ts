@@ -1,10 +1,6 @@
 
-import { type GameConfigT, type MinimalGameConfigT } from './GameTypes';
-
-export type GamesConfigT = {
-  availableMinimalGameConfigs: MinimalGameConfigT[],
-}
+import { type GameInfoT } from './GameTypes';
 
 export type GamesUserConfigT = {
-  joinedGameConfigs: GameConfigT[],
+  joinedGameInfos: GameInfoT[],
 }

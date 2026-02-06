@@ -1,14 +1,14 @@
 
 import type { UserIdT } from '@ig/app-engine-models';
 import type { GameStateT } from './GameStateTypes';
-import type { GameConfigT } from './GameTypes';
+import type { GameInfoT } from './GameTypes';
 
 export type GameInstanceIdT = string;
 
 export type GameInstanceExposedInfoT = {
   gameInstanceId: GameInstanceIdT,
   invitationCode: string,
-  gameConfig: GameConfigT,
+  gameInfo: GameInfoT,
   gameState: GameStateT,
   playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
 }

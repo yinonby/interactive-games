@@ -1,7 +1,7 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import type { GameConfigT } from '@ig/games-engine-models';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import type { GameInfoT } from '@ig/games-engine-models';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { GamesTableRow } from './GamesTableRow';
@@ -29,22 +29,22 @@ describe('GamesTableRow', () => {
   });
 
   it('renders games summary table row', () => {
-    const joinedGameConfig: GameConfigT = buildTestGameConfig({
+    const joinedGameInfo: GameInfoT = buildTestGameInfo({
       gameName: 'Poker Night',
     });
 
     const { getByTestId, getAllByTestId } = render(
-      <GamesTableRow joinedGameConfig={joinedGameConfig} />
+      <GamesTableRow joinedGameInfo={joinedGameInfo} />
     );
 
     // verify calls
-    expect(buildGameDashboardUrlPathMock).toHaveBeenCalledWith(joinedGameConfig.gameConfigId);
+    expect(buildGameDashboardUrlPathMock).toHaveBeenCalledWith(joinedGameInfo.gameConfigId);
 
     // verify components
     getByTestId('RnuiTableRow-tid');
     expect(getAllByTestId('RnuiTableCell-tid')).toHaveLength(2);
     const text = getByTestId("gameName-text-tid");
-    expect(text.props.children).toEqual(joinedGameConfig.gameName);
+    expect(text.props.children).toEqual(joinedGameInfo.gameName);
     getByTestId('PlatformUiLink-tid');
     getByTestId('open-game-btn-tid');
   });
