@@ -1,14 +1,15 @@
 
-import { type HttpAdapter } from '@ig/client-utils';
 import type { BaseQueryApi } from '@reduxjs/toolkit/query';
 import { createAppRtkBaseQuery } from './AppRtkBaseQuery';
-
-const apiUrl = 'https://api.test';
+import * as AppRtkDefaultRequestHandler from './AppRtkDefaultRequestHandler';
+import * as AppRtkGraphqlRequestHandler from './AppRtkGraphqlRequestHandler';
 
 describe('AppRtkBaseQuery', () => {
   const warnMock = jest.fn();
   const errorMock = jest.fn();
   const generateHttpAdapterMock = jest.fn();
+  const handleDefaultRequestSpy = jest.spyOn(AppRtkDefaultRequestHandler, 'handleDefaultRequest');
+  const handleGraphqlRequestSpy = jest.spyOn(AppRtkGraphqlRequestHandler, 'handleGraphqlRequest');
 
   const api = {
     extra: {
@@ -24,161 +25,77 @@ describe('AppRtkBaseQuery', () => {
     jest.clearAllMocks();
   });
 
-  it('returns data on successful request', async () => {
-    const requestMock: jest.Mock = jest.fn();
-    const httpAdapterMock: HttpAdapter = {
-      request: requestMock,
-    }
-    generateHttpAdapterMock.mockReturnValueOnce(httpAdapterMock);
+  describe('createAppRtkBaseQuery', () => {
+    it('defaults status to 500 when httpAdapter is null', async () => {
+      generateHttpAdapterMock.mockReturnValueOnce(null);
 
-    const response = { foo: 'bar' };
-    requestMock.mockResolvedValueOnce(response);
+      const baseQuery = createAppRtkBaseQuery();
 
-    const baseQuery = createAppRtkBaseQuery();
+      const result = await baseQuery(
+        {
+          url: '/test',
+          method: 'DELETE',
+        },
+        api,
+        extraOptions
+      );
 
-    const result = await baseQuery(
-      {
-        url: apiUrl + '/test',
+      expect(errorMock).toHaveBeenCalled();
+      expect(result).toEqual({
+        error: {
+          status: 500,
+          appErrCode: 'appError:unknown',
+          errMsg: 'Unexpected error when generating an httpAdapter',
+        },
+      });
+    });
+
+    it('calls handleDefaultRequest', async () => {
+      const response = { data: 'bar' };
+      handleDefaultRequestSpy.mockResolvedValueOnce(response);
+
+      const baseQuery = createAppRtkBaseQuery();
+
+      const result = await baseQuery(
+        {
+          url: '/test',
+          method: 'GET',
+        },
+        api,
+        extraOptions
+      );
+
+      expect(handleDefaultRequestSpy).toHaveBeenCalledTimes(1);
+      expect(handleDefaultRequestSpy).toHaveBeenCalledWith(expect.objectContaining({
+        url: '/test',
         method: 'GET',
-      },
-      api,
-      extraOptions
-    );
-
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(requestMock).toHaveBeenCalledWith({
-      url: apiUrl + '/test',
-      method: 'GET',
-      data: undefined,
-    });
-    expect(result).toEqual({
-      data: response,
-    });
-  });
-
-  it('returns mapped error on failed request', async () => {
-    const requestMock: jest.Mock = jest.fn();
-    const httpAdapterMock: HttpAdapter = {
-      request: requestMock,
-    }
-    generateHttpAdapterMock.mockReturnValueOnce(httpAdapterMock);
-
-    requestMock.mockRejectedValueOnce({
-      status: 401,
-      code: 'UNAUTHORIZED',
-      message: 'Not authorized',
+        data: undefined,
+      }));
+      expect(result).toEqual(response);
     });
 
-    const baseQuery = createAppRtkBaseQuery();
+    it('calls handleGraphqlRequest', async () => {
+      const response = { data: 'bar' };
+      handleGraphqlRequestSpy.mockResolvedValueOnce(response);
 
-    const result = await baseQuery(
-      {
-        url: apiUrl + '/test',
-        method: 'POST',
-        data: { a: 1 },
-      },
-      api,
-      extraOptions
-    );
+      const baseQuery = createAppRtkBaseQuery();
 
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({
-      error: {
-        status: 401,
-        appErrCode: 'appError:unknown',
-        errMsg: 'Not authorized',
-      },
-    });
-  });
+      const result = await baseQuery(
+        {
+          url: '/test',
+          kind: 'graphql',
+          graphql: { document: '' }
+        },
+        api,
+        extraOptions
+      );
 
-  it('defaults status to 500 when error has no status', async () => {
-    const requestMock: jest.Mock = jest.fn();
-    const httpAdapterMock: HttpAdapter = {
-      request: requestMock,
-    }
-    generateHttpAdapterMock.mockReturnValueOnce(httpAdapterMock);
-    requestMock.mockRejectedValueOnce(new Error('Boom'));
-
-    const baseQuery = createAppRtkBaseQuery();
-
-    const result = await baseQuery(
-      {
-        url: apiUrl + '/test',
-        method: 'DELETE',
-      },
-      api,
-      extraOptions
-    );
-
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({
-      error: {
-        status: 500,
-        appErrCode: 'appError:unknown',
-        errMsg: 'Boom',
-      },
-    });
-  });
-
-  it('defaults status to 500 when httpAdapter is null', async () => {
-    generateHttpAdapterMock.mockReturnValueOnce(null);
-
-    const baseQuery = createAppRtkBaseQuery();
-
-    const result = await baseQuery(
-      {
-        url: apiUrl + '/test',
-        method: 'DELETE',
-      },
-      api,
-      extraOptions
-    );
-
-    expect(errorMock).toHaveBeenCalled();
-    expect(result).toEqual({
-      error: {
-        status: 500,
-        appErrCode: 'appError:unknown',
-        errMsg: 'Unexpected error when generating an httpAdapter',
-      },
-    });
-  });
-
-  it('returns data on successful graphql request', async () => {
-    const requestMock: jest.Mock = jest.fn();
-    const httpAdapterMock: HttpAdapter = {
-      request: requestMock,
-    }
-    generateHttpAdapterMock.mockReturnValueOnce(httpAdapterMock);
-
-    const responseData = { foo: 'bar' };
-    const response = { data: responseData };
-    requestMock.mockResolvedValueOnce(response);
-
-    const baseQuery = createAppRtkBaseQuery();
-
-    const result = await baseQuery(
-      {
-        url: apiUrl + '/test',
-        kind: 'graphql',
+      expect(handleGraphqlRequestSpy).toHaveBeenCalledTimes(1);
+      expect(handleGraphqlRequestSpy).toHaveBeenCalledWith(expect.objectContaining({
+        url: '/test',
         graphql: { document: '' }
-      },
-      api,
-      extraOptions
-    );
-
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(requestMock).toHaveBeenCalledWith({
-      url: apiUrl + '/test',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apollo-require-preflight': 'true',
-      },
-      data: { query: '' },
-    });
-    expect(result).toEqual({
-      data: responseData,
+      }));
+      expect(result).toEqual(response);
     });
   });
 });

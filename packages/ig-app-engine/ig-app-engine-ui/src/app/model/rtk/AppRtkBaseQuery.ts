@@ -3,22 +3,26 @@ import type { LoggerAdapter } from '@ig/utils';
 import type { BaseQueryApi, BaseQueryFn } from '@reduxjs/toolkit/query';
 import type { HttpAdapter } from '../../../../../../ig-lib/ig-client-lib/ig-client-utils/src/types/HttpProvider';
 import type { AppRtkErrorT, AppRtkHttpAdapterGeneratorProvider } from '../../../types/AppRtkTypes';
+import { handleDefaultRequest } from './AppRtkDefaultRequestHandler';
+import { handleGraphqlRequest } from './AppRtkGraphqlRequestHandler';
 import { extractAppRtkError } from './AppRtkUtils';
 
+type AppRtkQueryArgs = {
+  url: string,
+} & ({
+  kind?: undefined,
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  data?: unknown,
+} | {
+  kind: 'graphql',
+  graphql: {
+    document: string; // GraphQL query string
+    variables?: Record<string, string | number | object>;
+  };
+})
+
 export const createAppRtkBaseQuery = (): BaseQueryFn<
-  {
-    url: string,
-    kind?: undefined,
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    data?: unknown,
-  } | {
-    url: string,
-    kind: 'graphql',
-    graphql: {
-      document: string; // GraphQL query string
-      variables?: Record<string, string | number | object>;
-    };
-  },
+  AppRtkQueryArgs,
   unknown,
   AppRtkErrorT
 > =>
@@ -39,30 +43,21 @@ export const createAppRtkBaseQuery = (): BaseQueryFn<
 
       // --------- GraphQL path ----------
       if (args.kind === 'graphql') {
-        const { graphql } = args;
-        const { document, variables } = graphql;
-
-        const result = await httpAdapter.request({
-          url: url,
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apollo-require-preflight': 'true',
-          },
-          data: { query: document, variables },
-        }) as { data: object };
-        return { data: result.data }; // GraphQL responses usually have { data, errors }
+        return handleGraphqlRequest({
+          url,
+          graphql: args.graphql,
+          httpAdapter,
+          logger
+        });
+      } else {
+        return handleDefaultRequest({
+          url,
+          method: args.method,
+          data: args.data,
+          httpAdapter,
+          logger
+        });
       }
-
-        // --------- REST path ----------
-      const { method, data } = args;
-      const result = await httpAdapter.request({
-        url,
-        method,
-        data,
-      });
-
-      return { data: result };
     } catch (error: unknown) {
       logger.warn("An error ocurred in AppRtkBaseQuery", error);
 

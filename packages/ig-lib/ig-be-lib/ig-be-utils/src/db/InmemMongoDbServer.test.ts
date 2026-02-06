@@ -23,7 +23,7 @@ describe('InmemMongoDbServer', () => {
   });
 
   describe('startDb', () => {
-    it('should create MongoMemoryServer with given args', async () => {
+    it('should create MongoMemoryServer with given args', () => {
       new InmemMongoDbServer(mongoose, new BeLogger());
     });
 
