@@ -1,53 +1,53 @@
 
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
-import { GameConfigSummaryView } from './GameConfigSummaryView';
+import { GameInfoSummaryView } from './GameInfoSummaryView';
 
 // mocks
 
-jest.mock('./MinimalGameConfigTableRows', () => {
+jest.mock('./MinimalGameInfoTableRows', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    MinimalGameConfigTableRows: View,
+    MinimalGameInfoTableRows: View,
   };
 });
 
-describe('GameConfigSummaryView', () => {
+describe('GameInfoSummaryView', () => {
   it('renders correctly', async () => {
-    const gameConfig = buildTestGameConfig({
+    const gameInfo = buildTestGameInfo({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
     })
 
     const { getByText, getByTestId } = render(
-      <GameConfigSummaryView
-        gameConfig={gameConfig}
+      <GameInfoSummaryView
+        gameInfo={gameInfo}
       />
     );
 
-    getByText(gameConfig.gameName);
+    getByText(gameInfo.gameName);
 
-    const rows = getByTestId('MinimalGameConfigTableRows-tid');
-    expect(rows.props.minimalGameConfig).toEqual(gameConfig);
+    const rows = getByTestId('MinimalGameInfoTableRows-tid');
+    expect(rows.props.minimalGameInfo).toEqual(gameInfo);
 
     getByText(buildMockedTranslation('games:extraTimeLimit'));
     getByText(buildMockedTranslation('common:minutes'));
   });
 
   it('renders correctly, extraTimeLimit is unlimited', async () => {
-    const gameConfig = buildTestGameConfig({
+    const gameInfo = buildTestGameInfo({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'unlimited' },
     })
 
     const { getByText } = render(
-      <GameConfigSummaryView
-        gameConfig={gameConfig}
+      <GameInfoSummaryView
+        gameInfo={gameInfo}
       />
     );
 

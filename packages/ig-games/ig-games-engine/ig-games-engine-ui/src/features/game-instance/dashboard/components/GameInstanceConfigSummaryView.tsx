@@ -14,11 +14,11 @@ export type GameInstanceConfigSummaryViewPropsT = {
 };
 
 export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewPropsT> = ({ gameInstanceExposedInfo }) => {
-  const gameConfig = gameInstanceExposedInfo.gameConfig;
+  const gameInfo = gameInstanceExposedInfo.gameInfo;
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
-  const durationMinStr =  gameConfig.maxDurationInfo.kind === 'limited' ?
-    t('common:minutes', { minutes: MS_TO_MIN(gameConfig.maxDurationInfo.durationMs) }) :
+  const durationMinStr =  gameInfo.maxDurationInfo.kind === 'limited' ?
+    t('common:minutes', { minutes: MS_TO_MIN(gameInfo.maxDurationInfo.durationMs) }) :
     t('common:unlimited');
 
   return (
@@ -26,7 +26,7 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
       <View style={[genericStyles.flexRowAlignTop]} >
         <View style={[genericStyles.flex1]}>
           <RnuiText testID='title-tid' variant='titleSmall' >
-            {gameConfig.gameName}
+            {gameInfo.gameName}
           </RnuiText>
         </View>
 
@@ -38,7 +38,7 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
       </RnuiText>
 
       <RnuiText testID='max-participants-tid'>
-        {t('games:maxParticipants') + ': ' +  gameConfig.maxParticipants}
+        {t('games:maxParticipants') + ': ' +  gameInfo.maxParticipants}
       </RnuiText>
 
       {gameInstanceExposedInfo.gameState.gameStatus === 'notStarted' &&

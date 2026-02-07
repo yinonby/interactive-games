@@ -1,20 +1,22 @@
 
 import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { MinimalGameConfigT } from '@ig/games-engine-models';
+import type { MinimalGameInfoT } from '@ig/games-engine-models';
 import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTable, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
-import { useGamesUserConfigController } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+import {
+  useGamesUserConfigController
+} from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
-import { GameImageCard } from '../../common/game-config/GameImageCard';
-import { MinimalGameConfigTableRows } from './MinimalGameConfigTableRows';
+import { GameImageCard } from '../../common/game-info/GameImageCard';
+import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
 
 export type JoinableGameCardViewPropsT = TestableComponentT & {
-  minimalGameConfig: MinimalGameConfigT,
+  minimalGameInfo: MinimalGameInfoT,
 };
 
-export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGameConfig }) => {
+export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGameInfo }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
   const { onPlayGame } = useGamesUserConfigController();
@@ -24,8 +26,8 @@ export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGa
 
   const handlePlayGamePress = async (): Promise<void> => {
     try {
-      await onPlayGame(minimalGameConfig.gameConfigId);
-      const url = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(minimalGameConfig.gameConfigId);
+      await onPlayGame(minimalGameInfo.gameConfigId);
+      const url = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(minimalGameInfo.gameConfigId);
       navigate(url);
     } catch (error: unknown) {
       onUnknownError(error);
@@ -33,14 +35,14 @@ export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGa
   }
 
   return (
-    <GameImageCard testID='GameImageCard-tid' minimalGameConfig={minimalGameConfig} includeFreeLabel>
+    <GameImageCard testID='GameImageCard-tid' minimalGameInfo={minimalGameInfo} includeFreeLabel>
       <View style={genericStyles.spacing}>
         <RnuiText variant="titleSmall">
-          {minimalGameConfig.gameName}
+          {minimalGameInfo.gameName}
         </RnuiText>
 
         <RnuiTable>
-          <MinimalGameConfigTableRows testID='MinimalGameConfigTableRows-tid' minimalGameConfig={minimalGameConfig} />
+          <MinimalGameInfoTableRows testID='MinimalGameInfoTableRows-tid' minimalGameInfo={minimalGameInfo} />
         </RnuiTable>
 
         <View style={{ flexDirection: "row" }}>

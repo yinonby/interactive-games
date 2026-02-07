@@ -1,10 +1,10 @@
 
 import {
-    type GameInstanceExposedInfoT
+  type GameInstanceExposedInfoT
 } from '@ig/games-engine-models';
 import {
-    buildTestGameConfig, buildTestGameInstanceExposedInfo,
-    buildTestGameState
+  buildTestGameInfo, buildTestGameInstanceExposedInfo,
+  buildTestGameState
 } from '@ig/games-engine-models/test-utils';
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
@@ -33,7 +33,7 @@ jest.mock('./StartGameButton', () => {
 describe('GameInstanceConfigSummaryView', () => {
   it('renders component properly', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameConfig: buildTestGameConfig({
+      gameInfo: buildTestGameInfo({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -60,7 +60,7 @@ describe('GameInstanceConfigSummaryView', () => {
   it('renders start button when game status is notStarted', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'giid-1',
-      gameConfig: buildTestGameConfig({
+      gameInfo: buildTestGameInfo({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -79,7 +79,7 @@ describe('GameInstanceConfigSummaryView', () => {
 
   it('does not render start button when game status is not notStarted', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameConfig: buildTestGameConfig({
+      gameInfo: buildTestGameInfo({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -98,7 +98,7 @@ describe('GameInstanceConfigSummaryView', () => {
 
   it('renders properly when max duration is unlimited', () => {
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameConfig: buildTestGameConfig({
+      gameInfo: buildTestGameInfo({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'unlimited' },
         maxParticipants: 6,

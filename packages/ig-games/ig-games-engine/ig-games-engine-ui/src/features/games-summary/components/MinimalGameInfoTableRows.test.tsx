@@ -4,7 +4,7 @@ import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
-import { MinimalGameConfigTableRows } from './MinimalGameConfigTableRows';
+import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
 
 // Mock PriceView to render easily queryable output
 jest.mock('./PriceView', () => {
@@ -16,11 +16,11 @@ jest.mock('./PriceView', () => {
   };
 });
 
-describe('MinimalGameConfigTableRows', () => {
+describe('MinimalGameInfoTableRows', () => {
   it('renders correctly', async () => {
     const { getByText } = render(
-      <MinimalGameConfigTableRows
-        minimalGameConfig={buildTestMinimalGameConfig({
+      <MinimalGameInfoTableRows
+        minimalGameInfo={buildTestMinimalGameConfig({
           maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
           gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
@@ -37,8 +37,8 @@ describe('MinimalGameConfigTableRows', () => {
 
   it('renders correctly, duration is unlimited', async () => {
     const { getByText } = render(
-      <MinimalGameConfigTableRows
-        minimalGameConfig={buildTestMinimalGameConfig({
+      <MinimalGameInfoTableRows
+        minimalGameInfo={buildTestMinimalGameConfig({
           maxDurationInfo: { kind: 'unlimited' },
           gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,

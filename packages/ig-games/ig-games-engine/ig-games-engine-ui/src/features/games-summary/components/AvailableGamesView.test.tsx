@@ -1,11 +1,11 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from '@ig/app-engine-ui';
-import type { GameConfigT, GamesUserConfigT } from '@ig/games-engine-models';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import type { GameInfoT, GamesUserConfigT } from '@ig/games-engine-models';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
-import * as GamesConfigModel from '../../../domains/games-config/model/rtk/GamesConfigModel';
+import * as GamesConfigModel from '../../../domains/games-app/model/rtk/GamesAppModel';
 import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { AvailableGamesView } from './AvailableGamesView';
 
@@ -20,7 +20,7 @@ jest.mock("./JoinableGameCardView", () => {
 
 describe("AvailableGamesView", () => {
   const { onAppErrorMock } = __engineAppUiMocks;
-  const useGamesConfigModelSpy = jest.spyOn(GamesConfigModel, 'useGamesConfigModel');
+  const useGamesConfigModelSpy = jest.spyOn(GamesConfigModel, 'useGamesAppModel');
   const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
 
   beforeEach(() => {
@@ -65,7 +65,7 @@ describe("AvailableGamesView", () => {
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { minimalGameConfigs: [] },
+      data: { minimalGameInfos: [] },
     });
     useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
@@ -79,20 +79,20 @@ describe("AvailableGamesView", () => {
   });
 
   it('renders "No games are available" when user has joined all available games', () => {
-    const availableMinimalGameConfigs = [
-      buildTestGameConfig({ gameConfigId: "g1" }),
-      buildTestGameConfig({ gameConfigId: "g2" }),
+    const availableMinimalGameInfos = [
+      buildTestGameInfo({ gameConfigId: "g1" }),
+      buildTestGameInfo({ gameConfigId: "g2" }),
     ];
-    const joinedGameConfigs: GameConfigT[] = [
-      buildTestGameConfig({ gameConfigId: "g1" }),
-      buildTestGameConfig({ gameConfigId: "g2" }),
+    const joinedGameInfos: GameInfoT[] = [
+      buildTestGameInfo({ gameConfigId: "g1" }),
+      buildTestGameInfo({ gameConfigId: "g2" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        minimalGameConfigs: availableMinimalGameConfigs,
+        minimalGameInfos: availableMinimalGameInfos,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({
@@ -100,7 +100,7 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameConfigs: joinedGameConfigs,
+          joinedGameInfos: joinedGameInfos,
         }
       }
     });
@@ -113,19 +113,19 @@ describe("AvailableGamesView", () => {
   });
 
   it('renders "Available games:" and grid when there are non-joined games', () => {
-    const availableMinimalGameConfigs = [
-      buildTestGameConfig({ gameConfigId: "g1" }),
-      buildTestGameConfig({ gameConfigId: "g2" }),
+    const availableMinimalGameInfos = [
+      buildTestGameInfo({ gameConfigId: "g1" }),
+      buildTestGameInfo({ gameConfigId: "g2" }),
     ];
-    const joinedGameConfigs: GameConfigT[] = [
-      buildTestGameConfig({ gameConfigId: "g1" }),
+    const joinedGameInfos: GameInfoT[] = [
+      buildTestGameInfo({ gameConfigId: "g1" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        minimalGameConfigs: availableMinimalGameConfigs,
+        minimalGameInfos: availableMinimalGameInfos,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({
@@ -133,7 +133,7 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameConfigs: joinedGameConfigs,
+          joinedGameInfos: joinedGameInfos,
         }
       }
     });

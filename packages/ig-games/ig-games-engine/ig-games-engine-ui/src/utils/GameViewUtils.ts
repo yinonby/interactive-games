@@ -1,27 +1,27 @@
 
 import type { AppImageAssetT } from '@ig/app-engine-models';
-import type { MinimalGameConfigT } from '@ig/games-engine-models';
+import type { MinimalGameInfoT } from '@ig/games-engine-models';
 import { type RnuiImagePropsT, type RnuiImageSourceT } from '@ig/rnui';
 
 export const getMinimalGameConfigImageProps = (
-  minimalGameConfig: MinimalGameConfigT,
+  minimalGameInfo: MinimalGameInfoT,
   imagesSourceMap: Record<AppImageAssetT, RnuiImageSourceT>,
   includeFreeLabel = true,
 ): RnuiImagePropsT | undefined => {
   let rnuiImageProps: RnuiImagePropsT | undefined = undefined;
 
-  if (minimalGameConfig.imageInfo.kind === 'asset') {
-    const gameImageType: AppImageAssetT = minimalGameConfig.imageInfo.imageAssetName;
+  if (minimalGameInfo.imageInfo.kind === 'asset') {
+    const gameImageType: AppImageAssetT = minimalGameInfo.imageInfo.imageAssetName;
     const imageSource: RnuiImageSourceT | undefined = imagesSourceMap[gameImageType]
     if (imageSource !== undefined) {
       rnuiImageProps = { imageSource: imageSource, height: 200 };
     }
   } else {
-    rnuiImageProps = { imageSource: minimalGameConfig.imageInfo.imageUrl, height: 200 };
+    rnuiImageProps = { imageSource: minimalGameInfo.imageInfo.imageUrl, height: 200 };
   }
 
   if (includeFreeLabel && rnuiImageProps !== undefined &&
-    (minimalGameConfig.gamePriceInfo.kind === "free" || minimalGameConfig.gamePriceInfo.priceRate === 0)
+    (minimalGameInfo.gamePriceInfo.kind === "free" || minimalGameInfo.gamePriceInfo.priceRate === 0)
   ) {
     rnuiImageProps.imgLabelProps = {
       text: "free",

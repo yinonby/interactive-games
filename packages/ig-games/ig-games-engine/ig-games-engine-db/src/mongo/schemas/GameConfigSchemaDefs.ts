@@ -1,15 +1,10 @@
 
-import type { GameConfigT, MinimalGameConfigT } from '@ig/games-engine-models';
+import type { GameConfigT, GameInfoNoIdT, MinimalGameInfoNoIdT } from '@ig/games-engine-models';
 import type { SchemaDefinition } from 'mongoose';
 import { durationInfoSchemaDef, imageInfoSchemaDef, priceInfoSchemaDef } from './CommonSchemaDefs';
 import { levelConfigSchemaDef } from './LevelConfigSchemaDefs';
 
-export const minimalGameConfigSchemaDef: SchemaDefinition<MinimalGameConfigT> = {
-  gameConfigId: {
-    type: String,
-    required: true,
-  },
-
+export const minimalGameInfoNoIdSchemaDef: SchemaDefinition<MinimalGameInfoNoIdT> = {
   kind: {
     type: String,
     required: true,
@@ -47,8 +42,8 @@ export const minimalGameConfigSchemaDef: SchemaDefinition<MinimalGameConfigT> = 
   },
 }
 
-export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
-  ...minimalGameConfigSchemaDef,
+export const gameInfoNoIdSchemaDef: SchemaDefinition<GameInfoNoIdT> = {
+  ...minimalGameInfoNoIdSchemaDef,
 
   extraTimeMinutes: {
     type: Number,
@@ -67,5 +62,18 @@ export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
     _id: false,
     required: true,
     default: [],
+  },
+}
+
+export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
+  gameConfigId: {
+    type: String,
+    required: true,
+  },
+
+  gameInfoNoId: {
+    type: gameInfoNoIdSchemaDef,
+    _id: false,
+    required: true,
   },
 }

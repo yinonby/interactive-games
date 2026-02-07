@@ -30,7 +30,7 @@ const loadPresets = async (gamesPluginConfig: GamesPluginConfigT): Promise<void>
     }
 
     const presetNames = presetNamesStr.split(',');
-    if (presetNamesStr === 'all' || presetNames.includes('game-configs-preset-1')) {
+    if (presetNamesStr === 'all' || presetNames.includes('game-infos-preset-1')) {
       await loadGameConfigPreset1(gamesPluginConfig.gamesDbAdapter);
     }
   }

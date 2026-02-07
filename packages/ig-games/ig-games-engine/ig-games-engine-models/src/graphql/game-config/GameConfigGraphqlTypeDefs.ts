@@ -2,33 +2,18 @@
 import { print } from 'graphql';
 import { gql } from 'graphql-tag';
 import { gamesGraphqlCommonTypeDefs, gamesGraphqlDirectiveTypeDefs } from '../common/GamesGraphqlCommonTypeDefs';
+import { gameInfoGraphqlTypesTypeDefs } from '../game-info/GameInfoGraphqlTypeDefs';
 
-const gameConfigGraphqlEnumTypeDefs = gql`
-  enum GameConfigKind {
-    jointGame
+const gameConfigGraphqlTypesTypeDefs = gql`
+  type GameConfig {
+    gameConfigId: ID!
+    gameInfoNoId: GameInfoNoId!
   }
 `;
 
 const gameConfigGraphqlQueryTypeDefs = gql`
   type Query {
-    getGameConfigs: [GameConfig!]!
-  }
-
-  type LevelExposedConfig {
-    levelName: String
-  }
-
-  type GameConfig {
-    gameConfigId: ID!
-    kind: GameConfigKind!
-    gameName: String!
-    maxDurationInfo: DurationInfo!
-    gamePriceInfo: PriceInfo!
-    maxParticipants: Int!
-    imageInfo: ImageInfo!
-    extraTimeMinutes: Int!
-    extraTimeLimitDurationInfo: DurationInfo!
-    levelExposedConfigs: [LevelExposedConfig!]!
+    getGameConfigs: [GameConfig!]! @auth(requires: gamesSystemAdmin)
   }
 `;
 
@@ -37,13 +22,13 @@ const gameConfigGraphqlMutationTypeDefs = gql`
     updateGameConfig(input: UpdateGameConfigInput!): UpdateGameConfigResult! @auth(requires: gamesSystemAdmin)
   }
 
-  input LevelExposedConfigInput {
-    levelName: String
-  }
-
   input UpdateGameConfigInput {
     gameConfigId: ID!
-    kind: GameConfigKind
+    gameInfoNoId: GameInfoNoIdInput!
+  }
+
+  input GameInfoNoIdInput {
+    kind: GameInfoKind
     gameName: String
     maxDurationInfo: DurationInfoInput
     gamePriceInfo: PriceInfoInput
@@ -54,6 +39,10 @@ const gameConfigGraphqlMutationTypeDefs = gql`
     levelExposedConfigs: [LevelExposedConfigInput!]
   }
 
+  input LevelExposedConfigInput {
+    levelName: String
+  }
+
   type UpdateGameConfigResult {
     status: UpdateStatus!
   }
@@ -62,7 +51,8 @@ const gameConfigGraphqlMutationTypeDefs = gql`
 const gameConfigGraphqlTypeDefsStr = [
   print(gamesGraphqlDirectiveTypeDefs),
   print(gamesGraphqlCommonTypeDefs),
-  print(gameConfigGraphqlEnumTypeDefs),
+  print(gameInfoGraphqlTypesTypeDefs),
+  print(gameConfigGraphqlTypesTypeDefs),
   print(gameConfigGraphqlQueryTypeDefs),
   print(gameConfigGraphqlMutationTypeDefs),
 ].join('\n');

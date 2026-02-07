@@ -4,7 +4,7 @@ import type { LevelExposedConfigT } from './LevelTypes';
 
 export type GameConfigIdT = string;
 
-export type MinimalGameConfigT = {
+export type MinimalGameInfoT = {
   gameConfigId: GameConfigIdT,
   kind: 'jointGame',
   gameName: string,
@@ -14,8 +14,16 @@ export type MinimalGameConfigT = {
   imageInfo: ImageInfoT,
 }
 
-export type GameConfigT = MinimalGameConfigT & {
+export type GameInfoT = MinimalGameInfoT & {
   extraTimeMinutes: number,
   extraTimeLimitDurationInfo: DurationInfoT,
   levelExposedConfigs: LevelExposedConfigT[],
+}
+
+export type MinimalGameInfoNoIdT = Omit<MinimalGameInfoT, 'gameConfigId'>;
+export type GameInfoNoIdT = Omit<GameInfoT, 'gameConfigId'>;
+
+export type GameConfigT = {
+  gameConfigId: GameConfigIdT,
+  gameInfoNoId: GameInfoNoIdT,
 }

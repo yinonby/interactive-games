@@ -1,9 +1,9 @@
 
-import type { GameConfigIdT, GameConfigT, UpdateGameConfigInputT } from '@ig/games-engine-models';
+import type { GameConfigIdT, GameConfigT, GameInfoNoIdT } from '@ig/games-engine-models';
 
 export interface GameConfigsTableAdapter {
   getGameConfigs: () => Promise<GameConfigT[]>;
   getGameConfig(gameConfigId: GameConfigIdT): Promise<GameConfigT | null>;
-  createGameConfig: (gameConfig: GameConfigT) => Promise<void>;
-  updateGameConfig(input: UpdateGameConfigInputT): Promise<void>;
+  createGameConfig: (gameConfigId: GameConfigIdT, gameInfoNoId: GameInfoNoIdT) => Promise<void>;
+  updateGameConfig(gameConfigId: GameConfigIdT, partialGameInfoNoId: Partial<GameInfoNoIdT>): Promise<void>;
 }

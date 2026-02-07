@@ -13,7 +13,7 @@ import { JoinableGameCardView } from './JoinableGameCardView';
 
 // mocks
 
-jest.mock('../../../features/common/game-config/GameImageCard', () => {
+jest.mock('../../../features/common/game-info/GameImageCard', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -22,12 +22,12 @@ jest.mock('../../../features/common/game-config/GameImageCard', () => {
   };
 });
 
-jest.mock('./MinimalGameConfigTableRows', () => {
+jest.mock('./MinimalGameInfoTableRows', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    MinimalGameConfigTableRows: View,
+    MinimalGameInfoTableRows: View,
   };
 });
 
@@ -56,23 +56,23 @@ describe('JoinableGameCardView', () => {
 
     onPlayGameMock.mockResolvedValue('game-instance-123');
 
-    const minimalGameConfig = buildTestMinimalGameConfig({
+    const minimalGameInfo = buildTestMinimalGameConfig({
       gameConfigId: 'gcid-1',
       gameName: 'Test Game',
     });
 
     const { getByText, getByTestId } = render(
       <JoinableGameCardView
-        minimalGameConfig={minimalGameConfig}
+        minimalGameInfo={minimalGameInfo}
       />
     );
 
     const card = getByTestId('GameImageCard-tid');
-    expect(card.props.minimalGameConfig).toEqual(minimalGameConfig);
+    expect(card.props.minimalGameInfo).toEqual(minimalGameInfo);
     expect(card.props.includeFreeLabel).toEqual(true);
 
-    const rows = getByTestId('MinimalGameConfigTableRows-tid');
-    expect(rows.props.minimalGameConfig).toEqual(minimalGameConfig);
+    const rows = getByTestId('MinimalGameInfoTableRows-tid');
+    expect(rows.props.minimalGameInfo).toEqual(minimalGameInfo);
 
     getByText(buildMockedTranslation('games:play'));
   });
@@ -89,7 +89,7 @@ describe('JoinableGameCardView', () => {
 
     const { getByTestId } = render(
       <JoinableGameCardView
-        minimalGameConfig={{
+        minimalGameInfo={{
           gameConfigId: 'gcid-1',
           kind: 'jointGame',
           gameName: 'Test Game',
@@ -123,7 +123,7 @@ describe('JoinableGameCardView', () => {
 
     const { getByTestId } = render(
       <JoinableGameCardView
-        minimalGameConfig={{
+        minimalGameInfo={{
           gameConfigId: 'gcid-1',
           kind: 'jointGame',
           gameName: 'Test Game',

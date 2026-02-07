@@ -1,7 +1,7 @@
 
 import { ApolloServer } from '@apollo/server';
 import type { GameConfigsTableAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
-import { buildFullTestGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildFullTestGameConfig, buildFullTestGameInfoNoId } from '@ig/games-engine-models/test-utils';
 import { createGameConfigSchema } from './GameConfigSchema';
 
 describe('createGameConfigSchema', () => {
@@ -11,10 +11,12 @@ describe('createGameConfigSchema', () => {
       getGameConfigs: vi.fn().mockResolvedValue([
         buildFullTestGameConfig({
           gameConfigId: 'gc-1',
-          kind: 'jointGame',
-          gameName: 'Test Game',
-          maxDurationInfo: { kind: 'limited', durationMs: 60000 },
-          maxParticipants: 4,
+          gameInfoNoId: buildFullTestGameInfoNoId({
+            kind: 'jointGame',
+            gameName: 'Test Game',
+            maxDurationInfo: { kind: 'limited', durationMs: 60000 },
+            maxParticipants: 4,
+          }),
         }),
       ]),
       createGameConfig: vi.fn(),
@@ -36,8 +38,10 @@ describe('createGameConfigSchema', () => {
     type GetGameConfigsResult = {
       getGameConfigs: {
         gameConfigId: string;
-        gameName: string;
-        maxParticipants: number;
+        gameInfoNoId: {
+          gameName: string;
+          maxParticipants: number;
+        }
       }[];
     };
 
@@ -47,8 +51,10 @@ describe('createGameConfigSchema', () => {
         query {
           getGameConfigs {
             gameConfigId
-            gameName
-            maxParticipants
+            gameInfoNoId {
+              gameName
+              maxParticipants
+            }
           }
         }
       `,
@@ -65,8 +71,10 @@ describe('createGameConfigSchema', () => {
     expect(data.getGameConfigs).toHaveLength(1);
     expect(data.getGameConfigs[0]).toEqual({
       gameConfigId: 'gc-1',
-      gameName: 'Test Game',
-      maxParticipants: 4,
+      gameInfoNoId: {
+        gameName: 'Test Game',
+        maxParticipants: 4,
+      }
     });
 
     // --- ensure logic path was called ---

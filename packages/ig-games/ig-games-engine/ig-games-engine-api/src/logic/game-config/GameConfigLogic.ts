@@ -1,6 +1,9 @@
 
 import type { GameConfigLogicAdapter, GameConfigsTableAdapter } from '@ig/games-engine-be-models';
-import type { GameConfigIdT, GameConfigT, UpdateGameConfigInputT, UpdateGameConfigResultT } from '@ig/games-engine-models';
+import type {
+  GameConfigIdT, GameConfigT, GameInfoNoIdT, GameInfoT,
+  UpdateGameConfigInputT, UpdateGameConfigResultT
+} from '@ig/games-engine-models';
 
 export class GameConfigLogic implements GameConfigLogicAdapter {
   constructor(
@@ -15,12 +18,33 @@ export class GameConfigLogic implements GameConfigLogicAdapter {
     return await this.gameConfigsTableAdapter.getGameConfig(gameConfigId);
   }
 
-  public async createGameConfig(gameConfig: GameConfigT): Promise<void> {
-    return await this.gameConfigsTableAdapter.createGameConfig(gameConfig);
+  public async getGameInfos(): Promise<GameInfoT[]> {
+    const gameConfigs = await this.gameConfigsTableAdapter.getGameConfigs();
+    return gameConfigs.map(e => ({
+      gameConfigId: e.gameConfigId,
+      ...e.gameInfoNoId,
+    }));
+  }
+
+  public async getGameInfo(gameConfigId: GameConfigIdT): Promise<GameInfoT | null> {
+    const gameConfig = await this.gameConfigsTableAdapter.getGameConfig(gameConfigId);
+
+    if (gameConfig === null) {
+      return null;
+    }
+    return {
+      gameConfigId: gameConfig.gameConfigId,
+      ...gameConfig.gameInfoNoId,
+    }
+  }
+
+  public async createGameConfig(gameConfigId: GameConfigIdT, gameInfoNoId: GameInfoNoIdT): Promise<void> {
+    return await this.gameConfigsTableAdapter.createGameConfig(gameConfigId, gameInfoNoId);
   }
 
   public async updateGameConfig(input: UpdateGameConfigInputT): Promise<UpdateGameConfigResultT> {
-    await this.gameConfigsTableAdapter.updateGameConfig(input);
+    const { gameConfigId, ...rest } = input;
+    await this.gameConfigsTableAdapter.updateGameConfig(gameConfigId, rest);
 
     return { status: 'ok' };
   }

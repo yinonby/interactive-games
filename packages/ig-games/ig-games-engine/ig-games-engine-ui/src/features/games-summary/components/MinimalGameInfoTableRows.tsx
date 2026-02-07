@@ -1,21 +1,21 @@
 
 import { useAppLocalization } from '@ig/app-engine-ui';
-import type { MinimalGameConfigT } from '@ig/games-engine-models';
+import type { MinimalGameInfoT } from '@ig/games-engine-models';
 import { RnuiTableCell, RnuiTableRow, RnuiText } from '@ig/rnui';
 import { MS_TO_MIN } from '@ig/utils';
 import React, { type FC } from 'react';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { PriceView } from './PriceView';
 
-export type MinimalGameConfigSummaryViewPropsT = TestableComponentT & {
-  minimalGameConfig: MinimalGameConfigT,
+export type MinimalGameInfoTableRowsPropsT = TestableComponentT & {
+  minimalGameInfo: MinimalGameInfoT,
 };
 
-export const MinimalGameConfigTableRows: FC<MinimalGameConfigSummaryViewPropsT> = ({ minimalGameConfig }) => {
+export const MinimalGameInfoTableRows: FC<MinimalGameInfoTableRowsPropsT> = ({ minimalGameInfo }) => {
   const { t } = useAppLocalization();
-  const durationMinutesStr = minimalGameConfig.maxDurationInfo.kind === 'unlimited' ?
+  const durationMinutesStr = minimalGameInfo.maxDurationInfo.kind === 'unlimited' ?
     t("common:unlimited") :
-    t("common:minutes", { minutes: MS_TO_MIN(minimalGameConfig.maxDurationInfo.durationMs) });
+    t("common:minutes", { minutes: MS_TO_MIN(minimalGameInfo.maxDurationInfo.durationMs) });
 
   return (
     <>
@@ -40,7 +40,7 @@ export const MinimalGameConfigTableRows: FC<MinimalGameConfigSummaryViewPropsT> 
         </RnuiTableCell>
         <RnuiTableCell>
           <RnuiText >
-            {minimalGameConfig.maxParticipants}
+            {minimalGameInfo.maxParticipants}
           </RnuiText>
         </RnuiTableCell>
       </RnuiTableRow>
@@ -52,7 +52,7 @@ export const MinimalGameConfigTableRows: FC<MinimalGameConfigSummaryViewPropsT> 
           </RnuiText>
         </RnuiTableCell>
         <RnuiTableCell>
-          <PriceView testID="price-view-tid" priceInfo={minimalGameConfig.gamePriceInfo} />
+          <PriceView testID="price-view-tid" priceInfo={minimalGameInfo.gamePriceInfo} />
         </RnuiTableCell>
       </RnuiTableRow>
     </>
