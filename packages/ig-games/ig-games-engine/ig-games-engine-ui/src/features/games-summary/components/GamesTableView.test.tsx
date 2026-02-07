@@ -1,6 +1,6 @@
 
-import type { GameConfigT } from '@ig/games-engine-models';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import type { GameInfoT } from '@ig/games-engine-models';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
@@ -29,9 +29,9 @@ describe('GamesTableView', () => {
   });
 
   it('renders empty table', () => {
-    const joinedGameConfigs: GameConfigT[] = [];
+    const joinedGameInfos: GameInfoT[] = [];
     const { getAllByTestId, getByTestId, queryByTestId, getByText } = render(
-      <GamesTableView joinedGameConfigs={joinedGameConfigs} />
+      <GamesTableView joinedGameInfos={joinedGameInfos} />
     );
 
     getByTestId('RnuiTable-tid');
@@ -44,13 +44,13 @@ describe('GamesTableView', () => {
   });
 
   it('renders games list when games exist', () => {
-    const joinedGameConfigs: GameConfigT[] = [
-      buildTestGameConfig({ gameName: "game-1" }),
-      buildTestGameConfig({ gameName: "game-2" }),
+    const joinedGameInfos: GameInfoT[] = [
+      buildTestGameInfo({ gameName: "game-1" }),
+      buildTestGameInfo({ gameName: "game-2" }),
     ];
 
     const { getAllByTestId, getByTestId } = render(
-      <GamesTableView joinedGameConfigs={joinedGameConfigs} />
+      <GamesTableView joinedGameInfos={joinedGameInfos} />
     );
 
     getByTestId('RnuiTable-tid');

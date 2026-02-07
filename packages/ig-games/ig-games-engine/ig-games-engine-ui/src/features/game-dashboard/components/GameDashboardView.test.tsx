@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GameModel from '../../../domains/game/model/rtk/GameModel';
@@ -8,12 +8,12 @@ import { GameDashboardView } from './GameDashboardView';
 
 // mocks
 
-jest.mock('./GameConfigCardView', () => {
+jest.mock('./GameInfoCardView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    GameConfigCardView: View,
+    GameInfoCardView: View,
   };
 });
 
@@ -42,9 +42,9 @@ describe('GameDashboardView', () => {
       isError: false,
     });
 
-    const joinedGameConfig = buildTestGameConfig({ gameName: 'g1' });
+    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
     const { queryByTestId } = render(
-      <GameDashboardView joinedGameConfig={joinedGameConfig}/>
+      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
     );
 
     expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
@@ -57,16 +57,16 @@ describe('GameDashboardView', () => {
       appErrCode: "apiError:server",
     });
 
-    const joinedGameConfig = buildTestGameConfig({ gameName: 'g1' });
+    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
     render(
-      <GameDashboardView joinedGameConfig={joinedGameConfig}/>
+      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
     );
 
     expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders properly', async () => {
-    const joinedGameConfig = buildTestGameConfig({ gameName: 'g1' });
+    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
     useGameModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -76,10 +76,10 @@ describe('GameDashboardView', () => {
     });
 
     const { getByTestId, getAllByTestId } = render(
-      <GameDashboardView joinedGameConfig={joinedGameConfig}/>
+      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
     );
 
-    getByTestId('GameConfigCardView-tid');
+    getByTestId('GameInfoCardView-tid');
     expect(getAllByTestId('GameInstanceSummaryView-tid')).toHaveLength(2);
   });
 });

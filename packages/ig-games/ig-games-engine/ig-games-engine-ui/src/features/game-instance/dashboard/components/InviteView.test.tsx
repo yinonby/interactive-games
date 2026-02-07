@@ -11,7 +11,7 @@ import { InviteView } from './InviteView';
 describe("InviteView", () => {
   const baseGameInstance: GameInstanceExposedInfoT = {
     invitationCode: "ABC123",
-    gameConfig: { maxParticipants: 4 } as unknown as GameConfigIdT,
+    gameInfo: { maxParticipants: 4 } as unknown as GameConfigIdT,
     playerExposedInfos: [],
   } as unknown as GameInstanceExposedInfoT;
 

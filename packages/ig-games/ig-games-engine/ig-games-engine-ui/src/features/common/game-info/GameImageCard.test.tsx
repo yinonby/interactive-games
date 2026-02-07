@@ -34,20 +34,20 @@ describe('GameImageCard', () => {
     } as AppConfigContextT)
 
     // render
-    const minimalGameConfig = buildTestMinimalGameConfig({
+    const minimalGameInfo = buildTestMinimalGameConfig({
       gameConfigId: 'ABC',
     });
 
     const { getByTestId } = render(
       <GameImageCard
-        minimalGameConfig={minimalGameConfig}
+        minimalGameInfo={minimalGameInfo}
         includeFreeLabel={includeFreeLabel}
       />
     );
 
     // verify calls
     expect(getMinimalGameConfigImagePropsSpy)
-      .toHaveBeenCalledWith(minimalGameConfig, imagesSourceMap, includeFreeLabel);
+      .toHaveBeenCalledWith(minimalGameInfo, imagesSourceMap, includeFreeLabel);
 
     // verify components
     const card = getByTestId('RnuiCard-tid');

@@ -1,13 +1,13 @@
 
-import type { GameConfigT } from '@ig/games-engine-models';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import type { GameInfoT } from '@ig/games-engine-models';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { GameConfigCardView } from './GameConfigCardView';
+import { GameInfoCardView } from './GameInfoCardView';
 
 // mocks
 
-jest.mock('../../common/game-config/GameImageCard', () => {
+jest.mock('../../common/game-info/GameImageCard', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -25,27 +25,27 @@ jest.mock('./CreateGameInstanceButton', () => {
   };
 });
 
-jest.mock('../../games-summary/components/GameConfigSummaryView', () => {
+jest.mock('../../games-summary/components/GameInfoSummaryView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    GameConfigSummaryView: View,
+    GameInfoSummaryView: View,
   };
 });
 
 // tests
 
-describe('GameConfigCardView', () => {
+describe('GameInfoCardView', () => {
   it('renders properly', async () => {
-    const gameConfig: GameConfigT = buildTestGameConfig({});
+    const gameInfo: GameInfoT = buildTestGameInfo({});
 
     const { getByTestId } = render(
-      <GameConfigCardView gameConfig={gameConfig} />
+      <GameInfoCardView gameInfo={gameInfo} />
     );
 
     getByTestId('GameImageCard-tid');
-    getByTestId('GameConfigSummaryView-tid');
+    getByTestId('GameInfoSummaryView-tid');
     getByTestId('CreateGameInstanceButton-tid');
   });
 });

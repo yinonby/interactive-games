@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildTestGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
@@ -65,7 +65,7 @@ describe('GamesSummaryView', () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameConfigs: [],
+          joinedGameInfos: [],
         }
       },
     });
@@ -85,9 +85,9 @@ describe('GamesSummaryView', () => {
       isError: false,
       data:  {
         gamesUserConfig: {
-          joinedGameConfigs: [
-            buildTestGameConfig({}),
-            buildTestGameConfig({}),
+          joinedGameInfos: [
+            buildTestGameInfo({}),
+            buildTestGameInfo({}),
           ],
         }
       },

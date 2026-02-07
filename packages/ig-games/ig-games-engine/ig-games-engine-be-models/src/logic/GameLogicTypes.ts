@@ -1,8 +1,11 @@
 
-import type { GameConfigT, UpdateGameConfigInputT, UpdateGameConfigResultT } from '@ig/games-engine-models';
+import type { GameConfigIdT, GameConfigT, GameInfoNoIdT, GameInfoT, UpdateGameConfigInputT, UpdateGameConfigResultT } from '@ig/games-engine-models';
 
 export interface GameConfigLogicAdapter {
   getGameConfigs(): Promise<GameConfigT[]>;
-  createGameConfig(gameConfig: GameConfigT): Promise<void>;
+  getGameConfig(gameConfigId: GameConfigIdT): Promise<GameConfigT | null>;
+  getGameInfos(): Promise<GameInfoT[]>;
+  getGameInfo(gameConfigId: GameConfigIdT): Promise<GameInfoT | null>;
+  createGameConfig(gameConfigId: GameConfigIdT, gameInfoNoId: GameInfoNoIdT): Promise<void>;
   updateGameConfig(input: UpdateGameConfigInputT): Promise<UpdateGameConfigResultT>;
 }

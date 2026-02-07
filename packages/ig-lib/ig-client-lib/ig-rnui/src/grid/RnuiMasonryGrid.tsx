@@ -1,16 +1,16 @@
 import {
-    FC,
-    ReactElement,
-    useEffect,
-    useRef,
-    useState,
+  FC,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import {
-    Animated,
-    LayoutChangeEvent,
-    StyleSheet,
-    useWindowDimensions,
-    View,
+  Animated,
+  LayoutChangeEvent,
+  StyleSheet,
+  useWindowDimensions,
+  View,
 } from 'react-native';
 import { RnuiGridItemPropsT } from './RnuiGridItem';
 import { getBreakpoint, TOTAL_GRID_COLUMNS } from './RnuiGridUtils';

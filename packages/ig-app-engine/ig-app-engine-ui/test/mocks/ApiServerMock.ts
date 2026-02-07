@@ -1,6 +1,6 @@
 
 import {
-  type GameConfigIdT, type GameConfigT, type GameInstanceChatMessageT,
+  type GameConfigIdT, type GameInfoT, type GameInstanceChatMessageT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
   type GetGameInstanceChatResponseT,
@@ -26,25 +26,25 @@ import {
 } from './DevMocks';
 
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
-  const gameConfig: GameConfigT | undefined =
+  const gameInfo: GameInfoT | undefined =
     devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
   const curUserId = await getLocalUserId();
 
-  if (gameConfig === undefined) {
+  if (gameInfo === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
   if (curUserId === null) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameConfig: GameConfigT | undefined =
+  const joinedGameInfo: GameInfoT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameConfig !== undefined) {
+  if (joinedGameInfo !== undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  devJoinedGameConfigs.push(gameConfig);
+  devJoinedGameConfigs.push(gameInfo);
 }
 
 const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
@@ -82,10 +82,10 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameConfig: GameConfigT | undefined =
+  const joinedGameInfo: GameInfoT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameConfig === undefined) {
+  if (joinedGameInfo === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -106,14 +106,14 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     }
   }
 
-  const levelStates: LevelStateT[] = joinedGameConfig.levelExposedConfigs
+  const levelStates: LevelStateT[] = joinedGameInfo.levelExposedConfigs
     .map(e => levelConfigTolevelState(e))
     .filter(e => e !== null);
 
   const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
     gameInstanceId: gameInstanceId,
     invitationCode: 'invt-code-' + gameInstanceId,
-    gameConfig: joinedGameConfig,
+    gameInfo: joinedGameInfo,
     gameState: {
       gameStatus: 'notStarted',
       levelStates: levelStates,
@@ -132,7 +132,7 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
 }
 
 const getGameInstanceIds = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT[]> => {
-  return devAllGameInstanceExposedInfos.filter(e => e.gameConfig.gameConfigId === gameConfigId)
+  return devAllGameInstanceExposedInfos.filter(e => e.gameInfo.gameConfigId === gameConfigId)
     .map(e => e.gameInstanceId);
 }
 
@@ -240,7 +240,7 @@ export class ApiServerMock implements HttpAdapter {
 
     if (options.url === '/games/user-config') {
       const gamesUserConfig: GamesUserConfigT = {
-        joinedGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
+        joinedGameInfos: [...devJoinedGameConfigs], // clone this array so it is not frozen
       }
       const response: GetGamesUserConfigResponseT = {
         gamesUserConfig: gamesUserConfig,
