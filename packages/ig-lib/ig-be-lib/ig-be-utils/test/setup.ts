@@ -1,3 +1,4 @@
+import type { LoggerAdapter } from '@ig/utils';
 
 beforeAll(async () => {
 });
@@ -12,12 +13,12 @@ afterAll(async () => {
 });
 
 vi.mock('../src/logger/BeLogger', () => {
-  class SilentBeLogger {
+  class SilentBeLogger implements LoggerAdapter {
     info = vi.fn();
+    log = vi.fn();
     warn = vi.fn();
     error = vi.fn();
     debug = vi.fn();
-    trace = vi.fn();
   }
 
   return {

@@ -18,7 +18,7 @@ export class InmemMongoDbServer implements DbProvider {
     this.mongoMemoryServer = await MongoMemoryServer.create();
     const uri = this.mongoMemoryServer.getUri();
     await this._mongoose.connect(uri);
-    this.logger.log(`Connected to in-memory MongoDb server at: ${uri}`);
+    this.logger.info(`Connected to in-memory MongoDb server at: ${uri}`);
   }
 
   public async stopDb(): Promise<void> {
