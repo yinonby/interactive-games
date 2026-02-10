@@ -1,6 +1,7 @@
 
 import type { LoggerAdapter } from '@ig/utils';
 import express from 'express';
+import { MongoInmemDbServer } from '../db/MongoInmemDbServer';
 import type { ExpressAppStarterInfoT } from '../types/exported/ExpressTypes';
 import { ExpressApp } from './ExpressApp';
 
@@ -202,10 +203,14 @@ describe('ExpressApp', () => {
   });
 
   it('should handle shutdown', async () => {
+    // start a local mongo inmem server
+    const mongoInmemDbServer = new MongoInmemDbServer();
+    const uri = await mongoInmemDbServer.startDb();
+
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 3000,
       appInfo: { appVersion: '1.1' },
-      dbInfo: { dbType: 'inmem-mongodb', tableNamePrefix: '' },
+      dbInfo: { dbType: 'mongodb', mongoConnString: uri, tableNamePrefix: '' },
       expressPluginContainers: [],
     };
 

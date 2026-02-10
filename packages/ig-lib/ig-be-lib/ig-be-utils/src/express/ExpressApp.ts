@@ -2,7 +2,7 @@
 import type { LoggerAdapter } from '@ig/utils';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Application, type NextFunction, type Request, type Response } from 'express';
-import { DbInstance } from '../db/DbInstance';
+import { DbClient } from '../db/DbClient';
 import { BeLogger } from '../logger/BeLogger';
 import type { PackageDb } from '../types/exported/DbTypes';
 import type { ExpressAppDbInfoT, ExpressAppStarterInfoT, ExpressPluginContainerT } from '../types/exported/ExpressTypes';
@@ -29,10 +29,10 @@ export class ExpressApp {
     // Middleware to parse JSON bodies
     this.app.use(express.json());
 
-    let dbInstance: DbInstance | null = null;
+    let dbClient: DbClient | null = null;
     if (this.expressAppStarterInfo.dbInfo) {
       this.logger.log(`Initializing db...`);
-      dbInstance = await this.initDb(
+      dbClient = await this.initDb(
         this.expressAppStarterInfo.dbInfo,
         this.expressAppStarterInfo.expressPluginContainers);
     }
@@ -47,8 +47,8 @@ export class ExpressApp {
 
     const shutdown = async (signal: string): Promise<void> => {
       this.logger.log(`Received ${signal} signal. Closing server...`);
-      if (dbInstance) {
-        await dbInstance.stopDb();
+      if (dbClient) {
+        await dbClient.dbDisconnet();
       }
     }
 
@@ -77,9 +77,9 @@ export class ExpressApp {
   private async initDb(
     dbInfo: ExpressAppDbInfoT,
     expressPluginContainers: ExpressPluginContainerT<unknown>[],
-  ): Promise<DbInstance> {
-    const dbInstance = new DbInstance(dbInfo);
-    await dbInstance.startDb();
+  ): Promise<DbClient> {
+    const dbClient = new DbClient(dbInfo);
+    await dbClient.dbConnect();
 
     // here need to connect to db
 
@@ -90,7 +90,7 @@ export class ExpressApp {
       }
     }
 
-    return dbInstance;
+    return dbClient;
   }
 
   private async initRoutes(): Promise<void> {
