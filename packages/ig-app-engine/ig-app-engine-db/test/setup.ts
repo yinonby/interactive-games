@@ -1,6 +1,7 @@
 
 import { DbClient, MongoInmemDbServer } from '@ig/be-utils';
 import { initBeLibMocks } from '@ig/be-utils/test/mocks/BeLibMocks';
+import { getMongoMemoryServerCreateTimeout } from '@ig/vitest';
 import { EngineMongoDb } from '../src/mongo/EngineMongoDb';
 
 let mongoInmemDbServer: MongoInmemDbServer;
@@ -16,7 +17,7 @@ beforeAll(async () => {
   await dbClient.dbConnect();
 
   await gamesMongoDb.init();
-});
+}, getMongoMemoryServerCreateTimeout());
 
 beforeEach(async () => {
   await dbClient.dropDb();

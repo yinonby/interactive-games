@@ -1,5 +1,6 @@
 
 import type { LoggerAdapter } from '@ig/utils';
+import { getMongoMemoryServerCreateTimeout } from '@ig/vitest';
 import express from 'express';
 import { MongoInmemDbServer } from '../db/MongoInmemDbServer';
 import type { ExpressAppStarterInfoT } from '../types/exported/ExpressTypes';
@@ -36,13 +37,8 @@ describe('ExpressApp', () => {
   let mongoConnString: string;
 
   beforeAll(async () => {
-    vi.useRealTimers();
-    const a = Date.now();
     mongoConnString = await mongoInmemDbServer.startDb();
-    const b = Date.now();
-    console.log(b - a)
-    vi.useFakeTimers();
-  }, 60000);
+  }, getMongoMemoryServerCreateTimeout());
 
   beforeEach(() => {
     vi.clearAllMocks();
