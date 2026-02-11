@@ -38,8 +38,8 @@ describe('MongoInmemDbServer', () => {
 
   // mock logger
   const mockLogger: LoggerAdapter = {
+    trace: vi.fn(),
     info: vi.fn(),
-    log: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     debug: vi.fn(),

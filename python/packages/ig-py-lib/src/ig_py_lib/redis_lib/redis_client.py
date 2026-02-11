@@ -34,7 +34,7 @@ class RedisClient(ABC):
 
         for attempt in range(1, retries + 1):
             try:
-                self.logger.log(
+                self.logger.info(
                     f"Redis client connecting (attempt {attempt}/{retries})..."
                 )
                 await self.connect()
@@ -42,24 +42,24 @@ class RedisClient(ABC):
 
             except redis.ConnectionError as e:
                 last_exc = e
-                self.logger.log(
+                self.logger.info(
                     f"Redis connection failed (attempt {attempt}/{retries}), retrying in {delay}s..."
                 )
                 await asyncio.sleep(delay)
 
             except Exception as e:
                 last_exc = e
-                self.logger.log(
+                self.logger.info(
                     f"Redis failed (attempt {attempt}/{retries}): {e}, retrying in {delay}s..."
                 )
                 await asyncio.sleep(delay)
 
         # all retries exhausted
-        self.logger.log("Redis connection failed after all retries")
+        self.logger.info("Redis connection failed after all retries")
         raise last_exc
 
     async def connect(self) -> None:
-        self.logger.log(
+        self.logger.info(
             f"Redis client connecting to {self.redis_server_host}:{self.redis_server_port}..."
         )
 
@@ -71,17 +71,17 @@ class RedisClient(ABC):
             socket_timeout=5,
         )
 
-        self.logger.log("Redis client setting up pubsub...")
+        self.logger.info("Redis client setting up pubsub...")
         self.pubsub = self.redis_client.pubsub()  # type: ignore[no-untyped-call]
 
-        self.logger.log("Redis client subscribing to pubsub...")
+        self.logger.info("Redis client subscribing to pubsub...")
         self.pubsub.subscribe(self.redis_pubsub_channel_names)
 
         # Test connection
-        self.logger.log("Redis client testing connection with ping...")
+        self.logger.info("Redis client testing connection with ping...")
         self.redis_client.ping()
 
-        self.logger.log("Connected to Redis")
+        self.logger.info("Connected to Redis")
 
     async def redis_listener_loop(self) -> None:
         while True:
@@ -102,11 +102,11 @@ class RedisClient(ABC):
                 await self.handle_redis_client_message_data(message["data"])
 
         except redis.ConnectionError:
-            self.logger.log("Lost Redis connection, reconnecting...")
+            self.logger.info("Lost Redis connection, reconnecting...")
             await self.connect_redis_with_retries()
 
     async def start_loop(self) -> None:
-        self.logger.log("Redis starting...")
+        self.logger.info("Redis starting...")
 
         await self.connect_redis_with_retries()
         await self.redis_listener_loop()

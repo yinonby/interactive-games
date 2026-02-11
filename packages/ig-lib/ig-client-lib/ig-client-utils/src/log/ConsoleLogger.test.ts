@@ -20,6 +20,20 @@ describe('ConsoleLogger', () => {
   });
 
   describe('implicitly non silent: print functionality', () => {
+    it('calls console.log with TRC prefix', () => {
+      const logger: ConsoleLogger = new ConsoleLogger();
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      logger.trace('a', 1);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `${dateStr} TRC:`,
+        'a',
+        1
+      );
+    });
+
     it('calls console.debug with DBG prefix', () => {
       const logger: ConsoleLogger = new ConsoleLogger();
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -43,20 +57,6 @@ describe('ConsoleLogger', () => {
 
       expect(infoSpy).toHaveBeenCalledWith(
         `${dateStr} INF:`,
-        'a',
-        1
-      );
-    });
-
-    it('calls console.log with LOG prefix', () => {
-      const logger: ConsoleLogger = new ConsoleLogger();
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      logger.log('a', 1);
-
-      expect(logSpy).toHaveBeenCalledWith(
-        `${dateStr} LOG:`,
         'a',
         1
       );
@@ -108,6 +108,16 @@ describe('ConsoleLogger', () => {
   });
 
   describe('silent functionality', () => {
+    it('stays silent: trace', () => {
+      const logger: ConsoleLogger = new ConsoleLogger(true);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      logger.trace('a', 1);
+
+      expect(logSpy).not.toHaveBeenCalled();
+    });
+
     it('stays silent: debug', () => {
       const logger: ConsoleLogger = new ConsoleLogger(true);
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -126,16 +136,6 @@ describe('ConsoleLogger', () => {
       logger.info('a', 1);
 
       expect(infoSpy).not.toHaveBeenCalled();
-    });
-
-    it('stays silent: log', () => {
-      const logger: ConsoleLogger = new ConsoleLogger(true);
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      logger.log('a', 1);
-
-      expect(logSpy).not.toHaveBeenCalled();
     });
 
     it('stays silent: warn', () => {

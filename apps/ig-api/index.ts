@@ -21,14 +21,14 @@ async function initApp() {
     }
     isShuttingDown = true;
 
-    logger.log(`Received ${signal} signal. Stopping Mongo Inmem DB server...`);
+    logger.info(`Received ${signal} signal. Stopping Mongo Inmem DB server...`);
     await mongoInmemDbServer.stopDb();
 
-    logger.log(`Received ${signal} signal. Stopped Mongo Inmem DB`);
+    logger.info(`Received ${signal} signal. Stopped Mongo Inmem DB`);
   }
 
   // these handlers are registered before starting the app, so they will be called first upon signal
-  logger.log(`Registering Mongo Inmem DB signal handlers...`);
+  logger.info(`Registering Mongo Inmem DB signal handlers...`);
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
 

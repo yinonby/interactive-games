@@ -30,8 +30,8 @@ declare module "@ig/platform-ui" {
 
 declare module "@ig/client-utils" {
   export const __loggerMocks: {
+    traceMock: jest.Mock,
     debugMock: jest.Mock,
-    logMock: jest.Mock,
     infoMock: jest.Mock,
     warnMock: jest.Mock,
     errorMock: jest.Mock,

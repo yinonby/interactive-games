@@ -18,8 +18,8 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
   });
 
   const loggerMock: LoggerAdapter = {
+    trace: jest.fn(),
     debug: jest.fn(),
-    log: jest.fn(),
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn(),

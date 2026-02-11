@@ -18,7 +18,7 @@ vi.mock('../db/DbInstance', () => {
 });
 
 describe('ExpressApp', () => {
-  const mockLogger: LoggerAdapter = { log: vi.fn() } as unknown as LoggerAdapter;
+  const mockLogger: LoggerAdapter = { info: vi.fn() } as unknown as LoggerAdapter;
   const useMock = vi.fn();
   const listenMock = vi.fn();
 
@@ -200,7 +200,7 @@ describe('ExpressApp', () => {
     vi.clearAllMocks();
 
     listenCb();
-    expect(mockLogger.log).toHaveBeenCalledWith(`Server is running at http://localhost:${1287}`);
+    expect(mockLogger.info).toHaveBeenCalledWith(`Server is running at http://localhost:${1287}`);
   });
 
   it('should handle shutdown, SIGINT', async () => {
@@ -236,8 +236,8 @@ describe('ExpressApp', () => {
 
     // simulate SIGINT
     await shutdownFn(sigint);
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Disconnecting DB client...`);
-    expect(mockLogger.log).toHaveBeenNthCalledWith(2, `Received ${sigint} signal. Closing server...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Disconnecting DB client...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(2, `Received ${sigint} signal. Closing server...`);
     expect(exitMock).toHaveBeenCalledTimes(1);
 
     // send another SIGINT - should do nothing
@@ -274,8 +274,8 @@ describe('ExpressApp', () => {
 
     // simulate SIGTERM
     await shutdownFn(sigterm);
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${sigterm} signal. Disconnecting DB client...`);
-    expect(mockLogger.log).toHaveBeenNthCalledWith(2, `Received ${sigterm} signal. Closing server...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigterm} signal. Disconnecting DB client...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(2, `Received ${sigterm} signal. Closing server...`);
     expect(exitMock).toHaveBeenCalled();
   });
 
@@ -303,7 +303,7 @@ describe('ExpressApp', () => {
 
     // simulate SIGINT
     await shutdownFn(sigint);
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Closing server...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Closing server...`);
     expect(exitMock).toHaveBeenCalled();
   });
 });

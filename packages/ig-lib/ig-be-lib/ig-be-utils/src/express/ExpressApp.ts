@@ -25,10 +25,10 @@ export class ExpressApp {
   }
 
   public async startApp(): Promise<void> {
-    this.logger.log(`Starting server...`);
+    this.logger.info(`Starting server...`);
 
     // Middleware to handle CORS
-    this.logger.log(`Initializing CORS...`);
+    this.logger.info(`Initializing CORS...`);
     this.initCors();
 
     // Middleware to parse JSON bodies
@@ -36,18 +36,18 @@ export class ExpressApp {
 
     let dbClient: DbClient | null = null;
     if (this.expressAppStarterInfo.dbInfo) {
-      this.logger.log(`Initializing db...`);
+      this.logger.info(`Initializing db...`);
       dbClient = await this.initDb(
         this.expressAppStarterInfo.dbInfo,
         this.expressAppStarterInfo.expressPluginContainers);
     }
 
     // init routes
-    this.logger.log(`Initializing routes...`);
+    this.logger.info(`Initializing routes...`);
     await this.initRoutes();
 
     // post init callbacks
-    this.logger.log(`Initializing post-init...`);
+    this.logger.info(`Initializing post-init...`);
     await this.postInit();
 
     let isShuttingDown = false;
@@ -58,11 +58,11 @@ export class ExpressApp {
       isShuttingDown = true;
 
       if (dbClient) {
-        this.logger.log(`Received ${signal} signal. Disconnecting DB client...`);
+        this.logger.info(`Received ${signal} signal. Disconnecting DB client...`);
         await dbClient.dbDisconnet();
       }
 
-      this.logger.log(`Received ${signal} signal. Closing server...`);
+      this.logger.info(`Received ${signal} signal. Closing server...`);
       this.signalHandler.exit(0);
     }
 
@@ -71,14 +71,14 @@ export class ExpressApp {
 
     // Start the server
     this.app.listen(this.expressAppStarterInfo.listerPort, () => {
-      this.logger.log(`Server is running at http://localhost:${this.expressAppStarterInfo.listerPort}`);
+      this.logger.info(`Server is running at http://localhost:${this.expressAppStarterInfo.listerPort}`);
     });
   }
 
   private initCors(): void {
     if (this.expressAppStarterInfo.corsAllowOrigins !== undefined) {
       for (const corsAllowOrigin of this.expressAppStarterInfo.corsAllowOrigins) {
-        this.logger.log(`Initializing CORS for [${corsAllowOrigin}]...`);
+        this.logger.info(`Initializing CORS for [${corsAllowOrigin}]...`);
 
         this.app.use(this.corsMiddleware({
           origin: corsAllowOrigin,
