@@ -90,7 +90,6 @@ def main():
                     # Append 'done' to the previous "Running..." line
                     # Note: In parallel, 'done' might appear on a new line if other logs started
                     print(f"{GREEN}Tests in {res['name']}... DONE{RESET}")
-                    print(res["stdout"])
                 else:
                     # Failure detected
                     print(f"\n{RED}{BOLD}FAILED: {res['name']}{RESET}")
