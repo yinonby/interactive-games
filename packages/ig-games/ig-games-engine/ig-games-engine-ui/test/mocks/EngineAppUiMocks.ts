@@ -25,8 +25,8 @@ export const initEngineAppUiMocks = () => {
 
     const useClientLoggerMock = (): LoggerAdapter => {
       return {
+        trace: (): void => { },
         debug: (): void => { },
-        log: (): void => { },
         info: (): void => { },
         warn: (): void => { },
         error: loggerErrorMock,

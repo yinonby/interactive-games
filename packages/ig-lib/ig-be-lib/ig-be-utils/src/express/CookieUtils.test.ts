@@ -5,7 +5,7 @@ import { CookieUtils } from './CookieUtils';
 describe("CookieUtils", () => {
   it("sets a secure cookie with SameSite=None when secure is true", () => {
     const cookieUtils = new CookieUtils(
-      "gnm.test",
+      "fake.domain",
       true,
       1000 * 60 * 60
     );
@@ -25,14 +25,14 @@ describe("CookieUtils", () => {
         secure: true,
         sameSite: "none",
         maxAge: 1000 * 60 * 60,
-        domain: "gnm.test",
+        domain: "fake.domain",
       }
     );
   });
 
   it("sets a non-secure cookie with SameSite=Lax when secure is false", () => {
     const cookieUtils = new CookieUtils(
-      "gnm.test",
+      "fake.domain",
       false,
       5000
     );
@@ -51,7 +51,7 @@ describe("CookieUtils", () => {
         secure: false,
         sameSite: "lax",
         maxAge: 5000,
-        domain: "gnm.test",
+        domain: "fake.domain",
       }
     );
   });

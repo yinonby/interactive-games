@@ -1,23 +1,24 @@
 
 import type { LoggerAdapter } from '@ig/utils';
 import express from 'express';
+import { MongoInmemDbServer } from '../db/MongoInmemDbServer';
 import type { ExpressAppStarterInfoT } from '../types/exported/ExpressTypes';
-import { ExpressApp } from './ExpressApp';
+import { ExpressApp, type ExpressAppSignalHandler } from './ExpressApp';
 
 vi.mock('express');
 vi.mock('mongoose');
 
-vi.mock('../db/DbInstance', () => {
+vi.mock('../db/DbClient', () => {
   return {
-    DbInstance: vi.fn().mockImplementation(() => ({
-      startDb: vi.fn(),
-      stopDb: vi.fn(),
+    DbClient: vi.fn().mockImplementation(() => ({
+      dbConnect: vi.fn(),
+      dbDisconnect: vi.fn(),
     })),
   };
 });
 
 describe('ExpressApp', () => {
-  const mockLogger: LoggerAdapter = { log: vi.fn() } as unknown as LoggerAdapter;
+  const mockLogger: LoggerAdapter = { info: vi.fn() } as unknown as LoggerAdapter;
   const useMock = vi.fn();
   const listenMock = vi.fn();
 
@@ -30,8 +31,25 @@ describe('ExpressApp', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   jsonSpy.mockReturnValue('JSONFNMOCK' as any);
 
+  // start a local mongo inmem server
+  const mongoInmemDbServer = new MongoInmemDbServer();
+  let mongoConnString: string;
+
+  beforeAll(async () => {
+    vi.useRealTimers();
+    const a = Date.now();
+    mongoConnString = await mongoInmemDbServer.startDb();
+    const b = Date.now();
+    console.log(b - a)
+    vi.useFakeTimers();
+  }, 60000);
+
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterAll(async () => {
+    await mongoInmemDbServer.stopDb();
   });
 
   it('should initialize with defaults', () => {
@@ -57,8 +75,9 @@ describe('ExpressApp', () => {
 
   it('should initialize with CORS', async () => {
     const corsMiddlewareMock = vi.fn().mockReturnValue('CORSRES');
-    const signalHandler: { on: (signal: string, fn: (signal: string) => void) => void } = {
+    const signalHandler: ExpressAppSignalHandler = {
       on: vi.fn(),
+      exit: vi.fn(),
     }
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
@@ -198,41 +217,75 @@ describe('ExpressApp', () => {
     vi.clearAllMocks();
 
     listenCb();
-    expect(mockLogger.log).toHaveBeenCalledWith(`Server is running at http://localhost:${1287}`);
+    expect(mockLogger.info).toHaveBeenCalledWith(`Server is running at http://localhost:${1287}`);
   });
 
-  it('should handle shutdown', async () => {
+  it('should handle shutdown, SIGINT', async () => {
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 3000,
       appInfo: { appVersion: '1.1' },
-      dbInfo: { dbType: 'inmem-mongodb', tableNamePrefix: '' },
+      dbInfo: { dbType: 'mongodb', mongoConnString: mongoConnString, tableNamePrefix: '' },
       expressPluginContainers: [],
     };
 
     const onMock = vi.fn();
-    const signalHandler: { on: (signal: string, fn: (signal: string) => void) => void } = {
+    const exitMock = vi.fn();
+    const signalHandler: ExpressAppSignalHandler = {
       on: onMock,
+      exit: exitMock,
     }
 
     const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
     await app.startApp();
 
-    expect(onMock.mock.calls[0][0]).toEqual('SIGINT');
-    expect(onMock.mock.calls[1][0]).toEqual('SIGTERM');
+    const sigint = 'SIGINT';
+    const sigterm = 'SIGTERM';
+    expect(onMock.mock.calls[0][0]).toEqual(sigint);
+    expect(onMock.mock.calls[1][0]).toEqual(sigterm);
 
     const shutdownFn = onMock.mock.calls[0][1];
 
-    vi.clearAllMocks();
+    vi.clearAllMocks(); // clear mockLogger
 
     // simulate SIGINT
-    shutdownFn('SIGINT');
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${'SIGINT'} signal. Closing server...`);
+    await shutdownFn(sigint);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Disconnecting DB client...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(2, `Received ${sigint} signal. Closing server...`);
+    expect(exitMock).toHaveBeenCalledTimes(1);
 
-    vi.clearAllMocks();
+    // send another SIGINT - should do nothing
+    await shutdownFn(sigint);
+    expect(exitMock).toHaveBeenCalledTimes(1);
+  });
 
-    // simulate SIGINT
-    shutdownFn('SIGTERM');
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${'SIGTERM'} signal. Closing server...`);
+  it('should handle shutdown, SIGTERM', async () => {
+    const mockStarterInfo: ExpressAppStarterInfoT = {
+      listerPort: 3000,
+      appInfo: { appVersion: '1.1' },
+      dbInfo: { dbType: 'mongodb', mongoConnString: mongoConnString, tableNamePrefix: '' },
+      expressPluginContainers: [],
+    };
+
+    const onMock = vi.fn();
+    const exitMock = vi.fn();
+    const signalHandler: ExpressAppSignalHandler = {
+      on: onMock,
+      exit: exitMock,
+    }
+
+    const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
+    await app.startApp();
+
+    const sigterm = 'SIGTERM';
+    const shutdownFn = onMock.mock.calls[0][1];
+
+    vi.clearAllMocks(); // clear mockLogger
+
+    // simulate SIGTERM
+    await shutdownFn(sigterm);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigterm} signal. Disconnecting DB client...`);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(2, `Received ${sigterm} signal. Closing server...`);
+    expect(exitMock).toHaveBeenCalled();
   });
 
   it('should handle shutdown, without db instance', async () => {
@@ -243,28 +296,23 @@ describe('ExpressApp', () => {
     };
 
     const onMock = vi.fn();
-    const signalHandler: { on: (signal: string, fn: (signal: string) => void) => void } = {
+    const exitMock = vi.fn();
+    const signalHandler: ExpressAppSignalHandler = {
       on: onMock,
+      exit: exitMock,
     }
 
     const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
     await app.startApp();
 
-    expect(onMock.mock.calls[0][0]).toEqual('SIGINT');
-    expect(onMock.mock.calls[1][0]).toEqual('SIGTERM');
-
+    const sigint = 'SIGINT';
     const shutdownFn = onMock.mock.calls[0][1];
 
-    vi.clearAllMocks();
+    vi.clearAllMocks(); // clear mockLogger
 
     // simulate SIGINT
-    shutdownFn('SIGINT');
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${'SIGINT'} signal. Closing server...`);
-
-    vi.clearAllMocks();
-
-    // simulate SIGINT
-    shutdownFn('SIGTERM');
-    expect(mockLogger.log).toHaveBeenNthCalledWith(1, `Received ${'SIGTERM'} signal. Closing server...`);
+    await shutdownFn(sigint);
+    expect(mockLogger.info).toHaveBeenNthCalledWith(1, `Received ${sigint} signal. Closing server...`);
+    expect(exitMock).toHaveBeenCalled();
   });
 });

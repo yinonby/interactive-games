@@ -11,7 +11,6 @@ describe('GameConfigGraphqlClientTypes', () => {
     const document = parse(getGameConfigsQuery);
     const errors = validate(schema, document);
 
-    console.log(errors[0])
     expect(errors).toHaveLength(0);
   });
 

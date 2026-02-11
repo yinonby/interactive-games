@@ -6,18 +6,33 @@ import sys
 import threading
 import time
 
+
+class color:
+    PURPLE = "\033[95m"
+    CYAN = "\033[96m"
+    DARKCYAN = "\033[36m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    RED = "\033[91m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+    END = "\033[0m"
+
 # Color mapping for the prefixes themselves
 COLORS = {
-    "EXP": "\033[94m", # Blue
-    "API": "\033[92m", # Green
-    "WSS": "\033[95m", # Magenta
-    "RESET": "\033[0m"
+    "EXP": color.BLUE,
+    "API": color.GREEN,
+    "WSS": color.PURPLE,
+    "PRX": color.CYAN,
+    "RESET": "\033[0m",
 }
 
 APPS = [
     {"name": "EXP", "cwd": "apps/ig-expo", "cmd": ["npm", "start"]},
     {"name": "API", "cwd": "apps/ig-api", "cmd": ["npm", "run", "start:dev:presets:all"]},
     {"name": "WSS", "cwd": "python/apps/ig-ws", "cmd": ["make", "run"]},
+    {"name": "PRX", "cwd": "apps/ig-dev-http-proxy", "cmd": ["npm", "start"]},
 ]
 
 def stream_logs(fd, prefix):

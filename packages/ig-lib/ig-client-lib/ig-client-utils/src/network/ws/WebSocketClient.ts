@@ -34,7 +34,7 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
     this.socket = new WebSocket(this.url);
 
     this.socket.onopen = (): void => {
-      this.logger.log('[WS] connected');
+      this.logger.info('[WS] connected');
     };
 
     this.socket.onmessage = (event): void => {
@@ -51,7 +51,7 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
     };
 
     this.socket.onclose = (): void => {
-      this.logger.log('[WS] closed');
+      this.logger.info('[WS] closed');
       this.socket = undefined;
 
       if (!this.manuallyClosed) {
@@ -99,7 +99,7 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
     if (this.isAwaitingReconnect) return;
 
     this.reconnectTimeout = setTimeout(() => {
-      this.logger.log("[WS] reconnectTimeout elapsed, reconnecting...")
+      this.logger.info("[WS] reconnectTimeout elapsed, reconnecting...")
       this.isAwaitingReconnect = false;
       this.reconnectTimeout = undefined;
       this.connect();

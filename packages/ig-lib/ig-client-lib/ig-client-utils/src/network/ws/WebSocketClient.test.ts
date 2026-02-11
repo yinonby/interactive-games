@@ -5,8 +5,8 @@ import { WebSocketClient } from './WebSocketClient';
 
 const warnMock = vi.fn();
 const loggerMock: LoggerAdapter = {
+  trace: vi.fn(),
   debug: vi.fn(),
-  log: vi.fn(),
   info: vi.fn(),
   warn: warnMock,
   error: vi.fn(),

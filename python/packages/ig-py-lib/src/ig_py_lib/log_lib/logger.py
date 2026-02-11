@@ -2,16 +2,37 @@ import sys
 from datetime import datetime, timezone
 
 
+class Colors:
+    # Standard colors
+    BLACK = "\033[30m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    BLUE = "\033[34m"
+    MAGENTA = "\033[35m"
+    CYAN = "\033[36m"
+    WHITE = "\033[37m"
+
+    # Bright / Bold variants
+    BRIGHT_BLACK = "\033[90m"
+    BRIGHT_RED = "\033[91m"
+    BRIGHT_GREEN = "\033[92m"
+    BRIGHT_YELLOW = "\033[93m"
+    BRIGHT_BLUE = "\033[94m"
+    BRIGHT_MAGENTA = "\033[95m"
+    BRIGHT_CYAN = "\033[96m"
+    BRIGHT_WHITE = "\033[97m"
+
+    # Styles
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+    REVERSED = "\033[7m"
+
+
 class PyLogger:
     def __init__(self, prefix: str = "") -> None:
         self.prefix = f"{prefix}: " if prefix else ""
-
-    # ANSI Color Codes
-    YELLOW = "\033[93m"
-    RED = "\033[91m"
-    BLUE = "\033[94m"
-    CYAN = "\033[96m"
-    RESET = "\033[0m"
 
     @staticmethod
     def _get_timestamp() -> str:
@@ -22,22 +43,22 @@ class PyLogger:
         timestamp = self._get_timestamp()
         # Format: 2026-02-03T21:39:08.879Z LEVEL: message
         formatted_msg = (
-            f"{timestamp} {color}{level}: {self.prefix}{message}{self.RESET}\n"
+            f"{timestamp} {color}{level}: {self.prefix}{message}{Colors.RESET}\n"
         )
         sys.stdout.write(formatted_msg)
         sys.stdout.flush()
 
+    def trace(self, msg: str) -> None:
+        self._log("TRC", msg, Colors.MAGENTA)
+
     def debug(self, msg: str) -> None:
-        self._log("DBG", msg, self.CYAN)
+        self._log("DBG", msg, Colors.CYAN)
 
     def info(self, msg: str) -> None:
-        self._log("INF", msg, self.BLUE)
-
-    def log(self, msg: str) -> None:
-        self._log("LOG", msg)
+        self._log("INF", msg, Colors.GREEN)
 
     def warn(self, msg: str) -> None:
-        self._log("WRN", msg, self.YELLOW)
+        self._log("WRN", msg, Colors.YELLOW)
 
     def error(self, msg: str) -> None:
-        self._log("ERR", msg, self.RED)
+        self._log("ERR", msg, Colors.RED)

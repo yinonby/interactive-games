@@ -32,8 +32,6 @@ export type ExpressAppDbInfoT = ({
   dbType: 'mongodb';
   mongoConnString: string;
 } | {
-  dbType: 'inmem-mongodb';
-} | {
   dbType: 'mysql';
   mySqlConnString: string;
 }) & {

@@ -22,6 +22,20 @@ describe('BeLogger', () => {
   });
 
   describe('implicitly non silent: print functionality', () => {
+    it('calls console.log with TRC prefix', () => {
+      const logger: BeLogger = new BeLogger();
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      logger.trace('a', 1);
+
+      expect(logSpy).toHaveBeenCalledWith(
+        `${dateStr} TRC:`,
+        'a',
+        1
+      );
+    });
+
     it('calls console.debug with DBG prefix', () => {
       const logger: BeLogger = new BeLogger();
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -45,20 +59,6 @@ describe('BeLogger', () => {
 
       expect(infoSpy).toHaveBeenCalledWith(
         `${dateStr} INF:`,
-        'a',
-        1
-      );
-    });
-
-    it('calls console.log with LOG prefix', () => {
-      const logger: BeLogger = new BeLogger();
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      logger.log('a', 1);
-
-      expect(logSpy).toHaveBeenCalledWith(
-        `${dateStr} LOG:`,
         'a',
         1
       );
@@ -110,6 +110,16 @@ describe('BeLogger', () => {
   });
 
   describe('silent functionality', () => {
+    it('stays silent: trace', () => {
+      const logger: BeLogger = new BeLogger(true);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+      logger.trace('a', 1);
+
+      expect(logSpy).not.toHaveBeenCalled();
+    });
+
     it('stays silent: debug', () => {
       const logger: BeLogger = new BeLogger(true);
       // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -128,16 +138,6 @@ describe('BeLogger', () => {
       logger.info('a', 1);
 
       expect(infoSpy).not.toHaveBeenCalled();
-    });
-
-    it('stays silent: log', () => {
-      const logger: BeLogger = new BeLogger(true);
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      logger.log('a', 1);
-
-      expect(logSpy).not.toHaveBeenCalled();
     });
 
     it('stays silent: warn', () => {

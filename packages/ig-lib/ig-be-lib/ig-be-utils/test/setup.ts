@@ -14,8 +14,8 @@ afterAll(async () => {
 
 vi.mock('../src/logger/BeLogger', () => {
   class SilentBeLogger implements LoggerAdapter {
+    trace = vi.fn();
     info = vi.fn();
-    log = vi.fn();
     warn = vi.fn();
     error = vi.fn();
     debug = vi.fn();
