@@ -3,15 +3,15 @@ export const initClientUtilsMocks = () => {
   jest.mock('@ig/client-utils', () => {
     const actual = jest.requireActual<typeof import('../../../../ig-client-lib/ig-client-utils')>('@ig/client-utils');
 
+    const traceMock = jest.fn();
     const debugMock = jest.fn();
-    const logMock = jest.fn();
     const infoMock = jest.fn();
     const warnMock = jest.fn();
     const errorMock = jest.fn();
 
     class ConsoleLoggerMock {
+      trace(): void { traceMock() };
       debug(): void { debugMock() };
-      log(): void { logMock() };
       info(): void { infoMock() };
       warn(): void { warnMock() };
       error(): void { errorMock() };
@@ -20,7 +20,7 @@ export const initClientUtilsMocks = () => {
     // expose for tests
     const __loggerMocks = {
       debugMock,
-      logMock,
+      traceMock,
       infoMock,
       warnMock,
       errorMock,

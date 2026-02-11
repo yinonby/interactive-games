@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from .logger import PyLogger  # Path based on your error log
+from .logger import Colors, PyLogger  # Path based on your error log
 
 logger = PyLogger()
 
@@ -19,38 +19,21 @@ def fixed_time():
         yield mock_now
 
 
-def test_log_format_standard(fixed_time):
-    # Patch sys.stdout.write specifically to capture the string
-    with patch("sys.stdout.write") as mock_write:
-        logger.log("test message")
-
-        # Get the actual string passed to sys.stdout.write
-        actual_call = mock_write.call_args[0][0]
-        expected = "2026-02-03T21:39:08.879Z LOG: test message\033[0m\n"
-        assert actual_call == expected
-
-
-def test_warn_color_and_level(fixed_time):
-    with patch("sys.stdout.write") as mock_write:
-        logger.warn("warning message")
-        actual_call = mock_write.call_args[0][0]
-
-        assert logger.YELLOW in actual_call
-        assert "WRN: warning message" in actual_call
-        assert actual_call.endswith("\033[0m\n")
-
-
 @pytest.mark.parametrize(
-    "level_func,label",
+    "level_func,label,color",
     [
-        (logger.info, "INF"),
-        (logger.debug, "DBG"),
-        (logger.warn, "WRN"),
-        (logger.error, "ERR"),
+        (logger.trace, "TRC", Colors.MAGENTA),
+        (logger.debug, "DBG", Colors.CYAN),
+        (logger.info, "INF", Colors.GREEN),
+        (logger.warn, "WRN", Colors.YELLOW),
+        (logger.error, "ERR", Colors.RED),
     ],
 )
-def test_all_shorthand_labels(fixed_time, level_func, label):
+def test_all_shorthand_labels(fixed_time, level_func, label, color):
     with patch("sys.stdout.write") as mock_write:
-        level_func("msg")
+        level_func("test message")
         actual_call = mock_write.call_args[0][0]
-        assert f"{label}: msg" in actual_call
+        expected = (
+            f"2026-02-03T21:39:08.879Z {color}{label}: test message{Colors.RESET}\n"
+        )
+        assert actual_call == expected

@@ -12,7 +12,7 @@ describe('UsersMongoTable', () => {
     });
 
     it('should create instance without defaults', () => {
-      const mockLogger: LoggerAdapter = { log: vi.fn() } as unknown as LoggerAdapter;
+      const mockLogger: LoggerAdapter = { info: vi.fn() } as unknown as LoggerAdapter;
       const instance = new UsersMongoTable(true, 'prefix_', mockLogger);
       expect(instance).toBeDefined();
     });

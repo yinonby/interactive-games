@@ -18,7 +18,7 @@ class WebSocketServer(ABC):
         pass
 
     async def start_loop(self) -> None:
-        self.logger.log(
+        self.logger.info(
             f"WebSocket server starting on {self.ws_server_listen_ip_addr}:{self.ws_server_listen_port}..."
         )
 
@@ -27,7 +27,7 @@ class WebSocketServer(ABC):
             host=self.ws_server_listen_ip_addr,
             port=self.ws_server_listen_port,
         )
-        self.logger.log(
+        self.logger.info(
             f"WebSocket server listening on {self.ws_server_listen_ip_addr}:{self.ws_server_listen_port}..."
         )
 

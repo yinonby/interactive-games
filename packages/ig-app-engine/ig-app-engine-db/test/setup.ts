@@ -1,20 +1,25 @@
 
-import { InmemMongoDbServer } from '@ig/be-utils';
+import { DbClient, MongoInmemDbServer } from '@ig/be-utils';
 import { initBeLibMocks } from '@ig/be-utils/test/mocks/BeLibMocks';
 import { EngineMongoDb } from '../src/mongo/EngineMongoDb';
 
-let inmemMongoDbServer: InmemMongoDbServer;
+let mongoInmemDbServer: MongoInmemDbServer;
+let dbClient: DbClient;
 const gamesMongoDb = new EngineMongoDb();
 
 beforeAll(async () => {
-  inmemMongoDbServer = new InmemMongoDbServer();
-  await inmemMongoDbServer.startDb();
+  // start a local mongo inmem server
+  mongoInmemDbServer = new MongoInmemDbServer();
+  const uri = await mongoInmemDbServer.startDb();
+
+  dbClient = new DbClient({ dbType: 'mongodb', mongoConnString: uri, tableNamePrefix: '' });
+  await dbClient.dbConnect();
 
   await gamesMongoDb.init();
 });
 
 beforeEach(async () => {
-  await inmemMongoDbServer.dropDb();
+  await dbClient.dropDb();
   await gamesMongoDb.recreate();
 });
 
@@ -22,7 +27,7 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-  await inmemMongoDbServer.stopDb();
+  await mongoInmemDbServer.stopDb();
 });
 
 initBeLibMocks();

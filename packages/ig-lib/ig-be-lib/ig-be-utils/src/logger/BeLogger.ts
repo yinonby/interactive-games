@@ -12,15 +12,15 @@ export class BeLogger implements LoggerAdapter {
     return `${timestamp} ${level}:`;
   }
 
-  debug(...args: unknown[]): void {
+  trace(...args: unknown[]): void {
     if (!this.silent) {
-      console.debug(this.getLogPrefix("DBG"), ...args);
+      console.log(this.getLogPrefix("TRC"), ...args);
     }
   }
 
-  log(...args: unknown[]): void {
+  debug(...args: unknown[]): void {
     if (!this.silent) {
-      console.log(this.getLogPrefix("LOG"), ...args);
+      console.debug(this.getLogPrefix("DBG"), ...args);
     }
   }
 

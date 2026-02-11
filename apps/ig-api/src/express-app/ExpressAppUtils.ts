@@ -2,7 +2,7 @@
 
 import { EngineMongoDb } from '@ig/app-engine-db';
 import { type AuthPluginConfigT } from '@ig/auth-api';
-import type { ExpressAppStarterInfoT, ExpressPluginContainerT } from '@ig/be-utils';
+import { type ExpressAppStarterInfoT, type ExpressPluginContainerT } from '@ig/be-utils';
 import { type GamesPluginConfigT } from '@ig/games-engine-api';
 import { GamesMongoDb } from '@ig/games-engine-db';
 import { getEnvVarInt, getEnvVarStr } from '@ig/utils';
@@ -11,7 +11,7 @@ import { useAppEnginePluginContainer } from './AppEnginePlugin';
 import { useAuthPluginContainer } from './AuthPlugin';
 import { useGamesPluginContainer } from './GamesPlugin';
 
-export const useExpressAppStarterInfo = (): ExpressAppStarterInfoT => {
+export const useExpressAppStarterInfo = (mongoConnString: string): ExpressAppStarterInfoT => {
   const listerPort: number = getEnvVarInt('IG_API__APP_LISTEN_PORT');
   const appUrl: string = getEnvVarStr('IG_API__APP_URL');
   const corsAllowOrigins: string[] | undefined = [appUrl];
@@ -29,7 +29,8 @@ export const useExpressAppStarterInfo = (): ExpressAppStarterInfoT => {
       appVersion: '1.0.0',
     },
     dbInfo: {
-      dbType: 'inmem-mongodb',
+      dbType: 'mongodb',
+      mongoConnString: mongoConnString,
       tableNamePrefix: '',
     },
     expressPluginContainers: [
