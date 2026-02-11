@@ -1,5 +1,5 @@
 
-import type { LoggerAdapter } from '@ig/utils';
+import { type LoggerAdapter } from '@ig/utils';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Application, type NextFunction, type Request, type Response } from 'express';
 import { DbClient } from '../db/DbClient';
@@ -7,13 +7,18 @@ import { BeLogger } from '../logger/BeLogger';
 import type { PackageDb } from '../types/exported/DbTypes';
 import type { ExpressAppDbInfoT, ExpressAppStarterInfoT, ExpressPluginContainerT } from '../types/exported/ExpressTypes';
 
+export type ExpressAppSignalHandler = {
+  on: (signal: string, fn: (signal: string) => void) => void
+  exit: (ret?: number) => void,
+}
+
 export class ExpressApp {
   private app: Application;
 
   constructor(
     private expressAppStarterInfo: ExpressAppStarterInfoT,
     private logger: LoggerAdapter = new BeLogger(),
-    private signalHandler: { on: (signal: string, fn: (signal: string) => void) => void } = process,
+    private signalHandler: ExpressAppSignalHandler = process,
     private corsMiddleware: (options?: CorsOptions) => (req: Request, res: Response, next: NextFunction) => void = cors,
   ) {
     this.app = express();
@@ -45,11 +50,20 @@ export class ExpressApp {
     this.logger.log(`Initializing post-init...`);
     await this.postInit();
 
+    let isShuttingDown = false;
     const shutdown = async (signal: string): Promise<void> => {
-      this.logger.log(`Received ${signal} signal. Closing server...`);
+      if (isShuttingDown) {
+        return;
+      }
+      isShuttingDown = true;
+
       if (dbClient) {
+        this.logger.log(`Received ${signal} signal. Disconnecting DB client...`);
         await dbClient.dbDisconnet();
       }
+
+      this.logger.log(`Received ${signal} signal. Closing server...`);
+      this.signalHandler.exit(0);
     }
 
     this.signalHandler.on('SIGINT', shutdown);

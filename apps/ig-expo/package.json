@@ -14,10 +14,11 @@
     "test:verbose": "echo ok",
     "cover:unit": "npm run test:unit -- run --coverage",
 
-    "start": "expo start -c",
-    "android": "expo start --android -c",
-    "ios": "expo start --ios -c",
-    "web": "expo start --web -c"
+    "start": "expo start",
+    "start:clean": "expo start -c",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
