@@ -44,9 +44,9 @@ describe('MongoDbClient', () => {
     });
   });
 
-  describe('dbDisconnet', () => {
+  describe('dbDisconnect', () => {
     it('should call mongoose.disconnect', async () => {
-      await mongoDbClient.dbDisconnet();
+      await mongoDbClient.dbDisconnect();
 
       expect(mongoose.disconnect).toHaveBeenCalledTimes(1);
     });
@@ -55,13 +55,13 @@ describe('MongoDbClient', () => {
       const error = new Error('Connection failed');
       vi.mocked(mongoose.disconnect).mockRejectedValueOnce(error);
 
-      await expect(mongoDbClient.dbDisconnet()).rejects.toThrow('Connection failed');
+      await expect(mongoDbClient.dbDisconnect()).rejects.toThrow('Connection failed');
     });
   });
 
   describe('dropDb', () => {
     it('should not dropDb when disconnected', async () => {
-      await mongoDbClient.dbDisconnet();
+      await mongoDbClient.dbDisconnect();
 
       expect(mongoose.connection.db?.dropDatabase).not.toHaveBeenCalled();
     });

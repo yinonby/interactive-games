@@ -14,7 +14,7 @@ describe('DbInstance', () => {
   dbDisconnetMock.mockResolvedValue(undefined);
   const mockMongoDbClient: DbClientProvider = {
     dbConnect: dbConnectMock,
-    dbDisconnet: dbDisconnetMock,
+    dbDisconnect: dbDisconnetMock,
     dropDb: dropDbMock,
   };
   vi.mocked(MongoDbClient).mockReturnValue(mockMongoDbClient as MongoDbClient);
@@ -54,12 +54,12 @@ describe('DbInstance', () => {
     });
   });
 
-  describe('dbDisconnet', () => {
+  describe('dbDisconnect', () => {
     it('should throw error for mysql dbType', async () => {
       const dbInfo: ExpressAppDbInfoT = { dbType: 'mongodb'} as ExpressAppDbInfoT;
       const dbClient: DbClient = new DbClient(dbInfo);
 
-      await dbClient.dbDisconnet();
+      await dbClient.dbDisconnect();
       expect(dbDisconnetMock).toHaveBeenCalled();
     });
   });

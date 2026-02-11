@@ -11,7 +11,7 @@ export class MongoDbClient implements DbClientProvider {
     await mongoose.connect(this.mongoConnString);
   }
 
-  public async dbDisconnet(): Promise<void> {
+  public async dbDisconnect(): Promise<void> {
     await mongoose.disconnect();
   }
 

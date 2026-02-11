@@ -22,8 +22,8 @@ export class DbClient {
     await this.dbClientProvider.dbConnect();
   }
 
-  public async dbDisconnet(): Promise<void> {
-    await this.dbClientProvider.dbDisconnet();
+  public async dbDisconnect(): Promise<void> {
+    await this.dbClientProvider.dbDisconnect();
   }
 
   public async dropDb(): Promise<void> {

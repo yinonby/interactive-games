@@ -8,11 +8,11 @@ import { ExpressApp, type ExpressAppSignalHandler } from './ExpressApp';
 vi.mock('express');
 vi.mock('mongoose');
 
-vi.mock('../db/DbInstance', () => {
+vi.mock('../db/DbClient', () => {
   return {
-    DbInstance: vi.fn().mockImplementation(() => ({
-      startDb: vi.fn(),
-      stopDb: vi.fn(),
+    DbClient: vi.fn().mockImplementation(() => ({
+      dbConnect: vi.fn(),
+      dbDisconnect: vi.fn(),
     })),
   };
 });
@@ -31,8 +31,20 @@ describe('ExpressApp', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   jsonSpy.mockReturnValue('JSONFNMOCK' as any);
 
+  // start a local mongo inmem server
+  const mongoInmemDbServer = new MongoInmemDbServer();
+  let mongoConnString: string;
+
+  beforeAll(async () => {
+    mongoConnString = await mongoInmemDbServer.startDb();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterAll(async () => {
+    await mongoInmemDbServer.stopDb();
   });
 
   it('should initialize with defaults', () => {
@@ -204,14 +216,10 @@ describe('ExpressApp', () => {
   });
 
   it('should handle shutdown, SIGINT', async () => {
-    // start a local mongo inmem server
-    const mongoInmemDbServer = new MongoInmemDbServer();
-    const uri = await mongoInmemDbServer.startDb();
-
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 3000,
       appInfo: { appVersion: '1.1' },
-      dbInfo: { dbType: 'mongodb', mongoConnString: uri, tableNamePrefix: '' },
+      dbInfo: { dbType: 'mongodb', mongoConnString: mongoConnString, tableNamePrefix: '' },
       expressPluginContainers: [],
     };
 
@@ -246,14 +254,10 @@ describe('ExpressApp', () => {
   });
 
   it('should handle shutdown, SIGTERM', async () => {
-    // start a local mongo inmem server
-    const mongoInmemDbServer = new MongoInmemDbServer();
-    const uri = await mongoInmemDbServer.startDb();
-
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 3000,
       appInfo: { appVersion: '1.1' },
-      dbInfo: { dbType: 'mongodb', mongoConnString: uri, tableNamePrefix: '' },
+      dbInfo: { dbType: 'mongodb', mongoConnString: mongoConnString, tableNamePrefix: '' },
       expressPluginContainers: [],
     };
 

@@ -1,7 +1,7 @@
 
 export interface DbClientProvider {
   dbConnect(): Promise<void>;
-  dbDisconnet(): Promise<void>;
+  dbDisconnect(): Promise<void>;
   dropDb(): Promise<void>;
 }
 

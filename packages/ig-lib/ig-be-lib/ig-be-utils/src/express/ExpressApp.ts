@@ -5,7 +5,10 @@ import express, { type Application, type NextFunction, type Request, type Respon
 import { DbClient } from '../db/DbClient';
 import { BeLogger } from '../logger/BeLogger';
 import type { PackageDb } from '../types/exported/DbTypes';
-import type { ExpressAppDbInfoT, ExpressAppStarterInfoT, ExpressPluginContainerT } from '../types/exported/ExpressTypes';
+import type {
+  ExpressAppDbInfoT,
+  ExpressAppStarterInfoT, ExpressPluginContainerT
+} from '../types/exported/ExpressTypes';
 
 export type ExpressAppSignalHandler = {
   on: (signal: string, fn: (signal: string) => void) => void
@@ -59,7 +62,7 @@ export class ExpressApp {
 
       if (dbClient) {
         this.logger.info(`Received ${signal} signal. Disconnecting DB client...`);
-        await dbClient.dbDisconnet();
+        await dbClient.dbDisconnect();
       }
 
       this.logger.info(`Received ${signal} signal. Closing server...`);
