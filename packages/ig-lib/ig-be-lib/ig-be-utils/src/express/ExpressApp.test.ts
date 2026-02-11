@@ -36,8 +36,13 @@ describe('ExpressApp', () => {
   let mongoConnString: string;
 
   beforeAll(async () => {
+    vi.useRealTimers();
+    const a = Date.now();
     mongoConnString = await mongoInmemDbServer.startDb();
-  });
+    const b = Date.now();
+    console.log(b - a)
+    vi.useFakeTimers();
+  }, 60000);
 
   beforeEach(() => {
     vi.clearAllMocks();
