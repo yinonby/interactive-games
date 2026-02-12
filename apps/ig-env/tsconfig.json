@@ -13,7 +13,6 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
-    "types": ["vitest/globals"],
     "paths": {
       "@/*": ["src/*"],
     }

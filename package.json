@@ -34,7 +34,7 @@
     "clean:modules": "for x in $(find . -name node_modules); do rm -rf $x; done",
     "clean:lock": "rm package-lock.json",
 
-    "reset:watchman": "watchman watch-del-all",
+    "reset:watchman": "watchman watch-del-all >/dev/null",
 
     "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
     "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",

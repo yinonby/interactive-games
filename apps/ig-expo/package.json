@@ -24,6 +24,7 @@
     "@expo/vector-icons": "^15.0.3",
     "@ig/auth-ui": "*",
     "@ig/app-engine-ui": "*",
+    "@ig/env": "*",
     "@ig/games-engine-ui": "*",
     "@ig/games-engine-ui-models": "*",
     "@react-navigation/bottom-tabs": "^7.4.0",

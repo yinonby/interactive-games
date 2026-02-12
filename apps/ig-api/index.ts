@@ -2,11 +2,6 @@
 
 import { useExpressAppStarterInfo } from '@/express-app/ExpressAppUtils';
 import { BeLogger, ExpressApp, MongoInmemDbServer } from '@ig/be-utils';
-import dotenv from 'dotenv';
-
-dotenv.config({ override: true, path: ".env.ig-api" }); // load general env file
-dotenv.config({ override: true, path: `.env.ig-api.${process.env.NODE_ENV}` }); // load env-specific file
-dotenv.config({ override: true, path: `.env.ig-api.${process.env.NODE_ENV}.local` }); // load env-specific secrets file
 
 async function initApp() {
   // start a local mongo inmem server
