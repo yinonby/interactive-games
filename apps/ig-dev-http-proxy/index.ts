@@ -1,29 +1,22 @@
 
 import { BeLogger } from '@ig/be-utils';
-import { getEnvVarInt, getEnvVarStr } from '@ig/utils';
-import dotenv from 'dotenv';
+import { getDevHttpProxyEnvVars } from '@ig/env';
 import { Redbird } from 'redbird';
 
-dotenv.config({ override: true, path: ".env.ig-dev-http-proxy" }); // load general env file
-
 async function initApp(): Promise<void> {
-  const baseDomain = getEnvVarStr('IG_DEV_HTTP_PROXY__BASE_DOMAIN');
-  const listenPort = getEnvVarInt('IG_DEV_HTTP_PROXY__LISTEN_PORT');
-  const expoPort = getEnvVarInt('IG_DEV_HTTP_PROXY__EXPO_PORT');
-  const apiPort = getEnvVarInt('IG_DEV_HTTP_PROXY__API_PORT');
-  const wssPort = getEnvVarInt('IG_DEV_HTTP_PROXY__WSS_PORT');
+  const { devHttpProxyListenPort, sysDomain, webListenPort, apiListenPort, wssListenPort } = getDevHttpProxyEnvVars();
 
-  const proxy = new Redbird({ port: listenPort });
+  const proxy = new Redbird({ port: devHttpProxyListenPort });
   const logger = new BeLogger();
 
   // API
-  await proxy.register(`${baseDomain}/api`, `http://${baseDomain}:${apiPort}/api`);
+  await proxy.register(`${sysDomain}/api`, `http://${sysDomain}:${apiListenPort}/api`);
 
   // WebSockets
-  await proxy.register(`${baseDomain}/wss`, `http://${baseDomain}:${wssPort}/wss`);
+  await proxy.register(`${sysDomain}/wss`, `http://${sysDomain}:${wssListenPort}/wss`);
 
   // All other - expo
-  await proxy.register(`${baseDomain}/`, `http://${baseDomain}:${expoPort}`);
+  await proxy.register(`${sysDomain}/`, `http://${sysDomain}:${webListenPort}`);
 
   logger.info('Dev http proxy is running...');
 }

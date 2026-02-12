@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@ig/be-utils": "*",
-    "@ig/utils": "*",
-    "dotenv": "^16.6.1"
+    "@ig/env": "*",
+    "@ig/utils": "*"
   },
   "devDependencies": {
     "@ig/lint": "*",
