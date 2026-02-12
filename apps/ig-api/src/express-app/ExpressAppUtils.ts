@@ -3,18 +3,18 @@
 import { EngineMongoDb } from '@ig/app-engine-db';
 import { type AuthPluginConfigT } from '@ig/auth-api';
 import { type ExpressAppStarterInfoT, type ExpressPluginContainerT } from '@ig/be-utils';
+import { getApiEnvVars } from '@ig/env';
 import { type GamesPluginConfigT } from '@ig/games-engine-api';
 import { GamesMongoDb } from '@ig/games-engine-db';
-import { getEnvVarInt, getEnvVarStr } from '@ig/utils';
 import { useAppApiPluginContainer } from './AppApiPlugin';
 import { useAppEnginePluginContainer } from './AppEnginePlugin';
 import { useAuthPluginContainer } from './AuthPlugin';
 import { useGamesPluginContainer } from './GamesPlugin';
 
 export const useExpressAppStarterInfo = (mongoConnString: string): ExpressAppStarterInfoT => {
-  const listerPort: number = getEnvVarInt('IG_API__APP_LISTEN_PORT');
-  const appUrl: string = getEnvVarStr('IG_API__APP_URL');
-  const corsAllowOrigins: string[] | undefined = [appUrl];
+  const apiEnvVars = getApiEnvVars();
+
+  const corsAllowOrigins: string[] | undefined = [apiEnvVars.webCorsOrigin];
   const engineMongoDb: EngineMongoDb = new EngineMongoDb();
   const gamesMongoDb: GamesMongoDb = new GamesMongoDb();
   const appPluginContainer: ExpressPluginContainerT<unknown> = useAppApiPluginContainer();
@@ -23,7 +23,7 @@ export const useExpressAppStarterInfo = (mongoConnString: string): ExpressAppSta
   const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> = useGamesPluginContainer(gamesMongoDb);
 
   return {
-    listerPort: listerPort,
+    listerPort: apiEnvVars.apiListenPort,
     corsAllowOrigins: corsAllowOrigins,
     appInfo: {
       appVersion: '1.0.0',

@@ -1,0 +1,28 @@
+{
+  "name": "@ig/env",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run tsc && npm run lint && npm run cover:unit",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.mjs ./src",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "test:unit": "echo ok",
+    "ut": "npm run test:unit --",
+    "cover:unit": "npm run test:unit -- run --coverage"
+  },
+  "dependencies": {
+    "@ig/utils": "*",
+    "dotenv": "^16.6.1"
+  },
+  "devDependencies": {
+    "@ig/lint": "*",
+    "@ig/ts-deps": "*"
+  }
+}

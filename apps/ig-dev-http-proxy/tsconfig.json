@@ -2,8 +2,9 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
     "lib": ["ESNext"],
     "noEmit": true,
     "resolveJsonModule": true,
