@@ -17,6 +17,7 @@
     "ut": "npm run test:unit --",
     "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
     "cover:unit": "npm run test:unit -- run --coverage",
+
     "start": "npm run start:dev",
     "start:dev": "NODE_ENV=development LOG_LEVEL=DBG tsx --no-cache index.ts",
     "start:dev:inspect": "NODE_ENV=development LOG_LEVEL=DBG tsx --no-cache --inspect index.ts",
