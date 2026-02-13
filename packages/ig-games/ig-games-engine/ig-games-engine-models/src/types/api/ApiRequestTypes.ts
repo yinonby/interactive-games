@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 import type {
   ChatMsgIdT,
   GameInstanceChatMessageT,
@@ -78,7 +78,7 @@ export type GetGameInstanceChatResponseT = {
 
 export type PostGameInstanceChatMessageParamsT = {
   gameInstanceId: GameInstanceIdT,
-  playerUserId: UserIdT,
+  playerAccountId: AccountIdT,
   chatMessage: string,
 }
 

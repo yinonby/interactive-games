@@ -24,15 +24,15 @@ describe("PlayersTableView", () => {
   const { loggerErrorMock } = __engineAppUiMocks;
   const { useAuthMock } = __authUiMocks;
 
-  // mock curUserId
-  const curUserId = "userIdMock";
+  // mock curAccountId
+  const curAccountId = "userIdMock";
   useAuthMock.mockReturnValue({
-    curUserId: curUserId,
+    curAccountId: curAccountId,
   });
 
   it("does not render when current user is not in players list", () => {
     const playerExposedInfo: PlayerExposedInfoT = {
-      playerUserId: "otherUserId",
+      playerAccountId: "otherUserId",
       playerRole: 'player',
     } as PlayerExposedInfoT;
     const { queryByTestId } = render(
@@ -48,7 +48,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly withAdminButtons = false", () => {
     const playerExposedInfo: PlayerExposedInfoT = {
-      playerUserId: curUserId,
+      playerAccountId: curAccountId,
       playerRole: 'admin',
     } as PlayerExposedInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -70,7 +70,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, no admin", () => {
     const playerExposedInfo: PlayerExposedInfoT = {
-      playerUserId: curUserId,
+      playerAccountId: curAccountId,
       playerRole: 'player',
     } as PlayerExposedInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -92,7 +92,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, admin", () => {
     const playerExposedInfo: PlayerExposedInfoT = {
-      playerUserId: curUserId,
+      playerAccountId: curAccountId,
       playerRole: 'admin',
     } as PlayerExposedInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -114,11 +114,11 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, multiple players", () => {
     const playerExposedInfo1: PlayerExposedInfoT = {
-      playerUserId: curUserId,
+      playerAccountId: curAccountId,
       playerRole: 'admin',
     } as PlayerExposedInfoT;
     const playerExposedInfo2: PlayerExposedInfoT = {
-      playerUserId: 'otherUserId',
+      playerAccountId: 'otherUserId',
       playerRole: 'player',
     } as PlayerExposedInfoT;
     const { queryAllByTestId } = render(

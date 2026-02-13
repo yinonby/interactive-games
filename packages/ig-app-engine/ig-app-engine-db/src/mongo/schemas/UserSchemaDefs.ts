@@ -1,8 +1,8 @@
 
 import type { SchemaDefinition } from 'mongoose';
-import type { UserT } from '../../../../ig-app-engine-models';
+import type { AccountT, UserT } from '../../../../ig-app-engine-models';
 
-export const userSchemaDef: SchemaDefinition<UserT> = {
+export const getUserSchemaDef = (): SchemaDefinition<UserT> => ({
   userId: {
     type: String,
     required: true,
@@ -11,8 +11,19 @@ export const userSchemaDef: SchemaDefinition<UserT> = {
     type: String,
     required: false,
   },
+})
+
+export const getAccountSchemaDef = (): SchemaDefinition<AccountT> => ({
+  accountId: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
   nickname: {
     type: String,
     required: false,
   },
-}
+})

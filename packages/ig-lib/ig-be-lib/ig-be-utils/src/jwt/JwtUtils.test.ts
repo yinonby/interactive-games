@@ -8,7 +8,7 @@ describe("buildJWT", () => {
 
   it("should generate a valid JWT with the given payload", () => {
     const payload: JWTPayload = {
-      userId: "123",
+      x: "123",
       role: "admin",
     };
 
@@ -16,7 +16,7 @@ describe("buildJWT", () => {
 
     const decoded = jwt.verify(token, secret) as jwt.JwtPayload;
 
-    expect(decoded.userId).toBe("123");
+    expect(decoded.x).toBe("123");
     expect(decoded.role).toBe("admin");
   });
 

@@ -101,7 +101,7 @@ describe('useGameInstanceController', () => {
     expect(postGameInstanceChatMessageMock).toHaveBeenCalledWith({
       gameInstanceId: 'giid-1',
       chatMessage: 'Hello world',
-      playerUserId: 'user-1'
+      playerAccountId: 'user-1'
     });
   });
 

@@ -4,7 +4,7 @@ import { BeLogger, MongoDbTable } from '@ig/be-utils';
 import type { LoggerAdapter } from '@ig/utils';
 import { Schema } from 'mongoose';
 import type { UserIdT, UserT } from '../../../../ig-app-engine-models';
-import { userSchemaDef } from '../schemas/UserSchemaDefs';
+import { getUserSchemaDef } from '../schemas/UserSchemaDefs';
 
 export class UsersMongoTable extends MongoDbTable<UserT> implements UsersTableAdapter {
   constructor(
@@ -22,7 +22,7 @@ export class UsersMongoTable extends MongoDbTable<UserT> implements UsersTableAd
   }
 
   protected getSchema(): Schema<UserT> {
-    const userSchema = new Schema<UserT>(userSchemaDef, {
+    const userSchema = new Schema<UserT>(getUserSchemaDef(), {
       timestamps: true,
     });
     userSchema.index({ ['userId']: 1 }, { unique: true });

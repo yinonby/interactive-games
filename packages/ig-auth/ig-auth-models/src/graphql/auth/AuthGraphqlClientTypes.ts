@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 
 // query
 
@@ -16,7 +16,7 @@ export type HealthQuryResultT = {
 // mutation
 
 export type GuestLoginResultDataT = {
-  userId: UserIdT,
+  accountId: AccountIdT,
 }
 
 export type GuestLoginResultT = {
@@ -30,7 +30,7 @@ export type GuestLoginResponseT = {
 export const guestLoginMutation = `
   mutation GuestLogin {
     guestLoginResult: guestLogin {
-      userId
+      accountId
     }
   }
 `;
@@ -41,7 +41,7 @@ export type EmailLoginInputT = {
 }
 
 export type EmailLoginResultDataT = {
-  userId: UserIdT,
+  accountId: AccountIdT,
 }
 
 export type EmailLoginResultT = {
@@ -55,7 +55,7 @@ export type EmailLoginResponseT = {
 export const emailLoginMutation = `
   mutation EmailLogin($input: EmailLoginInput!) {
     emailLoginResult: emailLogin(input: $input) {
-      userId
+      accountId
     }
   }
 `;

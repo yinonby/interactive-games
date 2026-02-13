@@ -230,7 +230,7 @@ describe('GameInstanceRtkApi', () => {
       const result = await store.dispatch(
         gameInstanceRtkApiEndpoints.postGameInstanceChatMessage.initiate({
           gameInstanceId: 'giid-1',
-          playerUserId: 'user-1',
+          playerAccountId: 'user-1',
           chatMessage: 'Hello world',
         })
       );
@@ -248,7 +248,7 @@ describe('GameInstanceRtkApi', () => {
       const result = await store.dispatch(
         gameInstanceRtkApiEndpoints.postGameInstanceChatMessage.initiate({
           gameInstanceId: 'giid-2',
-          playerUserId: 'user-1',
+          playerAccountId: 'user-1',
           chatMessage: 'Hello world',
         })
       );

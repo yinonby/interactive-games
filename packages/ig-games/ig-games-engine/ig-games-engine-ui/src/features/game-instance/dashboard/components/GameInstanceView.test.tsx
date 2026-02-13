@@ -67,10 +67,10 @@ describe('GameInstanceView', () => {
   const { loggerErrorMock } = __engineAppUiMocks;
   const { useAuthMock } = __authUiMocks;
 
-  // mock curUserId
+  // mock curAccountId
   const curUserIdMock = 'userIdMock';
   useAuthMock.mockReturnValue({
-    curUserId: curUserIdMock,
+    curAccountId: curUserIdMock,
   });
 
   beforeEach(() => {
@@ -81,7 +81,7 @@ describe('GameInstanceView', () => {
     // build gameInstanceExposedInfo
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerUserId: 'otherUser',
+        playerAccountId: 'otherUser',
         playerRole: 'player',
       })],
     });
@@ -102,7 +102,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       gameInfo: gameInfo,
       playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerUserId: curUserIdMock,
+        playerAccountId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({
@@ -142,7 +142,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       gameInfo: gameInfo,
       playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerUserId: curUserIdMock,
+        playerAccountId: curUserIdMock,
         playerRole: 'player',
       })],
       gameState: buildTestGameState({
@@ -164,7 +164,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       gameInfo: gameInfo,
       playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerUserId: curUserIdMock,
+        playerAccountId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({

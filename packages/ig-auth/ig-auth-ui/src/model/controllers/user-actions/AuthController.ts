@@ -1,10 +1,10 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/app-engine-ui';
 import { useGuestLoginMutation } from '../../rtk/AuthRtkApi';
 
 export type AuthControllerT = {
-  onGuestLogin: () => Promise<UserIdT>,
+  onGuestLogin: () => Promise<AccountIdT>,
 }
 
 export function useAuthController(): AuthControllerT {
@@ -12,12 +12,12 @@ export function useAuthController(): AuthControllerT {
     guestLogin,
   ] = useGuestLoginMutation();
 
-  const handleGuestLogin = async (): Promise<UserIdT> => {
+  const handleGuestLogin = async (): Promise<AccountIdT> => {
     const { error, data } = await guestLogin();
     if (error !== undefined) {
       throw new AppError(extractAppErrorCodeFromUnknownObject(error));
     }
-    return data.guestLoginResult.userId;
+    return data.guestLoginResult.accountId;
   };
 
   return {

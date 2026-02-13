@@ -8,7 +8,7 @@ class JwtUtils:
         self.jwt_secret = jwt_secret
         self.jwt_algorithms = jwt_algorithms
 
-    # Pseudo function to extract userId from auth token
+    # decode token payload
     def decode_token(self, token: str) -> dict[str, Any] | None:
         try:
             payload: dict[str, Any] = jwt.decode(

@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 import type { GameStateT } from './GameStateTypes';
 import type { GameInfoT } from './GameTypes';
 
@@ -17,7 +17,7 @@ export type PlayerRoleT = 'admin' | 'player';
 export type PlayerStatusT = 'invited' | 'active' | 'suspended';
 
 export type PlayerExposedInfoT = {
-  playerUserId: UserIdT,
+  playerAccountId: AccountIdT,
   playerNickname: string,
   playerRole: PlayerRoleT,
   playerStatus: PlayerStatusT,
@@ -29,6 +29,6 @@ export type GameInstanceChatMessageT = {
   gameInstanceId: GameInstanceIdT,
   chatMsgId: ChatMsgIdT,
   sentTs: number,
-  playerUserId: UserIdT,
+  playerAccountId: AccountIdT,
   msgText: string,
 }

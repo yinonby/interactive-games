@@ -27,8 +27,8 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
   const onUnknownErrorMock = jest.fn();
 
   // AppConfigUtils mocks
-  const getLocalUserIdSpy = jest.spyOn(AuthUtils, 'getLocalUserId');
-  const setLocalUserIdSpy = jest.spyOn(AuthUtils, 'setLocalUserId');
+  const getLocalUserIdSpy = jest.spyOn(AuthUtils, 'getLocalAccountId');
+  const setLocalUserIdSpy = jest.spyOn(AuthUtils, 'setLocalAccountId');
 
   const TestChild: React.FC = () => {
     return (
@@ -86,7 +86,7 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
 
   it('creates new local user id, guest login succeeds', async () => {
     getLocalUserIdSpy.mockResolvedValue(null);
-    onGuestLoginMock.mockResolvedValue('USER1');
+    onGuestLoginMock.mockResolvedValue('ACCOUNT1');
 
     render(
       <AuthProvider
@@ -104,7 +104,7 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
     // verify calls
     expect(getLocalUserIdSpy).toHaveBeenCalledWith();
     expect(onGuestLoginMock).toHaveBeenCalledWith();
-    expect(setLocalUserIdSpy).toHaveBeenCalledWith('USER1');
+    expect(setLocalUserIdSpy).toHaveBeenCalledWith('ACCOUNT1');
   });
 
   it('uses existing local user id', async () => {
@@ -194,6 +194,6 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
       expect(getLocalUserIdSpy).toHaveBeenCalled()
     );
 
-    expect(contextValue.curUserId).toBe(existingUserId);
+    expect(contextValue.curAccountId).toBe(existingUserId);
   });
 });

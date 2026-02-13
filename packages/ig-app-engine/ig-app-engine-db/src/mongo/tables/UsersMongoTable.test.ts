@@ -26,7 +26,7 @@ describe('UsersMongoTable', () => {
   });
 
   describe('getUsers', () => {
-    it('should return array of game configs', async () => {
+    it('should return array of users', async () => {
       const userId1: UserIdT = 'USER1';
       const userId2: UserIdT = 'USER2';
       const mockUser1: UserT = buildFullTestUser({
@@ -48,9 +48,8 @@ describe('UsersMongoTable', () => {
     });
   });
 
-
   describe('getUser', () => {
-    it('should return array of game configs', async () => {
+    it('should return array of users', async () => {
       const userId1: UserIdT = 'USER1';
       const mockUser1: UserT = buildFullTestUser({
         userId: userId1,
@@ -68,7 +67,7 @@ describe('UsersMongoTable', () => {
   });
 
   describe('createUser', () => {
-    it('should insert game config', async () => {
+    it('should insert user', async () => {
       const mockUser1: UserT = buildFullTestUser({});
       const instance = new UsersMongoTable();
 

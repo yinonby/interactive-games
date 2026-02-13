@@ -27,7 +27,7 @@ const getChatMessagePlayerNickname = (
   playerExposedInfos: PlayerExposedInfoT[],
 ): string | null => {
   const otherPlayerExposedInfo: PlayerExposedInfoT | undefined =
-    playerExposedInfos.find(e => e.playerUserId === gameInstanceChatMessage.playerUserId);
+    playerExposedInfos.find(e => e.playerAccountId === gameInstanceChatMessage.playerAccountId);
   if (otherPlayerExposedInfo === undefined) {
     return null;
   }
@@ -56,7 +56,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   const [chatMessage, setChatMessage] = useState("");
   const listRef = useRef<FlatList>(null);
   const genericStyles = useGenericStyles();
-  const { curUserId } = useAuth();
+  const { curAccountId } = useAuth();
   const { onUnknownError } = useAppErrorHandling();
 
   const chatMessageWithPlayerNicknames: ChatMessageWithPlayerNicknameT[] =
@@ -64,7 +64,7 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
 
   const handlePress = async (): Promise<void> => {
     try {
-      await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, curUserId, chatMessage);
+      await onSendChatMessage(gameInstanceExposedInfo.gameInstanceId, curAccountId, chatMessage);
       setChatMessage("");
     } catch (error: unknown) {
       onUnknownError(error);

@@ -111,13 +111,13 @@ export const devChatMessages: GameInstanceChatMessageT[] = [{
   gameInstanceId: 'giid-1',
   chatMsgId: 'msg-1',
   sentTs: 2,
-  playerUserId: 'user-2',
+  playerAccountId: 'user-2',
   msgText: 'Hey',
 }, {
   gameInstanceId: 'giid-1',
   chatMsgId: 'msg-1',
   sentTs: 3,
-  playerUserId: 'user-3',
+  playerAccountId: 'user-3',
   msgText: 'Let\'s play',
 }]
 

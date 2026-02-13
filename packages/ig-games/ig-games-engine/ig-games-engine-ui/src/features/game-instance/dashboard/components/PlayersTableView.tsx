@@ -17,16 +17,16 @@ export const PlayersTableView: FC<PlayersTableViewPropsT> = (props) => {
   const { playerExposedInfos, withAdminButtons } = props;
   const { t } = useAppLocalization();
   const logger = useClientLogger();
-  const { curUserId } = useAuth();
+  const { curAccountId } = useAuth();
 
-  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerUserId === curUserId);
+  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerAccountId === curAccountId);
   if (curPlayerExposedInfo === undefined) {
-    logger.error(`Unexpected game instance not belonging to player, curUserId [${curUserId}]`);
+    logger.error(`Unexpected game instance not belonging to player, curAccountId [${curAccountId}]`);
     return null;
   }
   const isCurUserAdminPlayer = curPlayerExposedInfo.playerRole === 'admin';
   const otherPlayerExposedInfos = playerExposedInfos
-    .filter(e => e.playerUserId !== curUserId)
+    .filter(e => e.playerAccountId !== curAccountId)
     .sort(comparePlayersForDisplaySort);
 
   return (

@@ -15,7 +15,7 @@ const authGraphqlMutationTypeDefs = gql`
   }
 
   type GuestLoginResult {
-    userId: String!
+    accountId: String!
   }
 
   input EmailLoginInput {
@@ -24,7 +24,7 @@ const authGraphqlMutationTypeDefs = gql`
   }
 
   type EmailLoginResult {
-    userId: String!
+    accountId: String!
   }
 `;
 
