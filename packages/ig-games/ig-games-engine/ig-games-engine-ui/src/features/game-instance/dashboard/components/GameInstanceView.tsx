@@ -21,15 +21,15 @@ export type GameInstanceViewPropsT = TestableComponentT & {
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
   const { playerExposedInfos } = gameInstanceExposedInfo;
-  const { curUserId } = useAuth();
+  const { curAccountId } = useAuth();
   const gameInfo = gameInstanceExposedInfo.gameInfo;
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();
 
-  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerUserId === curUserId);
+  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerAccountId === curAccountId);
   if (curPlayerExposedInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player,` +
-      `gameInstanceId [${gameInstanceExposedInfo.gameInstanceId}] curUserId [${curUserId}]`);
+      `gameInstanceId [${gameInstanceExposedInfo.gameInstanceId}] curAccountId [${curAccountId}]`);
     return null;
   }
 

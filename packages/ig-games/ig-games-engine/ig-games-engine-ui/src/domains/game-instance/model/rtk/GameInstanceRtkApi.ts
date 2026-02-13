@@ -38,7 +38,7 @@ const gameInstanceRtkApi = appRtkApi.injectEndpoints({
       query: (params: PostGameInstanceChatMessageParamsT) => ({
         url: `/games/game-instance/${params.gameInstanceId}/chat/message`,
         method: 'POST',
-        data: { chatMessage: params.chatMessage, playerUserId: params.playerUserId },
+        data: { chatMessage: params.chatMessage, playerAccountId: params.playerAccountId },
       }),
       invalidatesTags: (result, error, params) => [{ type: 'GamesInstanceChatTag', id: params.gameInstanceId }],
     }),

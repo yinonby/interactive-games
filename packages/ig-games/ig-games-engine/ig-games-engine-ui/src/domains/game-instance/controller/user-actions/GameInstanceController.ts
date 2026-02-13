@@ -1,12 +1,12 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/app-engine-ui';
 import type { GameInstanceIdT } from '@ig/games-engine-models';
 import { usePostGameInstanceChatMessageMutation, useStartGameMutation, useSubmitGuessMutation } from '../../model/rtk/GameInstanceRtkApi';
 
 export type GameInstanceControllerT = {
   onStartGame: (gameInstanceId: GameInstanceIdT) => Promise<void>,
-  onSendChatMessage: (gameInstanceId: GameInstanceIdT, playerUserId: UserIdT, chatMessage: string) => Promise<void>,
+  onSendChatMessage: (gameInstanceId: GameInstanceIdT, playerAccountId: AccountIdT, chatMessage: string) => Promise<void>,
   onSubmitGuess: (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string) => Promise<boolean>,
 }
 
@@ -36,12 +36,12 @@ export function useGameInstanceController(): GameInstanceControllerT {
 
   const sendChatMessge = async (
     gameInstanceId: GameInstanceIdT,
-    playerUserId: UserIdT,
+    playerAccountId: AccountIdT,
     chatMessage: string
   ): Promise<void> => {
     const { error } = await postGameInstanceChatMessage({
       gameInstanceId: gameInstanceId,
-      playerUserId: playerUserId,
+      playerAccountId: playerAccountId,
       chatMessage: chatMessage,
     });
     if (error !== undefined) {

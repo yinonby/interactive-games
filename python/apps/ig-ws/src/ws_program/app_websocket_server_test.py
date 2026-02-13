@@ -20,7 +20,7 @@ class DummyAuthManager(AppAuthTokenManager):
         self.return_value = return_value
         super().__init__("secret", ["HS256"])
 
-    def get_user_id_from_auth_token(self, token):
+    def get_account_id_from_auth_token(self, token):
         return self.return_value
 
 
@@ -30,8 +30,8 @@ class DummyAuthManager(AppAuthTokenManager):
 
 
 @pytest.mark.asyncio
-async def test_handle_ws_client_conn_user_none():
-    """If get_user_id_from_auth_token returns None, websocket.close is called"""
+async def test_handle_ws_client_conn_account_none():
+    """If get_account_id_from_auth_token returns None, websocket.close is called"""
     ipc = InterProcessComm[str]()
     auth_manager = DummyAuthManager(return_value=None)  # invalid token
     server = AppWebSocketServer(ipc, auth_manager, "localhost", 8765)
@@ -46,7 +46,7 @@ async def test_handle_ws_client_conn_user_none():
 
 
 @pytest.mark.asyncio
-async def test_handle_ws_client_conn_user_id_not_none():
+async def test_handle_ws_client_conn_account_id_not_none():
     # --- Setup mocks ---
     mock_websocket = AsyncMock()
     mock_websocket.request = Request(
@@ -56,7 +56,7 @@ async def test_handle_ws_client_conn_user_id_not_none():
     mock_websocket.close = AsyncMock()
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
-    mock_auth_token_manager.get_user_id_from_auth_token.return_value = "user123"
+    mock_auth_token_manager.get_account_id_from_auth_token.return_value = "account123"
 
     mock_ipc = MagicMock(spec=InterProcessComm)
 
@@ -68,19 +68,21 @@ async def test_handle_ws_client_conn_user_id_not_none():
         ws_server_listen_port=8000,
     )
 
-    # Patch handle_ws_client_conn_for_user_id to avoid infinite loops
-    server.handle_ws_client_conn_for_user_id = AsyncMock()
+    # Patch handle_ws_client_conn_for_account_id to avoid infinite loops
+    server.handle_ws_client_conn_for_account_id = AsyncMock()
 
     # --- Call the method under test ---
     await server.handle_ws_client_conn(mock_websocket)
 
     # --- Assertions ---
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_called_once_with("valid-token")
-    server.handle_ws_client_conn_for_user_id.assert_called_once_with(mock_websocket, "user123")
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_called_once_with("valid-token")
+    server.handle_ws_client_conn_for_account_id.assert_called_once_with(
+        mock_websocket, "account123"
+    )
     mock_websocket.close.assert_not_called()
 
 
-def test_get_user_id_from_auth_token_missing_request():
+def test_get_account_id_from_auth_token_missing_request():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = None
@@ -95,13 +97,13 @@ def test_get_user_id_from_auth_token_missing_request():
         ws_server_listen_port=8000,
     )
 
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
-    assert user_id is None
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_not_called()
+    assert account_id is None
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_not_called()
 
 
-def test_get_user_id_from_auth_token_missing_cookie_in_headers():
+def test_get_account_id_from_auth_token_missing_cookie_in_headers():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = Request(path="", headers={})
@@ -116,19 +118,19 @@ def test_get_user_id_from_auth_token_missing_cookie_in_headers():
         ws_server_listen_port=8000,
     )
 
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
-    assert user_id is None
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_not_called()
+    assert account_id is None
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_not_called()
 
 
-def test_get_user_id_from_auth_token_missing_auth_jwt_cookie():
+def test_get_account_id_from_auth_token_missing_auth_jwt_cookie():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = Request(path="", headers={"Cookie": "cookie1=val1"})
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
-    mock_auth_token_manager.get_user_id_from_auth_token.return_value = None
+    mock_auth_token_manager.get_account_id_from_auth_token.return_value = None
 
     mock_ipc = MagicMock(spec=InterProcessComm)
 
@@ -139,13 +141,13 @@ def test_get_user_id_from_auth_token_missing_auth_jwt_cookie():
         ws_server_listen_port=8000,
     )
 
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
-    assert user_id is None
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_not_called()
+    assert account_id is None
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_not_called()
 
 
-def test_get_user_id_from_auth_token_missing_user_id_in_auth_jwt_cookie():
+def test_get_account_id_from_auth_token_missing_account_id_in_auth_jwt_cookie():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = Request(
@@ -153,7 +155,7 @@ def test_get_user_id_from_auth_token_missing_user_id_in_auth_jwt_cookie():
     )
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
-    mock_auth_token_manager.get_user_id_from_auth_token.return_value = None
+    mock_auth_token_manager.get_account_id_from_auth_token.return_value = None
 
     mock_ipc = MagicMock(spec=InterProcessComm)
 
@@ -164,13 +166,13 @@ def test_get_user_id_from_auth_token_missing_user_id_in_auth_jwt_cookie():
         ws_server_listen_port=8000,
     )
 
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
-    assert user_id is None
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_called_with("valid-token")
+    assert account_id is None
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_called_with("valid-token")
 
 
-def test_get_user_id_from_auth_token_success():
+def test_get_account_id_from_auth_token_success():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = Request(
@@ -178,7 +180,7 @@ def test_get_user_id_from_auth_token_success():
     )
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
-    mock_auth_token_manager.get_user_id_from_auth_token.return_value = "user123"
+    mock_auth_token_manager.get_account_id_from_auth_token.return_value = "account123"
 
     mock_ipc = MagicMock(spec=InterProcessComm)
 
@@ -190,14 +192,14 @@ def test_get_user_id_from_auth_token_success():
     )
 
     # --- Call the method ---
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
     # --- Assertions ---
-    assert user_id == "user123"
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_called_once_with("valid-token")
+    assert account_id == "account123"
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_called_once_with("valid-token")
 
 
-def test_get_user_id_from_auth_token_success_with_multiple_cookies():
+def test_get_account_id_from_auth_token_success_with_multiple_cookies():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
     mock_websocket.request = Request(
@@ -208,7 +210,7 @@ def test_get_user_id_from_auth_token_success_with_multiple_cookies():
     )
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
-    mock_auth_token_manager.get_user_id_from_auth_token.return_value = "user123"
+    mock_auth_token_manager.get_account_id_from_auth_token.return_value = "account123"
 
     mock_ipc = MagicMock(spec=InterProcessComm)
 
@@ -220,15 +222,15 @@ def test_get_user_id_from_auth_token_success_with_multiple_cookies():
     )
 
     # --- Call the method ---
-    user_id = server.get_user_id_from_auth_token(mock_websocket)
+    account_id = server.get_account_id_from_auth_token(mock_websocket)
 
     # --- Assertions ---
-    assert user_id == "user123"
-    mock_auth_token_manager.get_user_id_from_auth_token.assert_called_once_with("valid-token")
+    assert account_id == "account123"
+    mock_auth_token_manager.get_account_id_from_auth_token.assert_called_once_with("valid-token")
 
 
 @pytest.mark.asyncio
-async def test_handle_ws_client_conn_for_user_id_connection_closed():
+async def test_handle_ws_client_conn_for_account_id_connection_closed():
     mock_websocket = AsyncMock()
     mock_ipc = MagicMock(spec=InterProcessComm)
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
@@ -246,14 +248,14 @@ async def test_handle_ws_client_conn_for_user_id_connection_closed():
 
     server.handle_queue_message_loop = AsyncMock(side_effect=raise_connection_closed)
 
-    await server.handle_ws_client_conn_for_user_id(mock_websocket, "user123")
+    await server.handle_ws_client_conn_for_account_id(mock_websocket, "account123")
 
-    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123")
-    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123", mock.ANY)
+    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123")
+    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123", mock.ANY)
 
 
 @pytest.mark.asyncio
-async def test_handle_ws_client_conn_for_user_id_other_exception():
+async def test_handle_ws_client_conn_for_account_id_other_exception():
     mock_websocket = AsyncMock()
     mock_ipc = MagicMock(spec=InterProcessComm)
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
@@ -268,14 +270,14 @@ async def test_handle_ws_client_conn_for_user_id_other_exception():
     # Patch handle_queue_message_loop to raise a generic exception
     server.handle_queue_message_loop = AsyncMock(side_effect=ValueError("oops"))
 
-    await server.handle_ws_client_conn_for_user_id(mock_websocket, "user123")
+    await server.handle_ws_client_conn_for_account_id(mock_websocket, "account123")
 
-    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123")
-    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123", mock.ANY)
+    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123")
+    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123", mock.ANY)
 
 
 @pytest.mark.asyncio
-async def test_handle_ws_client_conn_for_user_id_success():
+async def test_handle_ws_client_conn_for_account_id_success():
     mock_websocket = AsyncMock()
     mock_ipc = MagicMock(spec=InterProcessComm)
     mock_ipc.subscribe = MagicMock()
@@ -293,10 +295,10 @@ async def test_handle_ws_client_conn_for_user_id_success():
     # Patch handle_queue_message_loop to run normally
     server.handle_queue_message_loop = AsyncMock(return_value=None)
 
-    await server.handle_ws_client_conn_for_user_id(mock_websocket, "user123")
+    await server.handle_ws_client_conn_for_account_id(mock_websocket, "account123")
 
-    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123")
-    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "user123", mock.ANY)
+    mock_ipc.subscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123")
+    mock_ipc.unsubscribe.assert_called_once_with(IPC_TOPIC_USER_PREFIX + "account123", mock.ANY)
     server.handle_queue_message_loop.assert_awaited_once_with(mock_websocket, mock.ANY)
 
 

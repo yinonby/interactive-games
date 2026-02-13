@@ -16,7 +16,7 @@ import {
 import type { LetterAnalysisT } from '@ig/games-wordle-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
 import type { HttpAdapter, HttpMethod } from '../../../../ig-lib/ig-client-lib/ig-client-utils';
-import { getLocalUserId } from '../../src/app/layout/AppConfigUtils';
+import { getLocalAccountId } from '../../src/app/layout/AppConfigUtils';
 import { useClientLogger } from '../../src/app/providers/useClientLogger';
 import {
   devAllGameConfigs,
@@ -28,12 +28,8 @@ import {
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
   const gameInfo: GameInfoT | undefined =
     devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
-  const curUserId = await getLocalUserId();
 
   if (gameInfo === undefined) {
-    throw { status: 500, apiErrCode: 'apiError:server' };
-  }
-  if (curUserId === null) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -55,17 +51,17 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
     throw { status: 500, apiErrCode: 'gamesApiError:invalidInvitationCode' };
   }
 
-  const curUserId = await getLocalUserId();
-  if (curUserId === null) {
+  const curAccountId = await getLocalAccountId();
+  if (curAccountId === null) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  if (gameInstanceExposedInfo.playerExposedInfos.find(e => e.playerUserId === curUserId)) {
+  if (gameInstanceExposedInfo.playerExposedInfos.find(e => e.playerAccountId === curAccountId)) {
     throw { status: 500, apiErrCode: 'gamesApiError:gameInstanceAlreadyJoined' };
   }
 
   gameInstanceExposedInfo.playerExposedInfos.push({
-    playerUserId: curUserId,
+    playerAccountId: curAccountId,
     playerNickname: 'Jim Curry',
     playerRole: 'player',
     playerStatus: 'active',
@@ -76,9 +72,9 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
 
 const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
   const gameInstanceId = 'giid-' + gameConfigId + '-' + generateUuidv4().slice(0, 8);
-  const curUserId = await getLocalUserId();
+  const curAccountId = await getLocalAccountId();
 
-  if (curUserId === null) {
+  if (curAccountId === null) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -119,7 +115,7 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
       levelStates: levelStates,
     },
     playerExposedInfos: [{
-      playerUserId: curUserId,
+      playerAccountId: curAccountId,
       playerNickname: 'Jim Curry',
       playerRole: 'admin',
       playerStatus: 'active',
@@ -270,7 +266,7 @@ export class ApiServerMock implements HttpAdapter {
         gameInstanceId: gameInstanceId,
         chatMsgId: Date.now().toString(),
         sentTs: Date.now(),
-        playerUserId: data.playerUserId,
+        playerAccountId: data.playerAccountId,
         msgText: data.chatMessage,
       }
       devChatMessages.push(chatMessage)

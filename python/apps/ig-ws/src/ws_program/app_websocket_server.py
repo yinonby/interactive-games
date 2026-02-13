@@ -24,16 +24,16 @@ class AppWebSocketServer(WebSocketServer):
         self.ipc: InterProcessComm[str] = ipc
 
     async def handle_ws_client_conn(self, websocket: ServerConnection) -> None:
-        user_id = self.get_user_id_from_auth_token(websocket)
-        if user_id is None:
-            self.logger.debug("WebSocket Server: Disconnecting due to no user id")
+        account_id = self.get_account_id_from_auth_token(websocket)
+        if account_id is None:
+            self.logger.debug("WebSocket Server: Disconnecting due to no account id")
             await websocket.close(reason="Invalid auth token")
             return
 
-        self.logger.debug(f"WebSocket Server: User {user_id} connected")
-        await self.handle_ws_client_conn_for_user_id(websocket, user_id)
+        self.logger.debug(f"WebSocket Server: Account {account_id} connected")
+        await self.handle_ws_client_conn_for_account_id(websocket, account_id)
 
-    def get_user_id_from_auth_token(self, websocket: ServerConnection) -> str | None:
+    def get_account_id_from_auth_token(self, websocket: ServerConnection) -> str | None:
         # Extract request
         request: Request | None = websocket.request
         if request is None:
@@ -55,34 +55,34 @@ class AppWebSocketServer(WebSocketServer):
             self.logger.debug("WebSocket Server: Conection missing auth cookie")
             return None
 
-        # Extract user id from auth jwt cookie
+        # Extract account id from auth jwt cookie
         auth_token = auth_cookie.value
-        user_id = self.auth_token_manager.get_user_id_from_auth_token(auth_token)
-        if user_id is None:
-            self.logger.debug("WebSocket Server: Auth token missing user id")
+        account_id = self.auth_token_manager.get_account_id_from_auth_token(auth_token)
+        if account_id is None:
+            self.logger.debug("WebSocket Server: Auth token missing account id")
             return None
 
-        return user_id
+        return account_id
 
-    async def handle_ws_client_conn_for_user_id(
-        self, websocket: ServerConnection, user_id: str
+    async def handle_ws_client_conn_for_account_id(
+        self, websocket: ServerConnection, account_id: str
     ) -> None:
-        topic = IPC_TOPIC_USER_PREFIX + user_id
+        topic = IPC_TOPIC_USER_PREFIX + account_id
         queue: asyncio.Queue[str] = self.ipc.subscribe(topic)
 
         try:
             await self.handle_queue_message_loop(websocket, queue)
 
         except ConnectionClosed:
-            self.logger.debug(f"WebSocket Server: Connection closed, user {user_id}")
+            self.logger.debug(f"WebSocket Server: Connection closed, account {account_id}")
             pass
 
         except Exception:
-            self.logger.debug(f"WebSocket Server: Unexpected error, user {user_id}")
+            self.logger.debug(f"WebSocket Server: Unexpected error, account {account_id}")
             pass
 
         finally:
-            self.logger.debug(f"WebSocket Server: User {user_id} disconnected")
+            self.logger.debug(f"WebSocket Server: Account {account_id} disconnected")
             self.ipc.unsubscribe(topic, queue)
 
     async def handle_queue_message_loop(

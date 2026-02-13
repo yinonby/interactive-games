@@ -15,7 +15,7 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-const guestLoginResponse: GuestLoginResponseT = { data: { guestLoginResult: { userId: 'USER1' }}};
+const guestLoginResponse: GuestLoginResponseT = { data: { guestLoginResult: { accountId: 'ACCOUNT1' }}};
 
 export const server = setupServer(
   http.post(apiUrl + '/auth/graphql', () => {

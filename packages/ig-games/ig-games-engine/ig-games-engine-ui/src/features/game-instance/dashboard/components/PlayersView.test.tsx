@@ -17,7 +17,7 @@ jest.mock("./PlayersTableView", () => {
 describe("PlayersView", () => {
   it("renders correctly", () => {
     const playerExposedInfos: PlayerExposedInfoT[] = [{
-      playerUserId: "userIdMock",
+      playerAccountId: "userIdMock",
       playerRole: "admin",
     } as PlayerExposedInfoT];
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
