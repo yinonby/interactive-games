@@ -2,14 +2,14 @@
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { __authUiMocks } from '@ig/auth-ui';
 import {
-    type GameInstanceChatMessageT, type GameInstanceExposedInfoT
+  type GameInstanceChatMessageT, type GameInstanceExposedInfoT
 } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo, buildTestPlayerExposedInfo } from '@ig/games-engine-models/test-utils';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import {
-    useGameInstanceController
+  useGameInstanceController
 } from '../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import { ChatView } from './ChatView';
 
@@ -42,20 +42,20 @@ describe("ChatView", () => {
     onSendChatMessageMock.mockImplementation(async () => {});
     const mockedCurUserId = "mockedId";
     useAuthMock.mockReturnValue({
-      curUserId: mockedCurUserId,
+      curAccountId: mockedCurUserId,
     });
 
     // render
     const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
       gameInstanceId: "gi1",
       playerExposedInfos: [
-        buildTestPlayerExposedInfo({ playerUserId: "user2", playerNickname: "Alice" }),
+        buildTestPlayerExposedInfo({ playerAccountId: "user2", playerNickname: "Alice" }),
       ],
     });
     const messages: GameInstanceChatMessageT[] = [
-      { chatMsgId: "m1", playerUserId: "user1", msgText: "hello me" } as GameInstanceChatMessageT,
-      { chatMsgId: "m2", playerUserId: "user2", msgText: "hi" } as GameInstanceChatMessageT,
-      { chatMsgId: "m3", playerUserId: "unknown", msgText: "secret" } as GameInstanceChatMessageT,
+      { chatMsgId: "m1", playerAccountId: "user1", msgText: "hello me" } as GameInstanceChatMessageT,
+      { chatMsgId: "m2", playerAccountId: "user2", msgText: "hi" } as GameInstanceChatMessageT,
+      { chatMsgId: "m3", playerAccountId: "unknown", msgText: "secret" } as GameInstanceChatMessageT,
     ];
     const { getByTestId, getByText } = render(
       <ChatView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={messages} />
@@ -73,7 +73,7 @@ describe("ChatView", () => {
     onSendChatMessageMock.mockImplementation(async () => { });
     const mockedCurUserId = "mockedId";
     useAuthMock.mockReturnValue({
-      curUserId: mockedCurUserId,
+      curAccountId: mockedCurUserId,
     });
 
     // render
@@ -107,7 +107,7 @@ describe("ChatView", () => {
     onSendChatMessageMock.mockRejectedValue('ERR');
     const mockedCurUserId = "mockedId";
     useAuthMock.mockReturnValue({
-      curUserId: mockedCurUserId,
+      curAccountId: mockedCurUserId,
     });
 
     // render

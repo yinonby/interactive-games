@@ -24,6 +24,7 @@ export const useAuthPluginContainer = (
           sysDomain,
           !isDevel(),
           engineDbAdapter.getUsersTableAdapter(),
+          engineDbAdapter.getAccountsTableAdapter(),
         ),
       },
     },

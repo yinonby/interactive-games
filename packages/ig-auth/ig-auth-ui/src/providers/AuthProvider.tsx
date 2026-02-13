@@ -1,13 +1,13 @@
 
-import type { UserIdT } from '@ig/app-engine-models';
+import type { AccountIdT } from '@ig/app-engine-models';
 import { RnuiActivityIndicator } from '@ig/rnui';
 import type { LoggerAdapter } from '@ig/utils';
 import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useAuthController } from '../model/controllers/user-actions/AuthController';
-import { getLocalUserId, setLocalUserId } from './AuthUtils';
+import { getLocalAccountId, setLocalAccountId } from './AuthUtils';
 
 export interface AuthContextT {
-  curUserId: UserIdT,
+  curAccountId: AccountIdT,
 }
 
 const AuthContext = createContext<AuthContextT | undefined>(undefined);
@@ -20,23 +20,23 @@ export type AuthProviderPropsT = {
 export const AuthProvider: React.FC<PropsWithChildren<AuthProviderPropsT>> = (props) => {
   const { logger, onUnknownError, children } = props;
   const { onGuestLogin } = useAuthController();
-  const [curUserId, setCurUserId] = useState("");
+  const [curAccountId, setCurUserId] = useState("");
 
   useEffect(() => {
-    if (curUserId === "") {
-      logger.info('Detecting curUserId...');
+    if (curAccountId === "") {
+      logger.info('Detecting curAccountId...');
       const updateCurUserId = async () => {
-        const _curUserId: string | null = await getLocalUserId();
+        const _curUserId: string | null = await getLocalAccountId();
 
         if (_curUserId !== null) {
-          logger.info('Found curUserId');
+          logger.info('Found curAccountId');
           setCurUserId(_curUserId);
         } else {
-          logger.info('No curUserId found, initiating guest login');
+          logger.info('No curAccountId found, initiating guest login');
           try {
             const newUserId = await onGuestLogin();
             logger.info('Retrieved user id after a guest login');
-            await setLocalUserId(newUserId);
+            await setLocalAccountId(newUserId);
             setCurUserId(newUserId);
           } catch (error: unknown) {
             onUnknownError(error);
@@ -46,13 +46,13 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderPropsT>> = (pr
 
       updateCurUserId();
     }
-  }, [curUserId]);
+  }, [curAccountId]);
 
   const value: AuthContextT = {
-    curUserId: curUserId,
+    curAccountId: curAccountId,
   }
 
-  if (curUserId === '') return (
+  if (curAccountId === '') return (
     <RnuiActivityIndicator testID='RnuiActivityIndicator-tid'/>
   );
 

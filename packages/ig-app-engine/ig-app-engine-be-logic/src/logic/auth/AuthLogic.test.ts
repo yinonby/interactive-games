@@ -1,5 +1,5 @@
 
-import type { UsersTableAdapter } from '@ig/app-engine-be-models';
+import type { AccountsTableAdapter, UsersTableAdapter } from '@ig/app-engine-be-models';
 import type { EmailLoginInputT } from '@ig/auth-models';
 import { CookieUtils, type JwtAlgorithmT } from '@ig/be-utils';
 import * as IgLib from '@ig/utils';
@@ -18,25 +18,28 @@ describe('AuthLogic', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setCookiespy.mockImplementation(() => {});
 
-  let mockTableAdapter: UsersTableAdapter;
-  const getUsersMock = vi.fn();
-  const getUserMock = vi.fn();
-  const createUserMock = vi.fn();
+  let mock_UsersTableAdapter: UsersTableAdapter;
+  let mock_AccountsTableAdapter: AccountsTableAdapter;
+  const mock_createUser = vi.fn();
+  const mock_createAccount = vi.fn();
 
   beforeEach(() => {
     // Create a fresh mock before each test
-    mockTableAdapter = {
-      getUsers: getUsersMock,
-      getUser: getUserMock,
-      createUser: createUserMock,
+    mock_UsersTableAdapter = {
+      getUser: vi.fn(),
+      createUser: mock_createUser,
     };
 
+    mock_AccountsTableAdapter = {
+      getAccount: vi.fn(),
+      createAccount: mock_createAccount,
+    };
   });
 
   it('created with defaults', () => {
     // create
     const logic: AuthLogic = new AuthLogic(jwtSecret, jwtAlgorithm, jwtExpiresInMs, jwtCookieDomain,
-      jwtCookieIsSecure, mockTableAdapter);
+      jwtCookieIsSecure, mock_UsersTableAdapter, mock_AccountsTableAdapter);
 
     // guestLogin
     expect(logic).not.toBeNull();
@@ -48,16 +51,17 @@ describe('AuthLogic', () => {
 
     // create
     const logic: AuthLogic = new AuthLogic(jwtSecret, jwtAlgorithm, jwtExpiresInMs, jwtCookieDomain,
-      jwtCookieIsSecure, mockTableAdapter, cookieUtils);
+      jwtCookieIsSecure, mock_UsersTableAdapter, mock_AccountsTableAdapter, cookieUtils);
 
     // guestLogin
     const res: Response = {} as Response;
-    const userId = await logic.guestLogin(res);
+    const accountId = await logic.guestLogin(res);
 
     // verify
-    expect(mockTableAdapter.createUser).toHaveBeenCalled();
+    expect(mock_createUser).toHaveBeenCalled();
+    expect(mock_createAccount).toHaveBeenCalled();
     expect(setCookiespy).toHaveBeenCalled();
-    expect(userId).toEqual(uuidv4);
+    expect(accountId).toEqual(uuidv4);
   });
 
   it('emailLogin throws', async () => {
@@ -68,7 +72,7 @@ describe('AuthLogic', () => {
 
     // create
     const logic: AuthLogic = new AuthLogic(jwtSecret, jwtAlgorithm, jwtExpiresInMs, jwtCookieDomain,
-      jwtCookieIsSecure, mockTableAdapter, cookieUtils);
+      jwtCookieIsSecure, mock_UsersTableAdapter, mock_AccountsTableAdapter, cookieUtils);
 
     // emailLogin, verify throws
     const res: Response = {} as Response;
