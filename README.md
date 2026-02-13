@@ -1,13 +1,27 @@
 
 ## Games & More
 
-**Games & More** is a **monorepo** designed to host multiple applications and shared packages in a single repository.
+**Games & More** is a platform that provides interactive, multi-player, fun games.
 
 <img src="./assets/images/game-play-wordle.png" alt="Wordle Game Play" height="300" />
 
 ---
 
+### How to run locally
+
+- You need a running redis on port 6379. If you don't have one:
+  - If you don't have docker installed:
+    - On **Mac**: `brew install docker`
+  - `npm run start:redis`
+- `npm install`
+- `npm start`
+- Go to: http://localhost
+
+---
+
 ### Monorepo Structure
+
+This **monorepo** was designed to host multiple applications and shared packages in a single repository.
 
 The repository is organized as follows:
 
