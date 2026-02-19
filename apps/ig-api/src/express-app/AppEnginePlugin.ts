@@ -1,11 +1,13 @@
 /* istanbul ignore file -- @preserve */
 
-import type { EngineMongoDb } from '@ig/app-engine-db';
-import type { ExpressPluginContainerT } from '@ig/be-utils';
+import type { EngineDbAdapter } from '@ig/app-engine-be-models';
+import type { ExpressPluginContainerT, PackageDb } from '@ig/be-utils';
 
-export const useAppEnginePluginContainer = (engineMongoDb: EngineMongoDb): ExpressPluginContainerT<unknown> => {
+export const useAppEnginePluginContainer = (
+  engineDb: PackageDb & EngineDbAdapter,
+): ExpressPluginContainerT<unknown> => {
   const pluginContainer: ExpressPluginContainerT<unknown> = {
-    getPackageDb: () => engineMongoDb,
+    getPackageDb: () => engineDb,
   }
 
   return pluginContainer;

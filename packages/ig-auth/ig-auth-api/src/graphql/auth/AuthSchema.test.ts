@@ -1,15 +1,17 @@
 
 import { ApolloServer } from '@apollo/server';
-import type { AuthLogicAdapter } from '@ig/auth-be-models';
+import type { SignupPluginAdapter, SignupServiceTransactionAdapter } from '@ig/auth-be-models';
 import { healthQuery, type HealthQuryResultT } from '@ig/auth-models';
 import type { Request, Response } from 'express';
 import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from './AuthSchema';
 
 describe('createAuthSchema', () => {
-  const authLogicAdapterMock = {} as AuthLogicAdapter;
+  const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
+  const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
   const pluginConfig: AuthPluginConfigT = {
-    getAuthLogicAdapter: () => authLogicAdapterMock,
+    getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
+    getSignupPluginAdapter: () => mock_SignupPluginAdapter,
   };
 
   it('creates a working schema and resolves guestLogin', async () => {

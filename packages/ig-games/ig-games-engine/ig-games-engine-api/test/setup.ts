@@ -1,5 +1,5 @@
 
-import { initBeLibMocks } from '@ig/be-utils/test/mocks/BeLibMocks';
+import { initBeUtilsMocks } from '@ig/be-utils/test/mocks/BeUtilsMocks';
 
 beforeAll(async () => {
 });
@@ -13,4 +13,4 @@ afterEach(async () => {
 afterAll(async () => {
 });
 
-initBeLibMocks();
+initBeUtilsMocks();
