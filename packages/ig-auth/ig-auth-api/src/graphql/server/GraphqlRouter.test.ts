@@ -1,14 +1,16 @@
 
-import type { AuthLogicAdapter } from '@ig/auth-be-models';
+import type { SignupPluginAdapter, SignupServiceTransactionAdapter } from '@ig/auth-be-models';
 import express from 'express';
 import request from 'supertest';
 import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createGraphqlRouter } from './GraphqlRouter';
 
 describe('GraphqlRouter', () => {
-  const authLogicAdapterMock = {} as AuthLogicAdapter;
+  const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
+  const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
   const pluginConfig: AuthPluginConfigT = {
-    getAuthLogicAdapter: () => authLogicAdapterMock,
+    getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
+    getSignupPluginAdapter: () => mock_SignupPluginAdapter,
   };
   let app: express.Express;
 

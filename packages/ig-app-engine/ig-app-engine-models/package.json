@@ -19,6 +19,7 @@
     "cover:unit": "npm run test:unit -- run --coverage"
   },
   "dependencies": {
+    "@ig/auth-models": "*",
     "@ig/utils": "*"
   },
   "devDependencies": {

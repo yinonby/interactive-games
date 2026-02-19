@@ -25,7 +25,7 @@ describe('AppConfigController', () => {
 
     it('calls guestLogin, succeeds', async () => {
       const useGuestLoginMutationSpy = jest.spyOn(AuthRtkApi, 'useGuestLoginMutation');
-      const guestLoginMock = jest.fn().mockResolvedValue({ data: { guestLoginResult: { accountId: 'ACCOUNT1' }}});
+      const guestLoginMock = jest.fn().mockResolvedValue({ data: { guestLoginResult: { authId: 'ACCOUNT1' }}});
 
       useGuestLoginMutationSpy.mockReturnValue(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

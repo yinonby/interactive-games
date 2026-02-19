@@ -17,7 +17,7 @@ export function useAuthController(): AuthControllerT {
     if (error !== undefined) {
       throw new AppError(extractAppErrorCodeFromUnknownObject(error));
     }
-    return data.guestLoginResult.accountId;
+    return data.guestLoginResult.authId as AccountIdT;
   };
 
   return {

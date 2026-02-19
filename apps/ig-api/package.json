@@ -27,12 +27,13 @@
   },
   "dependencies": {
     "@ig/auth-api": "*",
-    "@ig/app-engine-db": "*",
+    "@ig/auth-mongo-db": "*",
     "@ig/app-engine-be-logic": "*",
+    "@ig/app-engine-mongo-db": "*",
     "@ig/env": "*",
     "@ig/games-engine-api": "*",
-    "@ig/games-engine-db": "*",
     "@ig/games-engine-be-models": "*",
+    "@ig/games-engine-mongo-db": "*",
     "@ig/be-utils": "*",
     "@ig/utils": "*",
     "express": "^5.2.1"

@@ -1,5 +1,5 @@
 
-export * from './src/types/api/AppApiRequestTypes';
-export * from './src/types/app/AppTypes';
-export * from './src/types/user/UserTypes';
+export * from './src/types/AppApiRequestTypes';
+export * from './src/types/AppTypes';
+export * from './src/types/UserTypes';
 

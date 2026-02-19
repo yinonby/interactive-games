@@ -1,3 +1,7 @@
 
-export { AuthLogic } from './src/logic/auth/AuthLogic';
+export {
+  AppEngineSignupPlugin,
+  AppEngineSignupPluginTransaction,
+  type AuthJwtPropNamesT
+} from './src/logic/auth/AppEngineSignupPlugin';
 

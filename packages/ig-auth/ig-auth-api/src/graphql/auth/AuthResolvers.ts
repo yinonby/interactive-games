@@ -19,10 +19,10 @@ export const createAuthResolvers = (authLogicAdapter: AuthLogicAdapter): any => 
       args: unknown,
       context: ApolloContextT,
     ): Promise<GuestLoginResultDataT> => {
-      const accountId = await authLogicAdapter.guestLogin(context.res);
+      const authId = await authLogicAdapter.guestLogin(context.res);
 
       return {
-        accountId,
+        authId,
       }
     },
 
@@ -32,10 +32,10 @@ export const createAuthResolvers = (authLogicAdapter: AuthLogicAdapter): any => 
       context: { res: Response },
     ): Promise<EmailLoginResultDataT> => {
       const { input } = args;
-      const accountId = await authLogicAdapter.emailLogin(input, context.res);
+      const authId = await authLogicAdapter.emailLogin(input, context.res);
 
       return {
-        accountId,
+        authId,
       }
     },
   }
