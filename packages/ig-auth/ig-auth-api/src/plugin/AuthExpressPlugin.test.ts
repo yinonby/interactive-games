@@ -1,5 +1,5 @@
 
-import type { AuthLogicAdapter } from '@ig/auth-be-models';
+import type { SignupPluginAdapter, SignupServiceTransactionAdapter } from '@ig/auth-be-models';
 import type { ExpressAppInfoT } from '@ig/be-utils';
 import type { Router } from 'express';
 import * as graphqlModule from '../graphql/server/GraphqlRouter';
@@ -19,9 +19,11 @@ describe('authApiPlugin', () => {
 
   it('initRouter calls createGraphqlRouter and returns a Router', async () => {
     const mockAppInfo = {} as ExpressAppInfoT;
-    const authLogicAdapterMock = {} as AuthLogicAdapter;
+    const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
+    const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
     const pluginConfig: AuthPluginConfigT = {
-      getAuthLogicAdapter: () => authLogicAdapterMock,
+      getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
+      getSignupPluginAdapter: () => mock_SignupPluginAdapter,
     };
 
     const router = await authApiPlugin.initRouter(mockAppInfo, pluginConfig);

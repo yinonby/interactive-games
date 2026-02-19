@@ -1,12 +1,8 @@
 
-import type { AccountIdT, AccountT, UserIdT, UserT } from '../../../ig-app-engine-models';
-
-export interface UsersTableAdapter {
-  getUser(userId: UserIdT): Promise<UserT | null>;
-  createUser(user: UserT): Promise<void>;
-}
+import type { AccountIdT, AccountT } from '@ig/app-engine-models';
+import type { DbTransactionContext } from '@ig/be-utils';
 
 export interface AccountsTableAdapter {
   getAccount(accountId: AccountIdT): Promise<AccountT | null>;
-  createAccount(acconut: AccountT): Promise<void>;
+  createAccount(account: AccountT, ctx?: DbTransactionContext): Promise<void>;
 }

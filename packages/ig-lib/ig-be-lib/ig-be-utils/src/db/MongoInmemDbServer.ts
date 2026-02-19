@@ -1,26 +1,30 @@
 
 import type { LoggerAdapter } from '@ig/utils';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from "mongodb-memory-server";
 import { BeLogger } from '../logger/BeLogger';
 import type { InmemDbServerProvider } from '../types/DbTypes';
 
 export class MongoInmemDbServer implements InmemDbServerProvider {
+  private mongoMemoryReplSet: MongoMemoryReplSet | null = null;
+
   constructor(
     private logger: LoggerAdapter = new BeLogger(),
   ) { }
-  private mongoMemoryServer: MongoMemoryServer | null = null;
 
   public async startDb(): Promise<string> {
-    this.mongoMemoryServer = await MongoMemoryServer.create();
-    const uri = this.mongoMemoryServer.getUri();
+    // IMPORTANT: use MongoMemoryReplSet for transactions
+    this.mongoMemoryReplSet = await MongoMemoryReplSet.create({
+      replSet: { count: 1 },
+    });
+    const uri = this.mongoMemoryReplSet.getUri();
 
     this.logger.info(`Started in-memory MongoDb server at: ${uri}`);
     return uri;
   }
 
   public async stopDb(): Promise<void> {
-    if (this.mongoMemoryServer) {
-      await this.mongoMemoryServer.stop();
+    if (this.mongoMemoryReplSet) {
+      await this.mongoMemoryReplSet.stop();
     }
   }
 }

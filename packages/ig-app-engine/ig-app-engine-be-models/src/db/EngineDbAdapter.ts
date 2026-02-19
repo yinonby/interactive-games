@@ -1,11 +1,7 @@
 
-import type { AccountsTableAdapter, UsersTableAdapter } from './UsersTableAdapter';
+import type { AccountsTableAdapter } from './UsersTableAdapter';
 
 export interface EngineDbAdapter {
-  getUsersTableAdapter: (
-    tableNamePrefix?: string,
-  ) => UsersTableAdapter;
-
   getAccountsTableAdapter: (
     tableNamePrefix?: string,
   ) => AccountsTableAdapter;

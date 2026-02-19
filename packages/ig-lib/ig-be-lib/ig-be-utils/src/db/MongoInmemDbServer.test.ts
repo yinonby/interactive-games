@@ -1,6 +1,6 @@
 
 import type { LoggerAdapter } from '@ig/utils';
-import { type MongoMemoryServer } from 'mongodb-memory-server';
+import { type MongoMemoryReplSet } from 'mongodb-memory-server';
 import type { Mock } from 'vitest';
 import { MongoInmemDbServer } from './MongoInmemDbServer';
 
@@ -8,7 +8,7 @@ vi.mock('mongodb-memory-server', () => {
   const createMock = vi.fn();
 
   return {
-    MongoMemoryServer: {
+    MongoMemoryReplSet: {
       create: createMock,
     },
 
@@ -29,12 +29,12 @@ describe('MongoInmemDbServer', () => {
   const mockUri = 'mongodb://localhost:12345';
   const getUriMock = vi.fn();
   const stopMock = vi.fn();
-  const mockMongoMemoryServer: MongoMemoryServer = {
+  const mock_MongoMemoryReplSet: MongoMemoryReplSet = {
     getUri: getUriMock,
     stop: stopMock,
-  } as unknown as MongoMemoryServer;
+  } as unknown as MongoMemoryReplSet;
   const { createMock } = __mmsMocks;
-  createMock.mockResolvedValue(mockMongoMemoryServer);
+  createMock.mockResolvedValue(mock_MongoMemoryReplSet);
 
   // mock logger
   const mockLogger: LoggerAdapter = {
@@ -48,7 +48,7 @@ describe('MongoInmemDbServer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    createMock.mockResolvedValue(mockMongoMemoryServer);
+    createMock.mockResolvedValue(mock_MongoMemoryReplSet);
   });
 
   afterEach(() => {
@@ -62,7 +62,7 @@ describe('MongoInmemDbServer', () => {
 
     it('should create MongoMemoryServer', async () => {
       getUriMock.mockReturnValue(mockUri);
-      createMock.mockResolvedValue(mockMongoMemoryServer);
+      createMock.mockResolvedValue(mock_MongoMemoryReplSet);
 
       const mongoInmemDbServer: MongoInmemDbServer = new MongoInmemDbServer(mockLogger);
       await mongoInmemDbServer.startDb();

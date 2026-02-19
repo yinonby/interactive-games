@@ -1,19 +1,21 @@
 /* istanbul ignore file -- @preserve */
 
-import type { ExpressPluginContainerT } from '@ig/be-utils';
+import type { ExpressPluginContainerT, PackageDb } from '@ig/be-utils';
 import { gamesApiPlugin, type GamesPluginConfigT } from '@ig/games-engine-api';
-import type { GamesMongoDb } from '@ig/games-engine-db';
+import type { GamesDbAdapter } from '@ig/games-engine-be-models';
 import { loadGameConfigPreset1 } from '../presets/GameConfigsPreset';
 import { isDevel } from '../utils/Utils';
 
-export const useGamesPluginContainer = (gamesMongoDb: GamesMongoDb): ExpressPluginContainerT<GamesPluginConfigT> => {
+export const useGamesPluginContainer = (
+  gamesDb: PackageDb & GamesDbAdapter,
+): ExpressPluginContainerT<GamesPluginConfigT> => {
   const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> = {
-    getPackageDb: () => gamesMongoDb,
+    getPackageDb: () => gamesDb,
     routeConfig: {
       route: '/api/games',
       expressPlugin: gamesApiPlugin,
       pluginConfig: {
-        gamesDbAdapter: gamesMongoDb,
+        gamesDbAdapter: gamesDb,
       },
     },
     postInitCb: loadPresets,

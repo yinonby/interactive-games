@@ -1,18 +1,9 @@
 
-import type { AccountT, UserT } from '../../src/types/user/UserTypes';
+import type { AccountT } from '../../src/types/UserTypes';
 
 if (process.env.NODE_ENV !== 'test') {
   throw new Error('TestUtils should only be used in testing');
 }
-
-const baseUser: UserT = {
-  userId: 'USER1',
-};
-
-export const buildFullTestUser = (overrides: Partial<UserT>): UserT => ({
-  ...baseUser,
-  ...overrides,
-});
 
 const baseAccount: AccountT = {
   accountId: 'ACCOUNT1',
