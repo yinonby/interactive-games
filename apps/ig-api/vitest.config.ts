@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+      "@ig/prisma-utils/test-utils": path.resolve(__dirname, "../../packages/ig-lib/ig-be-lib/ig-prisma-utils/test/test-index.ts"),
     },
   },
 });

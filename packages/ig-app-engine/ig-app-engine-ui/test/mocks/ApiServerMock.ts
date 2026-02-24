@@ -1,15 +1,17 @@
 
 import {
-  type GameConfigIdT, type GameInfoT, type GameInstanceChatMessageT,
+  type ChatMessageT,
+  type ConversationIdT,
+  type GameConfigIdT, type GameInfoT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
-  type GetGameInstanceChatResponseT,
+  type GetChatResponseT,
   type GetGameInstanceResponseT,
   type GetGamesUserConfigResponseT,
   type LevelExposedConfigT,
   type LevelStateT,
-  type PostGameInstanceChatMessageParamsT,
-  type PostGameInstanceChatMessageResponseT,
+  type PostChatMessageParamsT,
+  type PostChatMessageResponseT,
   type PostGameInstanceStartResponseT,
   type PostGameInstanceSubmitGuessResponseT
 } from '@ig/games-engine-models';
@@ -160,8 +162,8 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
   };
 }
 
-const getGameInstanceChatMessages = (gameInstanceId: GameInstanceIdT): GameInstanceChatMessageT[] => {
-  return devChatMessages.filter(e => e.gameInstanceId === gameInstanceId).sort((e1, e2) => e1.sentTs - e2.sentTs);
+const getChatMessages = (conversationId: ConversationIdT): ChatMessageT[] => {
+  return devChatMessages.filter(e => e.conversationId === conversationId).sort((e1, e2) => e1.sentTs - e2.sentTs);
 }
 
 const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string): boolean => {
@@ -221,6 +223,8 @@ const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, gu
   return isCorrectGuess;
 }
 
+let nextPaginationId = 1;
+
 export class ApiServerMock implements HttpAdapter {
   constructor(
     private apiUrl: string,
@@ -258,30 +262,6 @@ export class ApiServerMock implements HttpAdapter {
       const gameConfigId: GameConfigIdT = options.url.split('/')[3] as GameConfigIdT;
       const gameInstanceIds: GameInstanceIdT[] = await getGameInstanceIds(gameConfigId);
       return { gameInstanceIds: gameInstanceIds } as TResponse;
-    } else if (options.url.startsWith('/games/game-instance/') && options.url.endsWith('chat/message')) {
-      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
-      const data: PostGameInstanceChatMessageParamsT = options.data as unknown as PostGameInstanceChatMessageParamsT;
-
-      const chatMessage: GameInstanceChatMessageT = {
-        gameInstanceId: gameInstanceId,
-        chatMsgId: Date.now().toString(),
-        sentTs: Date.now(),
-        playerAccountId: data.playerAccountId,
-        msgText: data.chatMessage,
-      }
-      devChatMessages.push(chatMessage)
-
-      const response: PostGameInstanceChatMessageResponseT = {
-        chatMsgId: chatMessage.chatMsgId,
-      }
-      return response as TResponse;
-    } else if (options.url.startsWith('/games/game-instance/') && options.url.endsWith('chat')) {
-      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
-
-      const response: GetGameInstanceChatResponseT = {
-        chatMessages: getGameInstanceChatMessages(gameInstanceId),
-      }
-      return response as TResponse;
     } else if (options.url.startsWith('/games/game-instance/') && options.url.endsWith('start')) {
       const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
       handleStartGame(gameInstanceId);
@@ -310,6 +290,31 @@ export class ApiServerMock implements HttpAdapter {
       }
       const response: GetGameInstanceResponseT = {
         gameInstanceExposedInfo: {...gameInstanceExposedInfo}, // clone this array so it is not frozen
+      }
+      return response as TResponse;
+    } else if (options.url.startsWith('/games/chat/') && options.url.endsWith('message')) {
+      const data: PostChatMessageParamsT = options.data as unknown as PostChatMessageParamsT;
+
+      const chatMessage: ChatMessageT = {
+        conversationKind: data.conversationKind,
+        conversationId: data.conversationId,
+        chatMsgId: Date.now().toString(),
+        sentTs: Date.now(),
+        senderAccountId: data.senderAccountId,
+        msgText: data.chatMessage,
+        paginationId: nextPaginationId++,
+      }
+      devChatMessages.push(chatMessage)
+
+      const response: PostChatMessageResponseT = {
+        chatMsgId: chatMessage.chatMsgId,
+      }
+      return response as TResponse;
+    } else if (options.url.startsWith('/games/chat/')) {
+      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
+
+      const response: GetChatResponseT = {
+        chatMessages: getChatMessages(gameInstanceId as ConversationIdT),
       }
       return response as TResponse;
     } else {

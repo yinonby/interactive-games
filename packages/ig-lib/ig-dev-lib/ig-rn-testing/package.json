@@ -4,6 +4,8 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
+    "build": "echo nothing to do",
+
     "test": "echo nothing to do"
   },
   "devDependencies": {

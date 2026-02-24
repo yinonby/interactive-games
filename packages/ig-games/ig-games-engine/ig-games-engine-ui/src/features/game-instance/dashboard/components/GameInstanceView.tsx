@@ -1,7 +1,7 @@
 
 import { useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { useAuth } from '@ig/auth-ui';
-import type { GameInstanceChatMessageT, GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { ChatMessageT, GameInstanceExposedInfoT } from '@ig/games-engine-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -15,11 +15,11 @@ import { PlayersView } from './PlayersView';
 
 export type GameInstanceViewPropsT = TestableComponentT & {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
-  gameInstanceChatMessages: GameInstanceChatMessageT[],
+  chatMessages: ChatMessageT[],
 };
 
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo, gameInstanceChatMessages } = props;
+  const { gameInstanceExposedInfo, chatMessages } = props;
   const { playerExposedInfos } = gameInstanceExposedInfo;
   const { curAccountId } = useAuth();
   const gameInfo = gameInstanceExposedInfo.gameInfo;
@@ -80,7 +80,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
               <ChatView
                 testID="ChatView-tid"
                 gameInstanceExposedInfo={gameInstanceExposedInfo}
-                gameInstanceChatMessages={gameInstanceChatMessages}
+                chatMessages={chatMessages}
               />
             </RnuiCard>
           </View>

@@ -5,11 +5,12 @@ import { useGameInstanceController } from './GameInstanceController';
 
 jest.mock('../../model/rtk/GameInstanceRtkApi');
 
+const conversationId1 = 'CID1';
+
 describe('useGameInstanceController', () => {
   it('calls startGame', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
     const startGameMock = jest.fn().mockResolvedValue({ data: {}});
 
@@ -18,7 +19,7 @@ describe('useGameInstanceController', () => {
       [startGameMock, jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -40,8 +41,7 @@ describe('useGameInstanceController', () => {
 
   it('calls startGame and handles error', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
     const startGameMock = jest.fn().mockResolvedValue({ error: {}});
 
@@ -50,7 +50,7 @@ describe('useGameInstanceController', () => {
       [startGameMock, jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -65,25 +65,25 @@ describe('useGameInstanceController', () => {
     // verify throws
     await expect(result.current.onStartGame('giid-1')).rejects.toThrow();
 
+
     // verify calls
     expect(startGameMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls postGameInstanceChatMessage with the provided data', async () => {
+  it('calls postChatMessage with the provided data', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const postGameInstanceChatMessageMock = jest.fn().mockResolvedValue({ data: {}});
+    const postChatMessageMock = jest.fn().mockResolvedValue({ data: {}});
 
     useStartGameMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [postGameInstanceChatMessageMock, jest.fn() as any]
+      [postChatMessageMock, jest.fn() as any]
     );
 
     useSubmitGuessMutationSpy.mockReturnValue(
@@ -94,32 +94,32 @@ describe('useGameInstanceController', () => {
     const { result } = renderHook(() => useGameInstanceController());
 
     await act(async () => {
-      await result.current.onSendChatMessage('giid-1', 'user-1', 'Hello world');
+      await result.current.onSendChatMessage('gameInstanceChat', conversationId1, 'user-1', 'Hello world');
     });
 
-    expect(postGameInstanceChatMessageMock).toHaveBeenCalledTimes(1);
-    expect(postGameInstanceChatMessageMock).toHaveBeenCalledWith({
-      gameInstanceId: 'giid-1',
+    expect(postChatMessageMock).toHaveBeenCalledTimes(1);
+    expect(postChatMessageMock).toHaveBeenCalledWith({
+      conversationKind: "gameInstanceChat",
+      conversationId: conversationId1,
+      senderAccountId: "user-1",
       chatMessage: 'Hello world',
-      playerAccountId: 'user-1'
     });
   });
 
-  it('handles error thrown by postGameInstanceChatMessage', async () => {
+  it('handles error thrown by postChatMessage', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const postGameInstanceChatMessageMock = jest.fn().mockResolvedValue({ error: {}});
+    const postChatMessageMock = jest.fn().mockResolvedValue({ error: {}});
 
     useStartGameMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [postGameInstanceChatMessageMock, jest.fn() as any]
+      [postChatMessageMock, jest.fn() as any]
     );
 
     useSubmitGuessMutationSpy.mockReturnValue(
@@ -130,16 +130,16 @@ describe('useGameInstanceController', () => {
     const { result } = renderHook(() => useGameInstanceController());
 
     // verify throws
-    await expect(result.current.onSendChatMessage('giid-1', 'user-1', 'Hello world')).rejects.toThrow();
+    await expect(result.current.onSendChatMessage('gameInstanceChat', conversationId1, 'user-1', 'Hello world'))
+      .rejects.toThrow();
 
     // verify calls
-    expect(postGameInstanceChatMessageMock).toHaveBeenCalledTimes(1);
+    expect(postChatMessageMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls submitGuess with the provided data', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
     const submitGuessMock = jest.fn().mockResolvedValue({ data: {}});
 
@@ -148,7 +148,7 @@ describe('useGameInstanceController', () => {
       [jest.fn(), jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -172,10 +172,9 @@ describe('useGameInstanceController', () => {
     });
   });
 
-  it('handles error thrown by postGameInstanceChatMessage', async () => {
+  it('handles error thrown by postChatMessage', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const usePostGameInstanceChatMessageMutationSpy =
-      jest.spyOn(GameInstanceRtkApi, 'usePostGameInstanceChatMessageMutation');
+    const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
     const submitGuessMock = jest.fn().mockResolvedValue({ error: {}});
 
@@ -184,7 +183,7 @@ describe('useGameInstanceController', () => {
       [jest.fn(), jest.fn() as any]
     );
 
-    usePostGameInstanceChatMessageMutationSpy.mockReturnValue(
+    usePostChatMessageMutationSpy.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
@@ -198,6 +197,7 @@ describe('useGameInstanceController', () => {
 
     // verify throws
     await expect(result.current.onSubmitGuess('giid-1', 0, 'Hello')).rejects.toThrow();
+
 
     // verify calls
     expect(submitGuessMock).toHaveBeenCalledTimes(1);
