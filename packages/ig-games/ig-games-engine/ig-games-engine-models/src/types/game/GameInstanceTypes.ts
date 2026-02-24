@@ -4,6 +4,9 @@ import type { GameStateT } from './GameStateTypes';
 import type { GameInfoT } from './GameTypes';
 
 export type GameInstanceIdT = string;
+export const getGameInstanceConversationId = (gameInstanceId: GameInstanceIdT): ConversationIdT => {
+  return 'GI-' + gameInstanceId;
+}
 
 export type GameInstanceExposedInfoT = {
   gameInstanceId: GameInstanceIdT,
@@ -23,12 +26,15 @@ export type PlayerExposedInfoT = {
   playerStatus: PlayerStatusT,
 }
 
+export type ConversationIdT = string;
 export type ChatMsgIdT = string;
 
-export type GameInstanceChatMessageT = {
-  gameInstanceId: GameInstanceIdT,
+export type ChatMessageT = {
+  conversationKind: 'gameInstanceChat',
+  conversationId: ConversationIdT,
   chatMsgId: ChatMsgIdT,
+  senderAccountId: AccountIdT,
   sentTs: number,
-  playerAccountId: AccountIdT,
   msgText: string,
+  paginationId: number,
 }

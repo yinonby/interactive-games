@@ -6,7 +6,7 @@ import {
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type {
   GameInstanceExposedInfoT,
-  GetGameInstanceChatResponseT, GetGameInstanceResponseT, PostGameInstanceChatMessageResponseT,
+  GetChatResponseT, GetGameInstanceResponseT, PostChatMessageResponseT,
   PostGameInstanceStartResponseT,
   PostGameInstanceSubmitGuessResponseT
 } from '@ig/games-engine-models';
@@ -27,6 +27,8 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
+const conversationId1 = 'CID1';
+const conversationId2 = 'CID2';
 let gameInstanceExposedInfoMock1: GameInstanceExposedInfoT;
 
 export const server = setupServer(
@@ -52,30 +54,6 @@ export const server = setupServer(
     return HttpResponse.error();
   }),
 
-  // get chat
-  http.get(apiUrl + '/games/game-instance/giid-1/chat', () => {
-    const response: GetGameInstanceChatResponseT = {
-      chatMessages: [],
-    };
-    return HttpResponse.json(response);
-  }),
-
-  http.get(apiUrl + '/games/game-instance/giid-2/chat', () => {
-    return HttpResponse.error();
-  }),
-
-  // post chat message
-  http.post(apiUrl + '/games/game-instance/giid-1/chat/message', () => {
-    const response: PostGameInstanceChatMessageResponseT = {
-      chatMsgId: 'msg-1',
-    };
-    return HttpResponse.json(response);
-  }),
-
-  http.post(apiUrl + '/games/game-instance/giid-2/chat/message', () => {
-    return HttpResponse.error();
-  }),
-
   // post submit guess
   http.post(apiUrl + '/games/game-instance/giid-1/submit-guess', () => {
     const response: PostGameInstanceSubmitGuessResponseT= {
@@ -85,6 +63,32 @@ export const server = setupServer(
   }),
 
   http.post(apiUrl + '/games/game-instance/giid-2/submit-guess', () => {
+    return HttpResponse.error();
+  }),
+
+  // chat
+
+  // get chat
+  http.get(apiUrl + `/games/chat/${conversationId1}`, () => {
+    const response: GetChatResponseT = {
+      chatMessages: [],
+    };
+    return HttpResponse.json(response);
+  }),
+
+  http.get(apiUrl + `/games/chat/${conversationId2}`, () => {
+    return HttpResponse.error();
+  }),
+
+  // post chat message
+  http.post(apiUrl + `/games/chat/${conversationId1}/message`, () => {
+    const response: PostChatMessageResponseT = {
+      chatMsgId: 'msg-1',
+    };
+    return HttpResponse.json(response);
+  }),
+
+  http.post(apiUrl + `/games/chat/${conversationId2}/message`, () => {
     return HttpResponse.error();
   }),
 );
@@ -196,68 +200,6 @@ describe('GameInstanceRtkApi', () => {
     });
   });
 
-  describe('getGameInstanceChat', () => {
-    it('fetches game instance chat', async () => {
-      const store = createTestStore();
-
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstanceChat.initiate('giid-1')
-      );
-      if (result.data === undefined) {
-        throw new Error('result.data is undefined');
-      }
-
-      const response: GetGameInstanceChatResponseT = result.data;
-      expect(response.chatMessages).toEqual([]);
-    });
-
-    it('does not fetch game instance chat when game instance id is invalid', async () => {
-      const store = createTestStore();
-
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstanceChat.initiate('giid-2')
-      );
-
-      expect(result.isError).toBeTruthy();
-      expect(result.data).toBeUndefined();
-    });
-  });
-
-  describe('getGameInstanceChat', () => {
-    it('posts game instance chat message', async () => {
-      const store = createTestStore();
-
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.postGameInstanceChatMessage.initiate({
-          gameInstanceId: 'giid-1',
-          playerAccountId: 'user-1',
-          chatMessage: 'Hello world',
-        })
-      );
-      if (result.data === undefined) {
-        throw new Error('result.data is undefined');
-      }
-
-      const response: PostGameInstanceChatMessageResponseT = result.data;
-      expect(response.chatMsgId).toEqual('msg-1');
-    });
-
-    it('does not post game instance chat message when game instance id is invalid', async () => {
-      const store = createTestStore();
-
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.postGameInstanceChatMessage.initiate({
-          gameInstanceId: 'giid-2',
-          playerAccountId: 'user-1',
-          chatMessage: 'Hello world',
-        })
-      );
-
-      expect(result.error).toBeTruthy();
-      expect(result.data).toBeUndefined();
-    });
-  });
-
   describe('submitGuess', () => {
     it('submits guess', async () => {
       const store = createTestStore();
@@ -285,6 +227,70 @@ describe('GameInstanceRtkApi', () => {
           gameInstanceId: 'giid-2',
           levelIdx: 0,
           guess: 'Hello',
+        })
+      );
+
+      expect(result.error).toBeTruthy();
+      expect(result.data).toBeUndefined();
+    });
+  });
+
+  describe('getChat', () => {
+    it('fetches game instance chat', async () => {
+      const store = createTestStore();
+
+      const result = await store.dispatch(
+        gameInstanceRtkApiEndpoints.getChat.initiate(conversationId1)
+      );
+      if (result.data === undefined) {
+        throw new Error('result.data is undefined');
+      }
+
+      const response: GetChatResponseT = result.data;
+      expect(response.chatMessages).toEqual([]);
+    });
+
+    it('does not fetch game instance chat when game instance id is invalid', async () => {
+      const store = createTestStore();
+
+      const result = await store.dispatch(
+        gameInstanceRtkApiEndpoints.getChat.initiate(conversationId2)
+      );
+
+      expect(result.isError).toBeTruthy();
+      expect(result.data).toBeUndefined();
+    });
+  });
+
+  describe('postChatMessage', () => {
+    it('posts game instance chat message', async () => {
+      const store = createTestStore();
+
+      const result = await store.dispatch(
+        gameInstanceRtkApiEndpoints.postChatMessage.initiate({
+          conversationKind: 'gameInstanceChat',
+          conversationId: conversationId1,
+          senderAccountId: 'user-1',
+          chatMessage: 'Hello world',
+        })
+      );
+      if (result.data === undefined) {
+        throw new Error('result.data is undefined');
+      }
+
+      const response: PostChatMessageResponseT = result.data;
+      expect(response.chatMsgId).toEqual('msg-1');
+    });
+
+    it('does not post game instance chat message when game instance id is invalid', async () => {
+      const store = createTestStore();
+
+      const result = await store.dispatch(
+        gameInstanceRtkApiEndpoints.postChatMessage.initiate({
+          conversationKind: 'gameInstanceChat',
+          conversationId: conversationId2,
+          senderAccountId: 'user-1',
+          chatMessage: 'Hello world',
         })
       );
 

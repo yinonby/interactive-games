@@ -89,7 +89,7 @@ describe('GameInstanceView', () => {
         gameInstanceExposedInfo: buildTestGameInstanceExposedInfo({
           gameState: buildTestGameState({ gameStatus: 'ended' })
         }),
-        gameInstanceChatMessages: [],
+        chatMessages: [],
       },
     });
 

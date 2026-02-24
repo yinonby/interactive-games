@@ -1,0 +1,45 @@
+{
+  "name": "@ig/games-engine-prisma-db",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run build && npm run tsc && npm run lint && npm run cover:unit",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.mjs ./src",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js . --exclude 'generated|node_modules'",
+    "test:unit": "cross-env NODE_ENV=test LOG_LEVEL=SILENT vitest",
+    "ut": "npm run test:unit --",
+    "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
+    "cover:unit": "npm run test:unit -- run --coverage",
+
+    "build": "npm run prisma:generate",
+
+    "prisma:generate": "npx prisma generate",
+    "prisma:dev:migrations:update": "npm run prisma:dev:migrations:reset && npm run prisma:dev:migrations:migrate",
+    "prisma:dev:migrations:migrate": "npx prisma migrate dev --name init",
+    "prisma:dev:migrations:reset": "rm -rf prisma/migrations/ && npx prisma migrate reset --force",
+    "prisma:dev:server:run": "npx prisma dev"
+  },
+  "dependencies": {
+    "@ig/be-utils": "*",
+    "@ig/games-engine-be-models": "*",
+    "@ig/games-engine-models": "*",
+    "@ig/prisma-utils": "*",
+    "@ig/utils": "*",
+    "@prisma/client": "^7.4.1"
+  },
+  "devDependencies": {
+    "@ig/lint": "*",
+    "@ig/ts-deps": "*",
+    "@ig/vitest": "*",
+    "@types/node": "^25.3.0",
+    "cross-env": "^7.0.3",
+    "prisma": "^7.4.1"
+  }
+}

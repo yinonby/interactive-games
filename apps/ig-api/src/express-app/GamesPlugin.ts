@@ -2,12 +2,13 @@
 
 import type { ExpressPluginContainerT, PackageDb } from '@ig/be-utils';
 import { gamesApiPlugin, type GamesPluginConfigT } from '@ig/games-engine-api';
-import type { GamesDbAdapter } from '@ig/games-engine-be-models';
+import type { GamesChatDbAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
 import { loadGameConfigPreset1 } from '../presets/GameConfigsPreset';
 import { isDevel } from '../utils/Utils';
 
 export const useGamesPluginContainer = (
   gamesDb: PackageDb & GamesDbAdapter,
+  gamesChatDbAdapter: GamesChatDbAdapter,
 ): ExpressPluginContainerT<GamesPluginConfigT> => {
   const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> = {
     getPackageDb: () => gamesDb,
@@ -16,6 +17,7 @@ export const useGamesPluginContainer = (
       expressPlugin: gamesApiPlugin,
       pluginConfig: {
         gamesDbAdapter: gamesDb,
+        gamesChatDbAdapter: gamesChatDbAdapter,
       },
     },
     postInitCb: loadPresets,

@@ -1,8 +1,9 @@
 
 import type { AccountIdT } from '@ig/app-engine-models';
 import type {
+  ChatMessageT,
   ChatMsgIdT,
-  GameInstanceChatMessageT,
+  ConversationIdT,
   GameInstanceExposedInfoT,
   GameInstanceIdT
 } from '../game/GameInstanceTypes';
@@ -71,22 +72,6 @@ export type PostGameInstanceStartResponseT = {
   status: 'ok',
 }
 
-// get::games/game-instance/<id>/chat
-export type GetGameInstanceChatResponseT = {
-  chatMessages: GameInstanceChatMessageT[],
-}
-
-export type PostGameInstanceChatMessageParamsT = {
-  gameInstanceId: GameInstanceIdT,
-  playerAccountId: AccountIdT,
-  chatMessage: string,
-}
-
-// post::games/game-instance<id>/msg
-export type PostGameInstanceChatMessageResponseT = {
-  chatMsgId: ChatMsgIdT,
-}
-
 // post::games/game-instance/<id>/submit-guess
 export type PostGameInstanceSubmitGuessParamsT = {
   gameInstanceId: GameInstanceIdT,
@@ -96,4 +81,23 @@ export type PostGameInstanceSubmitGuessParamsT = {
 
 export type PostGameInstanceSubmitGuessResponseT = {
   isGuessCorrect: boolean,
+}
+
+// chat
+
+// get::games/chat/<conversation-id>
+export type GetChatResponseT = {
+  chatMessages: ChatMessageT[],
+}
+
+export type PostChatMessageParamsT = {
+  conversationKind: 'gameInstanceChat',
+  conversationId: ConversationIdT,
+  senderAccountId: AccountIdT,
+  chatMessage: string,
+}
+
+// post::games/chat/<conversation-id>/msg
+export type PostChatMessageResponseT = {
+  chatMsgId: ChatMsgIdT,
 }

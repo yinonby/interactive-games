@@ -67,6 +67,8 @@ The repository is organized as follows:
   - **Mongo DB**: A no-sql database.
     - **mongoose**: A Node.js client to access the DB.
     - **mongodb-memory-server**: An in-memory Node.js Mongo DB instance for rapid development and testing.
+  - **PostgreSQL DB**: An sql database.
+    - **Prisma**: A generic SQL client supporting typed schemas.
 
 - API Server
   - **Express**: A Node.js web framework for serving HTTP requests using middlewares and routing.
@@ -133,5 +135,5 @@ The API backend is built in 3 logical layers:
 - The **Database Adapter** layer:
   - The backend is built so that the database is completely isolated from the business logic.
   - A database adapter presents the business logic layer with an interface to the database, hiding both the database operations, as well as the database itself.
-  - Database adapters can use whatever database provider they want (MongoDB / MySQL / PostgreSQL).
+  - Database adapters hide database provider, so application can easily switch database (MongoDB / MySQL / PostgreSQL).
 

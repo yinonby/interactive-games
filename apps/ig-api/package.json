@@ -12,7 +12,7 @@
     "lint": "npm run lint:eslint && npm run lint:cycles",
     "lint:eslint": "eslint -c ./.eslint.config.mjs ./src",
     "lint:fix": "npm run lint:eslint -- --fix",
-    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js . --exclude 'generated|node_modules'",
     "test:unit": "cross-env NODE_ENV=test LOG_LEVEL=SILENT vitest",
     "ut": "npm run test:unit --",
     "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
@@ -34,8 +34,10 @@
     "@ig/games-engine-api": "*",
     "@ig/games-engine-be-models": "*",
     "@ig/games-engine-mongo-db": "*",
+    "@ig/games-engine-prisma-db": "*",
     "@ig/be-utils": "*",
     "@ig/utils": "*",
+    "@prisma/adapter-pg": "^7.4.1",
     "express": "^5.2.1"
   },
   "devDependencies": {
