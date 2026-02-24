@@ -71,6 +71,9 @@ describe('MongoTransaction (integration)', () => {
     });
     const testModel = model<TestT>('testitems', testSchema);
 
+    // make sure indexes are created before the transaction
+    await testModel.createIndexes();
+
     const transaction = new MongoTransaction(mock_logger);
 
     const ctx = await transaction.start();
