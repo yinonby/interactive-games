@@ -29,6 +29,7 @@
     "@ig/vitest": "*",
     "@types/node": "^25.3.0",
     "cross-env": "^7.0.3",
+    "std-env": "^3.10.0",
     "testcontainers": "^11.12.0"
   }
 }

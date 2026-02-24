@@ -1,6 +1,7 @@
 
 import { GamesPrismaDb } from '@/GamesPrismaDb';
 import {
+  getSqlDbTestContainerCreateTimeout,
   startTestingSqlDbContainer,
   type SqlDbTestContainer
 } from '@ig/prisma-utils/test-utils';
@@ -18,7 +19,7 @@ beforeAll(async () => {
   // initialize the prisma db (run migrations)
   const gamesPrismaDb = new GamesPrismaDb(sqlDriverAdapterFactory);
   await gamesPrismaDb.init();
-});
+}, getSqlDbTestContainerCreateTimeout());
 
 beforeEach(async () => {
 });

@@ -3,6 +3,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import type { SqlDriverAdapterFactory } from '@prisma/client/runtime/client';
 import fs from 'fs';
 import path from 'path';
+import { isCI } from 'std-env';
 import { GenericContainer, type StartedTestContainer } from 'testcontainers';
 
 const exposedPort = 5432;
@@ -49,6 +50,11 @@ export async function startTestingSqlDbContainer(): Promise<SqlDbTestContainer> 
     console.error('Error starting SQL DB test container, please run docker');
     throw err;
   }
+}
+
+export const getSqlDbTestContainerCreateTimeout = (): number => {
+  // use 60 seconds in CI
+  return isCI ? 60000 : 10000;
 }
 
 export function getTestingSqlDbContainerSinglton(): SqlDbTestContainer {
