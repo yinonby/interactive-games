@@ -68,7 +68,7 @@ The repository is organized as follows:
     - **mongoose**: A Node.js client to access the DB.
     - **mongodb-memory-server**: An in-memory Node.js Mongo DB instance for rapid development and testing.
   - **PostgreSQL DB**: An sql database.
-    - **Prisma**: A generic SQL client supporting typed schemas.
+    - **Prisma**: A generic SQL client supporting typed schemas and migrations management.
 
 - API Server
   - **Express**: A Node.js web framework for serving HTTP requests using middlewares and routing.
