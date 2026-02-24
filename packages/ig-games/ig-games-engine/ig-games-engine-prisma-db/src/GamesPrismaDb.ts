@@ -6,8 +6,8 @@ import fs from 'fs';
 import path from 'path';
 import { PrismaClient } from '../generated/prisma/client';
 import {
-  GameInstanceChatMessagesTable,
-} from './GameInstanceChatMessagesTable';
+  ChatMessagesTable,
+} from './ChatMessagesTable';
 
 export class GamesPrismaDb implements GamesChatDbAdapter {
   private prismaClient: PrismaClient;
@@ -22,8 +22,8 @@ export class GamesPrismaDb implements GamesChatDbAdapter {
     await this.runMigrations();
   }
 
-  public getGameInstanceChatMessagesTableAdapter(): GamesChatMessagesTableAdapter {
-    return new GameInstanceChatMessagesTable(this.prismaClient);
+  public getChatMessagesTableAdapter(): GamesChatMessagesTableAdapter {
+    return new ChatMessagesTable(this.prismaClient);
   }
 
   // service methods

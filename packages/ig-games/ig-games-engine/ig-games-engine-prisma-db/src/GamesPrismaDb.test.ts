@@ -1,8 +1,8 @@
 
 import { getTestingSqlDbContainerSinglton } from '@ig/prisma-utils/test-utils';
 import type { SqlDriverAdapterFactory } from '@prisma/client/runtime/client';
-import type { GameInstanceChatMessagesTable } from './GameInstanceChatMessagesTable';
-import * as GameInstanceChatMessagesTableModule from './GameInstanceChatMessagesTable';
+import type { ChatMessagesTable } from './ChatMessagesTable';
+import * as ChatMessagesTableModule from './ChatMessagesTable';
 import { GamesPrismaDb } from './GamesPrismaDb';
 
 // tests
@@ -10,8 +10,8 @@ import { GamesPrismaDb } from './GamesPrismaDb';
 describe('GamesPrismaDb', () => {
   let sqlDriverAdapterFactory: SqlDriverAdapterFactory;
 
-  const spy_GameInstanceChatMessagesTable =
-    vi.spyOn(GameInstanceChatMessagesTableModule, 'GameInstanceChatMessagesTable');
+  const spy_ChatMessagesTable =
+    vi.spyOn(ChatMessagesTableModule, 'ChatMessagesTable');
 
   beforeAll(() => {
     const sqlDbTestContainer = getTestingSqlDbContainerSinglton();
@@ -29,21 +29,21 @@ describe('GamesPrismaDb', () => {
     });
   });
 
-  describe('getGameInstanceChatMessagesTableAdapter', () => {
-    it('returns GameInstanceChatMessagesTable instance', () => {
+  describe('getChatMessagesTableAdapter', () => {
+    it('returns ChatMessagesTable instance', () => {
       // setup mocks
-      const mock_GameInstanceChatMessagesTable = { mock: 'table' } as unknown as GameInstanceChatMessagesTable;
-      spy_GameInstanceChatMessagesTable.mockImplementation(() => {
+      const mock_ChatMessagesTable = { mock: 'table' } as unknown as ChatMessagesTable;
+      spy_ChatMessagesTable.mockImplementation(() => {
         console.log("in mock")
-        return mock_GameInstanceChatMessagesTable;
+        return mock_ChatMessagesTable;
       });
 
       // GamesPrismaDb
       const db = new GamesPrismaDb(sqlDriverAdapterFactory);
 
-      const table = db.getGameInstanceChatMessagesTableAdapter();
+      const table = db.getChatMessagesTableAdapter();
 
-      expect(table).toEqual(expect.objectContaining(mock_GameInstanceChatMessagesTable));
+      expect(table).toEqual(expect.objectContaining(mock_ChatMessagesTable));
     });
   });
 });

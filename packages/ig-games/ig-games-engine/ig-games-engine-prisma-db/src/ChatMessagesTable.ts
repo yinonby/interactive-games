@@ -5,7 +5,7 @@ import type { ChatMessageT, ChatMsgIdT, ConversationIdT } from '@ig/games-engine
 import { generateUuidv4 } from '@ig/utils';
 import type { PrismaClient } from '../generated/prisma/client';
 
-export class GameInstanceChatMessagesTable implements GamesChatMessagesTableAdapter {
+export class ChatMessagesTable implements GamesChatMessagesTableAdapter {
   constructor(
     private prismaClient: PrismaClient,
   ) {}

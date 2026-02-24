@@ -17,6 +17,27 @@ RESET = "\033[0m"
 def find_packages(root_dir):
     """Locates directories containing package.json or Makefile, skipping ignored dirs."""
     tasks = []
+
+    # First pass: Find build tasks (if any)
+    for root, dirs, files in os.walk(root_dir):
+        # Skip root dir
+        if root == root_dir:
+            continue
+
+        # Skip node_modules and virtual environments
+        if "node_modules" in root or ".venv" in root or ".git" in root:
+            continue
+
+        if "package.json" in files:
+            tasks.append(
+                {
+                    "name": os.path.basename(root) or "root",
+                    "cwd": root,
+                    "cmd": ["npm", "run", "build"],
+                }
+            )
+
+    # Second pass: Find test tasks (after build tasks are added)
     for root, dirs, files in os.walk(root_dir):
         # Skip root dir
         if root == root_dir:
@@ -43,6 +64,7 @@ def find_packages(root_dir):
                     "cmd": ["make", "test"],
                 }
             )
+
     return tasks
 
 

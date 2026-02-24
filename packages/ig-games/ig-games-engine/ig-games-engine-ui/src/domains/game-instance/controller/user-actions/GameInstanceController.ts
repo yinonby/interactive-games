@@ -22,7 +22,7 @@ export type GameInstanceControllerT = {
 
 export function useGameInstanceController(): GameInstanceControllerT {
   const [
-    postGameInstanceChatMessage,
+    postChatMessage,
   ] = usePostChatMessageMutation();
   const [
     startGame,
@@ -50,7 +50,7 @@ export function useGameInstanceController(): GameInstanceControllerT {
     senderAccountId: AccountIdT,
     chatMessage: string
   ): Promise<void> => {
-    const { error } = await postGameInstanceChatMessage({
+    const { error } = await postChatMessage({
       conversationKind: conversationKind,
       conversationId: conversationId,
       senderAccountId: senderAccountId,

@@ -22,7 +22,7 @@ export interface GameConfigsTableAdapter {
 
 export interface GamesChatDbAdapter {
   init(): Promise<void>;
-  getGameInstanceChatMessagesTableAdapter(): GamesChatMessagesTableAdapter;
+  getChatMessagesTableAdapter(): GamesChatMessagesTableAdapter;
 }
 
 export interface GamesChatMessagesTableAdapter {

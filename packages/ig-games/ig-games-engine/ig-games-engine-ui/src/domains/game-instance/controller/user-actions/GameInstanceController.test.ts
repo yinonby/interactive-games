@@ -70,7 +70,7 @@ describe('useGameInstanceController', () => {
     expect(startGameMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls postGameInstanceChatMessage with the provided data', async () => {
+  it('calls postChatMessage with the provided data', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
     const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
@@ -106,7 +106,7 @@ describe('useGameInstanceController', () => {
     });
   });
 
-  it('handles error thrown by postGameInstanceChatMessage', async () => {
+  it('handles error thrown by postChatMessage', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
     const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
@@ -172,7 +172,7 @@ describe('useGameInstanceController', () => {
     });
   });
 
-  it('handles error thrown by postGameInstanceChatMessage', async () => {
+  it('handles error thrown by postChatMessage', async () => {
     const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
     const usePostChatMessageMutationSpy = jest.spyOn(GameInstanceRtkApi, 'usePostChatMessageMutation');
     const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');

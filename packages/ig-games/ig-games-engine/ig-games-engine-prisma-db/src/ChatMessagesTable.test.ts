@@ -2,9 +2,9 @@
 import { getTestingSqlDbContainerSinglton } from '@ig/prisma-utils/test-utils';
 import type { SqlDriverAdapterFactory } from '@prisma/client/runtime/client';
 import { PrismaClient } from '../generated/prisma/client';
-import { GameInstanceChatMessagesTable } from './GameInstanceChatMessagesTable';
+import { ChatMessagesTable } from './ChatMessagesTable';
 
-describe('GameInstanceChatMessagesTable', () => {
+describe('ChatMessagesTable', () => {
   let prismaClient: PrismaClient;
 
   beforeAll(() => {
@@ -19,14 +19,14 @@ describe('GameInstanceChatMessagesTable', () => {
 
   describe('constructor', () => {
     it('should create instance with defaults', () => {
-      const instance = new GameInstanceChatMessagesTable(prismaClient);
+      const instance = new ChatMessagesTable(prismaClient);
       expect(instance).toBeDefined();
     });
   });
 
   describe('createMessage', () => {
     it('should create a new chat message', async () => {
-      const instance = new GameInstanceChatMessagesTable(prismaClient);
+      const instance = new ChatMessagesTable(prismaClient);
       const chatMsgId = await instance.createMessage(
         'gameInstanceChat',
         'CID1',
@@ -40,7 +40,7 @@ describe('GameInstanceChatMessagesTable', () => {
 
   describe('getMostRecentMessagesForGameInstance', () => {
     it('should get last messages for a game instance', async () => {
-      const instance = new GameInstanceChatMessagesTable(prismaClient);
+      const instance = new ChatMessagesTable(prismaClient);
 
       // create messages 0-9
       const n = 10;
@@ -69,7 +69,7 @@ describe('GameInstanceChatMessagesTable', () => {
 
   describe('getPriorMessagesForGameInstance', () => {
     it('should get messages for a game instance', async () => {
-      const instance = new GameInstanceChatMessagesTable(prismaClient);
+      const instance = new ChatMessagesTable(prismaClient);
 
       // create messages 0-9
       const n = 10;
@@ -108,7 +108,7 @@ describe('GameInstanceChatMessagesTable', () => {
 
   describe('getNewerMessagesForGameInstance', () => {
     it('should get newer messages for a game instance', async () => {
-      const instance = new GameInstanceChatMessagesTable(prismaClient);
+      const instance = new ChatMessagesTable(prismaClient);
 
       // create message 0
       await instance.createMessage(
