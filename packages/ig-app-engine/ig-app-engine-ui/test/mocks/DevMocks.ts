@@ -1,6 +1,7 @@
 
 import type {
-  GameInfoT, GameInstanceChatMessageT,
+  ChatMessageT,
+  GameInfoT,
   GameInstanceExposedInfoT, MinimalGameInfoT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
@@ -107,17 +108,21 @@ export const devJoinedGameConfigs: GameInfoT[] = [];
 
 export const devAllGameInstanceExposedInfos: GameInstanceExposedInfoT[] = []
 
-export const devChatMessages: GameInstanceChatMessageT[] = [{
-  gameInstanceId: 'giid-1',
+export const devChatMessages: ChatMessageT[] = [{
+  conversationKind: 'gameInstanceChat',
+  conversationId: 'cid-1',
   chatMsgId: 'msg-1',
   sentTs: 2,
-  playerAccountId: 'user-2',
+  senderAccountId: 'user-2',
   msgText: 'Hey',
+  paginationId: 1,
 }, {
-  gameInstanceId: 'giid-1',
+  conversationKind: 'gameInstanceChat',
+  conversationId: 'cid-1',
   chatMsgId: 'msg-1',
   sentTs: 3,
-  playerAccountId: 'user-3',
+  senderAccountId: 'user-3',
   msgText: 'Let\'s play',
+  paginationId: 2,
 }]
 

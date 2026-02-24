@@ -7,24 +7,34 @@ import { type ExpressAppStarterInfoT, type ExpressPluginContainerT } from '@ig/b
 import { getApiEnvVars } from '@ig/env';
 import { type GamesPluginConfigT } from '@ig/games-engine-api';
 import { GamesMongoDb } from '@ig/games-engine-mongo-db';
+import { GamesPrismaDb } from '@ig/games-engine-prisma-db';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { useAppApiPluginContainer } from './AppApiPlugin';
 import { useAppEnginePluginContainer } from './AppEnginePlugin';
 import { useAuthPluginContainer } from './AuthPlugin';
 import { useGamesPluginContainer } from './GamesPlugin';
 
-export const useExpressAppStarterInfo = (mongoConnString: string): ExpressAppStarterInfoT => {
+export const useExpressAppStarterInfo = (
+  mongoConnString: string,
+  sqlDbConnString: string,
+): ExpressAppStarterInfoT => {
   const apiEnvVars = getApiEnvVars();
+
+  // init prisma postgres adapter
+  const prismaPg: PrismaPg = new PrismaPg({ connectionString: sqlDbConnString });
 
   const corsAllowOrigins: string[] | undefined = [apiEnvVars.webCorsOrigin];
   const authMongoDb: AuthMongoDb = new AuthMongoDb();
   const engineMongoDb: EngineMongoDb = new EngineMongoDb();
   const gamesMongoDb: GamesMongoDb = new GamesMongoDb();
+  const gamesPrismaDb: GamesPrismaDb = new GamesPrismaDb(prismaPg);
 
   const appPluginContainer: ExpressPluginContainerT<unknown> = useAppApiPluginContainer();
   const appEnginePluginContainer: ExpressPluginContainerT<unknown> = useAppEnginePluginContainer(engineMongoDb);
   const authPluginContainer: ExpressPluginContainerT<AuthPluginConfigT> = useAuthPluginContainer(authMongoDb,
     engineMongoDb);
-  const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> = useGamesPluginContainer(gamesMongoDb);
+  const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> =
+    useGamesPluginContainer(gamesMongoDb, gamesPrismaDb);
 
   return {
     listerPort: apiEnvVars.apiListenPort,

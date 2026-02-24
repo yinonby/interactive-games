@@ -1,19 +1,29 @@
 
 import type { AccountIdT } from '@ig/app-engine-models';
 import { AppError, extractAppErrorCodeFromUnknownObject } from '@ig/app-engine-ui';
-import type { GameInstanceIdT } from '@ig/games-engine-models';
-import { usePostGameInstanceChatMessageMutation, useStartGameMutation, useSubmitGuessMutation } from '../../model/rtk/GameInstanceRtkApi';
+import type { ConversationIdT, GameInstanceIdT } from '@ig/games-engine-models';
+import {
+  usePostChatMessageMutation,
+  useStartGameMutation, useSubmitGuessMutation
+} from '../../model/rtk/GameInstanceRtkApi';
 
 export type GameInstanceControllerT = {
   onStartGame: (gameInstanceId: GameInstanceIdT) => Promise<void>,
-  onSendChatMessage: (gameInstanceId: GameInstanceIdT, playerAccountId: AccountIdT, chatMessage: string) => Promise<void>,
+
+  onSendChatMessage: (
+    conversationKind: 'gameInstanceChat',
+    conversationId: ConversationIdT,
+    senderAccountId: AccountIdT,
+    chatMessage: string,
+  ) => Promise<void>,
+
   onSubmitGuess: (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string) => Promise<boolean>,
 }
 
 export function useGameInstanceController(): GameInstanceControllerT {
   const [
-    postGameInstanceChatMessage,
-  ] = usePostGameInstanceChatMessageMutation();
+    postChatMessage,
+  ] = usePostChatMessageMutation();
   const [
     startGame,
   ] = useStartGameMutation();
@@ -35,13 +45,15 @@ export function useGameInstanceController(): GameInstanceControllerT {
   }
 
   const sendChatMessge = async (
-    gameInstanceId: GameInstanceIdT,
-    playerAccountId: AccountIdT,
+    conversationKind: 'gameInstanceChat',
+    conversationId: ConversationIdT,
+    senderAccountId: AccountIdT,
     chatMessage: string
   ): Promise<void> => {
-    const { error } = await postGameInstanceChatMessage({
-      gameInstanceId: gameInstanceId,
-      playerAccountId: playerAccountId,
+    const { error } = await postChatMessage({
+      conversationKind: conversationKind,
+      conversationId: conversationId,
+      senderAccountId: senderAccountId,
       chatMessage: chatMessage,
     });
     if (error !== undefined) {

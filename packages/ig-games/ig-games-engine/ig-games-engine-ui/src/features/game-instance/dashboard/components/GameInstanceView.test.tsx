@@ -87,7 +87,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe('GameInstanceView', () => {
     });
 
     const { getByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
     );
 
     expect(queryByTestId('InviteView-tid')).toBeNull();
@@ -173,7 +173,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} gameInstanceChatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
     );
 
     expect(queryByTestId('LevelsView-tid')).toBeNull();

@@ -1,28 +1,31 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from '@ig/app-engine-ui';
-import type { GameInstanceChatMessageT, GameInstanceExposedInfoT, GameInstanceIdT } from '@ig/games-engine-models';
-import { useGetGameInstanceChatQuery, useGetGameInstanceQuery } from './GameInstanceRtkApi';
+import { getGameInstanceConversationId, type ChatMessageT, type ConversationIdT, type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-engine-models';
+import { useGetChatQuery, useGetGameInstanceQuery } from './GameInstanceRtkApi';
 
 export type GameInstanceModelDataT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
-  gameInstanceChatMessages: GameInstanceChatMessageT[],
+  chatMessages: ChatMessageT[],
 };
 
 export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
 
 export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInstanceModelT => {
+  const conversationId: ConversationIdT = getGameInstanceConversationId(gameInstanceId);
+
   const {
     isLoading: isGameInstanceLoading,
     isError: isGameInstanceError,
     error: gameInstanceError,
     data: gameInstanceResponse
   } = useGetGameInstanceQuery(gameInstanceId);
+
   const {
     isLoading: isChatLoading,
     isError: isChatError,
     error: chatError,
     data: gameInstanceChatResponse
-  } = useGetGameInstanceChatQuery(gameInstanceId);
+  } = useGetChatQuery(conversationId);
 
   if (isGameInstanceLoading || isChatLoading) {
     return {
@@ -54,7 +57,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     isError: false,
     data: {
       gameInstanceExposedInfo: gameInstanceResponse.gameInstanceExposedInfo,
-      gameInstanceChatMessages: gameInstanceChatResponse.chatMessages,
+      chatMessages: gameInstanceChatResponse.chatMessages,
     }
   }
 }
