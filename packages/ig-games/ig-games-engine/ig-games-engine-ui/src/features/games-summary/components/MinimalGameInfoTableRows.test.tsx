@@ -1,9 +1,9 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
 
 // Mock PriceView to render easily queryable output

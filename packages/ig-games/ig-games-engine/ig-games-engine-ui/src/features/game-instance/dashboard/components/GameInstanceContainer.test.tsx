@@ -58,7 +58,6 @@ describe('GameInstanceView', () => {
       isError: false,
       data: {
         gameInstanceExposedInfo: gameInstanceExposedInfo,
-        chatMessages: [],
       },
     });
 
@@ -68,6 +67,5 @@ describe('GameInstanceView', () => {
 
     const view = getByTestId("GameInstanceView-tid");
     expect(view.props.gameInstanceExposedInfo).toEqual({ gameInstanceId: gameInstanceId1 });
-    expect(view.props.chatMessages).toEqual([]);
   });
 });

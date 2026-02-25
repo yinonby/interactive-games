@@ -1,11 +1,11 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
 import { __puiMocks } from '@ig/platform-ui';
 import { MIN_TO_MS } from '@ig/utils';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GameViewUtils from '../../../utils/GameViewUtils';

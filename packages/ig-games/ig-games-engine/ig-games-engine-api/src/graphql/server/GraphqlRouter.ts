@@ -20,7 +20,7 @@ export async function createGraphqlRouter(
   });
 
   // inject directives
-  const authDirectiveGraphqlTransformer =  makeGamesGraphqlAuthDirectiveTransformer();
+  const authDirectiveGraphqlTransformer = makeGamesGraphqlAuthDirectiveTransformer();
   const directiveTransformers = [
     authDirectiveGraphqlTransformer,
   ]

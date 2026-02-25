@@ -1,8 +1,8 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '@ig/games-engine-models';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import { PlayersView } from './PlayersView';
 
 jest.mock("./PlayersTableView", () => {

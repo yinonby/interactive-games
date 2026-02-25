@@ -3,11 +3,11 @@
 import '@testing-library/jest-native/extend-expect';
 // figure out why cannot export these from @ig/rn-testing
 import type { GamesUiUrlPathsAdapter } from '@ig/app-engine-ui';
+import { initEngineAppUiMocks } from '@ig/app-engine-ui/test-utils';
 import { initAuthUiMocks } from '@ig/rn-testing/src/mocks/AuthUiMocks';
 import { initPlatformUiMocks } from '@ig/rn-testing/src/mocks/PlatformUiMocks';
 import { initReactNativeMocks } from '@ig/rn-testing/src/mocks/ReactNativeMocks';
 import { initRnuiMocks } from '@ig/rn-testing/src/mocks/RnuiMocks';
-import { initEngineAppUiMocks } from './mocks/EngineAppUiMocks';
 
 beforeAll(() => {
   jest.useFakeTimers();

@@ -1,7 +1,7 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import { PriceView } from './PriceView';
 
 // Mock engine models currency symbols and RnuiText rendering

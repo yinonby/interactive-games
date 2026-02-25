@@ -1,4 +1,5 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import {
   type GameInstanceExposedInfoT
 } from '@ig/games-engine-models';
@@ -9,7 +10,6 @@ import {
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import { GameInstanceConfigSummaryView } from './GameInstanceConfigSummaryView';
 
 jest.mock('../../common/GameStatusView', () => {

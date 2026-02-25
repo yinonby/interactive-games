@@ -54,7 +54,7 @@ jest.mock('./PlayersView', () => {
   };
 });
 
-jest.mock('../../common/ChatView', () => {
+jest.mock('@ig/chat-ui', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -87,7 +87,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe('GameInstanceView', () => {
     });
 
     const { getByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -151,7 +151,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
     );
 
     expect(queryByTestId('InviteView-tid')).toBeNull();
@@ -173,7 +173,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} chatMessages={[]} />
+      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
     );
 
     expect(queryByTestId('LevelsView-tid')).toBeNull();

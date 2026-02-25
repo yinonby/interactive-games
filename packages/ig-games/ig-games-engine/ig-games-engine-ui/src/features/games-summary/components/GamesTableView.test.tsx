@@ -1,9 +1,9 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import type { GameInfoT } from '@ig/games-engine-models';
 import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import { GamesTableView } from './GamesTableView';
 
 // --------------------

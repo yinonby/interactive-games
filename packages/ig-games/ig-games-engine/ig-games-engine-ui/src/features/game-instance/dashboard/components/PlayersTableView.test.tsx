@@ -1,10 +1,10 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { __authUiMocks } from '@ig/auth-ui';
 import type { PlayerExposedInfoT } from '@ig/games-engine-models';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import { PlayersTableView } from './PlayersTableView';
 
 // mocks

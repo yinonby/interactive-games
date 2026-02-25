@@ -1,8 +1,8 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import type { PlayerExposedInfoT } from '@ig/games-engine-models';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
-import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import { PlayerTableRow } from './PlayerTableRow';
 
 jest.mock("./PlayersTableView", () => {

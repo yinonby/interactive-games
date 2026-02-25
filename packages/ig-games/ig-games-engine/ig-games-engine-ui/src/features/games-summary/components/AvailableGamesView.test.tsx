@@ -1,10 +1,10 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from '@ig/app-engine-ui';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import type { GameInfoT, GamesUserConfigT } from '@ig/games-engine-models';
 import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import * as GamesConfigModel from '../../../domains/games-app/model/rtk/GamesAppModel';
 import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { AvailableGamesView } from './AvailableGamesView';

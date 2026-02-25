@@ -1,17 +1,12 @@
 
 import {
-  type ChatMessageT,
-  type ConversationIdT,
   type GameConfigIdT, type GameInfoT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
-  type GetChatResponseT,
   type GetGameInstanceResponseT,
   type GetGamesUserConfigResponseT,
   type LevelExposedConfigT,
   type LevelStateT,
-  type PostChatMessageParamsT,
-  type PostChatMessageResponseT,
   type PostGameInstanceStartResponseT,
   type PostGameInstanceSubmitGuessResponseT
 } from '@ig/games-engine-models';
@@ -23,7 +18,6 @@ import { useClientLogger } from '../../src/app/providers/useClientLogger';
 import {
   devAllGameConfigs,
   devAllGameInstanceExposedInfos,
-  devChatMessages,
   devJoinedGameConfigs
 } from './DevMocks';
 
@@ -162,10 +156,6 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
   };
 }
 
-const getChatMessages = (conversationId: ConversationIdT): ChatMessageT[] => {
-  return devChatMessages.filter(e => e.conversationId === conversationId).sort((e1, e2) => e1.sentTs - e2.sentTs);
-}
-
 const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string): boolean => {
   const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
     e.gameInstanceId === gameInstanceId
@@ -222,8 +212,6 @@ const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, gu
 
   return isCorrectGuess;
 }
-
-let nextPaginationId = 1;
 
 export class ApiServerMock implements HttpAdapter {
   constructor(
@@ -290,31 +278,6 @@ export class ApiServerMock implements HttpAdapter {
       }
       const response: GetGameInstanceResponseT = {
         gameInstanceExposedInfo: {...gameInstanceExposedInfo}, // clone this array so it is not frozen
-      }
-      return response as TResponse;
-    } else if (options.url.startsWith('/games/chat/') && options.url.endsWith('message')) {
-      const data: PostChatMessageParamsT = options.data as unknown as PostChatMessageParamsT;
-
-      const chatMessage: ChatMessageT = {
-        conversationKind: data.conversationKind,
-        conversationId: data.conversationId,
-        chatMsgId: Date.now().toString(),
-        sentTs: Date.now(),
-        senderAccountId: data.senderAccountId,
-        msgText: data.chatMessage,
-        paginationId: nextPaginationId++,
-      }
-      devChatMessages.push(chatMessage)
-
-      const response: PostChatMessageResponseT = {
-        chatMsgId: chatMessage.chatMsgId,
-      }
-      return response as TResponse;
-    } else if (options.url.startsWith('/games/chat/')) {
-      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
-
-      const response: GetChatResponseT = {
-        chatMessages: getChatMessages(gameInstanceId as ConversationIdT),
       }
       return response as TResponse;
     } else {
