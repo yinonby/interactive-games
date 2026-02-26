@@ -24,11 +24,11 @@ describe('LevelView', () => {
     const wordleLevelState: LevelStateT = buildTestLevelState({
       kind: 'wordle',
       levelStatus: 'levelInProcess',
-      wordleExposedConfig: { langCode: 'en', wordLength: 5, allowedGuessesNum: 6 },
-      wordleState: {
+      publicWordleConfig: { langCode: 'en', wordLength: 5, allowedGuessesNum: 6 },
+      publicWordleState: {
         guessDatas: [],
-        correctSolution: 'HELLO'
       },
+      wordleSolution: 'HELLO',
     });
 
     const { getByTestId } = render(

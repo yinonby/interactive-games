@@ -1,16 +1,8 @@
 
-import type { FixedGameSolutionT, GameConfigT } from '@ig/games-engine-models';
+import type { GameConfigT } from '@ig/games-engine-models';
 import type { SchemaDefinition } from 'mongoose';
 import { durationInfoSchemaDef, imageInfoSchemaDef, priceInfoSchemaDef } from './CommonSchemaDefs';
 import { levelConfigSchemaDef } from './LevelConfigSchemaDefs';
-
-export const fixedGameSolutionSchemaDef: SchemaDefinition<FixedGameSolutionT> = {
-  kind: {
-    type: String,
-    required: true,
-    enum: ['textSolution'],
-  },
-}
 
 export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
   gameConfigId: {
@@ -66,16 +58,10 @@ export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
     required: true,
   },
 
-  levelExposedConfigs: {
+  publicLevelConfigs: {
     type: [levelConfigSchemaDef],
     _id: false,
     required: true,
     default: [],
-  },
-
-  fixedGameSolution: {
-    type: [fixedGameSolutionSchemaDef],
-    _id: false,
-    required: false,
   },
 }

@@ -26,16 +26,16 @@ export const GameDashboardViewPageContent: FC<GameDashboardViewPageContentPropsT
     return null;
   }
 
-  const gameInfo: PublicGameConfigT | undefined =
+  const publicGameConfig: PublicGameConfigT | undefined =
     gamesUserConfigModelData.gamesUserConfig.joinedPublicGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (gameInfo === undefined) {
+  if (publicGameConfig === undefined) {
     return null;
   }
 
   return (
     <RnuiAppContent testID="RnuiAppContent-tid">
-      <GameDashboardView testID="GameDashboardView-tid" joinedPublicGameConfig={gameInfo} />
+      <GameDashboardView testID="GameDashboardView-tid" joinedPublicGameConfig={publicGameConfig} />
     </RnuiAppContent>
   );
 };

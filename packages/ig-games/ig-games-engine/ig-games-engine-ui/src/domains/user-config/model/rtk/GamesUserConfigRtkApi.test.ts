@@ -6,11 +6,11 @@ import {
 } from '@ig/app-engine-ui';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type {
-  GameInstanceExposedInfoT,
   GamesUserConfigT,
   GetGamesUserConfigResponseT,
   PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT,
-  PublicGameConfigT
+  PublicGameConfigT,
+  PublicGameInstanceT
 } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-engine-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
@@ -32,7 +32,7 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
 let mockedGamesUserConfig: GamesUserConfigT = {
   joinedPublicGameConfigs: [],
 };
-let mockedGameInstanceExposedInfos: GameInstanceExposedInfoT[];
+let mockedGameInstanceExposedInfos: PublicGameInstanceT[];
 
 export const server = setupServer(
   http.get(apiUrl + '/games/user-config', () => {

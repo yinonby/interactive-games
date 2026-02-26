@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { PublicGameInstanceT } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo, buildTestGameState, buildTestLevelState } from '@ig/games-engine-models/test-utils';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
@@ -29,7 +29,7 @@ describe('LevelsView', () => {
   } as unknown as GameInstanceControllerT);
 
   it('does not render LevelView when there are no levels', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameState: buildTestGameState({
         levelStates: [],
       }),
@@ -37,7 +37,7 @@ describe('LevelsView', () => {
 
     const { queryByTestId } = render(
       <LevelsView
-        gameInstanceExposedInfo={gameInstanceExposedInfo}
+        publicGameInstance={publicGameInstance}
       />
     );
 
@@ -50,7 +50,7 @@ describe('LevelsView', () => {
     onSubmitGuessMock.mockResolvedValue(true);
 
     // render
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'GIID1',
       gameState: buildTestGameState({
         levelStates: [buildTestLevelState()],
@@ -59,7 +59,7 @@ describe('LevelsView', () => {
 
     const { getByTestId } = render(
       <LevelsView
-        gameInstanceExposedInfo={gameInstanceExposedInfo}
+        publicGameInstance={publicGameInstance}
       />
     );
 
@@ -82,7 +82,7 @@ describe('LevelsView', () => {
     onSubmitGuessMock.mockRejectedValue('ERROR');
 
     // render
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'GIID1',
       gameState: buildTestGameState({
         levelStates: [buildTestLevelState()],
@@ -91,7 +91,7 @@ describe('LevelsView', () => {
 
     const { getByTestId } = render(
       <LevelsView
-        gameInstanceExposedInfo={gameInstanceExposedInfo}
+        publicGameInstance={publicGameInstance}
       />
     );
 

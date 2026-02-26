@@ -1,18 +1,18 @@
 
-import type { WordleExposedConfigT } from '@ig/games-wordle-models'
+import type { PublicWordleConfigT } from '@ig/games-wordle-models'
 import type { ImageInfoT } from './CommonTypes'
 
-export type LevelExposedConfigT = {
+export type PublicLevelConfigT = {
   levelName?: string,
 } & ({
-  kind: 'wordle',
-  wordleExposedConfig: WordleExposedConfigT,
-} | {
   kind: 'code',
-  codePuzzleExposedConfig: CodePuzzleExposedConfigT
+  publicCodePuzzleConfig: PublicCodePuzzleConfigT
+} | {
+  kind: 'wordle',
+  publicWordleConfig: PublicWordleConfigT,
 })
 
-export type CodePuzzleExposedConfigT = {
+export type PublicCodePuzzleConfigT = {
   kind: 'alphabetic' | 'numeric' | 'alphanumeric',
   codeLength: number,
   accessories?: CodePuzzleAccessoryT[],
@@ -29,3 +29,7 @@ export type CodePuzzleInstructionT = {
   kind: 'text',
   text: string,
 }
+
+export type LevelSolutionT = {
+  kind: 'textSolution',
+};

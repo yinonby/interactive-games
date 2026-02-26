@@ -8,25 +8,25 @@ import { View } from 'react-native';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
 
-export type GameInfoSummaryViewPropsT = TestableComponentT & {
-  gameInfo: PublicGameConfigT,
+export type PublicGameConfigSummaryViewPropsT = TestableComponentT & {
+  publicGameConfig: PublicGameConfigT,
 };
 
-export const PublicGameConfigSummaryView: FC<GameInfoSummaryViewPropsT> = ({ gameInfo }) => {
+export const PublicGameConfigSummaryView: FC<PublicGameConfigSummaryViewPropsT> = ({ publicGameConfig }) => {
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
-  const extraTimeLimitMinutesStr = gameInfo.extraTimeLimitDurationInfo.kind === 'unlimited' ?
+  const extraTimeLimitMinutesStr = publicGameConfig.extraTimeLimitDurationInfo.kind === 'unlimited' ?
     t("common:unlimited") :
-    t("common:minutes", { minutes: MS_TO_MIN(gameInfo.extraTimeLimitDurationInfo.durationMs) });
+    t("common:minutes", { minutes: MS_TO_MIN(publicGameConfig.extraTimeLimitDurationInfo.durationMs) });
 
   return (
     <View style={genericStyles.spacing}>
       <RnuiText variant="titleSmall" >
-        {gameInfo.gameName}
+        {publicGameConfig.gameName}
       </RnuiText>
 
       <RnuiTable>
-        <MinimalPublicGameConfigTableRows testID='MinimalPublicGameConfigTableRows-tid' minimalPublicGameConfig={gameInfo} />
+        <MinimalPublicGameConfigTableRows testID='MinimalPublicGameConfigTableRows-tid' minimalPublicGameConfig={publicGameConfig} />
 
         <RnuiTableRow noHorizontalPadding dense>
           <RnuiTableCell>

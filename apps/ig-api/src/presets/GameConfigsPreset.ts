@@ -10,7 +10,7 @@ import { MIN_TO_MS } from '@ig/utils';
 export const loadGameConfigPreset1 = async (gamesDbAdapter: GamesDbAdapter): Promise<void> => {
   const gameConfigLogicAdapter: GameConfigLogicAdapter =
     new GameConfigLogic(gamesDbAdapter.getGameConfigsTableAdapter());
-  const gameInfos: GameConfigT[] = [
+  const gameConfigs: GameConfigT[] = [
     secretIslandGameConfig,
     escapeRoomGameConfig,
     wordleEnGameConfig,
@@ -18,8 +18,8 @@ export const loadGameConfigPreset1 = async (gamesDbAdapter: GamesDbAdapter): Pro
     wordleEsGameConfig,
   ];
 
-  for (const gameInfo of gameInfos) {
-    await gameConfigLogicAdapter.createGameConfig(gameInfo.gameConfigId, gameInfo);
+  for (const gameConfig of gameConfigs) {
+    await gameConfigLogicAdapter.createGameConfig(gameConfig.gameConfigId, gameConfig);
   }
 }
 
@@ -35,7 +35,7 @@ const secretIslandGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const escapeRoomGameConfig: GameConfigT = {
@@ -50,7 +50,7 @@ const escapeRoomGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const wordleEnGameConfig: GameConfigT = {
@@ -65,7 +65,7 @@ const wordleEnGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const wordleEsGameConfig: GameConfigT = {
@@ -80,7 +80,7 @@ const wordleEsGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const wordleFrGameConfig: GameConfigT = {
@@ -95,6 +95,6 @@ const wordleFrGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 

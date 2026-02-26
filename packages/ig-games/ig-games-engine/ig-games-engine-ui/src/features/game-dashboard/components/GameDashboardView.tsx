@@ -37,7 +37,7 @@ export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
     <RnuiGrid>
       <RnuiGridItem key="summary" xs={12} sm={12} md={6} lg={4} xl={4} >
         <View>
-          <GameConfigCardView testID='GameConfigCardView-tid' gameInfo={props.joinedPublicGameConfig} />
+          <GameConfigCardView testID='GameConfigCardView-tid' publicGameConfig={props.joinedPublicGameConfig} />
         </View>
       </RnuiGridItem>
 

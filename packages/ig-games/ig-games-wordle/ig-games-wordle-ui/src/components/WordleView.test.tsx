@@ -12,19 +12,19 @@ describe('WordleView', () => {
     jest.clearAllMocks();
   });
 
-  it('renders exactly 2 full guess disabled inputs when 2 guesses are provided in wordleState', () => {
+  it('renders exactly 2 full guess disabled inputs when 2 guesses are provided in publicWordleState', () => {
     const mockProps: WordleViewPropsT = {
       wordleExposeConfig: {
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -44,12 +44,12 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'notStarted',
       onSubmitGuess: jest.fn(),
@@ -69,13 +69,13 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -100,12 +100,12 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: onSubmitGuessMock,
@@ -157,12 +157,12 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: onSubmitGuessMock,
@@ -209,11 +209,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'notStarted',
       onSubmitGuess: jest.fn(),
@@ -232,12 +232,12 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 3,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
           { guess: 'WORLD', letterAnalyses: ['notPresent', 'present', 'hit', 'notPresent', 'notPresent'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -256,11 +256,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -280,11 +280,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'solved',
       onSubmitGuess: jest.fn(),
@@ -303,11 +303,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -326,11 +326,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'levelInProcess',
       onSubmitGuess: jest.fn(),
@@ -350,7 +350,7 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
@@ -373,11 +373,11 @@ describe('WordleView', () => {
         wordLength: 5,
         allowedGuessesNum: 4,
       },
-      wordleState: {
+      publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
         ],
-        correctSolution: 'HELLO',
+        correctGuess: 'HELLO',
       },
       levelStatus: 'solved',
       onSubmitGuess: jest.fn(),

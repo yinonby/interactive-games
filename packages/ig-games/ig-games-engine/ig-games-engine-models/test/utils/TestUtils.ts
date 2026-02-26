@@ -1,5 +1,5 @@
 
-import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '../../src/types/game/GameInstanceTypes';
+import type { PublicGameInstanceT, PublicPlayerInfoT } from '../../src/types/game/GameInstanceTypes';
 import type { GameStateT, LevelStateT } from '../../src/types/game/GameStateTypes';
 import type {
   GameConfigNoIdT,
@@ -28,14 +28,11 @@ const basePublicGameConfig: PublicGameConfigT = {
   ...baseMinimalPublicGameConfig,
   extraTimeMinutes: 2,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 };
 
 const baseGameConfig: GameConfigT = {
   ...basePublicGameConfig,
-    fixedGameSolution: {
-      kind: 'textSolution',
-    },
 };
 
 export const buildMinimalPublicGameConfigMock = (
@@ -68,13 +65,13 @@ export const buildGameConfigNoIdMock = (
 
 // game instance
 
-export const buildTestGameInstanceExposedInfo = (overrides?: Partial<GameInstanceExposedInfoT>) => ({
+export const buildTestGameInstanceExposedInfo = (overrides?: Partial<PublicGameInstanceT>) => ({
   ...overrides
-} as GameInstanceExposedInfoT);
+} as PublicGameInstanceT);
 
-export const buildTestPlayerExposedInfo = (overrides?: Partial<PlayerExposedInfoT>) => ({
+export const buildTestPublicPlayerInfo = (overrides?: Partial<PublicPlayerInfoT>) => ({
   ...overrides
-} as PlayerExposedInfoT);
+} as PublicPlayerInfoT);
 
 export const buildTestGameState = (overrides?: Partial<GameStateT>) => ({
   ...overrides
@@ -83,3 +80,18 @@ export const buildTestGameState = (overrides?: Partial<GameStateT>) => ({
 export const buildTestLevelState = (overrides?: Partial<LevelStateT>) => ({
   ...overrides
 } as LevelStateT);
+
+const basePublicGameInstance: PublicGameInstanceT = {
+  gameInstanceId: 'GI1',
+  invitationCode: 'INT1',
+  publicGameConfig: buildPublicGameConfigMock(),
+  gameState: buildTestGameState(),
+  publicPlayerInfos: [buildTestPublicPlayerInfo()],
+};
+
+export const buildPublicGameInstanceMock = (
+  overrides?: Partial<PublicGameInstanceT>
+): PublicGameInstanceT => ({
+  ...basePublicGameInstance,
+  ...overrides,
+});

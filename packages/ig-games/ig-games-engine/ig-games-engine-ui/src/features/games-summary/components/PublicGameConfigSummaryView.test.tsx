@@ -19,35 +19,35 @@ jest.mock('./MinimalPublicGameConfigTableRows', () => {
 
 describe('PublicGameConfigSummaryView', () => {
   it('renders correctly', async () => {
-    const gameInfo = buildPublicGameConfigMock({
+    const publicGameConfig = buildPublicGameConfigMock({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
     })
 
     const { getByText, getByTestId } = render(
       <PublicGameConfigSummaryView
-        gameInfo={gameInfo}
+        publicGameConfig={publicGameConfig}
       />
     );
 
-    getByText(gameInfo.gameName);
+    getByText(publicGameConfig.gameName);
 
     const rows = getByTestId('MinimalPublicGameConfigTableRows-tid');
-    expect(rows.props.minimalPublicGameConfig).toEqual(gameInfo);
+    expect(rows.props.minimalPublicGameConfig).toEqual(publicGameConfig);
 
     getByText(buildMockedTranslation('games:extraTimeLimit'));
     getByText(buildMockedTranslation('common:minutes'));
   });
 
   it('renders correctly, extraTimeLimit is unlimited', async () => {
-    const gameInfo = buildPublicGameConfigMock({
+    const publicGameConfig = buildPublicGameConfigMock({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'unlimited' },
     })
 
     const { getByText } = render(
       <PublicGameConfigSummaryView
-        gameInfo={gameInfo}
+        publicGameConfig={publicGameConfig}
       />
     );
 

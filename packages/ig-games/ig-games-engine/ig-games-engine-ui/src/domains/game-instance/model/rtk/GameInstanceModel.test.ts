@@ -1,7 +1,7 @@
 
 import {
-  type GameInstanceExposedInfoT,
-  type GetGameInstanceResponseT
+  type GetGameInstanceResponseT,
+  type PublicGameInstanceT
 } from '@ig/games-engine-models';
 import { renderHook } from '@testing-library/react-native';
 import { useGameInstanceModel } from './GameInstanceModel';
@@ -90,11 +90,11 @@ describe('GameInstanceModel', () => {
   it('returns data', () => {
     const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
 
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
+    const publicGameInstance: PublicGameInstanceT = {
       gameInstanceId: gameInstanceId1,
-    } as GameInstanceExposedInfoT;
+    } as PublicGameInstanceT;
     const gameInstanceResponse: GetGameInstanceResponseT = {
-      gameInstanceExposedInfo: gameInstanceExposedInfo,
+      publicGameInstance: publicGameInstance,
     }
     useGetGameInstanceQuerySpy.mockReturnValue({
       isLoading: false,
@@ -109,7 +109,7 @@ describe('GameInstanceModel', () => {
       isLoading: false,
       isError: false,
       data: {
-        gameInstanceExposedInfo: gameInstanceResponse.gameInstanceExposedInfo,
+        publicGameInstance: gameInstanceResponse.publicGameInstance,
       },
     });
   });

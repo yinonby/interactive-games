@@ -1,15 +1,16 @@
 
 import {
   type GameConfigIdT,
-  type GameInstanceExposedInfoT, type GameInstanceIdT,
+  type GameInstanceIdT,
   type GamesUserConfigT,
   type GetGameInstanceResponseT,
   type GetGamesUserConfigResponseT,
-  type LevelExposedConfigT,
   type LevelStateT,
   type PostGameInstanceStartResponseT,
   type PostGameInstanceSubmitGuessResponseT,
-  type PublicGameConfigT
+  type PublicGameConfigT,
+  type PublicGameInstanceT,
+  type PublicLevelConfigT
 } from '@ig/games-engine-models';
 import type { LetterAnalysisT } from '@ig/games-wordle-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
@@ -22,11 +23,13 @@ import {
   devJoinedGameConfigs
 } from './DevMocks';
 
+const tmpCorrectGuess = 'WORLD';
+
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
-  const gameInfo: PublicGameConfigT | undefined =
+  const publicGameConfig: PublicGameConfigT | undefined =
     devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (gameInfo === undefined) {
+  if (publicGameConfig === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -37,14 +40,14 @@ const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  devJoinedGameConfigs.push(gameInfo);
+  devJoinedGameConfigs.push(publicGameConfig);
 }
 
 const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
-  const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined =
+  const publicGameInstance: PublicGameInstanceT | undefined =
     devAllGameInstanceExposedInfos.find(e => e.invitationCode === invitationCode);
 
-  if (gameInstanceExposedInfo === undefined) {
+  if (publicGameInstance === undefined) {
     throw { status: 500, apiErrCode: 'gamesApiError:invalidInvitationCode' };
   }
 
@@ -53,18 +56,18 @@ const handleAcceptInvite = async (invitationCode: string): Promise<string> => {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  if (gameInstanceExposedInfo.playerExposedInfos.find(e => e.playerAccountId === curAccountId)) {
+  if (publicGameInstance.publicPlayerInfos.find(e => e.playerAccountId === curAccountId)) {
     throw { status: 500, apiErrCode: 'gamesApiError:gameInstanceAlreadyJoined' };
   }
 
-  gameInstanceExposedInfo.playerExposedInfos.push({
+  publicGameInstance.publicPlayerInfos.push({
     playerAccountId: curAccountId,
     playerNickname: 'Jim Curry',
     playerRole: 'player',
     playerStatus: 'active',
   });
 
-  return gameInstanceExposedInfo.gameInstanceId;
+  return publicGameInstance.gameInstanceId;
 }
 
 const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT> => {
@@ -82,15 +85,16 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const levelConfigTolevelState = (levelConfig: LevelExposedConfigT): LevelStateT | null => {
+  const levelConfigTolevelState = (levelConfig: PublicLevelConfigT): LevelStateT | null => {
     if (levelConfig.kind === 'wordle') {
       const levelState: LevelStateT = {
         levelStatus: 'notStarted',
         kind: 'wordle',
-        wordleExposedConfig: levelConfig.wordleExposedConfig,
-        wordleState: {
+        publicWordleConfig: levelConfig.publicWordleConfig,
+        publicWordleState: {
           guessDatas: [],
         },
+        wordleSolution: tmpCorrectGuess,
       }
 
       return levelState;
@@ -99,19 +103,19 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     }
   }
 
-  const levelStates: LevelStateT[] = joinedPublicGameConfig.levelExposedConfigs
+  const levelStates: LevelStateT[] = joinedPublicGameConfig.publicLevelConfigs
     .map(e => levelConfigTolevelState(e))
     .filter(e => e !== null);
 
-  const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
+  const publicGameInstance: PublicGameInstanceT = {
     gameInstanceId: gameInstanceId,
     invitationCode: 'invt-code-' + gameInstanceId,
-    gameInfo: joinedPublicGameConfig,
+    publicGameConfig: joinedPublicGameConfig,
     gameState: {
       gameStatus: 'notStarted',
       levelStates: levelStates,
     },
-    playerExposedInfos: [{
+    publicPlayerInfos: [{
       playerAccountId: curAccountId,
       playerNickname: 'Jim Curry',
       playerRole: 'admin',
@@ -119,28 +123,28 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     }],
   }
 
-  devAllGameInstanceExposedInfos.push(gameInstanceExposedInfo);
+  devAllGameInstanceExposedInfos.push(publicGameInstance);
 
   return gameInstanceId;
 }
 
 const getGameInstanceIds = async (gameConfigId: GameConfigIdT): Promise<GameInstanceIdT[]> => {
-  return devAllGameInstanceExposedInfos.filter(e => e.gameInfo.gameConfigId === gameConfigId)
+  return devAllGameInstanceExposedInfos.filter(e => e.publicGameConfig.gameConfigId === gameConfigId)
     .map(e => e.gameInstanceId);
 }
 
 const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
-  const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
+  const publicGameInstance: PublicGameInstanceT | undefined = devAllGameInstanceExposedInfos.find(e =>
     e.gameInstanceId === gameInstanceId
   );
-  if (gameInstanceExposedInfo === undefined) {
+  if (publicGameInstance === undefined) {
     throw new Error('Game instance not found');
   }
-  if (gameInstanceExposedInfo.gameState.gameStatus !== 'notStarted') {
+  if (publicGameInstance.gameState.gameStatus !== 'notStarted') {
     throw new Error('Game already started');
   }
 
-  const gameState = {...gameInstanceExposedInfo.gameState};
+  const gameState = {...publicGameInstance.gameState};
   const newLevelStates: LevelStateT[] = gameState.levelStates.map((state, idx) =>
     (idx === 0) ? {
       ...state,
@@ -149,8 +153,8 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
     } : state
   );
 
-  gameInstanceExposedInfo.gameState = {
-    ...gameInstanceExposedInfo.gameState,
+  publicGameInstance.gameState = {
+    ...publicGameInstance.gameState,
     gameStatus: 'inProcess',
     startTimeTs: Date.now(),
     levelStates: newLevelStates,
@@ -158,23 +162,23 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
 }
 
 const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string): boolean => {
-  const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
+  const publicGameInstance: PublicGameInstanceT | undefined = devAllGameInstanceExposedInfos.find(e =>
     e.gameInstanceId === gameInstanceId
   );
-  if (gameInstanceExposedInfo === undefined) {
+  if (publicGameInstance === undefined) {
     throw new Error('Game instance not found');
   }
-  if (gameInstanceExposedInfo.gameState.gameStatus !== 'inProcess') {
+  if (publicGameInstance.gameState.gameStatus !== 'inProcess') {
     throw new Error('Game not in process');
   }
-  const gameState = {...gameInstanceExposedInfo.gameState};
-  const tmpCorrectGuess = 'WORLD';
+  const gameState = {...publicGameInstance.gameState};
   const lowercaseSolution = tmpCorrectGuess.toLowerCase();
   const lowercaseGuess = guess.toLowerCase();
   const isCorrectGuess = lowercaseGuess === lowercaseSolution;
   const isLastLevel = levelIdx === gameState.levelStates.length - 1;
-  const isLastGuess = gameState.levelStates[levelIdx].wordleState.guessDatas.length >=
-    gameState.levelStates[levelIdx].wordleExposedConfig.allowedGuessesNum - 1;
+  const isLastGuess = gameState.levelStates[levelIdx].kind !== 'wordle' ? false :
+    gameState.levelStates[levelIdx].publicWordleState.guessDatas.length >=
+      gameState.levelStates[levelIdx].publicWordleConfig.allowedGuessesNum - 1;
 
   const letterAnalyses: LetterAnalysisT[] = [];
   for (let i = 0; i < lowercaseSolution.length; i++) {
@@ -194,18 +198,18 @@ const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, gu
       ...state,
       levelStatus: isCorrectGuess ? 'solved' : (isLastGuess ? 'failed' : 'levelInProcess'),
       solvedTimeTs: Date.now(),
-      wordleState: {
-        ...state.wordleState,
-        guessDatas: [...state.wordleState.guessDatas, {
+      publicWordleState: {
+        ...state.publicWordleState,
+        guessDatas: [...state.publicWordleState.guessDatas, {
           guess: guess,
           letterAnalyses: letterAnalyses,
         }],
-        correctSolution: isLastGuess ? tmpCorrectGuess : undefined,
-      }
+        correctGuess: isLastGuess ? tmpCorrectGuess : undefined,
+      },
     } : state
   );
 
-  gameInstanceExposedInfo.gameState = {
+  publicGameInstance.gameState = {
     ...gameState,
     gameStatus: (isLastLevel && (isCorrectGuess || isLastGuess)) ? 'ended' : 'inProcess',
     levelStates: newLevelStates,
@@ -271,14 +275,14 @@ export class ApiServerMock implements HttpAdapter {
       return response as TResponse;
     } else if (options.url.startsWith('/games/game-instance/')) {
       const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
-      const gameInstanceExposedInfo: GameInstanceExposedInfoT | undefined = devAllGameInstanceExposedInfos.find(e =>
+      const publicGameInstance: PublicGameInstanceT | undefined = devAllGameInstanceExposedInfos.find(e =>
         e.gameInstanceId === gameInstanceId
       );
-      if (gameInstanceExposedInfo === undefined) {
+      if (publicGameInstance === undefined) {
         throw new Error('Game instance not found');
       }
       const response: GetGameInstanceResponseT = {
-        gameInstanceExposedInfo: {...gameInstanceExposedInfo}, // clone this array so it is not frozen
+        publicGameInstance: {...publicGameInstance}, // clone this array so it is not frozen
       }
       return response as TResponse;
     } else {

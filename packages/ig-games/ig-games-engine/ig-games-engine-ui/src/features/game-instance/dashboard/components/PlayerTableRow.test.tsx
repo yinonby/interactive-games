@@ -1,6 +1,6 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import type { PlayerExposedInfoT } from '@ig/games-engine-models';
+import type { PublicPlayerInfoT } from '@ig/games-engine-models';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { PlayerTableRow } from './PlayerTableRow';
@@ -16,7 +16,7 @@ jest.mock("./PlayersTableView", () => {
 
 describe("PlayerTableRow", () => {
   it("renders row and cells, withAdminButtons = false", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -25,7 +25,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId, getAllByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={false}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons={false}
     />);
 
@@ -37,7 +37,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders an extra empty cell when withAdminButtons = true, cur user is admin, and the row is for the cur user as a player", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -46,7 +46,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={true}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons
     />);
 
@@ -54,7 +54,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders an extra cell for button when withAdminButtons = true, cur user is admin, but the player is another player", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -63,7 +63,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons
     />);
 
@@ -71,7 +71,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders gray text color when player is invited", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -80,7 +80,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -88,7 +88,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders no text color when player is active", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -97,7 +97,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -105,7 +105,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders red text color when player is suspended", () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -114,7 +114,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
     />);
 
     const statusText = getByTestId("status-text-tid");
@@ -122,7 +122,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders suspend button and handles press", async () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -131,7 +131,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId, getByText } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons
     />);
 
@@ -146,7 +146,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders activate button and handles press", async () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -155,7 +155,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId, getByText } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons
     />);
 
@@ -170,7 +170,7 @@ describe("PlayerTableRow", () => {
   });
 
   it("renders uninvite button and handles press", async () => {
-    const otherPlayerExposedInfo: PlayerExposedInfoT = {
+    const otherPublicPlayerInfo: PublicPlayerInfoT = {
       playerAccountId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
@@ -179,7 +179,7 @@ describe("PlayerTableRow", () => {
     const { getByTestId, getByText } = render(<PlayerTableRow
       isCurUserAdminPlayer={true}
       isCurUser={false}
-      playerExposedInfo={otherPlayerExposedInfo}
+      publicPlayerInfo={otherPublicPlayerInfo}
       withAdminButtons
     />);
 

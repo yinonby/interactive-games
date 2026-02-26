@@ -11,6 +11,11 @@ describe('GraphqlRouter', () => {
       // fake table adapter methods if needed
       getAll: vi.fn(),
     }),
+
+    getGameInstancesTableAdapter: vi.fn().mockReturnValue({
+      // fake table adapter methods if needed
+      getAll: vi.fn(),
+    }),
   };
 
   let app: express.Express;

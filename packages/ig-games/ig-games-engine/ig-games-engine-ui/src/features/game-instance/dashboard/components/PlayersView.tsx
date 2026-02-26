@@ -1,6 +1,6 @@
 
 import { useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { PublicGameInstanceT } from '@ig/games-engine-models';
 import { RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -8,14 +8,14 @@ import type { TestableComponentT } from '../../../../types/ComponentTypes';
 import { PlayersTableView } from './PlayersTableView';
 
 export type PlayersViewPropsT = TestableComponentT & {
-  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+  publicGameInstance: PublicGameInstanceT,
   withAdminButtons?: boolean,
 };
 
 export const PlayersView: FC<PlayersViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo, withAdminButtons } = props;
+  const { publicGameInstance, withAdminButtons } = props;
   const { t } = useAppLocalization();
-  const { playerExposedInfos } = gameInstanceExposedInfo;
+  const { publicPlayerInfos } = publicGameInstance;
   const genericStyles = useGenericStyles();
 
   return (
@@ -24,7 +24,7 @@ export const PlayersView: FC<PlayersViewPropsT> = (props) => {
 
       <PlayersTableView
         testID="players-table-view-tid"
-        playerExposedInfos={playerExposedInfos}
+        publicPlayerInfos={publicPlayerInfos}
         withAdminButtons={withAdminButtons}
       />
     </View>

@@ -5,10 +5,10 @@ import {
 } from '@ig/app-engine-ui';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type {
-  GameInstanceExposedInfoT,
   GetGameInstanceResponseT,
   PostGameInstanceStartResponseT,
-  PostGameInstanceSubmitGuessResponseT
+  PostGameInstanceSubmitGuessResponseT,
+  PublicGameInstanceT
 } from '@ig/games-engine-models';
 import { buildTestGameState } from '@ig/games-engine-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
@@ -27,12 +27,12 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-let gameInstanceExposedInfoMock1: GameInstanceExposedInfoT;
+let publicGameInstanceMock1: PublicGameInstanceT;
 
 export const server = setupServer(
   // get chat
   http.get(apiUrl + '/games/game-instance/giid-1', () => {
-    return HttpResponse.json({ gameInstanceExposedInfo: gameInstanceExposedInfoMock1 });
+    return HttpResponse.json({ publicGameInstance: publicGameInstanceMock1 });
   }),
 
   http.get(apiUrl + '/games/game-instance/giid-2', () => {
@@ -41,7 +41,7 @@ export const server = setupServer(
 
   // post start game
   http.post(apiUrl + '/games/game-instance/giid-1/start', () => {
-    gameInstanceExposedInfoMock1.gameState.gameStatus = 'inProcess';
+    publicGameInstanceMock1.gameState.gameStatus = 'inProcess';
     const response: PostGameInstanceStartResponseT = {
       status: 'ok',
     };
@@ -86,10 +86,10 @@ describe('GameInstanceRtkApi', () => {
     server.listen();
   });
   beforeEach(() => {
-    gameInstanceExposedInfoMock1 = {
+    publicGameInstanceMock1 = {
       gameInstanceId: 'giid-1',
       gameState: buildTestGameState({ gameStatus: 'notStarted' }),
-    } as GameInstanceExposedInfoT;
+    } as PublicGameInstanceT;
   })
   afterEach(() => {
     server.resetHandlers();
@@ -108,7 +108,7 @@ describe('GameInstanceRtkApi', () => {
       }
 
       const getGameInstanceResponse: GetGameInstanceResponseT = result.data;
-      expect(getGameInstanceResponse.gameInstanceExposedInfo.gameInstanceId).toEqual('giid-1');
+      expect(getGameInstanceResponse.publicGameInstance.gameInstanceId).toEqual('giid-1');
     });
 
     it('does not fetch game instance when game instance id is invalid', async () => {
@@ -135,7 +135,7 @@ describe('GameInstanceRtkApi', () => {
         throw new Error('result1.data is undefined');
       }
       const getGameInstanceResponse1: GetGameInstanceResponseT = result1.data;
-      expect(getGameInstanceResponse1.gameInstanceExposedInfo.gameState.gameStatus).toEqual('notStarted');
+      expect(getGameInstanceResponse1.publicGameInstance.gameState.gameStatus).toEqual('notStarted');
 
       // start game
       const result2 = await store.dispatch(
@@ -153,7 +153,7 @@ describe('GameInstanceRtkApi', () => {
         throw new Error('result3.data is undefined');
       }
       const getGameInstanceResponse3: GetGameInstanceResponseT = result3.data;
-      expect(getGameInstanceResponse3.gameInstanceExposedInfo.gameState.gameStatus).toEqual('inProcess');
+      expect(getGameInstanceResponse3.publicGameInstance.gameState.gameStatus).toEqual('inProcess');
 
       // return
       const response: PostGameInstanceStartResponseT = result2.data;

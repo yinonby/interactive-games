@@ -64,11 +64,11 @@ describe('GameConfigLogic', () => {
   });
 
   it('createGameConfig calls table adapter with correct argument', async () => {
-    const newGameInfoNoId: GameConfigNoIdT = buildGameConfigNoIdMock();
+    const newGameConfigNoId: GameConfigNoIdT = buildGameConfigNoIdMock();
 
-    await logic.createGameConfig('GCID1', newGameInfoNoId);
+    await logic.createGameConfig('GCID1', newGameConfigNoId);
 
-    expect(mockTableAdapter.createGameConfig).toHaveBeenCalledWith('GCID1', newGameInfoNoId);
+    expect(mockTableAdapter.createGameConfig).toHaveBeenCalledWith('GCID1', newGameConfigNoId);
   });
 
   it('updateGameConfig calls table adapter with correct argument', async () => {

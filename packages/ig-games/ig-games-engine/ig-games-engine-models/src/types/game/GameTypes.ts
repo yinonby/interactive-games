@@ -1,6 +1,6 @@
 
 import type { DurationInfoT, ImageInfoT, PriceInfoT } from './CommonTypes';
-import type { LevelExposedConfigT } from './LevelTypes';
+import type { PublicLevelConfigT } from './LevelTypes';
 
 export type GameConfigIdT = string;
 
@@ -17,17 +17,11 @@ export type MinimalPublicGameConfigT = {
 export type PublicGameConfigT = MinimalPublicGameConfigT & {
   extraTimeMinutes: number,
   extraTimeLimitDurationInfo: DurationInfoT,
-  levelExposedConfigs: LevelExposedConfigT[],
+  publicLevelConfigs: PublicLevelConfigT[],
 }
 
 // internal structures exposed for admin clients
 
-export type GameConfigT = PublicGameConfigT & {
-  fixedGameSolution?: FixedGameSolutionT,
-}
+export type GameConfigT = PublicGameConfigT;
 
 export type GameConfigNoIdT = Omit<GameConfigT, 'gameConfigId'>;
-
-export type FixedGameSolutionT = {
-  kind: 'textSolution',
-};

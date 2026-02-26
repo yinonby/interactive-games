@@ -16,8 +16,8 @@ export const LevelView: FC<LevelViewPropsT> = (props) => {
   if (levelState.kind === 'wordle') {
     return <WordleView
       testID='WordleView-tid'
-      wordleExposeConfig={levelState.wordleExposedConfig}
-      wordleState={levelState.wordleState}
+      wordleExposeConfig={levelState.publicWordleConfig}
+      publicWordleState={levelState.publicWordleState}
       levelStatus={levelState.levelStatus}
       onSubmitGuess={onSubmitGuess}
     />

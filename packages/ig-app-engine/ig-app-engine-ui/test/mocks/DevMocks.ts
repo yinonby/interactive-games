@@ -1,7 +1,8 @@
 
 import type {
-  GameInstanceExposedInfoT, MinimalPublicGameConfigT,
-  PublicGameConfigT
+  MinimalPublicGameConfigT,
+  PublicGameConfigT,
+  PublicGameInstanceT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
 
@@ -17,7 +18,7 @@ const secretIslandMinimalConfig: PublicGameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const escapeRoomMinimalConfig: PublicGameConfigT = {
@@ -32,7 +33,7 @@ const escapeRoomMinimalConfig: PublicGameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const wordleEnMinimalConfig: PublicGameConfigT = {
@@ -47,9 +48,9 @@ const wordleEnMinimalConfig: PublicGameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [{
+  publicLevelConfigs: [{
     kind: 'wordle',
-    wordleExposedConfig: {
+    publicWordleConfig: {
       wordLength: 5,
       allowedGuessesNum: 6,
       langCode: 'en',
@@ -69,7 +70,7 @@ const wordleEsMinimalConfig: PublicGameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 const wordleFrMinimalConfig: PublicGameConfigT = {
@@ -84,7 +85,7 @@ const wordleFrMinimalConfig: PublicGameConfigT = {
   // for full config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 }
 
 export const devAvailableMinimalGameConfigs: MinimalPublicGameConfigT[] = [
@@ -105,4 +106,4 @@ export const devAllGameConfigs: PublicGameConfigT[] = [
 
 export const devJoinedGameConfigs: PublicGameConfigT[] = [];
 
-export const devAllGameInstanceExposedInfos: GameInstanceExposedInfoT[] = []
+export const devAllGameInstanceExposedInfos: PublicGameInstanceT[] = []

@@ -1,6 +1,6 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '@ig/games-engine-models';
+import type { PublicGameInstanceT, PublicPlayerInfoT } from '@ig/games-engine-models';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { PlayersView } from './PlayersView';
@@ -16,22 +16,22 @@ jest.mock("./PlayersTableView", () => {
 
 describe("PlayersView", () => {
   it("renders correctly", () => {
-    const playerExposedInfos: PlayerExposedInfoT[] = [{
+    const publicPlayerInfos: PublicPlayerInfoT[] = [{
       playerAccountId: "userIdMock",
       playerRole: "admin",
-    } as PlayerExposedInfoT];
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
-      playerExposedInfos: playerExposedInfos,
-    } as GameInstanceExposedInfoT;
+    } as PublicPlayerInfoT];
+    const publicGameInstance: PublicGameInstanceT = {
+      publicPlayerInfos: publicPlayerInfos,
+    } as PublicGameInstanceT;
 
     // render
-    const { getByTestId, getByText } = render(<PlayersView gameInstanceExposedInfo={gameInstanceExposedInfo} />);
+    const { getByTestId, getByText } = render(<PlayersView publicGameInstance={publicGameInstance} />);
 
     getByTestId("container-tid");
     getByTestId("players-text-tid");
     getByText(buildMockedTranslation("games:players"));
 
     const table = getByTestId("players-table-view-tid");
-    expect(table.props.playerExposedInfos).toBe(playerExposedInfos);
+    expect(table.props.publicPlayerInfos).toBe(publicPlayerInfos);
   });
 });

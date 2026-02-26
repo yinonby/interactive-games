@@ -1,6 +1,8 @@
 
 export * from './src/graphql/game-config/GameConfigGraphqlClientTypes';
 export * from './src/graphql/game-config/GameConfigGraphqlTypeDefs';
+export * from './src/graphql/game-instance/GameInstanceGraphqlClientTypes';
+export * from './src/graphql/game-instance/GameInstanceGraphqlTypeDefs';
 export * from './src/types/api/ApiRequestTypes';
 export * from './src/types/api/WebSocketMsgTypes';
 export * from './src/types/error/GamesErrorTypes';

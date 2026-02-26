@@ -78,7 +78,7 @@ export const getPublicGameConfigsQuery = `
         kind
         durationMs
       }
-      levelExposedConfigs {
+      publicLevelConfigs {
         levelName
       }
     }

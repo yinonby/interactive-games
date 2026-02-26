@@ -9,18 +9,23 @@ export const getGameInstanceConversationId = (gameInstanceId: GameInstanceIdT): 
   return 'GI-' + gameInstanceId;
 }
 
-export type GameInstanceExposedInfoT = {
+export type PublicGameInstanceT = {
   gameInstanceId: GameInstanceIdT,
   invitationCode: string,
-  gameInfo: PublicGameConfigT,
+  publicGameConfig: PublicGameConfigT,
   gameState: GameStateT,
-  playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
+  publicPlayerInfos: [PublicPlayerInfoT, ...PublicPlayerInfoT[]], // at least one player
 }
+
+export type PublicGameInstanceWithoutIdT = Omit<PublicGameInstanceT, 'gameInstanceId'>;
+
+export type GameInstanceT = PublicGameInstanceT;
+export type GameInstanceWithoutIdT = Omit<GameInstanceT, 'gameInstanceId'>;
 
 export type PlayerRoleT = 'admin' | 'player';
 export type PlayerStatusT = 'invited' | 'active' | 'suspended';
 
-export type PlayerExposedInfoT = {
+export type PublicPlayerInfoT = {
   playerAccountId: AccountIdT,
   playerNickname: string,
   playerRole: PlayerRoleT,
