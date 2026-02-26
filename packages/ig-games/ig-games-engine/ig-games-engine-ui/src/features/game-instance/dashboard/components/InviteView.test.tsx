@@ -1,9 +1,9 @@
 
 import { useAppConfig } from '@ig/app-engine-ui';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import type { GameConfigIdT, GameInstanceExposedInfoT } from '@ig/games-engine-models';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
-import { buildMockedTranslation } from '../../../../../test/mocks/EngineAppUiMocks';
 import { InviteView } from './InviteView';
 
 // tests

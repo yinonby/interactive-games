@@ -1,19 +1,15 @@
 
 import {
-  type ChatMessageT,
-  type ConversationIdT,
-  type GameConfigIdT, type GameInfoT,
+  type GameConfigIdT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
-  type GetChatResponseT,
   type GetGameInstanceResponseT,
   type GetGamesUserConfigResponseT,
   type LevelExposedConfigT,
   type LevelStateT,
-  type PostChatMessageParamsT,
-  type PostChatMessageResponseT,
   type PostGameInstanceStartResponseT,
-  type PostGameInstanceSubmitGuessResponseT
+  type PostGameInstanceSubmitGuessResponseT,
+  type PublicGameConfigT
 } from '@ig/games-engine-models';
 import type { LetterAnalysisT } from '@ig/games-wordle-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
@@ -23,22 +19,21 @@ import { useClientLogger } from '../../src/app/providers/useClientLogger';
 import {
   devAllGameConfigs,
   devAllGameInstanceExposedInfos,
-  devChatMessages,
   devJoinedGameConfigs
 } from './DevMocks';
 
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
-  const gameInfo: GameInfoT | undefined =
+  const gameInfo: PublicGameConfigT | undefined =
     devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
   if (gameInfo === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameInfo: GameInfoT | undefined =
+  const joinedPublicGameConfig: PublicGameConfigT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameInfo !== undefined) {
+  if (joinedPublicGameConfig !== undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -80,10 +75,10 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameInfo: GameInfoT | undefined =
+  const joinedPublicGameConfig: PublicGameConfigT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameInfo === undefined) {
+  if (joinedPublicGameConfig === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -104,14 +99,14 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     }
   }
 
-  const levelStates: LevelStateT[] = joinedGameInfo.levelExposedConfigs
+  const levelStates: LevelStateT[] = joinedPublicGameConfig.levelExposedConfigs
     .map(e => levelConfigTolevelState(e))
     .filter(e => e !== null);
 
   const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
     gameInstanceId: gameInstanceId,
     invitationCode: 'invt-code-' + gameInstanceId,
-    gameInfo: joinedGameInfo,
+    gameInfo: joinedPublicGameConfig,
     gameState: {
       gameStatus: 'notStarted',
       levelStates: levelStates,
@@ -160,10 +155,6 @@ const handleStartGame = (gameInstanceId: GameInstanceIdT): void => {
     startTimeTs: Date.now(),
     levelStates: newLevelStates,
   };
-}
-
-const getChatMessages = (conversationId: ConversationIdT): ChatMessageT[] => {
-  return devChatMessages.filter(e => e.conversationId === conversationId).sort((e1, e2) => e1.sentTs - e2.sentTs);
 }
 
 const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, guess: string): boolean => {
@@ -223,8 +214,6 @@ const handleSubmitGuess = (gameInstanceId: GameInstanceIdT, levelIdx: number, gu
   return isCorrectGuess;
 }
 
-let nextPaginationId = 1;
-
 export class ApiServerMock implements HttpAdapter {
   constructor(
     private apiUrl: string,
@@ -240,7 +229,7 @@ export class ApiServerMock implements HttpAdapter {
 
     if (options.url === '/games/user-config') {
       const gamesUserConfig: GamesUserConfigT = {
-        joinedGameInfos: [...devJoinedGameConfigs], // clone this array so it is not frozen
+        joinedPublicGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
       }
       const response: GetGamesUserConfigResponseT = {
         gamesUserConfig: gamesUserConfig,
@@ -290,31 +279,6 @@ export class ApiServerMock implements HttpAdapter {
       }
       const response: GetGameInstanceResponseT = {
         gameInstanceExposedInfo: {...gameInstanceExposedInfo}, // clone this array so it is not frozen
-      }
-      return response as TResponse;
-    } else if (options.url.startsWith('/games/chat/') && options.url.endsWith('message')) {
-      const data: PostChatMessageParamsT = options.data as unknown as PostChatMessageParamsT;
-
-      const chatMessage: ChatMessageT = {
-        conversationKind: data.conversationKind,
-        conversationId: data.conversationId,
-        chatMsgId: Date.now().toString(),
-        sentTs: Date.now(),
-        senderAccountId: data.senderAccountId,
-        msgText: data.chatMessage,
-        paginationId: nextPaginationId++,
-      }
-      devChatMessages.push(chatMessage)
-
-      const response: PostChatMessageResponseT = {
-        chatMsgId: chatMessage.chatMsgId,
-      }
-      return response as TResponse;
-    } else if (options.url.startsWith('/games/chat/')) {
-      const gameInstanceId: GameInstanceIdT = options.url.split('/')[3] as GameInstanceIdT;
-
-      const response: GetChatResponseT = {
-        chatMessages: getChatMessages(gameInstanceId as ConversationIdT),
       }
       return response as TResponse;
     } else {

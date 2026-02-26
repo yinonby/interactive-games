@@ -1,6 +1,6 @@
 
 import { useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { MinimalGameInfoT } from '@ig/games-engine-models';
+import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';
@@ -9,10 +9,10 @@ import { useGamesUserConfigModel } from '../../../domains/user-config/model/rtk/
 import { JoinableGameCardView } from './JoinableGameCardView';
 
 const getNonJoinedMinimalGameConfigs = (
-  availableMinimalGameInfos: MinimalGameInfoT[],
-  joinedGameInfos: MinimalGameInfoT[],
-): MinimalGameInfoT[] => {
-  return availableMinimalGameInfos.filter(e => !joinedGameInfos
+  availableMinimalPublicGameConfigs: MinimalPublicGameConfigT[],
+  joinedPublicGameConfigs: MinimalPublicGameConfigT[],
+): MinimalPublicGameConfigT[] => {
+  return availableMinimalPublicGameConfigs.filter(e => !joinedPublicGameConfigs
     .find(e2 => e2.gameConfigId === e.gameConfigId));
 };
 
@@ -52,8 +52,8 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
   }
 
   const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(
-    gamesConfigModel.minimalGameInfos,
-    gamesUserConfigModel.gamesUserConfig.joinedGameInfos);
+    gamesConfigModel.minimalPublicGameConfigs,
+    gamesUserConfigModel.gamesUserConfig.joinedPublicGameConfigs);
 
   return (
     <View style={genericStyles.spacing}>
@@ -73,7 +73,7 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
         <RnuiMasonryGrid testID="grid-tid" itemFadeInDurationMsOptions={[200, 190, 180, 170, 160, 150]}>
           {nonJoinedMinimalGameConfigs.map((e, index) => (
             <RnuiGridItem testID="grid-item-tid" key={index} xs={12} sm={6} md={4} lg={3} xl={2} >
-              <JoinableGameCardView testID="game-card-view-tid" minimalGameInfo={e} />
+              <JoinableGameCardView testID="game-card-view-tid" minimalPublicGameConfig={e} />
             </RnuiGridItem>
           ))}
         </RnuiMasonryGrid>

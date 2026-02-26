@@ -28,6 +28,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@test/*": ["test/*"],
+      "@ig/app-engine-ui/test-utils": ["../../../ig-app-engine/ig-app-engine-ui/test/test-index.ts"],
       "@ig/games-engine-models/test-utils": ["../ig-games-engine-models/test/test-index.ts"]
     }
   }

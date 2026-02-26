@@ -1,6 +1,6 @@
 
 import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { MinimalGameInfoT } from '@ig/games-engine-models';
+import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
 import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTable, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
@@ -10,13 +10,13 @@ import {
 } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { GameImageCard } from '../../common/game-info/GameImageCard';
-import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
+import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
 
 export type JoinableGameCardViewPropsT = TestableComponentT & {
-  minimalGameInfo: MinimalGameInfoT,
+  minimalPublicGameConfig: MinimalPublicGameConfigT,
 };
 
-export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGameInfo }) => {
+export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalPublicGameConfig }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
   const { onPlayGame } = useGamesUserConfigController();
@@ -26,8 +26,8 @@ export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGa
 
   const handlePlayGamePress = async (): Promise<void> => {
     try {
-      await onPlayGame(minimalGameInfo.gameConfigId);
-      const url = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(minimalGameInfo.gameConfigId);
+      await onPlayGame(minimalPublicGameConfig.gameConfigId);
+      const url = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(minimalPublicGameConfig.gameConfigId);
       navigate(url);
     } catch (error: unknown) {
       onUnknownError(error);
@@ -35,14 +35,14 @@ export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalGa
   }
 
   return (
-    <GameImageCard testID='GameImageCard-tid' minimalGameInfo={minimalGameInfo} includeFreeLabel>
+    <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={minimalPublicGameConfig} includeFreeLabel>
       <View style={genericStyles.spacing}>
         <RnuiText variant="titleSmall">
-          {minimalGameInfo.gameName}
+          {minimalPublicGameConfig.gameName}
         </RnuiText>
 
         <RnuiTable>
-          <MinimalGameInfoTableRows testID='MinimalGameInfoTableRows-tid' minimalGameInfo={minimalGameInfo} />
+          <MinimalPublicGameConfigTableRows testID='MinimalPublicGameConfigTableRows-tid' minimalPublicGameConfig={minimalPublicGameConfig} />
         </RnuiTable>
 
         <View style={{ flexDirection: "row" }}>

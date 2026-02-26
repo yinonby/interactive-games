@@ -60,7 +60,7 @@ describe('GamesUserConfigModel', () => {
 
   it('returns data', () => {
     const gamesUserConfig: GamesUserConfigT = {
-      joinedGameInfos: [],
+      joinedPublicGameConfigs: [],
     }
 
     mockedUseGetUserConfigQuery.mockReturnValue({

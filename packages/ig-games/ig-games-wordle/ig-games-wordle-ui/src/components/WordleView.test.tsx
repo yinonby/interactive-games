@@ -1,6 +1,6 @@
 
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { __rnuiMocks } from '@ig/rnui';
-import { buildMockedTranslation } from '@test/mocks/EngineAppUiMocks';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { WordleView, type WordleViewPropsT } from './WordleView';

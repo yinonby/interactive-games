@@ -1,9 +1,9 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { GamesSummaryView } from './GamesSummaryView';
 
@@ -65,7 +65,7 @@ describe('GamesSummaryView', () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameInfos: [],
+          joinedPublicGameConfigs: [],
         }
       },
     });
@@ -85,9 +85,9 @@ describe('GamesSummaryView', () => {
       isError: false,
       data:  {
         gamesUserConfig: {
-          joinedGameInfos: [
-            buildTestGameInfo({}),
-            buildTestGameInfo({}),
+          joinedPublicGameConfigs: [
+            buildPublicGameConfigMock({}),
+            buildPublicGameConfigMock({}),
           ],
         }
       },

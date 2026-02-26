@@ -1,7 +1,7 @@
 
 import type { AppImageAssetT } from '@ig/app-engine-models';
 import { __engineAppUiMocks, type AppConfigContextT } from '@ig/app-engine-ui';
-import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildMinimalPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import type { RnuiImagePropsT, RnuiImageSourceT } from '@ig/rnui';
 import { render } from '@testing-library/react-native';
 import React from 'react';
@@ -14,7 +14,7 @@ describe('GameImageCard', () => {
   const {
     useAppConfigMock,
   } = __engineAppUiMocks;
-  const getMinimalGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, 'getMinimalGameConfigImageProps');
+  const getGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, 'getGameConfigImageProps');
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -28,26 +28,26 @@ describe('GameImageCard', () => {
     const includeFreeLabel = false;
 
     // setup mocks
-    getMinimalGameConfigImagePropsSpy.mockReturnValue({ imageSource: '123' });
+    getGameConfigImagePropsSpy.mockReturnValue({ imageSource: '123' });
     useAppConfigMock.mockReturnValue({
       imagesSourceMap: imagesSourceMap,
     } as AppConfigContextT)
 
     // render
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       gameConfigId: 'ABC',
     });
 
     const { getByTestId } = render(
       <GameImageCard
-        minimalGameInfo={minimalGameInfo}
+        minimalPublicGameConfig={minimalPublicGameConfig}
         includeFreeLabel={includeFreeLabel}
       />
     );
 
     // verify calls
-    expect(getMinimalGameConfigImagePropsSpy)
-      .toHaveBeenCalledWith(minimalGameInfo, imagesSourceMap, includeFreeLabel);
+    expect(getGameConfigImagePropsSpy)
+      .toHaveBeenCalledWith(minimalPublicGameConfig, imagesSourceMap, includeFreeLabel);
 
     // verify components
     const card = getByTestId('RnuiCard-tid');

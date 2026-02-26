@@ -1,7 +1,7 @@
 
 import { ApolloServer } from '@apollo/server';
 import type { GameConfigsTableAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
-import { buildFullTestGameConfig, buildFullTestGameInfoNoId } from '@ig/games-engine-models/test-utils';
+import { buildGameConfigMock, buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { createGameConfigSchema } from './GameConfigSchema';
 
 describe('createGameConfigSchema', () => {
@@ -9,9 +9,9 @@ describe('createGameConfigSchema', () => {
     // --- mock table adapter ---
     const mockTableAdapter: Partial<GameConfigsTableAdapter> = {
       getGameConfigs: vi.fn().mockResolvedValue([
-        buildFullTestGameConfig({
-          gameConfigId: 'gc-1',
-          gameInfoNoId: buildFullTestGameInfoNoId({
+        buildPublicGameConfigMock({
+          ...buildGameConfigMock({
+            gameConfigId: 'gc-1',
             kind: 'jointGame',
             gameName: 'Test Game',
             maxDurationInfo: { kind: 'limited', durationMs: 60000 },
@@ -38,10 +38,8 @@ describe('createGameConfigSchema', () => {
     type GetGameConfigsResult = {
       getGameConfigs: {
         gameConfigId: string;
-        gameInfoNoId: {
-          gameName: string;
-          maxParticipants: number;
-        }
+        gameName: string;
+        maxParticipants: number;
       }[];
     };
 
@@ -51,10 +49,8 @@ describe('createGameConfigSchema', () => {
         query {
           getGameConfigs {
             gameConfigId
-            gameInfoNoId {
-              gameName
-              maxParticipants
-            }
+            gameName
+            maxParticipants
           }
         }
       `,
@@ -71,10 +67,8 @@ describe('createGameConfigSchema', () => {
     expect(data.getGameConfigs).toHaveLength(1);
     expect(data.getGameConfigs[0]).toEqual({
       gameConfigId: 'gc-1',
-      gameInfoNoId: {
-        gameName: 'Test Game',
-        maxParticipants: 4,
-      }
+      gameName: 'Test Game',
+      maxParticipants: 4,
     });
 
     // --- ensure logic path was called ---

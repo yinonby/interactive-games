@@ -43,14 +43,14 @@ export const createAppRtkBaseQuery = (): BaseQueryFn<
 
       // --------- GraphQL path ----------
       if (args.kind === 'graphql') {
-        return handleGraphqlRequest({
+        return await handleGraphqlRequest({
           url,
           graphql: args.graphql,
           httpAdapter,
           logger
         });
       } else {
-        return handleDefaultRequest({
+        return await handleDefaultRequest({
           url,
           method: args.method,
           data: args.data,

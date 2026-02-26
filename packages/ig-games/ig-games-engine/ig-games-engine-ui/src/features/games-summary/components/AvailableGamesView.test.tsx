@@ -1,10 +1,10 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from '@ig/app-engine-ui';
-import type { GameInfoT, GamesUserConfigT } from '@ig/games-engine-models';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
+import type { GamesUserConfigT, PublicGameConfigT } from '@ig/games-engine-models';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import * as GamesConfigModel from '../../../domains/games-app/model/rtk/GamesAppModel';
 import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { AvailableGamesView } from './AvailableGamesView';
@@ -65,7 +65,7 @@ describe("AvailableGamesView", () => {
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { minimalGameInfos: [] },
+      data: { minimalPublicGameConfigs: [] },
     });
     useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
@@ -79,20 +79,20 @@ describe("AvailableGamesView", () => {
   });
 
   it('renders "No games are available" when user has joined all available games', () => {
-    const availableMinimalGameInfos = [
-      buildTestGameInfo({ gameConfigId: "g1" }),
-      buildTestGameInfo({ gameConfigId: "g2" }),
+    const availableMinimalPublicGameConfigs = [
+      buildPublicGameConfigMock({ gameConfigId: "g1" }),
+      buildPublicGameConfigMock({ gameConfigId: "g2" }),
     ];
-    const joinedGameInfos: GameInfoT[] = [
-      buildTestGameInfo({ gameConfigId: "g1" }),
-      buildTestGameInfo({ gameConfigId: "g2" }),
+    const joinedPublicGameConfigs: PublicGameConfigT[] = [
+      buildPublicGameConfigMock({ gameConfigId: "g1" }),
+      buildPublicGameConfigMock({ gameConfigId: "g2" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        minimalGameInfos: availableMinimalGameInfos,
+        minimalPublicGameConfigs: availableMinimalPublicGameConfigs,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({
@@ -100,7 +100,7 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameInfos: joinedGameInfos,
+          joinedPublicGameConfigs: joinedPublicGameConfigs,
         }
       }
     });
@@ -113,19 +113,19 @@ describe("AvailableGamesView", () => {
   });
 
   it('renders "Available games:" and grid when there are non-joined games', () => {
-    const availableMinimalGameInfos = [
-      buildTestGameInfo({ gameConfigId: "g1" }),
-      buildTestGameInfo({ gameConfigId: "g2" }),
+    const availableMinimalPublicGameConfigs = [
+      buildPublicGameConfigMock({ gameConfigId: "g1" }),
+      buildPublicGameConfigMock({ gameConfigId: "g2" }),
     ];
-    const joinedGameInfos: GameInfoT[] = [
-      buildTestGameInfo({ gameConfigId: "g1" }),
+    const joinedPublicGameConfigs: PublicGameConfigT[] = [
+      buildPublicGameConfigMock({ gameConfigId: "g1" }),
     ]
 
     useGamesConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        minimalGameInfos: availableMinimalGameInfos,
+        minimalPublicGameConfigs: availableMinimalPublicGameConfigs,
       }
     });
     useGamesUserConfigModelSpy.mockReturnValue({
@@ -133,7 +133,7 @@ describe("AvailableGamesView", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameInfos: joinedGameInfos,
+          joinedPublicGameConfigs: joinedPublicGameConfigs,
         }
       }
     });

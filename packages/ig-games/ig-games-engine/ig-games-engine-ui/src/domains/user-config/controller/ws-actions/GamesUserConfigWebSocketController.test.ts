@@ -1,16 +1,16 @@
 
+import type { AppDispatch } from '@ig/app-engine-ui';
+import type { GamesUserConfigeWebSocketMsgKindT } from '@ig/games-engine-models';
 import { handleGamesUserConfigWebSocketMessage } from './GamesUserConfigWebSocketController';
 
-// 🔹 mock the RTK API util
+// mock the RTK API util
 jest.mock("../../model/rtk/GamesUserConfigRtkApi", () => ({
   gamesUserConfigRtkApiUtil: {
     invalidateTags: jest.fn(),
   },
 }));
 
-// 🔹 import mocked util AFTER jest.mock
-import type { AppDispatch } from '@ig/app-engine-ui';
-import type { GamesUserConfigeWebSocketMsgKindT } from '@ig/games-engine-models';
+// import mocked util AFTER jest.mock
 import { gamesUserConfigRtkApiUtil } from '../../model/rtk/GamesUserConfigRtkApi';
 
 describe("handleGamesUserConfigWebSocketMessage", () => {

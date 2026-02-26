@@ -1,6 +1,6 @@
 
 import { useAppErrorHandling } from '@ig/app-engine-ui';
-import type { GameConfigIdT, GameInfoT } from '@ig/games-engine-models';
+import type { GameConfigIdT, PublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiActivityIndicator, RnuiAppContent } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { useGamesUserConfigModel } from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
@@ -26,8 +26,8 @@ export const GameDashboardViewPageContent: FC<GameDashboardViewPageContentPropsT
     return null;
   }
 
-  const gameInfo: GameInfoT | undefined =
-    gamesUserConfigModelData.gamesUserConfig.joinedGameInfos.find(e => e.gameConfigId === gameConfigId);
+  const gameInfo: PublicGameConfigT | undefined =
+    gamesUserConfigModelData.gamesUserConfig.joinedPublicGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
   if (gameInfo === undefined) {
     return null;
@@ -35,7 +35,7 @@ export const GameDashboardViewPageContent: FC<GameDashboardViewPageContentPropsT
 
   return (
     <RnuiAppContent testID="RnuiAppContent-tid">
-      <GameDashboardView testID="GameDashboardView-tid" joinedGameInfo={gameInfo} />
+      <GameDashboardView testID="GameDashboardView-tid" joinedPublicGameConfig={gameInfo} />
     </RnuiAppContent>
   );
 };

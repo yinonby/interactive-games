@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildMockedTranslation } from '@test/mocks/EngineAppUiMocks';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { OpenGameInstanceButtonLink } from './OpenGameInstanceButtonLink';

@@ -1,13 +1,13 @@
 
 import { useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { useAuth } from '@ig/auth-ui';
-import type { ChatMessageT, GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import { ChatView } from '@ig/chat-ui';
+import { getGameInstanceConversationId, type GameInstanceExposedInfoT } from '@ig/games-engine-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
 import { GameImageCard } from '../../../common/game-info/GameImageCard';
-import { ChatView } from '../../common/ChatView';
 import { GameInstanceConfigSummaryView } from './GameInstanceConfigSummaryView';
 import { InviteView } from './InviteView';
 import { LevelsView } from './LevelsView';
@@ -15,11 +15,10 @@ import { PlayersView } from './PlayersView';
 
 export type GameInstanceViewPropsT = TestableComponentT & {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
-  chatMessages: ChatMessageT[],
 };
 
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo, chatMessages } = props;
+  const { gameInstanceExposedInfo } = props;
   const { playerExposedInfos } = gameInstanceExposedInfo;
   const { curAccountId } = useAuth();
   const gameInfo = gameInstanceExposedInfo.gameInfo;
@@ -48,7 +47,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
 
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
-            <GameImageCard testID='GameImageCard-tid' minimalGameInfo={gameInfo} includeFreeLabel={false}>
+            <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={gameInfo} includeFreeLabel={false}>
               <View style={genericStyles.spacing}>
                 <GameInstanceConfigSummaryView
                   testID="GameInstanceConfigSummaryView-tid"
@@ -79,8 +78,9 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
             <RnuiCard >
               <ChatView
                 testID="ChatView-tid"
-                gameInstanceExposedInfo={gameInstanceExposedInfo}
-                chatMessages={chatMessages}
+                conversationId={getGameInstanceConversationId(gameInstanceExposedInfo.gameInstanceId)}
+                senderId={curAccountId}
+                senderDisplayName={curPlayerExposedInfo.playerNickname}
               />
             </RnuiCard>
           </View>

@@ -1,9 +1,5 @@
 
-import type { AccountIdT } from '@ig/app-engine-models';
 import type {
-  ChatMessageT,
-  ChatMsgIdT,
-  ConversationIdT,
   GameInstanceExposedInfoT,
   GameInstanceIdT
 } from '../game/GameInstanceTypes';
@@ -81,23 +77,4 @@ export type PostGameInstanceSubmitGuessParamsT = {
 
 export type PostGameInstanceSubmitGuessResponseT = {
   isGuessCorrect: boolean,
-}
-
-// chat
-
-// get::games/chat/<conversation-id>
-export type GetChatResponseT = {
-  chatMessages: ChatMessageT[],
-}
-
-export type PostChatMessageParamsT = {
-  conversationKind: 'gameInstanceChat',
-  conversationId: ConversationIdT,
-  senderAccountId: AccountIdT,
-  chatMessage: string,
-}
-
-// post::games/chat/<conversation-id>/msg
-export type PostChatMessageResponseT = {
-  chatMsgId: ChatMsgIdT,
 }
