@@ -17,7 +17,7 @@ export const GameInstanceConfigSummaryView: FC<GameInstanceConfigSummaryViewProp
   const gameInfo = gameInstanceExposedInfo.gameInfo;
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
-  const durationMinStr =  gameInfo.maxDurationInfo.kind === 'limited' ?
+  const durationMinStr = gameInfo.maxDurationInfo.kind === 'limited' ?
     t('common:minutes', { minutes: MS_TO_MIN(gameInfo.maxDurationInfo.durationMs) }) :
     t('common:unlimited');
 

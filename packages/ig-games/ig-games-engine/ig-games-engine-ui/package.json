@@ -24,6 +24,7 @@
     "@ig/client-utils": "*",
     "@ig/app-engine-models": "*",
     "@ig/app-engine-ui": "*",
+    "@ig/chat-ui": "*",
     "@ig/games-engine-models": "*",
     "@ig/games-engine-ui-models": "*",
     "@ig/games-wordle-ui": "*",

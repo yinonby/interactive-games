@@ -4,7 +4,7 @@ import {
   appRtkApiReducerPath, useClientLogger, type AppRtkHttpAdapterGeneratorProvider
 } from '@ig/app-engine-ui';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
-import type { GetMinimalGameInfosResponseT, GetMinimalGameInfosResultT } from '@ig/games-engine-models';
+import type { GetMinimalPublicGameConfigsResponseT, GetMinimalPublicGameConfigsResultT } from '@ig/games-engine-models';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -18,9 +18,9 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-const getMinimalGameConfigsResponse: GetMinimalGameInfosResponseT = {
+const getMinimalGameConfigsResponse: GetMinimalPublicGameConfigsResponseT = {
   data: {
-    minimalGameInfos: [],
+    minimalPublicGameConfigs: [],
   }
 };
 
@@ -58,13 +58,13 @@ describe('GamesConfigRtkApi', () => {
     const store = createTestStore();
 
     const result = await store.dispatch(
-      gamesConfigRtkApiEndpoints.getMinimalGameInfos.initiate()
+      gamesConfigRtkApiEndpoints.getMinimalPublicGameConfigs.initiate()
     );
-    const response: GetMinimalGameInfosResultT | undefined = result.data;
+    const response: GetMinimalPublicGameConfigsResultT | undefined = result.data;
 
     if (response === undefined) {
       throw new Error('result.data is undefined');
     }
-    expect(response.minimalGameInfos).toEqual(getMinimalGameConfigsResponse.data.minimalGameInfos);
+    expect(response.minimalPublicGameConfigs).toEqual(getMinimalGameConfigsResponse.data.minimalPublicGameConfigs);
   });
 });

@@ -1,11 +1,11 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
+import { buildMinimalPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { __puiMocks } from '@ig/platform-ui';
 import { MIN_TO_MS } from '@ig/utils';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GameViewUtils from '../../../utils/GameViewUtils';
@@ -22,12 +22,12 @@ jest.mock('../../../features/common/game-info/GameImageCard', () => {
   };
 });
 
-jest.mock('./MinimalGameInfoTableRows', () => {
+jest.mock('./MinimalPublicGameConfigTableRows', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    MinimalGameInfoTableRows: View,
+    MinimalPublicGameConfigTableRows: View,
   };
 });
 
@@ -39,12 +39,12 @@ describe('JoinableGameCardView', () => {
   const { navigateMock } = __puiMocks;
   const onPlayGameMock = jest.fn();
   const useUserConfigControllerSpy = jest.spyOn(GamesUserConfigController, 'useGamesUserConfigController');
-  const getMinimalGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, 'getMinimalGameConfigImageProps');
+  const getGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, 'getGameConfigImageProps');
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    getMinimalGameConfigImagePropsSpy.mockReturnValue(undefined);
+    getGameConfigImagePropsSpy.mockReturnValue(undefined);
   });
 
   it('renders correctly', async () => {
@@ -56,23 +56,23 @@ describe('JoinableGameCardView', () => {
 
     onPlayGameMock.mockResolvedValue('game-instance-123');
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       gameConfigId: 'gcid-1',
       gameName: 'Test Game',
     });
 
     const { getByText, getByTestId } = render(
       <JoinableGameCardView
-        minimalGameInfo={minimalGameInfo}
+        minimalPublicGameConfig={minimalPublicGameConfig}
       />
     );
 
     const card = getByTestId('GameImageCard-tid');
-    expect(card.props.minimalGameInfo).toEqual(minimalGameInfo);
+    expect(card.props.minimalPublicGameConfig).toEqual(minimalPublicGameConfig);
     expect(card.props.includeFreeLabel).toEqual(true);
 
-    const rows = getByTestId('MinimalGameInfoTableRows-tid');
-    expect(rows.props.minimalGameInfo).toEqual(minimalGameInfo);
+    const rows = getByTestId('MinimalPublicGameConfigTableRows-tid');
+    expect(rows.props.minimalPublicGameConfig).toEqual(minimalPublicGameConfig);
 
     getByText(buildMockedTranslation('games:play'));
   });
@@ -89,7 +89,7 @@ describe('JoinableGameCardView', () => {
 
     const { getByTestId } = render(
       <JoinableGameCardView
-        minimalGameInfo={{
+        minimalPublicGameConfig={{
           gameConfigId: 'gcid-1',
           kind: 'jointGame',
           gameName: 'Test Game',
@@ -123,7 +123,7 @@ describe('JoinableGameCardView', () => {
 
     const { getByTestId } = render(
       <JoinableGameCardView
-        minimalGameInfo={{
+        minimalPublicGameConfig={{
           gameConfigId: 'gcid-1',
           kind: 'jointGame',
           gameName: 'Test Game',

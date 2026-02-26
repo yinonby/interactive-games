@@ -31,6 +31,8 @@ export const handleGraphqlRequest = async (args: {
     data: { query: document, variables },
   }) as GraphqlResponseT;
 
+   // GraphQL responses usually have { data, errors }
+
   if (result.errors !== undefined) {
     logger.warn('Graphql query responded with errors', result.errors);
 
@@ -43,5 +45,5 @@ export const handleGraphqlRequest = async (args: {
     }
   }
 
-  return { data: result.data }; // GraphQL responses usually have { data, errors }
+  return { data: result.data };
 }

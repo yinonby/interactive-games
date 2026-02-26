@@ -1,7 +1,7 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import type { GameInfoT } from '@ig/games-engine-models';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import type { PublicGameConfigT } from '@ig/games-engine-models';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
@@ -58,7 +58,7 @@ describe("GameDashboardViewPageContent", () => {
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameInfos: [],
+          joinedPublicGameConfigs: [],
         }
       },
     });
@@ -72,13 +72,13 @@ describe("GameDashboardViewPageContent", () => {
 
   it("renders properly", async () => {
     const gameConfigId = "GID1";
-    const joinedGameInfo: GameInfoT = buildTestGameInfo({ gameConfigId: gameConfigId });
+    const joinedPublicGameConfig: PublicGameConfigT = buildPublicGameConfigMock({ gameConfigId: gameConfigId });
     useGamesUserConfigModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
         gamesUserConfig: {
-          joinedGameInfos: [joinedGameInfo],
+          joinedPublicGameConfigs: [joinedPublicGameConfig],
         }
       },
     });
@@ -90,6 +90,6 @@ describe("GameDashboardViewPageContent", () => {
     getByTestId("RnuiAppContent-tid");
     const view = getByTestId("GameDashboardView-tid");
 
-    expect(view.props.joinedGameInfo).toEqual(joinedGameInfo);
+    expect(view.props.joinedPublicGameConfig).toEqual(joinedPublicGameConfig);
   });
 });

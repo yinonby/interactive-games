@@ -1,27 +1,27 @@
 
 import { useAppConfig, useAppLocalization, type GamesUiUrlPathsAdapter } from '@ig/app-engine-ui';
-import { type GameInfoT } from '@ig/games-engine-models';
+import { type PublicGameConfigT } from '@ig/games-engine-models';
 import { PlatformUiLink } from '@ig/platform-ui';
 import { RnuiButton, RnuiTableCell, RnuiTableRow, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 
 export type GamesTableRowPropsT = TestableComponentT & {
-  joinedGameInfo: GameInfoT,
+  joinedPublicGameConfig: PublicGameConfigT,
 };
 
-export const GamesTableRow: FC<GamesTableRowPropsT> = ({ joinedGameInfo }) => {
+export const GamesTableRow: FC<GamesTableRowPropsT> = ({ joinedPublicGameConfig }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
 
   return (
     <RnuiTableRow testID="RnuiTableRow-tid">
       <RnuiTableCell testID="RnuiTableCell-tid" >
-        <RnuiText testID="gameName-text-tid">{joinedGameInfo.gameName}</RnuiText>
+        <RnuiText testID="gameName-text-tid">{joinedPublicGameConfig.gameName}</RnuiText>
       </RnuiTableCell>
       <RnuiTableCell testID="RnuiTableCell-tid" endContent>
         <GameActionButton
           gamesUiUrlPathsAdapter={gamesUiUrlPathsAdapter}
-          joinedGameInfo={joinedGameInfo}
+          joinedPublicGameConfig={joinedPublicGameConfig}
         />
       </RnuiTableCell>
     </RnuiTableRow>
@@ -30,12 +30,12 @@ export const GamesTableRow: FC<GamesTableRowPropsT> = ({ joinedGameInfo }) => {
 
 type GameActionButtonPropsT = {
   gamesUiUrlPathsAdapter: GamesUiUrlPathsAdapter,
-  joinedGameInfo: GameInfoT,
+  joinedPublicGameConfig: PublicGameConfigT,
 };
 
-const GameActionButton: FC<GameActionButtonPropsT> = ({ gamesUiUrlPathsAdapter, joinedGameInfo }) => {
+const GameActionButton: FC<GameActionButtonPropsT> = ({ gamesUiUrlPathsAdapter, joinedPublicGameConfig }) => {
   const { t } = useAppLocalization();
-  const gameInstanceUrl = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(joinedGameInfo.gameConfigId);
+  const gameInstanceUrl = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(joinedPublicGameConfig.gameConfigId);
 
   return (
     <PlatformUiLink href={gameInstanceUrl} asChild>

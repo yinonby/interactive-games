@@ -2,32 +2,19 @@
 import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '../../src/types/game/GameInstanceTypes';
 import type { GameStateT, LevelStateT } from '../../src/types/game/GameStateTypes';
 import type {
+  GameConfigNoIdT,
   GameConfigT,
-  GameInfoNoIdT,
-  GameInfoT, MinimalGameInfoT,
+  MinimalPublicGameConfigT,
+  PublicGameConfigT
 } from '../../src/types/game/GameTypes';
 
 if (process.env.NODE_ENV !== 'test') {
   throw new Error('TestUtils should only be used in testing');
 }
 
-export const buildTestMinimalGameConfig = (overrides?: Partial<MinimalGameInfoT>) => ({
-  ...overrides
-} as MinimalGameInfoT);
+// game config
 
-export const buildTestGameInfo = (overrides?: Partial<GameInfoT>) => ({
-  ...overrides
-} as GameInfoT);
-
-export const buildTestGameInfoNoId = (overrides?: Partial<GameInfoNoIdT>) => ({
-  ...overrides
-} as GameInfoNoIdT);
-
-export const buildTestGameConfig = (overrides?: Partial<GameConfigT>) => ({
-  ...overrides
-} as GameConfigT);
-
-const baseGameInfo: GameInfoT = {
+const baseMinimalPublicGameConfig: MinimalPublicGameConfigT = {
   gameConfigId: 'gameConfigId1',
   kind: 'jointGame',
   gameName: 'gameName1',
@@ -35,30 +22,51 @@ const baseGameInfo: GameInfoT = {
   gamePriceInfo: { kind: 'free' },
   maxParticipants: 2,
   imageInfo: { kind: 'url', imageUrl: 'imageUrl1' },
+};
+
+const basePublicGameConfig: PublicGameConfigT = {
+  ...baseMinimalPublicGameConfig,
   extraTimeMinutes: 2,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
   levelExposedConfigs: [],
 };
 
-export const buildFullTestGameInfo = (overrides?: Partial<Omit<GameInfoT, 'imageAssetName'>>): GameInfoT => ({
-  ...baseGameInfo,
-  ...overrides,
-});
-
-export const buildFullTestGameInfoNoId = (overrides?: Partial<Omit<GameInfoNoIdT, 'imageAssetName'>>): GameInfoNoIdT => ({
-  ...baseGameInfo,
-  ...overrides,
-});
-
 const baseGameConfig: GameConfigT = {
-  gameConfigId: 'GCID1',
-  gameInfoNoId: baseGameInfo,
-}
+  ...basePublicGameConfig,
+    fixedGameSolution: {
+      kind: 'textSolution',
+    },
+};
 
-export const buildFullTestGameConfig = (overrides?: Partial<GameConfigT>): GameConfigT => ({
+export const buildMinimalPublicGameConfigMock = (
+  overrides?: Partial<MinimalPublicGameConfigT>
+): MinimalPublicGameConfigT => ({
+  ...baseMinimalPublicGameConfig,
+  ...overrides,
+});
+
+export const buildPublicGameConfigMock = (
+  overrides?: Partial<PublicGameConfigT>
+): PublicGameConfigT => ({
+  ...basePublicGameConfig,
+  ...overrides,
+});
+
+export const buildGameConfigMock = (
+  overrides?: Partial<GameConfigT>
+): GameConfigT => ({
   ...baseGameConfig,
   ...overrides,
 });
+
+export const buildGameConfigNoIdMock = (
+  overrides?: Partial<Omit<GameConfigNoIdT, 'imageAssetName'>>
+): GameConfigNoIdT => ({
+  ...baseGameConfig,
+  ...overrides,
+});
+
+// game instance
 
 export const buildTestGameInstanceExposedInfo = (overrides?: Partial<GameInstanceExposedInfoT>) => ({
   ...overrides

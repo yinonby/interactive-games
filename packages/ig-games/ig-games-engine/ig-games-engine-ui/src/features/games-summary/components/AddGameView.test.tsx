@@ -1,9 +1,9 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { __puiMocks } from '@ig/platform-ui';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
-import { buildMockedTranslation } from '../../../../test/mocks/EngineAppUiMocks';
 import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
 import { AddGameView } from './AddGameView';

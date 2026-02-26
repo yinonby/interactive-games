@@ -1,5 +1,5 @@
 
-import type { UserIdT } from '@ig/auth-models';
+import type { UserIdT } from '../../../../ig-auth-plugin/ig-auth-models';
 
 export type AccountIdT = string;
 

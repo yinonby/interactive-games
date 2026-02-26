@@ -1,20 +1,20 @@
 
 import { useAppLocalization } from '@ig/app-engine-ui';
-import { type GameInfoT } from '@ig/games-engine-models';
+import { type PublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { GamesTableRow } from './GamesTableRow';
 
-const compareGames = (mg1: GameInfoT, mg2: GameInfoT): number => {
+const compareGames = (mg1: PublicGameConfigT, mg2: PublicGameConfigT): number => {
   return mg1.gameName.localeCompare(mg2.gameName);
 }
 
 export type GamesTableViewPropsT = {
-  joinedGameInfos: GameInfoT[],
+  joinedPublicGameConfigs: PublicGameConfigT[],
   testID?: string,
 };
 
-export const GamesTableView: FC<GamesTableViewPropsT> = ({ joinedGameInfos }) => {
+export const GamesTableView: FC<GamesTableViewPropsT> = ({ joinedPublicGameConfigs }) => {
   const { t } = useAppLocalization();
 
   return (
@@ -25,8 +25,8 @@ export const GamesTableView: FC<GamesTableViewPropsT> = ({ joinedGameInfos }) =>
         </RnuiTableTitle>
         <RnuiTableTitle testID="RnuiTableTitle-tid" endContent><></></RnuiTableTitle>
       </RnuiTableHeader>
-      {[...joinedGameInfos].sort(compareGames).map((e, index) =>
-        <GamesTableRow testID='GamesTableRow-tid' key={index} joinedGameInfo={e}/>
+      {[...joinedPublicGameConfigs].sort(compareGames).map((e, index) =>
+        <GamesTableRow testID='GamesTableRow-tid' key={index} joinedPublicGameConfig={e}/>
       )}
     </RnuiTable>
   );

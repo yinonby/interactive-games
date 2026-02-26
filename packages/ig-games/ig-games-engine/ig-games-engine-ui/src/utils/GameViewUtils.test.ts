@@ -1,19 +1,19 @@
 
 import type { AppImageAssetT } from '@ig/app-engine-models';
-import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildMinimalPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import type { RnuiImagePropsT, RnuiImageSourceT } from '@ig/rnui';
-import { getMinimalGameConfigImageProps } from './GameViewUtils';
+import { getGameConfigImageProps } from './GameViewUtils';
 
-describe('getMinimalGameConfigImageProps', () => {
+describe('getGameConfigImageProps', () => {
   it('uses imageUrl when imageInfo kind is url', () => {
     const imagesSourceMap = {} as Record<AppImageAssetT, RnuiImageSourceT>;
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       imageInfo: { kind: 'url', imageUrl: 'http://example.com/from-url.png' },
       gamePriceInfo: { kind: 'free' },
     });
 
-    const result: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(minimalGameInfo, imagesSourceMap);
+    const result: RnuiImagePropsT | undefined = getGameConfigImageProps(minimalPublicGameConfig, imagesSourceMap);
 
     if (result === undefined) {
       throw new Error('Unexpected result');
@@ -27,12 +27,12 @@ describe('getMinimalGameConfigImageProps', () => {
       ['treasure-hunt-1']: { uri: 'http://example.com/cover.png' },
     } as Record<AppImageAssetT, RnuiImageSourceT>;
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       imageInfo: { kind: 'asset', imageAssetName: 'treasure-hunt-1' },
       gamePriceInfo: { kind: 'free' },
     });
 
-    const result: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(minimalGameInfo, imagesSourceMap);
+    const result: RnuiImagePropsT | undefined = getGameConfigImageProps(minimalPublicGameConfig, imagesSourceMap);
 
     if (result === undefined) {
       throw new Error('Unexpected result');
@@ -44,12 +44,12 @@ describe('getMinimalGameConfigImageProps', () => {
   it('returns undefined when when imageInfo kind is asset but imageAssetName is not in map', () => {
     const imagesSourceMap = {} as Record<AppImageAssetT, RnuiImageSourceT>;
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       imageInfo: { kind: 'asset', imageAssetName: 'missingAsset' as AppImageAssetT },
       gamePriceInfo: { kind: 'free' },
     })
 
-    const result: RnuiImagePropsT | undefined = getMinimalGameConfigImageProps(minimalGameInfo, imagesSourceMap);
+    const result: RnuiImagePropsT | undefined = getGameConfigImageProps(minimalPublicGameConfig, imagesSourceMap);
 
     expect(result).toBeUndefined();
   });
@@ -57,12 +57,12 @@ describe('getMinimalGameConfigImageProps', () => {
   it('adds free label when gamePriceInfo.kind is free', () => {
     const imagesSourceMap = {} as Record<AppImageAssetT, RnuiImageSourceT>;
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       imageInfo: { kind: 'url', imageUrl: 'http://example.com/from-url.png' },
       gamePriceInfo: { kind: 'free' },
     });
 
-    const result = getMinimalGameConfigImageProps(minimalGameInfo, imagesSourceMap);
+    const result = getGameConfigImageProps(minimalPublicGameConfig, imagesSourceMap);
 
     if (result === undefined || result.imgLabelProps === undefined) {
       throw new Error('Unexpected result');
@@ -75,12 +75,12 @@ describe('getMinimalGameConfigImageProps', () => {
   it('does not add free label when gamePriceInfo.kind is notFree', () => {
     const imagesSourceMap = {} as Record<AppImageAssetT, RnuiImageSourceT>;
 
-    const minimalGameInfo = buildTestMinimalGameConfig({
+    const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       imageInfo: { kind: 'url', imageUrl: 'http://example.com/from-url.png' },
       gamePriceInfo: { kind: 'notFree', priceRate: 1, priceCurrency: 'EUR' },
     });
 
-    const result = getMinimalGameConfigImageProps(minimalGameInfo, imagesSourceMap);
+    const result = getGameConfigImageProps(minimalPublicGameConfig, imagesSourceMap);
 
     if (result === undefined) {
       throw new Error('Unexpected result');

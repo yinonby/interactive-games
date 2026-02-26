@@ -1,18 +1,15 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from '@ig/app-engine-ui';
-import { getGameInstanceConversationId, type ChatMessageT, type ConversationIdT, type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-engine-models';
-import { useGetChatQuery, useGetGameInstanceQuery } from './GameInstanceRtkApi';
+import { type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-engine-models';
+import { useGetGameInstanceQuery } from './GameInstanceRtkApi';
 
 export type GameInstanceModelDataT = {
   gameInstanceExposedInfo: GameInstanceExposedInfoT,
-  chatMessages: ChatMessageT[],
 };
 
 export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
 
 export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInstanceModelT => {
-  const conversationId: ConversationIdT = getGameInstanceConversationId(gameInstanceId);
-
   const {
     isLoading: isGameInstanceLoading,
     isError: isGameInstanceError,
@@ -20,14 +17,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     data: gameInstanceResponse
   } = useGetGameInstanceQuery(gameInstanceId);
 
-  const {
-    isLoading: isChatLoading,
-    isError: isChatError,
-    error: chatError,
-    data: gameInstanceChatResponse
-  } = useGetChatQuery(conversationId);
-
-  if (isGameInstanceLoading || isChatLoading) {
+  if (isGameInstanceLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -38,13 +28,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(gameInstanceError),
     }
-  } else if (isChatError) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: extractAppErrorCodeFromUnknownObject(chatError),
-    }
-  } else if (gameInstanceResponse === undefined || gameInstanceChatResponse === undefined) {
+  } else if (gameInstanceResponse === undefined) {
     return {
       isLoading: false,
       isError: true,
@@ -57,7 +41,6 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     isError: false,
     data: {
       gameInstanceExposedInfo: gameInstanceResponse.gameInstanceExposedInfo,
-      chatMessages: gameInstanceChatResponse.chatMessages,
     }
   }
 }

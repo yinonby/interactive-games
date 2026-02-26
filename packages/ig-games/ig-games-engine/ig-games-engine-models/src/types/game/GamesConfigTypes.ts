@@ -1,6 +1,6 @@
 
-import { type GameInfoT } from './GameTypes';
+import { type PublicGameConfigT } from './GameTypes';
 
 export type GamesUserConfigT = {
-  joinedGameInfos: GameInfoT[],
+  joinedPublicGameConfigs: PublicGameConfigT[],
 }

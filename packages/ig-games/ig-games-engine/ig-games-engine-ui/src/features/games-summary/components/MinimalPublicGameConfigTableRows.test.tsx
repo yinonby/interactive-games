@@ -1,0 +1,51 @@
+
+import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
+import { buildMinimalPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
+import { MIN_TO_MS } from '@ig/utils';
+import { render } from '@testing-library/react-native';
+import React from 'react';
+import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
+
+// Mock PriceView to render easily queryable output
+jest.mock('./PriceView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    PriceView: View,
+  };
+});
+
+describe('MinimalPublicGameConfigTableRows', () => {
+  it('renders correctly', async () => {
+    const { getByText } = render(
+      <MinimalPublicGameConfigTableRows
+        minimalPublicGameConfig={buildMinimalPublicGameConfigMock({
+          maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
+          gamePriceInfo: { kind: 'free' },
+          maxParticipants: 4,
+        })}
+      />
+    );
+
+    getByText(buildMockedTranslation('common:duration'));
+    getByText(buildMockedTranslation('common:minutes'));
+    getByText(buildMockedTranslation('games:maxParticipants'));
+    getByText('4');
+    getByText(buildMockedTranslation('common:price'));
+  });
+
+  it('renders correctly, duration is unlimited', async () => {
+    const { getByText } = render(
+      <MinimalPublicGameConfigTableRows
+        minimalPublicGameConfig={buildMinimalPublicGameConfigMock({
+          maxDurationInfo: { kind: 'unlimited' },
+          gamePriceInfo: { kind: 'free' },
+          maxParticipants: 4,
+        })}
+      />
+    );
+
+    getByText(buildMockedTranslation('common:unlimited'));
+  });
+});

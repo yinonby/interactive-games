@@ -1,16 +1,16 @@
 
 import { useAppErrorHandling } from '@ig/app-engine-ui';
-import type { GameInfoT } from '@ig/games-engine-models';
+import type { PublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiActivityIndicator, RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';
 import { useGameModel } from '../../../domains/game/model/rtk/GameModel';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
-import { GameInfoCardView } from './GameInfoCardView';
+import { GameConfigCardView } from './GameConfigCardView';
 import { GameInstanceSummaryView } from './GameInstanceSummaryView';
 
 export type GameDashboardViewPropsT = TestableComponentT & {
-  joinedGameInfo: GameInfoT,
+  joinedPublicGameConfig: PublicGameConfigT,
 };
 
 export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
@@ -19,7 +19,7 @@ export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
     isError,
     appErrCode,
     data: gamesUserConfigModelData
-  } = useGameModel(props.joinedGameInfo.gameConfigId);
+  } = useGameModel(props.joinedPublicGameConfig.gameConfigId);
   const { onAppError } = useAppErrorHandling();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
     <RnuiGrid>
       <RnuiGridItem key="summary" xs={12} sm={12} md={6} lg={4} xl={4} >
         <View>
-          <GameInfoCardView testID='GameInfoCardView-tid' gameInfo={props.joinedGameInfo} />
+          <GameConfigCardView testID='GameConfigCardView-tid' gameInfo={props.joinedPublicGameConfig} />
         </View>
       </RnuiGridItem>
 

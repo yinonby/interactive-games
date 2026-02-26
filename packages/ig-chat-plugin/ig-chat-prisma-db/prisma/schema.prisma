@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma" // default
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ChatMessage {
+  msgId               String   @id
+  conversationId      String
+  conversationKind    String
+  senderId            String
+  senderDisplayName   String
+  msgContent          String
+  sentTs              Float
+  paginationId        Int      @default(autoincrement())
+
+  @@index([msgId])
+  @@index([conversationId, paginationId])
+}
