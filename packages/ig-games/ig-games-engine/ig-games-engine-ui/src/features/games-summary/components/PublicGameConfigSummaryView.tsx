@@ -1,18 +1,18 @@
 
 import { useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { GameInfoT } from '@ig/games-engine-models';
+import type { PublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiTable, RnuiTableCell, RnuiTableRow, RnuiText } from '@ig/rnui';
 import { MS_TO_MIN } from '@ig/utils';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
-import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
+import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
 
 export type GameInfoSummaryViewPropsT = TestableComponentT & {
-  gameInfo: GameInfoT,
+  gameInfo: PublicGameConfigT,
 };
 
-export const GameInfoSummaryView: FC<GameInfoSummaryViewPropsT> = ({ gameInfo }) => {
+export const PublicGameConfigSummaryView: FC<GameInfoSummaryViewPropsT> = ({ gameInfo }) => {
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
   const extraTimeLimitMinutesStr = gameInfo.extraTimeLimitDurationInfo.kind === 'unlimited' ?
@@ -26,7 +26,7 @@ export const GameInfoSummaryView: FC<GameInfoSummaryViewPropsT> = ({ gameInfo })
       </RnuiText>
 
       <RnuiTable>
-        <MinimalGameInfoTableRows testID='MinimalGameInfoTableRows-tid' minimalGameInfo={gameInfo} />
+        <MinimalPublicGameConfigTableRows testID='MinimalPublicGameConfigTableRows-tid' minimalPublicGameConfig={gameInfo} />
 
         <RnuiTableRow noHorizontalPadding dense>
           <RnuiTableCell>

@@ -1,49 +1,96 @@
 
-import type { GameConfigT, GameInfoNoIdT, GameInfoT } from '../../types/game/GameTypes';
+import type {
+  GameConfigIdT,
+  GameConfigNoIdT,
+  MinimalPublicGameConfigT, PublicGameConfigT
+} from '../../types/game/GameTypes';
 
-// query
+// get minimal public game configs query
+
+export type GetMinimalPublicGameConfigsResultT = {
+  minimalPublicGameConfigs: MinimalPublicGameConfigT[],
+}
+
+export type GetMinimalPublicGameConfigsResponseT = {
+  data: GetMinimalPublicGameConfigsResultT,
+}
+
+export const getMinimalPublicGameConfigsQuery = `
+  query GetMinimalPublicGameConfigs {
+    minimalPublicGameConfigs: getGameConfigs {
+      gameConfigId
+      kind
+      gameName
+      maxParticipants
+      maxDurationInfo {
+        kind
+        durationMs
+      }
+      gamePriceInfo {
+        kind
+        priceRate
+        priceCurrency
+      }
+      maxParticipants
+      imageInfo {
+        kind
+        imageAssetName
+        imageUrl
+      }
+    }
+  }
+`;
+
+// get public game configs query
 
 export type GetGameConfigsResultT = {
-  gameConfigs: GameConfigT[],
+  publicGameConfigs: PublicGameConfigT[],
 }
 
 export type GetGameConfigsResponseT = {
   data: GetGameConfigsResultT,
 }
 
-export const getGameConfigsQuery = `
-  query GetGameConfigs {
-    gameConfigs: getGameConfigs {
+export const getPublicGameConfigsQuery = `
+  query GetPublicGameConfigs {
+    publicGameConfigs: getGameConfigs {
       gameConfigId
-      gameInfoNoId {
+      kind
+      gameName
+      maxParticipants
+      maxDurationInfo {
         kind
-        gameName
-        maxParticipants
-        maxDurationInfo {
-          kind
-          durationMs
-        }
-        gamePriceInfo {
-          kind
-          priceRate
-          priceCurrency
-        }
-        maxParticipants
-        imageInfo {
-          kind
-          imageAssetName
-          imageUrl
-        }
+        durationMs
+      }
+      gamePriceInfo {
+        kind
+        priceRate
+        priceCurrency
+      }
+      maxParticipants
+      imageInfo {
+        kind
+        imageAssetName
+        imageUrl
+      }
+      extraTimeMinutes
+      extraTimeLimitDurationInfo {
+        kind
+        durationMs
+      }
+      levelExposedConfigs {
+        levelName
       }
     }
   }
 `;
 
-// mutation
+// game config update
 
-export type UpdateGameConfigInputT =
-  Pick<GameInfoT, 'gameConfigId'> &
-  Partial<GameInfoNoIdT>;
+export type UpdateGameConfigInputT = {
+  gameConfigId: GameConfigIdT,
+  partialGameConfigNoId: Partial<GameConfigNoIdT>,
+}
 
 export type UpdateGameConfigResultT = {
   status: 'ok';

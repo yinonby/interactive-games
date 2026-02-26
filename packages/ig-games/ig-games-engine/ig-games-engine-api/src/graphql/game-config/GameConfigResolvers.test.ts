@@ -1,17 +1,17 @@
 
 import type { GameConfigLogicAdapter } from '@ig/games-engine-be-models';
-import type { GameConfigT, GameInfoT, UpdateGameConfigInputT } from '@ig/games-engine-models';
-import { buildFullTestGameConfig, buildFullTestGameInfo } from '@ig/games-engine-models/test-utils';
+import type { PublicGameConfigT, UpdateGameConfigInputT } from '@ig/games-engine-models';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { createGameConfigResolvers } from './GameConfigResolvers';
 
 describe('GameConfigResolvers', () => {
   it('getGameConfigs calls adapter and returns data', async () => {
     // Arrange: mock the adapter
-    const mockGameConfig: GameConfigT = buildFullTestGameConfig();
-    const mockGameConfigs: GameConfigT[] = [mockGameConfig];
+    const mockPublicGameConfig: PublicGameConfigT = buildPublicGameConfigMock();
+    const mockPublicGameConfigs: PublicGameConfigT[] = [mockPublicGameConfig];
 
     const mockAdapter: Partial<GameConfigLogicAdapter> = {
-      getGameConfigs: vi.fn().mockResolvedValue(mockGameConfigs),
+      getGameConfigs: vi.fn().mockResolvedValue(mockPublicGameConfigs),
     };
 
     const resolvers = createGameConfigResolvers(mockAdapter as GameConfigLogicAdapter);
@@ -21,45 +21,26 @@ describe('GameConfigResolvers', () => {
 
     // Assert
     expect(mockAdapter.getGameConfigs).toHaveBeenCalled();
-    expect(result).toEqual(mockGameConfigs);
-  });
-
-  it('getGameInfos calls adapter and returns data', async () => {
-    // Arrange: mock the adapter
-    const mockGameInfo: GameInfoT = buildFullTestGameInfo({});
-    const mockGameInfos: GameInfoT[] = [mockGameInfo];
-
-    const mockAdapter: Partial<GameConfigLogicAdapter> = {
-      getGameInfos: vi.fn().mockResolvedValue(mockGameInfos),
-    };
-
-    const resolvers = createGameConfigResolvers(mockAdapter as GameConfigLogicAdapter);
-
-    // Act
-    const result = await resolvers.Query.getGameInfos();
-
-    // Assert
-    expect(mockAdapter.getGameInfos).toHaveBeenCalled();
-    expect(result).toEqual(mockGameInfos);
+    expect(result).toEqual(mockPublicGameConfigs);
   });
 
   it('updateGameConfig calls adapter and returns data', async () => {
     // Arrange: mock the adapter
-    const mockGameInfo: GameInfoT = buildFullTestGameInfo({});
-    const mockGameInfos: GameInfoT[] = [mockGameInfo];
+    const mockPublicGameConfig: PublicGameConfigT = buildPublicGameConfigMock({});
+    const mockPublicGameConfigs: PublicGameConfigT[] = [mockPublicGameConfig];
 
     const mockAdapter: Partial<GameConfigLogicAdapter> = {
-      updateGameConfig: vi.fn().mockResolvedValue(mockGameInfos),
+      updateGameConfig: vi.fn().mockResolvedValue(mockPublicGameConfigs),
     };
 
     const resolvers = createGameConfigResolvers(mockAdapter as GameConfigLogicAdapter);
 
     // Act
-    const input: UpdateGameConfigInputT = { gameConfigId: 'gcid1' };
+    const input: UpdateGameConfigInputT = { gameConfigId: 'gcid1', partialGameConfigNoId: {} };
     const result = await resolvers.Mutation.updateGameConfig({}, { input: input});
 
     // Assert
     expect(mockAdapter.updateGameConfig).toHaveBeenCalledWith(input);
-    expect(result).toEqual(mockGameInfos);
+    expect(result).toEqual(mockPublicGameConfigs);
   });
 });

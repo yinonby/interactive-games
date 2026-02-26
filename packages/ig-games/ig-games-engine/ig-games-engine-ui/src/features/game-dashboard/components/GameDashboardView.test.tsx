@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GameModel from '../../../domains/game/model/rtk/GameModel';
@@ -8,12 +8,12 @@ import { GameDashboardView } from './GameDashboardView';
 
 // mocks
 
-jest.mock('./GameInfoCardView', () => {
+jest.mock('./GameConfigCardView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    GameInfoCardView: View,
+    GameConfigCardView: View,
   };
 });
 
@@ -42,9 +42,9 @@ describe('GameDashboardView', () => {
       isError: false,
     });
 
-    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
+    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
     const { queryByTestId } = render(
-      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
+      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
     );
 
     expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
@@ -57,16 +57,16 @@ describe('GameDashboardView', () => {
       appErrCode: "apiError:server",
     });
 
-    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
+    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
     render(
-      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
+      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
     );
 
     expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders properly', async () => {
-    const joinedGameInfo = buildTestGameInfo({ gameName: 'g1' });
+    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
     useGameModelSpy.mockReturnValue({
       isLoading: false,
       isError: false,
@@ -76,10 +76,10 @@ describe('GameDashboardView', () => {
     });
 
     const { getByTestId, getAllByTestId } = render(
-      <GameDashboardView joinedGameInfo={joinedGameInfo}/>
+      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
     );
 
-    getByTestId('GameInfoCardView-tid');
+    getByTestId('GameConfigCardView-tid');
     expect(getAllByTestId('GameInstanceSummaryView-tid')).toHaveLength(2);
   });
 });

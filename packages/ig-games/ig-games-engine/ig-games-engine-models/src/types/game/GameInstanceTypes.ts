@@ -2,7 +2,7 @@
 import type { AccountIdT } from '@ig/app-engine-models';
 import type { ChatConversationIdT } from '@ig/chat-models';
 import type { GameStateT } from './GameStateTypes';
-import type { GameInfoT } from './GameTypes';
+import type { PublicGameConfigT } from './GameTypes';
 
 export type GameInstanceIdT = string;
 export const getGameInstanceConversationId = (gameInstanceId: GameInstanceIdT): ChatConversationIdT => {
@@ -12,7 +12,7 @@ export const getGameInstanceConversationId = (gameInstanceId: GameInstanceIdT): 
 export type GameInstanceExposedInfoT = {
   gameInstanceId: GameInstanceIdT,
   invitationCode: string,
-  gameInfo: GameInfoT,
+  gameInfo: PublicGameConfigT,
   gameState: GameStateT,
   playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]], // at least one player
 }

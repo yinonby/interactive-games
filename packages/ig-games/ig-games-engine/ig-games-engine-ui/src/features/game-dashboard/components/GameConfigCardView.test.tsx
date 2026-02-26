@@ -1,9 +1,9 @@
 
-import type { GameInfoT } from '@ig/games-engine-models';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import type { PublicGameConfigT } from '@ig/games-engine-models';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { GameInfoCardView } from './GameInfoCardView';
+import { GameConfigCardView } from './GameConfigCardView';
 
 // mocks
 
@@ -25,27 +25,27 @@ jest.mock('./CreateGameInstanceButton', () => {
   };
 });
 
-jest.mock('../../games-summary/components/GameInfoSummaryView', () => {
+jest.mock('../../games-summary/components/PublicGameConfigSummaryView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    GameInfoSummaryView: View,
+    PublicGameConfigSummaryView: View,
   };
 });
 
 // tests
 
-describe('GameInfoCardView', () => {
+describe('GameConfigCardView', () => {
   it('renders properly', async () => {
-    const gameInfo: GameInfoT = buildTestGameInfo({});
+    const gameInfo: PublicGameConfigT = buildPublicGameConfigMock({});
 
     const { getByTestId } = render(
-      <GameInfoCardView gameInfo={gameInfo} />
+      <GameConfigCardView gameInfo={gameInfo} />
     );
 
     getByTestId('GameImageCard-tid');
-    getByTestId('GameInfoSummaryView-tid');
+    getByTestId('PublicGameConfigSummaryView-tid');
     getByTestId('CreateGameInstanceButton-tid');
   });
 });

@@ -1,52 +1,52 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import { buildTestGameInfo } from '@ig/games-engine-models/test-utils';
+import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { GameInfoSummaryView } from './GameInfoSummaryView';
+import { PublicGameConfigSummaryView } from './PublicGameConfigSummaryView';
 
 // mocks
 
-jest.mock('./MinimalGameInfoTableRows', () => {
+jest.mock('./MinimalPublicGameConfigTableRows', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
-    MinimalGameInfoTableRows: View,
+    MinimalPublicGameConfigTableRows: View,
   };
 });
 
-describe('GameInfoSummaryView', () => {
+describe('PublicGameConfigSummaryView', () => {
   it('renders correctly', async () => {
-    const gameInfo = buildTestGameInfo({
+    const gameInfo = buildPublicGameConfigMock({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
     })
 
     const { getByText, getByTestId } = render(
-      <GameInfoSummaryView
+      <PublicGameConfigSummaryView
         gameInfo={gameInfo}
       />
     );
 
     getByText(gameInfo.gameName);
 
-    const rows = getByTestId('MinimalGameInfoTableRows-tid');
-    expect(rows.props.minimalGameInfo).toEqual(gameInfo);
+    const rows = getByTestId('MinimalPublicGameConfigTableRows-tid');
+    expect(rows.props.minimalPublicGameConfig).toEqual(gameInfo);
 
     getByText(buildMockedTranslation('games:extraTimeLimit'));
     getByText(buildMockedTranslation('common:minutes'));
   });
 
   it('renders correctly, extraTimeLimit is unlimited', async () => {
-    const gameInfo = buildTestGameInfo({
+    const gameInfo = buildPublicGameConfigMock({
       gameName: 'g1',
       extraTimeLimitDurationInfo: { kind: 'unlimited' },
     })
 
     const { getByText } = render(
-      <GameInfoSummaryView
+      <PublicGameConfigSummaryView
         gameInfo={gameInfo}
       />
     );

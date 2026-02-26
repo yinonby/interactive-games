@@ -1,7 +1,7 @@
 
 import { BeLogger, MongoDbTable } from '@ig/be-utils';
 import type { GameConfigsTableAdapter } from '@ig/games-engine-be-models';
-import type { GameConfigIdT, GameConfigT, GameInfoNoIdT } from '@ig/games-engine-models';
+import type { GameConfigIdT, GameConfigNoIdT, GameConfigT } from '@ig/games-engine-models';
 import type { LoggerAdapter } from '@ig/utils';
 import { Schema } from 'mongoose';
 import { gameConfigSchemaDef } from '../schemas/GameConfigSchemaDefs';
@@ -46,20 +46,23 @@ export class MongoGameConfigsTable extends MongoDbTable<GameConfigT> implements 
     return ret.toObject();
   }
 
-  public async createGameConfig (gameConfigId: GameConfigIdT, gameInfoNoId: GameInfoNoIdT): Promise<void> {
+  public async createGameConfig (
+    gameConfigId: GameConfigIdT,
+    partialGameConfigNoId: Partial<GameConfigNoIdT>,
+  ): Promise<void> {
     await this.getModel().insertOne({
-      gameConfigId: gameConfigId,
-      gameInfoNoId: gameInfoNoId,
+      ...partialGameConfigNoId,
+      gameConfigId: gameConfigId, // override gameConfigId if partialGameConfigNoId contained it
     });
   }
 
   public async updateGameConfig(
     gameConfigId: GameConfigIdT,
-    partialGameInfoNoId: Partial<GameInfoNoIdT>
+    partialGameConfigNoId: Partial<GameConfigNoIdT>
   ): Promise<void> {
 
     await this.updateExactlyOne({ gameConfigId }, {
-      gameInfoNoId: partialGameInfoNoId,
+      ...partialGameConfigNoId,
     });
   }
 }

@@ -1,12 +1,17 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from '@ig/app-engine-ui';
-import type { MinimalGameInfoT } from '@ig/games-engine-models';
-import { useGetMinimalGameInfosQuery } from './GamesAppRtkApi';
+import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
+import { useGetMinimalPublicGameConfigsQuery } from './GamesAppRtkApi';
 
-export type GamesAppModelT = ModelT<{ minimalGameInfos: MinimalGameInfoT[] }>;
+export type GamesAppModelT = ModelT<{ minimalPublicGameConfigs: MinimalPublicGameConfigT[] }>;
 
 export const useGamesAppModel = (): GamesAppModelT => {
-  const { isLoading, isError, error, data: getMinimalGameInfosResponse } = useGetMinimalGameInfosQuery();
+  const {
+    isLoading,
+    isError,
+    error,
+    data: getMinimalPublicGameConfigsResponse
+  } = useGetMinimalPublicGameConfigsQuery();
 
   if (isLoading) {
     return {
@@ -19,7 +24,7 @@ export const useGamesAppModel = (): GamesAppModelT => {
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(error),
     }
-  } else if (getMinimalGameInfosResponse === undefined) {
+  } else if (getMinimalPublicGameConfigsResponse === undefined) {
     return {
       isLoading: false,
       isError: true,
@@ -31,7 +36,7 @@ export const useGamesAppModel = (): GamesAppModelT => {
     isLoading: false,
     isError: false,
     data: {
-      minimalGameInfos: getMinimalGameInfosResponse.minimalGameInfos,
+      minimalPublicGameConfigs: getMinimalPublicGameConfigsResponse.minimalPublicGameConfigs,
     }
   }
 }

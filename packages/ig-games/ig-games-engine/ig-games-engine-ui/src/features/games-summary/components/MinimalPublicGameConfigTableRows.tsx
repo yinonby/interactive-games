@@ -1,21 +1,21 @@
 
 import { useAppLocalization } from '@ig/app-engine-ui';
-import type { MinimalGameInfoT } from '@ig/games-engine-models';
+import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiTableCell, RnuiTableRow, RnuiText } from '@ig/rnui';
 import { MS_TO_MIN } from '@ig/utils';
 import React, { type FC } from 'react';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { PriceView } from './PriceView';
 
-export type MinimalGameInfoTableRowsPropsT = TestableComponentT & {
-  minimalGameInfo: MinimalGameInfoT,
+export type MinimalPublicGameConfigTableRowsPropsT = TestableComponentT & {
+  minimalPublicGameConfig: MinimalPublicGameConfigT,
 };
 
-export const MinimalGameInfoTableRows: FC<MinimalGameInfoTableRowsPropsT> = ({ minimalGameInfo }) => {
+export const MinimalPublicGameConfigTableRows: FC<MinimalPublicGameConfigTableRowsPropsT> = ({ minimalPublicGameConfig }) => {
   const { t } = useAppLocalization();
-  const durationMinutesStr = minimalGameInfo.maxDurationInfo.kind === 'unlimited' ?
+  const durationMinutesStr = minimalPublicGameConfig.maxDurationInfo.kind === 'unlimited' ?
     t("common:unlimited") :
-    t("common:minutes", { minutes: MS_TO_MIN(minimalGameInfo.maxDurationInfo.durationMs) });
+    t("common:minutes", { minutes: MS_TO_MIN(minimalPublicGameConfig.maxDurationInfo.durationMs) });
 
   return (
     <>
@@ -40,7 +40,7 @@ export const MinimalGameInfoTableRows: FC<MinimalGameInfoTableRowsPropsT> = ({ m
         </RnuiTableCell>
         <RnuiTableCell>
           <RnuiText >
-            {minimalGameInfo.maxParticipants}
+            {minimalPublicGameConfig.maxParticipants}
           </RnuiText>
         </RnuiTableCell>
       </RnuiTableRow>
@@ -52,7 +52,7 @@ export const MinimalGameInfoTableRows: FC<MinimalGameInfoTableRowsPropsT> = ({ m
           </RnuiText>
         </RnuiTableCell>
         <RnuiTableCell>
-          <PriceView testID="price-view-tid" priceInfo={minimalGameInfo.gamePriceInfo} />
+          <PriceView testID="price-view-tid" priceInfo={minimalPublicGameConfig.gamePriceInfo} />
         </RnuiTableCell>
       </RnuiTableRow>
     </>

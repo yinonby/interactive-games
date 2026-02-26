@@ -1,11 +1,11 @@
 
 import type {
-  GameInfoT,
-  GameInstanceExposedInfoT, MinimalGameInfoT
+  GameInstanceExposedInfoT, MinimalPublicGameConfigT,
+  PublicGameConfigT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
 
-const secretIslandMinimalConfig: GameInfoT = {
+const secretIslandMinimalConfig: PublicGameConfigT = {
   gameConfigId: 'treasure-hunt-secret-island', // this game is already joined in this dev preset
   kind: 'jointGame',
   gameName: 'Treasure Hunt - Secret Island',
@@ -20,7 +20,7 @@ const secretIslandMinimalConfig: GameInfoT = {
   levelExposedConfigs: [],
 }
 
-const escapeRoomMinimalConfig: GameInfoT = {
+const escapeRoomMinimalConfig: PublicGameConfigT = {
   gameConfigId: 'escape-room-harry-potter',
   kind: 'jointGame',
   gameName: 'Escape Room - Harry Potter',
@@ -35,7 +35,7 @@ const escapeRoomMinimalConfig: GameInfoT = {
   levelExposedConfigs: [],
 }
 
-const wordleEnMinimalConfig: GameInfoT = {
+const wordleEnMinimalConfig: PublicGameConfigT = {
   gameConfigId: 'wordle-english',
   kind: 'jointGame',
   gameName: 'Wordle - English',
@@ -57,7 +57,7 @@ const wordleEnMinimalConfig: GameInfoT = {
   }],
 }
 
-const wordleEsMinimalConfig: GameInfoT = {
+const wordleEsMinimalConfig: PublicGameConfigT = {
   gameConfigId: 'wordle-spanish',
   kind: 'jointGame',
   gameName: 'Wordle - Spanish',
@@ -72,7 +72,7 @@ const wordleEsMinimalConfig: GameInfoT = {
   levelExposedConfigs: [],
 }
 
-const wordleFrMinimalConfig: GameInfoT = {
+const wordleFrMinimalConfig: PublicGameConfigT = {
   gameConfigId: 'wordle-french',
   kind: 'jointGame',
   gameName: 'Wordle - French',
@@ -87,7 +87,7 @@ const wordleFrMinimalConfig: GameInfoT = {
   levelExposedConfigs: [],
 }
 
-export const devAvailableMinimalGameConfigs: MinimalGameInfoT[] = [
+export const devAvailableMinimalGameConfigs: MinimalPublicGameConfigT[] = [
   secretIslandMinimalConfig,
   escapeRoomMinimalConfig,
   wordleEnMinimalConfig,
@@ -95,7 +95,7 @@ export const devAvailableMinimalGameConfigs: MinimalGameInfoT[] = [
   wordleFrMinimalConfig,
 ]
 
-export const devAllGameConfigs: GameInfoT[] = [
+export const devAllGameConfigs: PublicGameConfigT[] = [
   secretIslandMinimalConfig,
   escapeRoomMinimalConfig,
   wordleEnMinimalConfig,
@@ -103,6 +103,6 @@ export const devAllGameConfigs: GameInfoT[] = [
   wordleFrMinimalConfig,
 ]
 
-export const devJoinedGameConfigs: GameInfoT[] = [];
+export const devJoinedGameConfigs: PublicGameConfigT[] = [];
 
 export const devAllGameInstanceExposedInfos: GameInstanceExposedInfoT[] = []

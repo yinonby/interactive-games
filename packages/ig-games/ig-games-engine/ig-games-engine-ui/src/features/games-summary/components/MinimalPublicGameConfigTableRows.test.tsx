@@ -1,10 +1,10 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import { buildTestMinimalGameConfig } from '@ig/games-engine-models/test-utils';
+import { buildMinimalPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { MIN_TO_MS } from '@ig/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import { MinimalGameInfoTableRows } from './MinimalGameInfoTableRows';
+import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
 
 // Mock PriceView to render easily queryable output
 jest.mock('./PriceView', () => {
@@ -16,11 +16,11 @@ jest.mock('./PriceView', () => {
   };
 });
 
-describe('MinimalGameInfoTableRows', () => {
+describe('MinimalPublicGameConfigTableRows', () => {
   it('renders correctly', async () => {
     const { getByText } = render(
-      <MinimalGameInfoTableRows
-        minimalGameInfo={buildTestMinimalGameConfig({
+      <MinimalPublicGameConfigTableRows
+        minimalPublicGameConfig={buildMinimalPublicGameConfigMock({
           maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(6) },
           gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,
@@ -37,8 +37,8 @@ describe('MinimalGameInfoTableRows', () => {
 
   it('renders correctly, duration is unlimited', async () => {
     const { getByText } = render(
-      <MinimalGameInfoTableRows
-        minimalGameInfo={buildTestMinimalGameConfig({
+      <MinimalPublicGameConfigTableRows
+        minimalPublicGameConfig={buildMinimalPublicGameConfigMock({
           maxDurationInfo: { kind: 'unlimited' },
           gamePriceInfo: { kind: 'free' },
           maxParticipants: 4,

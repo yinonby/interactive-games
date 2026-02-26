@@ -6,11 +6,11 @@ import {
 } from '@ig/app-engine-ui';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type {
-  GameInfoT,
   GameInstanceExposedInfoT,
   GamesUserConfigT,
   GetGamesUserConfigResponseT,
-  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT
+  PostAcceptInviteRequestBodyT, PostAcceptInviteResponseT, PostCreateGameInstanceResponseT, PostPlayGameRequestBodyT, PostPlayGameResponseT,
+  PublicGameConfigT
 } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-engine-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
@@ -30,7 +30,7 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
 }
 
 let mockedGamesUserConfig: GamesUserConfigT = {
-  joinedGameInfos: [],
+  joinedPublicGameConfigs: [],
 };
 let mockedGameInstanceExposedInfos: GameInstanceExposedInfoT[];
 
@@ -42,9 +42,9 @@ export const server = setupServer(
   http.post(apiUrl + '/games/user-config/play-game', async ({ request }) => {
     const body = await request.json() as PostPlayGameRequestBodyT;
 
-    mockedGamesUserConfig.joinedGameInfos.push({
+    mockedGamesUserConfig.joinedPublicGameConfigs.push({
       gameConfigId: body.gameConfigId,
-    } as GameInfoT);
+    } as PublicGameConfigT);
 
     const response: PostPlayGameResponseT = {
       status: 'ok',
@@ -58,9 +58,9 @@ export const server = setupServer(
     const gameConfigId = "gcid-" + body.invitationCode;
     const gameInstanceId = "giid-" + body.invitationCode;
 
-    mockedGamesUserConfig.joinedGameInfos.push({
+    mockedGamesUserConfig.joinedPublicGameConfigs.push({
       gameConfigId: gameConfigId,
-    } as GameInfoT);
+    } as PublicGameConfigT);
 
     mockedGameInstanceExposedInfos.push(buildTestGameInstanceExposedInfo({
       gameInstanceId: gameInstanceId,
@@ -109,7 +109,7 @@ describe('GamesUserConfigRtkApi', () => {
   });
   beforeEach(() => {
     mockedGamesUserConfig = {
-      joinedGameInfos: [],
+      joinedPublicGameConfigs: [],
     };
     mockedGameInstanceExposedInfos = [];
   })
@@ -130,7 +130,7 @@ describe('GamesUserConfigRtkApi', () => {
       throw new Error('result.data is undefined');
     }
     expect(getGamesUserConfigResponse.gamesUserConfig).toEqual({
-      joinedGameInfos: [],
+      joinedPublicGameConfigs: [],
     });
   });
 
@@ -146,7 +146,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
@@ -164,8 +164,8 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse2: GetGamesUserConfigResponseT = result2.data;
-    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameInfos.length).toEqual(1);
-    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameInfos[0].gameConfigId).toEqual("GAME_123");
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(1);
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedPublicGameConfigs[0].gameConfigId).toEqual("GAME_123");
   });
 
   it('posts an accept-invite request and invalidates cache', async () => {
@@ -180,7 +180,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
@@ -198,7 +198,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse2: GetGamesUserConfigResponseT = result2.data;
-    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameInfos.length).toEqual(1);
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(1);
   });
 
   it('posts an create-game-instance request and invalidates cache', async () => {
@@ -213,7 +213,7 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse1: GetGamesUserConfigResponseT = result1.data;
-    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedGameInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse1.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(0);
 
     // Mutation
     await store.dispatch(
@@ -231,6 +231,6 @@ describe('GamesUserConfigRtkApi', () => {
     }
 
     const getGamesUserConfigResponse2: GetGamesUserConfigResponseT = result2.data;
-    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedGameInfos.length).toEqual(0);
+    expect(getGamesUserConfigResponse2.gamesUserConfig.joinedPublicGameConfigs.length).toEqual(0);
   });
 });

@@ -1,6 +1,6 @@
 
-import type { GameInfoT } from '@ig/games-engine-models';
-import { buildFullTestGameInfo } from '@ig/games-engine-models/test-utils';
+import type { GameConfigNoIdT, PublicGameConfigT } from '@ig/games-engine-models';
+import { buildGameConfigNoIdMock, buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import type { LoggerAdapter } from '@ig/utils';
 import { MongoGameConfigsTable } from './MongoGameConfigsTable';
 
@@ -27,10 +27,10 @@ describe('MongoGameConfigsTable', () => {
 
   describe('getGameConfigs', () => {
     it('should return array of game configs', async () => {
-      const mockGameInfo1: GameInfoT = buildFullTestGameInfo({
+      const mockPublicGameConfig1: PublicGameConfigT = buildPublicGameConfigMock({
         gameName: 'g1',
       });
-      const mockGameInfo2: GameInfoT = buildFullTestGameInfo({
+      const mockPublicGameConfig2: PublicGameConfigT = buildPublicGameConfigMock({
         gameName: 'g2',
       });
       const instance = new MongoGameConfigsTable();
@@ -38,8 +38,8 @@ describe('MongoGameConfigsTable', () => {
       const res1 = await instance.getGameConfigs();
       expect(res1).toHaveLength(0);
 
-      await instance.createGameConfig('GCID1', mockGameInfo1);
-      await instance.createGameConfig('GCID2', mockGameInfo2);
+      await instance.createGameConfig('GCID1', mockPublicGameConfig1);
+      await instance.createGameConfig('GCID2', mockPublicGameConfig2);
 
       const res2 = await instance.getGameConfigs();
       expect(res2).toHaveLength(2);
@@ -48,15 +48,13 @@ describe('MongoGameConfigsTable', () => {
 
   describe('getGameConfig', () => {
     it('should return array of game configs', async () => {
-      const mockGameInfo1: GameInfoT = buildFullTestGameInfo({
-        gameName: 'g1',
-      });
       const instance = new MongoGameConfigsTable();
 
       const res1 = await instance.getGameConfig('GCID1');
       expect(res1).toBeNull();
 
-      await instance.createGameConfig('GCID1', mockGameInfo1);
+      const partialGameConfigNoId: Partial<GameConfigNoIdT> = buildGameConfigNoIdMock();
+      await instance.createGameConfig('GCID1', partialGameConfigNoId);
 
       const res2 = await instance.getGameConfig('GCID1');
       expect(res2).not.toBeNull();
@@ -65,27 +63,27 @@ describe('MongoGameConfigsTable', () => {
 
   describe('createGameConfig', () => {
     it('should insert game config', async () => {
-      const mockGameInfo1: GameInfoT = buildFullTestGameInfo();
       const instance = new MongoGameConfigsTable();
 
       const res1 = await instance.getGameConfigs();
       expect(res1).toHaveLength(0);
 
-      await instance.createGameConfig('GCID1', mockGameInfo1);
+      const partialGameConfigNoId: Partial<GameConfigNoIdT> = buildGameConfigNoIdMock();
+      await instance.createGameConfig('GCID1', partialGameConfigNoId);
 
       const res2 = await instance.getGameConfigs();
       expect(res2).toHaveLength(1);
     });
 
     it('should fail to insert game config with an existing unique key', async () => {
-      const mockGameInfo1: GameInfoT = buildFullTestGameInfo();
       const instance = new MongoGameConfigsTable();
 
       const res1 = await instance.getGameConfigs();
       expect(res1).toHaveLength(0);
 
-      await instance.createGameConfig('GCID1', mockGameInfo1);
-      await expect(instance.createGameConfig('GCID1', mockGameInfo1)).rejects.toThrow();
+      const partialGameConfigNoId: Partial<GameConfigNoIdT> = buildGameConfigNoIdMock();
+      await instance.createGameConfig('GCID1', partialGameConfigNoId);
+      await expect(instance.createGameConfig('GCID1', partialGameConfigNoId)).rejects.toThrow();
 
       const res2 = await instance.getGameConfigs();
       expect(res2).toHaveLength(1);
@@ -94,16 +92,16 @@ describe('MongoGameConfigsTable', () => {
 
   describe('updateGameConfig', () => {
     it('should update game config', async () => {
-      const mockGameInfo1: GameInfoT = buildFullTestGameInfo({
-        gameName: 'g1',
-      });
       const instance = new MongoGameConfigsTable();
 
-      await instance.createGameConfig('GCID1', mockGameInfo1);
+      const partialGameConfigNoId: Partial<GameConfigNoIdT> = buildGameConfigNoIdMock({
+        gameName: 'g1',
+      });
+      await instance.createGameConfig('GCID1', partialGameConfigNoId);
 
       const res1 = await instance.getGameConfig('GCID1');
       assert(res1 !== null);
-      expect(res1.gameInfoNoId.gameName).toEqual('g1');
+      expect(res1.gameName).toEqual('g1');
 
       await instance.updateGameConfig('GCID1', {
         gameName: 'g1-updated',
@@ -111,7 +109,7 @@ describe('MongoGameConfigsTable', () => {
 
       const res2 = await instance.getGameConfig('GCID1');
       assert(res2 !== null);
-      expect(res2.gameInfoNoId.gameName).toEqual('g1-updated');
+      expect(res2.gameName).toEqual('g1-updated');
     });
 
     it('should fail to update game config when it does not exist', async () => {

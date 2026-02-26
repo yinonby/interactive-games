@@ -47,7 +47,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
 
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
-            <GameImageCard testID='GameImageCard-tid' minimalGameInfo={gameInfo} includeFreeLabel={false}>
+            <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={gameInfo} includeFreeLabel={false}>
               <View style={genericStyles.spacing}>
                 <GameInstanceConfigSummaryView
                   testID="GameInstanceConfigSummaryView-tid"

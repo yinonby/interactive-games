@@ -1,6 +1,6 @@
 
 import {
-  type GameConfigIdT, type GameInfoT,
+  type GameConfigIdT,
   type GameInstanceExposedInfoT, type GameInstanceIdT,
   type GamesUserConfigT,
   type GetGameInstanceResponseT,
@@ -8,7 +8,8 @@ import {
   type LevelExposedConfigT,
   type LevelStateT,
   type PostGameInstanceStartResponseT,
-  type PostGameInstanceSubmitGuessResponseT
+  type PostGameInstanceSubmitGuessResponseT,
+  type PublicGameConfigT
 } from '@ig/games-engine-models';
 import type { LetterAnalysisT } from '@ig/games-wordle-models';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
@@ -22,17 +23,17 @@ import {
 } from './DevMocks';
 
 const handlePlayGame = async (gameConfigId: GameConfigIdT): Promise<void> => {
-  const gameInfo: GameInfoT | undefined =
+  const gameInfo: PublicGameConfigT | undefined =
     devAllGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
   if (gameInfo === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameInfo: GameInfoT | undefined =
+  const joinedPublicGameConfig: PublicGameConfigT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameInfo !== undefined) {
+  if (joinedPublicGameConfig !== undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -74,10 +75,10 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
-  const joinedGameInfo: GameInfoT | undefined =
+  const joinedPublicGameConfig: PublicGameConfigT | undefined =
     devJoinedGameConfigs.find(e => e.gameConfigId === gameConfigId);
 
-  if (joinedGameInfo === undefined) {
+  if (joinedPublicGameConfig === undefined) {
     throw { status: 500, apiErrCode: 'apiError:server' };
   }
 
@@ -98,14 +99,14 @@ const handleCreateGameInstance = async (gameConfigId: GameConfigIdT): Promise<Ga
     }
   }
 
-  const levelStates: LevelStateT[] = joinedGameInfo.levelExposedConfigs
+  const levelStates: LevelStateT[] = joinedPublicGameConfig.levelExposedConfigs
     .map(e => levelConfigTolevelState(e))
     .filter(e => e !== null);
 
   const gameInstanceExposedInfo: GameInstanceExposedInfoT = {
     gameInstanceId: gameInstanceId,
     invitationCode: 'invt-code-' + gameInstanceId,
-    gameInfo: joinedGameInfo,
+    gameInfo: joinedPublicGameConfig,
     gameState: {
       gameStatus: 'notStarted',
       levelStates: levelStates,
@@ -228,7 +229,7 @@ export class ApiServerMock implements HttpAdapter {
 
     if (options.url === '/games/user-config') {
       const gamesUserConfig: GamesUserConfigT = {
-        joinedGameInfos: [...devJoinedGameConfigs], // clone this array so it is not frozen
+        joinedPublicGameConfigs: [...devJoinedGameConfigs], // clone this array so it is not frozen
       }
       const response: GetGamesUserConfigResponseT = {
         gamesUserConfig: gamesUserConfig,
