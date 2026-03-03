@@ -1,6 +1,6 @@
 
 import type { AuthLogicAdapter } from '@ig/auth-be-models';
-import type { EmailLoginInputT, EmailLoginResultDataT, GuestLoginResultDataT } from '@ig/auth-models';
+import type { EmailLoginInputT, EmailLoginResultDataT, GuestLoginInputT, GuestLoginResultDataT } from '@ig/auth-models';
 import type { Response } from 'express';
 import type { ApolloContextT } from '../../types/AuthPluginTypes';
 
@@ -16,10 +16,11 @@ export const createAuthResolvers = (authLogicAdapter: AuthLogicAdapter): any => 
   Mutation: {
     guestLogin: async (
       parent: unknown,
-      args: unknown,
+      args: { input: GuestLoginInputT },
       context: ApolloContextT,
     ): Promise<GuestLoginResultDataT> => {
-      const authId = await authLogicAdapter.guestLogin(context.res);
+      const { input } = args;
+      const authId = await authLogicAdapter.guestLogin(context.res, input.nickname);
 
       return {
         authId,

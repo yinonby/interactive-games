@@ -1,10 +1,6 @@
 
-import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import type { PublicGameConfigT } from '@ig/games-engine-models';
-import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { GameDashboardViewPageContent } from './GameDashboardViewPageContent';
 
 // mocks
@@ -18,78 +14,16 @@ jest.mock("../components/GameDashboardView", () => {
 });
 
 describe("GameDashboardViewPageContent", () => {
-  const { onAppErrorMock } = __engineAppUiMocks;
-  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders loading screen', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
-      isLoading: true,
-      isError: false,
-    });
-
-    const { queryByTestId } = render(
-      <GameDashboardViewPageContent gameConfigId='GID1'/>
-    );
-
-    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
-  });
-
-  it('renders error', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
-      isLoading: false,
-      isError: true,
-      appErrCode: "apiError:server",
-    });
-
-    render(
-      <GameDashboardViewPageContent gameConfigId='GID1'/>
-    );
-
-    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
-  });
-
-  it('renders null when game not found', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: [],
-        }
-      },
-    });
-
-    const { queryByTestId } = render(
-      <GameDashboardViewPageContent gameConfigId='GID1'/>
-    );
-
-    expect(queryByTestId('RnuiAppContent-tid')).toBeNull();
-  });
-
-  it("renders properly", async () => {
-    const gameConfigId = "GID1";
-    const joinedPublicGameConfig: PublicGameConfigT = buildPublicGameConfigMock({ gameConfigId: gameConfigId });
-    useGamesUserConfigModelSpy.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: [joinedPublicGameConfig],
-        }
-      },
-    });
-
+  it('renders correctly', () => {
     const { getByTestId } = render(
-      <GameDashboardViewPageContent gameConfigId={gameConfigId}/>
+      <GameDashboardViewPageContent gameConfigId='GID1'/>
     );
 
     getByTestId("RnuiAppContent-tid");
-    const view = getByTestId("GameDashboardView-tid");
-
-    expect(view.props.joinedPublicGameConfig).toEqual(joinedPublicGameConfig);
+    getByTestId("GameDashboardView-tid");
   });
 });

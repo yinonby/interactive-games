@@ -1,7 +1,7 @@
 
 import jwt from 'jsonwebtoken';
 import type { JWTPayload } from './JwtUtils';
-import { buildJWT } from './JwtUtils';
+import { buildJWT, decodeJwt } from './JwtUtils';
 
 describe("buildJWT", () => {
   const secret = "test-secret";
@@ -64,5 +64,43 @@ describe("buildJWT", () => {
     expect(() => {
       jwt.verify(token, "wrong-secret");
     }).toThrow();
+  });
+});
+
+
+describe("decodeJwt", () => {
+  const secret = "test-secret";
+  const payload = { userId: "123", role: "admin" };
+
+  it("should return decoded payload for valid token", () => {
+    const token = jwt.sign(payload, secret);
+
+    const result = decodeJwt(token, secret);
+
+    expect(result).toMatchObject(payload);
+  });
+
+  it("should throw 'Invalid token' for wrong secret", () => {
+    const token = jwt.sign(payload, secret);
+
+    expect(() => decodeJwt(token, "wrong-secret")).toThrowError();
+  });
+
+  it("should throw 'Invalid token' for malformed token", () => {
+    const malformedToken = "not.a.valid.token";
+
+    expect(() => decodeJwt(malformedToken, secret)).toThrowError();
+  });
+
+  it("should throw 'Invalid token' for expired token", () => {
+    const expiredToken = jwt.sign(payload, secret, { expiresIn: "1ms" });
+
+    // wait briefly to ensure expiration
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(() => decodeJwt(expiredToken, secret)).toThrowError();
+        resolve(null);
+      }, 10);
+    });
   });
 });

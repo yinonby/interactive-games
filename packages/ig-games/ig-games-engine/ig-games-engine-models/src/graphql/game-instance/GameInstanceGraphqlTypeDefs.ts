@@ -29,7 +29,7 @@ export const gameInstanceGraphqlEnumsTypeDefs = gql`
     ended
   }
 
-  enum LevelKindEnum {
+  enum PluginKindEnum {
     code
     wordle
   }
@@ -63,11 +63,17 @@ export const gameInstanceGraphqlEnumsTypeDefs = gql`
   enum SolutionKindEnum {
     text
   }
+
+  enum WordleDifficultyEnum {
+    easy
+    medium
+    hard
+  }
 `;
 
 export const gameInstanceGraphqlTypesTypeDefs = gql`
   type PublicPlayerInfo {
-    playerAccountId: ID!
+    playerId: ID!
     playerNickname: String!
     playerRole: PlayerRoleEnum!
     playerStatus: PlayerStatusEnum!
@@ -99,6 +105,7 @@ export const gameInstanceGraphqlTypesTypeDefs = gql`
   type PublicWordleConfig {
     langCode: LangCodeEnum!
     wordLength: Int!
+    difficulty: WordleDifficultyEnum!
     allowedGuessesNum: Int!
   }
 
@@ -111,19 +118,26 @@ export const gameInstanceGraphqlTypesTypeDefs = gql`
     levelStatus: LevelStatusEnum!
     startTimeTs: Int
     solvedTimeTs: Int
-    kind: LevelKindEnum!
+
+    pluginState: PluginState!
+  }
+
+  type PluginState {
+    kind: PluginKindEnum!
 
     publicCodePuzzleConfig: PublicCodePuzzleConfig
     codeSolution: String
+    isCaseSensitive: Boolean
 
     publicWordleConfig: PublicWordleConfig
     publicWordleState: PublicWordleState
     wordleSolution: String
   }
 
+
   type GameState {
     gameStatus: GameStatusEnum!
-    startTimeTs: Int!
+    startTimeTs: Int
     lastGivenExtraTimeTs: Int
     finishTimeTs: Int
     levelStates: [LevelState!]!
@@ -139,24 +153,20 @@ export const gameInstanceGraphqlTypesTypeDefs = gql`
 `;
 
 export const gameInstanceGraphqlInputsTypeDefs = gql`
-  input PublicPlayerInfoInput {
-    playerAccountId: ID!
-    playerNickname: String!
-    playerRole: PlayerRoleEnum!
-    playerStatus: PlayerStatusEnum!
+  input CreateGameInstanceInput {
+    gameConfigId: ID!
   }
 
-  input LevelSolutionInput {
-    solutionKind: SolutionKindEnum!
-  }
-
-  input AddPlayerInput {
+  type CreateGameInstanceResult {
     gameInstanceId: ID!
-    publicPlayerInfo: PublicPlayerInfoInput!
   }
 
-  type AddPlayerResult {
-    status: UpdateStatus!
+  input JoinGameByInviteInput {
+    invitationCode: String!
+  }
+
+  type JoinGameByInviteResult {
+    gameInstanceId: ID!
   }
 
   input StartPlayingInput {
@@ -180,14 +190,15 @@ export const gameInstanceGraphqlInputsTypeDefs = gql`
 
 const gameInstanceGraphqlQueryTypeDefs = gql`
   type Query {
-    getGameConfigInstanceIds(gameConfigId: ID!): [ID!]!
-    getPublicGameInstance(gameInstanceId: ID!): PublicGameInstance
+    getGameInstanceIdsForGameConfig(gameConfigId: ID!): [ID!]!
+    getPublicGameInstance(gameInstanceId: ID!): PublicGameInstance!
   }
 `;
 
 const gameInstanceGraphqlMutationTypeDefs = gql`
   type Mutation {
-    addPlayer(input: AddPlayerInput!): AddPlayerResult!
+    createGameInstance(input: CreateGameInstanceInput!): CreateGameInstanceResult!
+    joinGameByInvite(input: JoinGameByInviteInput!): JoinGameByInviteResult!
     startPlaying(input: StartPlayingInput!): StartPlayingResult!
     submitGuess(input: SubmitGuessInput!): SubmitGuessResult!
   }

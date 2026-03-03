@@ -18,6 +18,10 @@ export const PlayersView: FC<PlayersViewPropsT> = (props) => {
   const { publicPlayerInfos } = publicGameInstance;
   const genericStyles = useGenericStyles();
 
+  if (publicPlayerInfos.length === 0) {
+    return null;
+  }
+
   return (
     <View testID="container-tid" style={genericStyles.spacing}>
       <RnuiText testID="players-text-tid" variant="titleMedium">{t("games:players")}</RnuiText>

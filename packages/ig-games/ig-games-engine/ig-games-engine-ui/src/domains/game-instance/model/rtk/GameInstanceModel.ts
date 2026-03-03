@@ -1,7 +1,7 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from '@ig/app-engine-ui';
 import { type GameInstanceIdT, type PublicGameInstanceT } from '@ig/games-engine-models';
-import { useGetGameInstanceQuery } from './GameInstanceRtkApi';
+import { useGetPublicGameInstanceQuery } from './GameInstanceRtkApi';
 
 export type GameInstanceModelDataT = {
   publicGameInstance: PublicGameInstanceT,
@@ -15,7 +15,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     isError: isGameInstanceError,
     error: gameInstanceError,
     data: gameInstanceResponse
-  } = useGetGameInstanceQuery(gameInstanceId);
+  } = useGetPublicGameInstanceQuery(gameInstanceId);
 
   if (isGameInstanceLoading) {
     return {

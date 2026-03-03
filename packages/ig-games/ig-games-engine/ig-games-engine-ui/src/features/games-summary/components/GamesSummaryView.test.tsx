@@ -1,10 +1,9 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
+import * as GameUserModelModule from '../../../domains/game-user/model/rtk/GameUserModel';
 import { GamesSummaryView } from './GamesSummaryView';
 
 // --------------------
@@ -26,14 +25,14 @@ jest.mock('./GamesTableView', () => {
 
 describe('GamesSummaryView', () => {
   const { onAppErrorMock } = __engineAppUiMocks;
-  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
+  const spy_useGameUserModel = jest.spyOn(GameUserModelModule, 'useGameUserModel');
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders loading screen', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: true,
       isError: false,
     });
@@ -46,7 +45,7 @@ describe('GamesSummaryView', () => {
   });
 
   it('renders error', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
@@ -60,12 +59,13 @@ describe('GamesSummaryView', () => {
   });
 
   it('renders empty state when there are no games', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: [],
+        publicGameUser: {
+          gameUserId: 'USER1',
+          joinedGameConfigIds: [],
         }
       },
     });
@@ -80,15 +80,13 @@ describe('GamesSummaryView', () => {
   });
 
   it('renders games list when games exist', () => {
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data:  {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: [
-            buildPublicGameConfigMock({}),
-            buildPublicGameConfigMock({}),
-          ],
+      data: {
+        publicGameUser: {
+          gameUserId: 'USER1',
+          joinedGameConfigIds: ['GC1', 'GC2'],
         }
       },
     });

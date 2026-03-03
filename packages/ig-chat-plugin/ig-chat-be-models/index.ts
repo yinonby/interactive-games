@@ -1,4 +1,4 @@
 
-export * from './src/db/GamesDb';
-export * from './src/logic/GameLogicTypes';
+export * from './src/db/GamesDbTypes';
+export * from './src/logic/ChatLogicTypes';
 

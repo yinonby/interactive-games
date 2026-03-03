@@ -32,8 +32,12 @@ export class MongoGameConfigsTable extends MongoDbTable<GameConfigT> implements 
 
   // interface GameConfigsTableAdapter
 
-  public async getGameConfigs(): Promise<GameConfigT[]> {
-    return (await this.getModel().find({})).map(e => e.toObject());
+  public async getGameConfigs(gameConfigIds?: GameConfigIdT[]): Promise<GameConfigT[]> {
+    const ret = await this.getModel().find(gameConfigIds === undefined ? {} : {
+      "gameConfigId": { "$in": gameConfigIds },
+    });
+
+    return ret.map(e => e.toObject());
   }
 
   public async getGameConfig(gameConfigId: GameConfigIdT): Promise<GameConfigT | null> {
@@ -60,7 +64,6 @@ export class MongoGameConfigsTable extends MongoDbTable<GameConfigT> implements 
     gameConfigId: GameConfigIdT,
     partialGameConfigNoId: Partial<GameConfigNoIdT>
   ): Promise<void> {
-
     await this.updateExactlyOne({ gameConfigId }, {
       ...partialGameConfigNoId,
     });

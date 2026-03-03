@@ -7,9 +7,9 @@ import type { AuthPluginConfigT } from '../types/AuthPluginTypes';
 export const authApiPlugin: ExpressPluginT<AuthPluginConfigT> = {
   initRouter: async (
     appInfo: ExpressAppInfoT,
-    pluginConfig: AuthPluginConfigT,
+    publicPluginConfig: AuthPluginConfigT,
   ): Promise<Router> => {
-    const router = await createGraphqlRouter(pluginConfig);
+    const router = await createGraphqlRouter(publicPluginConfig);
 
     return router;
   },

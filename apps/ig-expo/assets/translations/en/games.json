@@ -1,7 +1,7 @@
 {
   "noGamesAbailable": "No games are available",
   "invitationCode": "Invitation code",
-  "joinGame": "Join game",
+  "joinGameByInvite": "Join game",
   "startGame": "Start game",
   "abailableGames": "Available games",
   "userNoGamesAbailable": "You don't have any games at the moment",

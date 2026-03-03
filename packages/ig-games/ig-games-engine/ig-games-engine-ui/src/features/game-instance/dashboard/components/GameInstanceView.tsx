@@ -25,7 +25,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();
 
-  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerAccountId === curAccountId);
+  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curAccountId);
   if (curPublicPlayerInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player,` +
       `gameInstanceId [${publicGameInstance.gameInstanceId}] curAccountId [${curAccountId}]`);

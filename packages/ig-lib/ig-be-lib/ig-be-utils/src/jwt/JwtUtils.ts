@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken';
  */
 export type JWTPayload = Record<string, unknown>;
 
-
 /**
  * Options for signing the JWT
  */
@@ -36,4 +35,11 @@ export function buildJWT(
   };
 
   return jwt.sign(payload, secret, signOptions);
+}
+
+export function decodeJwt(
+  token: string,
+  secret: string,
+): string | JWTPayload {
+  return jwt.verify(token, secret);
 }

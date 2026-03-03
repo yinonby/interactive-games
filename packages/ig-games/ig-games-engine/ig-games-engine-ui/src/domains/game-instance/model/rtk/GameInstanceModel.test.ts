@@ -1,11 +1,11 @@
 
 import {
-  type GetGameInstanceResponseT,
+  type GetGameInstanceResultT,
   type PublicGameInstanceT
 } from '@ig/games-engine-models';
+import { buildPublicGameInstanceMock } from '@ig/games-engine-models/test-utils';
 import { renderHook } from '@testing-library/react-native';
 import { useGameInstanceModel } from './GameInstanceModel';
-import type { UseGetGameInstanceQueryResultT } from './GameInstanceRtkApi';
 import * as GameInstanceRtkApi from './GameInstanceRtkApi';
 
 jest.mock('./GameInstanceRtkApi');
@@ -14,30 +14,30 @@ const gameInstanceId1 = 'giid-1';
 
 describe('GameInstanceModel', () => {
   it('calls hooks with correct args', () => {
-    const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
+    const spy_useGetPublicGameInstanceQuery = jest.spyOn(GameInstanceRtkApi, 'useGetPublicGameInstanceQuery');
 
-    useGetGameInstanceQuerySpy.mockReturnValue({
+    spy_useGetPublicGameInstanceQuery.mockReturnValue({
       isLoading: true,
       isError: false,
       data: undefined,
       refetch: jest.fn(),
-    } as UseGetGameInstanceQueryResultT);
+    });
 
     renderHook(() => useGameInstanceModel(gameInstanceId1));
 
     // verify
-    expect(useGetGameInstanceQuerySpy).toHaveBeenCalledWith(gameInstanceId1);
+    expect(spy_useGetPublicGameInstanceQuery).toHaveBeenCalledWith(gameInstanceId1);
   });
 
   it('returns loading state when query is loading game-instance', () => {
-    const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
+    const spy_useGetPublicGameInstanceQuery = jest.spyOn(GameInstanceRtkApi, 'useGetPublicGameInstanceQuery');
 
-    useGetGameInstanceQuerySpy.mockReturnValue({
+    spy_useGetPublicGameInstanceQuery.mockReturnValue({
       isLoading: true,
       isError: false,
       data: undefined,
       refetch: jest.fn(),
-    } as UseGetGameInstanceQueryResultT);
+    });
 
     const { result } = renderHook(() => useGameInstanceModel(gameInstanceId1));
 
@@ -49,59 +49,59 @@ describe('GameInstanceModel', () => {
   });
 
   it('returns error state when query has error in game-instance', () => {
-    const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
+    const spy_useGetPublicGameInstanceQuery = jest.spyOn(GameInstanceRtkApi, 'useGetPublicGameInstanceQuery');
 
-    useGetGameInstanceQuerySpy.mockReturnValue({
+    spy_useGetPublicGameInstanceQuery.mockReturnValue({
       isLoading: false,
       isError: true,
-      error: { appErrCode: "apiError:server" },
+      error: { appErrCode: 'apiError:server' },
       refetch: jest.fn(),
-    } as UseGetGameInstanceQueryResultT);
+    });
 
     const { result } = renderHook(() => useGameInstanceModel(gameInstanceId1));
 
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
-      appErrCode: "apiError:server",
+      appErrCode: 'apiError:server',
       data: undefined,
     });
   });
 
   it('returns error state when game-instance data is undefined', () => {
-    const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
+    const spy_useGetPublicGameInstanceQuery = jest.spyOn(GameInstanceRtkApi, 'useGetPublicGameInstanceQuery');
 
-    useGetGameInstanceQuerySpy.mockReturnValue({
+    spy_useGetPublicGameInstanceQuery.mockReturnValue({
       isLoading: false,
       isError: false,
       data: undefined,
       refetch: jest.fn(),
-    } as UseGetGameInstanceQueryResultT);
+    });
 
     const { result } = renderHook(() => useGameInstanceModel(gameInstanceId1));
 
     expect(result.current).toEqual({
       isLoading: false,
       isError: true,
-      appErrCode: "appError:invalidResponse",
+      appErrCode: 'appError:invalidResponse',
     });
   });
 
   it('returns data', () => {
-    const useGetGameInstanceQuerySpy = jest.spyOn(GameInstanceRtkApi, "useGetGameInstanceQuery");
+    const spy_useGetPublicGameInstanceQuery = jest.spyOn(GameInstanceRtkApi, 'useGetPublicGameInstanceQuery');
 
-    const publicGameInstance: PublicGameInstanceT = {
+    const publicGameInstance: PublicGameInstanceT = buildPublicGameInstanceMock({
       gameInstanceId: gameInstanceId1,
-    } as PublicGameInstanceT;
-    const gameInstanceResponse: GetGameInstanceResponseT = {
+    });
+    const apiResult: GetGameInstanceResultT = {
       publicGameInstance: publicGameInstance,
     }
-    useGetGameInstanceQuerySpy.mockReturnValue({
+    spy_useGetPublicGameInstanceQuery.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: gameInstanceResponse,
+      data: apiResult,
       refetch: jest.fn(),
-    } as UseGetGameInstanceQueryResultT);
+    });
 
     const { result } = renderHook(() => useGameInstanceModel(gameInstanceId1));
 
@@ -109,7 +109,7 @@ describe('GameInstanceModel', () => {
       isLoading: false,
       isError: false,
       data: {
-        publicGameInstance: gameInstanceResponse.publicGameInstance,
+        publicGameInstance: apiResult.publicGameInstance,
       },
     });
   });

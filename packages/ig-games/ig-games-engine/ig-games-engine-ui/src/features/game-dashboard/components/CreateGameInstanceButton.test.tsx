@@ -3,8 +3,10 @@ import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { __puiMocks } from '@ig/platform-ui';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
-import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
-import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+import type {
+  GameInstanceControllerT
+} from '../../../domains/game-instance/controller/user-actions/GameInstanceController';
+import * as GamesUserConfigControllerModule from '../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import { CreateGameInstanceButton } from './CreateGameInstanceButton';
 
 // tests
@@ -15,13 +17,13 @@ describe('CreateGameInstanceButton', () => {
     buildGameInstanceDashboardUrlPathMock,
   } = __engineAppUiMocks;
   const { navigateMock } = __puiMocks;
-  const useUserConfigControllerSpy = jest.spyOn(GamesUserConfigController, 'useGamesUserConfigController');
-  const onCreateGameInstanceMock = jest.fn();
+  const spy_useGameInstanceController = jest.spyOn(GamesUserConfigControllerModule, 'useGameInstanceController');
+  const mock_onCreateGameInstance = jest.fn();
   const gameConfigId = 'ABC';
 
-  useUserConfigControllerSpy.mockReturnValue({
-    onCreateGameInstance: onCreateGameInstanceMock,
-  } as unknown as GamesUserConfigControllerT);
+  spy_useGameInstanceController.mockReturnValue({
+    onCreateGameInstance: mock_onCreateGameInstance,
+  } as unknown as GameInstanceControllerT);
 
   it('renders properly', async () => {
     const { getByTestId } = render(
@@ -33,7 +35,7 @@ describe('CreateGameInstanceButton', () => {
 
   it('handles button click, onCreateGameInstance succeeds', async () => {
     // setup mocks
-    onCreateGameInstanceMock.mockResolvedValueOnce("giid-123");
+    mock_onCreateGameInstance.mockResolvedValueOnce("giid-123");
     buildGameInstanceDashboardUrlPathMock.mockReturnValue('mockedUrl');
 
     // render
@@ -47,14 +49,14 @@ describe('CreateGameInstanceButton', () => {
 
     // verify calls
     await waitFor(() => {
-      expect(onCreateGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
+      expect(mock_onCreateGameInstance).toHaveBeenCalledWith(gameConfigId);
     });
     expect(buildGameInstanceDashboardUrlPathMock).toHaveBeenCalledWith("giid-123");
     expect(navigateMock).toHaveBeenCalledWith('mockedUrl');
   });
 
   it('handles button click, onCreateGameInstance throws error', async () => {
-    onCreateGameInstanceMock.mockRejectedValue('ERR');
+    mock_onCreateGameInstance.mockRejectedValue('ERR');
 
     const { getByTestId } = render(
       <CreateGameInstanceButton gameConfigId={gameConfigId} />
@@ -64,7 +66,7 @@ describe('CreateGameInstanceButton', () => {
     fireEvent(btn, 'onPress');
 
     await waitFor(() => {
-      expect(onCreateGameInstanceMock).toHaveBeenCalledWith(gameConfigId);
+      expect(mock_onCreateGameInstance).toHaveBeenCalledWith(gameConfigId);
     });
 
     expect(onUnknownErrorMock).toHaveBeenCalledWith('ERR');

@@ -15,9 +15,21 @@ jest.mock("./PlayersTableView", () => {
 });
 
 describe("PlayersView", () => {
+  it("renders correctly, no players", () => {
+    const publicPlayerInfos: PublicPlayerInfoT[] = [];
+    const publicGameInstance: PublicGameInstanceT = {
+      publicPlayerInfos: publicPlayerInfos,
+    } as PublicGameInstanceT;
+
+    // render
+    const { queryByTestId } = render(<PlayersView publicGameInstance={publicGameInstance} />);
+
+    expect(queryByTestId("container-tid")).toBeNull();
+  });
+
   it("renders correctly", () => {
     const publicPlayerInfos: PublicPlayerInfoT[] = [{
-      playerAccountId: "userIdMock",
+      playerId: "userIdMock",
       playerRole: "admin",
     } as PublicPlayerInfoT];
     const publicGameInstance: PublicGameInstanceT = {

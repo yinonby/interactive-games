@@ -1,0 +1,40 @@
+{
+  "5letters": {
+    "easy": [
+      "apple","grape","stone","table","chair","bread","water","plant","light","sound",
+      "heart","smile","green","brown","white","black","sweet","train","cloud","dream",
+      "house","river","ocean","laugh","peace","earth","money","happy","sheep","horse",
+      "tiger","zebra","piano","radio","phone","drink","sleep","bread","cheer","dance",
+      "beach","shell","grass","field","storm","north","south","westy","easty","round",
+      "clock","brush","plate","knife","spoon","sugar","honey","candy","fruit","lemon",
+      "mango","berry","melon","peach","plumb","flame","blaze","spark","shine","glove",
+      "shirt","pants","socks","shoes","paper","penne","penny","couch","floor","cease",
+      "alive","angel","baker","cable","delta","eagle","faith","giant","human","ideal",
+      "jolly","kitty","lunch","magic","noble","olive","party","queen","ruler","sunny"
+    ],
+    "medium": [
+      "adobe","brisk","climb","drape","eager","faint","gloom","hover","irony","jewel",
+      "kneel","layer","mirth","nurse","occur","pride","quilt","risky","stare","trend",
+      "urban","vivid","worry","yearn","zesty","abide","blush","crane","dwell","elope",
+      "fable","grind","haste","inbox","joint","knack","liver","miner","novel","oxide",
+      "prone","quirk","ranch","scent","tease","unite","vapor","wheat","yacht","zonal",
+      "amber","bison","caper","daisy","ember","frost","glide","hound","ivory","jolly",
+      "koala","linen","mason","nymph","oasis","pouch","quasi","rival","shear","truce",
+      "ultra","valor","whale","xenon","yield","zebra","axiom","banjo","civic","dodge",
+      "envoy","fjord","glyph","hippo","ionic","jaunt","karma","logic","manor","naval",
+      "omega","pixel","quark","radar","salty","tempo","udder","vigor","woven","xylem"
+    ],
+    "hard": [
+      "aback","aphid","buxom","cynic","dizzy","equip","fuzzy","glyph","hazel","ivory",
+      "jazzy","khaki","llama","mneme","nymph","ovoid","pygmy","quack","rhino","squad",
+      "thump","unzip","vixen","waltz","xenon","yokel","zonal","azure","blitz","cajun",
+      "doxie","exalt","fjord","gawky","hippy","infix","jumpy","kiosk","lynch","muzzy",
+      "ninja","oxide","pixel","quirk","razor","sphinx","toxin","umbra","vivid","waxen",
+      "yacht","zippy","axiom","banjo","civic","dizzy","epoch","fizzy","glitz","hyena",
+      "ionic","jelly","karma","lucky","magma","nymph","ozone","proxy","quell","rhyme",
+      "skulk","twixt","udder","vixen","wryly","xylem","yolky","zesty","azure","buzzy",
+      "chasm","dizzy","eject","fugue","gauzy","hymen","imbue","jaunt","knead","luxor",
+      "mynah","nexus","ovary","plaza","quash","rhumb","squib","topaz","vodka","whizz"
+    ]
+  }
+}

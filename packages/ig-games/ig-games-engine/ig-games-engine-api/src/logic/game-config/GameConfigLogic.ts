@@ -3,8 +3,10 @@ import type { GameConfigLogicAdapter, GameConfigsTableAdapter } from '@ig/games-
 import type {
   GameConfigIdT,
   GameConfigNoIdT, GameConfigT,
+  PublicGameConfigT,
   UpdateGameConfigInputT, UpdateGameConfigResultT
 } from '@ig/games-engine-models';
+import { GamesApiError } from '../../types/GamesPluginTypes';
 
 export class GameConfigLogic implements GameConfigLogicAdapter {
   constructor(
@@ -15,8 +17,27 @@ export class GameConfigLogic implements GameConfigLogicAdapter {
     return await this.gameConfigsTableAdapter.getGameConfigs();
   }
 
-  public async getGameConfig(gameConfigId: GameConfigIdT): Promise<GameConfigT | null> {
-    return await this.gameConfigsTableAdapter.getGameConfig(gameConfigId);
+  public async getPublicGameConfigs(gameConfigIds?: GameConfigIdT[]): Promise<PublicGameConfigT[]> {
+    // TODO: implement toPublic()
+    return await this.gameConfigsTableAdapter.getGameConfigs(gameConfigIds);
+  }
+
+  public async getGameConfig(gameConfigId: GameConfigIdT): Promise<GameConfigT> {
+    const gameConfig =  await this.gameConfigsTableAdapter.getGameConfig(gameConfigId);
+
+    if (gameConfig === null) {
+      throw new GamesApiError('Game config not found', 'gamesApiError:gameConfigNotFound');
+    }
+    return gameConfig;
+  }
+
+  public async getPublicGameConfig(gameConfigId: GameConfigIdT): Promise<PublicGameConfigT> {
+    const publicGameConfig =  await this.gameConfigsTableAdapter.getGameConfig(gameConfigId);
+
+    if (publicGameConfig === null) {
+      throw new GamesApiError('Game config not found', 'gamesApiError:gameConfigNotFound');
+    }
+    return publicGameConfig;
   }
 
   public async createGameConfig(gameConfigId: GameConfigIdT, gameConfigNoId: GameConfigNoIdT): Promise<void> {

@@ -12,13 +12,11 @@ export class AuthLogic implements AuthLogicAdapter {
     private readonly signupServiceAdapter: SignupServiceAdapter,
   ) { }
 
-  public async guestLogin(res: Response): Promise<AuthIdT> {
+  public async guestLogin(res: Response, nickname: string): Promise<AuthIdT> {
     const newUserId = generateUuidv4();
     const newUser: UserT = {
       userId: newUserId,
     }
-
-    const nickname = '';
 
     // create user and account in db (in transaction)
     const authId = await this.signupServiceAdapter.signup(newUser, nickname, res);

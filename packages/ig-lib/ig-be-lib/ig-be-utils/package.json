@@ -8,7 +8,6 @@
   "main": "index.ts",
   "scripts": {
     "build": "echo nothing to do",
-
     "test": "npm run build && npm run tsc && npm run lint && npm run cover:unit",
     "tsc": "npx tsc",
     "lint": "npm run lint:eslint && npm run lint:cycles",
@@ -22,6 +21,7 @@
   },
   "dependencies": {
     "@ig/utils": "*",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
@@ -31,6 +31,7 @@
     "@ig/lint": "*",
     "@ig/ts-deps": "*",
     "@ig/vitest": "*",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",

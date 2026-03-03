@@ -1,6 +1,9 @@
 
 import type { LevelStateT } from '@ig/games-engine-models';
-import { buildTestLevelState } from '@ig/games-engine-models/test-utils';
+import {
+  buildLevelStateMock,
+  buildTestLevelState, buildWordleLevelStateMock
+} from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { LevelView } from './LevelView';
@@ -21,19 +24,13 @@ describe('LevelView', () => {
   const onSubmitGuessMock = jest.fn();
 
   it('renders WordleView when levelState.kind is "wordle"', () => {
-    const wordleLevelState: LevelStateT = buildTestLevelState({
-      kind: 'wordle',
-      levelStatus: 'levelInProcess',
-      publicWordleConfig: { langCode: 'en', wordLength: 5, allowedGuessesNum: 6 },
-      publicWordleState: {
-        guessDatas: [],
-      },
-      wordleSolution: 'HELLO',
+    const levelState: LevelStateT = buildLevelStateMock({
+      pluginState: buildWordleLevelStateMock(),
     });
 
     const { getByTestId } = render(
       <LevelView
-        levelState={wordleLevelState}
+        levelState={levelState}
         onSubmitGuess={onSubmitGuessMock}
       />
     );
@@ -44,7 +41,9 @@ describe('LevelView', () => {
 
   it('returns null (renders nothing) when levelState.kind is unknown', () => {
     const unknownLevelState: LevelStateT = buildTestLevelState({
-      kind: 'unknown_game_type' as 'wordle',
+      pluginState: buildWordleLevelStateMock({
+        kind: 'unknown_game_type' as 'wordle',
+      }),
     });
 
     const { queryByTestId } = render(

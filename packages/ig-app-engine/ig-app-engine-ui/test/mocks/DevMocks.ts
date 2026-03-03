@@ -1,8 +1,7 @@
 
 import type {
   MinimalPublicGameConfigT,
-  PublicGameConfigT,
-  PublicGameInstanceT
+  PublicGameConfigT
 } from '@ig/games-engine-models';
 import { MIN_TO_MS } from '@ig/utils';
 
@@ -49,11 +48,14 @@ const wordleEnMinimalConfig: PublicGameConfigT = {
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
   publicLevelConfigs: [{
-    kind: 'wordle',
-    publicWordleConfig: {
-      wordLength: 5,
-      allowedGuessesNum: 6,
-      langCode: 'en',
+    publicPluginConfig: {
+      kind: 'wordle',
+      publicWordleConfig: {
+        wordLength: 5,
+        allowedGuessesNum: 6,
+        langCode: 'en',
+        difficulty: 'easy'
+      }
     }
   }],
 }
@@ -105,5 +107,3 @@ export const devAllGameConfigs: PublicGameConfigT[] = [
 ]
 
 export const devJoinedGameConfigs: PublicGameConfigT[] = [];
-
-export const devAllGameInstanceExposedInfos: PublicGameInstanceT[] = []

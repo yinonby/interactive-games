@@ -25,3 +25,14 @@ export type PublicGameConfigT = MinimalPublicGameConfigT & {
 export type GameConfigT = PublicGameConfigT;
 
 export type GameConfigNoIdT = Omit<GameConfigT, 'gameConfigId'>;
+
+// user config
+
+export type GameUserIdT = string;
+
+export type PublicGameUserT = {
+  gameUserId: GameUserIdT,
+  joinedGameConfigIds: GameConfigIdT[],
+}
+
+export type GameUserT = PublicGameUserT;

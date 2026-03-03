@@ -17,7 +17,7 @@ jest.mock("./PlayersTableView", () => {
 describe("PlayerTableRow", () => {
   it("renders row and cells, withAdminButtons = false", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "active",
@@ -38,7 +38,7 @@ describe("PlayerTableRow", () => {
 
   it("renders an extra empty cell when withAdminButtons = true, cur user is admin, and the row is for the cur user as a player", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "active",
@@ -55,7 +55,7 @@ describe("PlayerTableRow", () => {
 
   it("renders an extra cell for button when withAdminButtons = true, cur user is admin, but the player is another player", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "active",
@@ -72,7 +72,7 @@ describe("PlayerTableRow", () => {
 
   it("renders gray text color when player is invited", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "invited",
@@ -89,7 +89,7 @@ describe("PlayerTableRow", () => {
 
   it("renders no text color when player is active", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "active",
@@ -106,7 +106,7 @@ describe("PlayerTableRow", () => {
 
   it("renders red text color when player is suspended", () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "suspended",
@@ -123,7 +123,7 @@ describe("PlayerTableRow", () => {
 
   it("renders suspend button and handles press", async () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "active",
@@ -147,7 +147,7 @@ describe("PlayerTableRow", () => {
 
   it("renders activate button and handles press", async () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "suspended",
@@ -171,7 +171,7 @@ describe("PlayerTableRow", () => {
 
   it("renders uninvite button and handles press", async () => {
     const otherPublicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "p1",
+      playerId: "p1",
       playerNickname: "Alice",
       playerRole: "player",
       playerStatus: "invited",

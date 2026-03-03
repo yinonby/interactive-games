@@ -5,6 +5,44 @@ import type {
   MinimalPublicGameConfigT, PublicGameConfigT
 } from '../../types/game/GameTypes';
 
+export const imageInfoQuerySelectors = `
+  kind
+  imageAssetName
+  imageUrl
+`;
+
+export const minimalPublicGameConfigQuerySelectors = `
+  gameConfigId
+  kind
+  gameName
+  maxParticipants
+  maxDurationInfo {
+    kind
+    durationMs
+  }
+  gamePriceInfo {
+    kind
+    priceRate
+    priceCurrency
+  }
+  maxParticipants
+  imageInfo {
+    ${imageInfoQuerySelectors}
+  }
+`;
+
+export const publicGameConfigQuerySelectors = `
+  ${minimalPublicGameConfigQuerySelectors}
+  extraTimeMinutes
+  extraTimeLimitDurationInfo {
+    kind
+    durationMs
+  }
+  publicLevelConfigs {
+    levelName
+  }
+`;
+
 // get minimal public game configs query
 
 export type GetMinimalPublicGameConfigsResultT = {
@@ -17,26 +55,8 @@ export type GetMinimalPublicGameConfigsResponseT = {
 
 export const getMinimalPublicGameConfigsQuery = `
   query GetMinimalPublicGameConfigs {
-    minimalPublicGameConfigs: getGameConfigs {
-      gameConfigId
-      kind
-      gameName
-      maxParticipants
-      maxDurationInfo {
-        kind
-        durationMs
-      }
-      gamePriceInfo {
-        kind
-        priceRate
-        priceCurrency
-      }
-      maxParticipants
-      imageInfo {
-        kind
-        imageAssetName
-        imageUrl
-      }
+    minimalPublicGameConfigs: getMinimalPublicGameConfigs {
+      ${minimalPublicGameConfigQuerySelectors}
     }
   }
 `;
@@ -51,9 +71,28 @@ export type GetGameConfigsResponseT = {
   data: GetGameConfigsResultT,
 }
 
+// gameConfigIds is optional, in its absence all public game configs are retrieved
 export const getPublicGameConfigsQuery = `
-  query GetPublicGameConfigs {
-    publicGameConfigs: getGameConfigs {
+  query GetPublicGameConfigs($gameConfigIds: [ID!]) {
+    publicGameConfigs: getPublicGameConfigs(gameConfigIds: $gameConfigIds) {
+      ${publicGameConfigQuerySelectors}
+    }
+  }
+`;
+
+// get public game configs query
+
+export type GetPublicGameConfigResultT = {
+  publicGameConfig: PublicGameConfigT,
+}
+
+export type GetPublicGameConfigResponseT = {
+  data: GetPublicGameConfigResultT,
+}
+
+export const getPublicGameConfigQuery = `
+  query GetPublicGameConfig($gameConfigId: ID!) {
+    publicGameConfig: getPublicGameConfig(gameConfigId: $gameConfigId) {
       gameConfigId
       kind
       gameName

@@ -56,8 +56,9 @@ export const gameConfigGraphqlTypesTypeDefs = gql`
 const gameConfigGraphqlQueryTypeDefs = gql`
   type Query {
     getGameConfigs: [GameConfig!]! @auth(requires: gamesSystemAdmin)
+    getPublicGameConfigs(gameConfigIds: [ID!]): [PublicGameConfig!]!
     getMinimalPublicGameConfigs: [MinimalPublicGameConfig!]!
-    getPublicGameConfigs: [PublicGameConfig!]!
+    getPublicGameConfig(gameConfigId: ID!): PublicGameConfig!
   }
 `;
 

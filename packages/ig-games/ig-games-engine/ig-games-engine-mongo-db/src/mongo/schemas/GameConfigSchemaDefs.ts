@@ -1,10 +1,10 @@
 
-import type { GameConfigT } from '@ig/games-engine-models';
+import type { GameConfigT, PublicGameConfigT } from '@ig/games-engine-models';
 import type { SchemaDefinition } from 'mongoose';
 import { durationInfoSchemaDef, imageInfoSchemaDef, priceInfoSchemaDef } from './CommonSchemaDefs';
 import { levelConfigSchemaDef } from './LevelConfigSchemaDefs';
 
-export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
+export const publicGameConfigSchemaDef: SchemaDefinition<PublicGameConfigT> = {
   gameConfigId: {
     type: String,
     required: true,
@@ -65,3 +65,5 @@ export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = {
     default: [],
   },
 }
+
+export const gameConfigSchemaDef: SchemaDefinition<GameConfigT> = publicGameConfigSchemaDef;

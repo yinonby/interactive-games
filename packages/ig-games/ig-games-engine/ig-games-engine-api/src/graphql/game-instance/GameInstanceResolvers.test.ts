@@ -1,23 +1,32 @@
 
 import type { GameInstanceLogicAdapter } from '@ig/games-engine-be-models';
-import type { AddPlayerInputT, StartPlayingInputT, SubmitGuessInputT } from '@ig/games-engine-models';
-import { buildTestPublicPlayerInfo } from '@ig/games-engine-models/test-utils';
+import type {
+  CreateGameInstanceInputT, JoinGameByInviteInputT, StartPlayingInputT,
+  SubmitGuessInputT
+} from '@ig/games-engine-models';
 import { createGameInstanceResolvers } from './GameInstanceResolvers';
 
 describe('GameConfigResolvers', () => {
-  it('getGameConfigInstanceIds calls adapter and returns data', async () => {
+  it('getGameInstanceIdsForGameConfig calls adapter and returns data', async () => {
     // Arrange: mock the adapter
     const mock_GameInstanceLogicAdapter: Partial<GameInstanceLogicAdapter> = {
-      getGameConfigInstanceIds: vi.fn().mockResolvedValue(['GI1']),
+      getGameInstanceIdsForGameConfig: vi.fn().mockResolvedValue(['GI1']),
     };
 
     const resolvers = createGameInstanceResolvers(mock_GameInstanceLogicAdapter as GameInstanceLogicAdapter);
 
     // Act
-    const result = await resolvers.Query.getGameConfigInstanceIds('GC1');
+    const result = await resolvers.Query.getGameInstanceIdsForGameConfig(
+      {},
+      { gameConfigId: 'GC1' },
+      { gameUserId: 'USER1', headers: {} },
+    );
 
     // Assert
-    expect(mock_GameInstanceLogicAdapter.getGameConfigInstanceIds).toHaveBeenCalled();
+    expect(mock_GameInstanceLogicAdapter.getGameInstanceIdsForGameConfig).toHaveBeenCalledWith(
+      'USER1',
+      { gameConfigId: 'GC1' },
+    );
     expect(result).toEqual(['GI1']);
   });
 
@@ -30,28 +39,52 @@ describe('GameConfigResolvers', () => {
     const resolvers = createGameInstanceResolvers(mock_GameInstanceLogicAdapter as GameInstanceLogicAdapter);
 
     // Act
-    const result = await resolvers.Query.getPublicGameInstance('GI1');
+    const result = await resolvers.Query.getPublicGameInstance(
+      {},
+      { gameInstanceId: 'GI1' },
+      { gameUserId: 'USER1', headers: {} }
+    );
 
     // Assert
-    expect(mock_GameInstanceLogicAdapter.getPublicGameInstance).toHaveBeenCalled();
+    expect(mock_GameInstanceLogicAdapter.getPublicGameInstance).toHaveBeenCalledWith(
+      'USER1',
+      { gameInstanceId: 'GI1' }
+    );
     expect(result).toEqual(null);
   });
 
-  it('addPlayer calls adapter and returns data', async () => {
+  it('createGameInstance calls adapter and returns data', async () => {
     // Arrange: mock the adapter
     const mock_GameInstanceLogicAdapter: Partial<GameInstanceLogicAdapter> = {
-      addPlayer: vi.fn(),
+      createGameInstance: vi.fn().mockResolvedValue('GI1'),
     };
 
     const resolvers = createGameInstanceResolvers(mock_GameInstanceLogicAdapter as GameInstanceLogicAdapter);
 
     // Act
-    const input: AddPlayerInputT = { gameInstanceId: 'GI1', publicPlayerInfo: buildTestPublicPlayerInfo() };
-    const result = await resolvers.Mutation.addPlayer({}, { input: input});
+    const input: CreateGameInstanceInputT = { gameConfigId: 'GC1' };
+    const result = await resolvers.Mutation.createGameInstance({}, { input }, { gameUserId: 'USER1', headers: {} });
 
     // Assert
-    expect(mock_GameInstanceLogicAdapter.addPlayer).toHaveBeenCalledWith(input);
-    expect(result).toEqual({ status: 'ok' });
+    expect(mock_GameInstanceLogicAdapter.createGameInstance).toHaveBeenCalledWith('USER1', input);
+    expect(result).toEqual({ gameInstanceId: 'GI1' });
+  });
+
+  it('joinGameByInvite calls adapter and returns data', async () => {
+    // Arrange: mock the adapter
+    const mock_GameInstanceLogicAdapter: Partial<GameInstanceLogicAdapter> = {
+      joinGameByInvite: vi.fn().mockResolvedValue('GI1'),
+    };
+
+    const resolvers = createGameInstanceResolvers(mock_GameInstanceLogicAdapter as GameInstanceLogicAdapter);
+
+    // Act
+    const input: JoinGameByInviteInputT = { invitationCode: 'GI1' };
+    const result = await resolvers.Mutation.joinGameByInvite({}, { input }, { gameUserId: 'USER1', headers: {} });
+
+    // Assert
+    expect(mock_GameInstanceLogicAdapter.joinGameByInvite).toHaveBeenCalledWith('USER1', input);
+    expect(result).toEqual({ gameInstanceId: 'GI1' });
   });
 
   it('startPlaying calls adapter and returns data', async () => {
@@ -64,10 +97,10 @@ describe('GameConfigResolvers', () => {
 
     // Act
     const input: StartPlayingInputT = { gameInstanceId: 'GI1' };
-    const result = await resolvers.Mutation.startPlaying({}, { input: input});
+    const result = await resolvers.Mutation.startPlaying({}, { input }, { gameUserId: 'USER1', headers: {} });
 
     // Assert
-    expect(mock_GameInstanceLogicAdapter.startPlaying).toHaveBeenCalledWith(input);
+    expect(mock_GameInstanceLogicAdapter.startPlaying).toHaveBeenCalledWith('USER1', input);
     expect(result).toEqual({ status: 'ok' });
   });
 
@@ -81,10 +114,10 @@ describe('GameConfigResolvers', () => {
 
     // Act
     const input: SubmitGuessInputT = { gameInstanceId: 'GI1', levelIdx: 1, guess: 'World' };
-    const result = await resolvers.Mutation.submitGuess({}, { input: input});
+    const result = await resolvers.Mutation.submitGuess({}, { input }, { gameUserId: 'USER1', headers: {} });
 
     // Assert
-    expect(mock_GameInstanceLogicAdapter.submitGuess).toHaveBeenCalledWith(input);
+    expect(mock_GameInstanceLogicAdapter.submitGuess).toHaveBeenCalledWith('USER1', input);
     expect(result).toEqual({ isGuessCorrect: true });
   });
 });

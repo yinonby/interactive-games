@@ -1,5 +1,6 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
+import { buildPublicWordleConfigMock } from '@ig/games-wordle-models/test-utils';
 import { __rnuiMocks } from '@ig/rnui';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
@@ -14,11 +15,11 @@ describe('WordleView', () => {
 
   it('renders exactly 2 full guess disabled inputs when 2 guesses are provided in publicWordleState', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -39,11 +40,11 @@ describe('WordleView', () => {
 
   it('does not render code input and button, when level is not in process', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -64,11 +65,11 @@ describe('WordleView', () => {
 
   it('does not render code input and button, when level is in process but no guesses are left', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -95,11 +96,11 @@ describe('WordleView', () => {
 
     // render
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -152,11 +153,11 @@ describe('WordleView', () => {
 
     // render
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -204,11 +205,11 @@ describe('WordleView', () => {
 
   it('does not render empty disabled code inputs, when level is not in process', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -227,11 +228,11 @@ describe('WordleView', () => {
 
   it('does not render empty disabled code inputs, when level in process but not more than 1 guess are left', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 3,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -251,11 +252,11 @@ describe('WordleView', () => {
 
   it('renders empty disabled code inputs, when level is in process and more than 1 guess are left', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -275,11 +276,11 @@ describe('WordleView', () => {
 
   it('does not render guessLeft text, when level is not in process', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -298,11 +299,11 @@ describe('WordleView', () => {
 
   it('renders guessLeft text, when level is in process', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -321,11 +322,11 @@ describe('WordleView', () => {
 
   it('does not render correct solution text, when level is not solved', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -345,11 +346,11 @@ describe('WordleView', () => {
 
   it('does not render correct solution text, when level is solved, but solution is not given', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },
@@ -368,11 +369,11 @@ describe('WordleView', () => {
 
   it('renders correct solution text, when level is solved and solution is given', () => {
     const mockProps: WordleViewPropsT = {
-      wordleExposeConfig: {
+      publicWordleConfig: buildPublicWordleConfigMock({
         langCode: 'en',
         wordLength: 5,
         allowedGuessesNum: 4,
-      },
+      }),
       publicWordleState: {
         guessDatas: [
           { guess: 'HELLO', letterAnalyses: ['hit', 'hit', 'hit', 'hit', 'hit'] },

@@ -81,7 +81,7 @@ describe('GameInstanceView', () => {
     // build publicGameInstance
     const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       publicPlayerInfos: [buildTestPublicPlayerInfo({
-        playerAccountId: 'otherUser',
+        playerId: 'otherUser',
         playerRole: 'player',
       })],
     });
@@ -102,7 +102,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       publicGameConfig: publicGameConfig,
       publicPlayerInfos: [buildTestPublicPlayerInfo({
-        playerAccountId: curUserIdMock,
+        playerId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({
@@ -142,7 +142,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       publicGameConfig: publicGameConfig,
       publicPlayerInfos: [buildTestPublicPlayerInfo({
-        playerAccountId: curUserIdMock,
+        playerId: curUserIdMock,
         playerRole: 'player',
       })],
       gameState: buildTestGameState({
@@ -164,7 +164,7 @@ describe('GameInstanceView', () => {
       gameInstanceId: 'gid-1',
       publicGameConfig: publicGameConfig,
       publicPlayerInfos: [buildTestPublicPlayerInfo({
-        playerAccountId: curUserIdMock,
+        playerId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({

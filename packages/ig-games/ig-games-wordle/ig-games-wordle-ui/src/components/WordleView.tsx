@@ -13,7 +13,7 @@ const letterAnalysisToBackgroundColor: Record<LetterAnalysisT, ColorValue> = {
 }
 
 export type WordleViewPropsT = TestableComponentT & {
-  wordleExposeConfig: PublicWordleConfigT,
+  publicWordleConfig: PublicWordleConfigT,
   publicWordleState: PublicWordleStateT,
   levelStatus: LevelStatusT,
   onSubmitGuess: (guess: string) => Promise<boolean>,
@@ -21,13 +21,13 @@ export type WordleViewPropsT = TestableComponentT & {
 };
 
 export const WordleView: FC<WordleViewPropsT> = (props) => {
-  const { wordleExposeConfig, publicWordleState, levelStatus, onSubmitGuess, snackbarDurationMs = 5000 } = props;
+  const { publicWordleConfig, publicWordleState, levelStatus, onSubmitGuess, snackbarDurationMs = 5000 } = props;
   const { t } = useAppLocalization();
   const { onShowSnackbar } = useRnuiSnackbar();
   const genericStyles = useGenericStyles();
   const [guess, setGuess] = useState('');
-  const isGuessSubmittable = guess.length === wordleExposeConfig.wordLength;
-  const guessesLeft = wordleExposeConfig.allowedGuessesNum - publicWordleState.guessDatas.length;
+  const isGuessSubmittable = guess.length === publicWordleConfig.wordLength;
+  const guessesLeft = publicWordleConfig.allowedGuessesNum - publicWordleState.guessDatas.length;
 
   const handleInputChange = async (input: string): Promise<void> => {
     setGuess(input);
@@ -54,7 +54,7 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         <View key={index} style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-full-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             value={e.guess}
             size='small'
             tileTextColors={e.letterAnalyses.map(() => 'white')}
@@ -68,7 +68,7 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         <View style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-input-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             value={guess}
             onChange={handleInputChange}
             size='small'
@@ -90,7 +90,7 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         <View key={index} style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-empty-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             size='small'
             disabled
           />

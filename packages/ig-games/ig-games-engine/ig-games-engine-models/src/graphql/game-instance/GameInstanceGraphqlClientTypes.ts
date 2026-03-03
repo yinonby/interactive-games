@@ -1,30 +1,99 @@
 
 import type {
   GameInstanceIdT,
-  PublicGameInstanceT,
-  PublicPlayerInfoT
+  PublicGameInstanceT
 } from '../../types/game/GameInstanceTypes';
+import type { GameConfigIdT } from '../../types/game/GameTypes';
+import { imageInfoQuerySelectors, publicGameConfigQuerySelectors } from '../game-config/GameConfigGraphqlClientTypes';
+
+const publicCodePuzzleConfigQuerySelector = `
+  kind
+  codeLength
+  accessories {
+    kind
+    imageInfo {
+      ${imageInfoQuerySelectors}
+    }
+  }
+  usedAccessories {
+    kind
+    imageInfo {
+      ${imageInfoQuerySelectors}
+    }
+  }
+  instructions {
+    kind
+    text
+  }
+`;
+
+const pluginStateQuerySelector = `
+  kind
+
+  publicCodePuzzleConfig {
+    ${publicCodePuzzleConfigQuerySelector}
+  }
+  codeSolution
+  isCaseSensitive
+
+  publicWordleConfig {
+    langCode
+    wordLength
+    difficulty
+    allowedGuessesNum
+  }
+  publicWordleState {
+    guessDatas {
+      guess
+      letterAnalyses
+    }
+    correctGuess
+  }
+  wordleSolution
+`;
+
+const gameStateQuerySelectors = `
+  gameStatus
+  startTimeTs
+  lastGivenExtraTimeTs
+  finishTimeTs
+  levelStates {
+    levelStatus
+    startTimeTs
+    solvedTimeTs
+    pluginState {
+      ${pluginStateQuerySelector}
+    }
+  }
+`
+
+const publicPlayerInfoQuerySelectors = `
+  playerId
+  playerNickname
+  playerRole
+  playerStatus
+`;
 
 // get minimal public game instances query
 
-export type GetGameConfigInstanceIdsResultT = {
+export type GetGameInstanceIdsForGameConfigResultT = {
   gameInstanceIds: GameInstanceIdT[],
 }
 
-export type GetGameConfigInstanceIdsResponseT = {
-  data: GetGameConfigInstanceIdsResultT,
+export type GetGameInstanceIdsForGameConfigResponseT = {
+  data: GetGameInstanceIdsForGameConfigResultT,
 }
 
-export const getGameConfigInstanceIdsQuery = `
-  query GetGameConfigInstanceIds($gameConfigId: ID!) {
-    gameInstanceIds: getGameConfigInstanceIds(gameConfigId: $gameConfigId)
+export const getGameInstanceIdsForGameConfigQuery = `
+  query GetGameInstanceIdsForGameConfig($gameConfigId: ID!) {
+    gameInstanceIds: getGameInstanceIdsForGameConfig(gameConfigId: $gameConfigId)
   }
 `;
 
 // get public game instances query
 
 export type GetGameInstanceResultT = {
-  publicGameInstance: PublicGameInstanceT | null,
+  publicGameInstance: PublicGameInstanceT,
 }
 
 export type GetGameInstanceResponseT = {
@@ -35,31 +104,64 @@ export const getGameInstanceQuery = `
   query GetPublicGameInstance($gameInstanceId: ID!) {
     publicGameInstance: getPublicGameInstance(gameInstanceId: $gameInstanceId) {
       gameInstanceId
+      invitationCode
+      publicGameConfig {
+        ${publicGameConfigQuerySelectors}
+      }
+      gameState {
+        ${gameStateQuerySelectors}
+      }
+      publicPlayerInfos {
+        ${publicPlayerInfoQuerySelectors}
+      }
+    }
+  }
+`;
+
+// create game instance
+
+export type CreateGameInstanceInputT = {
+  gameConfigId: GameConfigIdT,
+}
+
+export type CreateGameInstanceResultT = {
+  gameInstanceId: GameInstanceIdT;
+}
+
+export type CreateGameInstanceResponseT = {
+  data: {
+    createGameInstanceResult: CreateGameInstanceResultT,
+  }
+}
+
+export const createGameInstanceInputMutation = `
+  mutation CreateGameInstance($input: CreateGameInstanceInput!) {
+    createGameInstanceResult: createGameInstance(input: $input) {
+      gameInstanceId
     }
   }
 `;
 
 // add player
 
-export type AddPlayerInputT = {
+export type JoinGameByInviteInputT = {
+  invitationCode: string,
+}
+
+export type JoinGameByInviteResultT = {
   gameInstanceId: GameInstanceIdT,
-  publicPlayerInfo: PublicPlayerInfoT,
 }
 
-export type AddPlayerResultT = {
-  status: 'ok';
-}
-
-export type AddPlayerResponseT = {
+export type JoinGameByInviteResponseT = {
   data: {
-    AddPlayerResult: AddPlayerResultT,
+    joinGameByInviteResult: JoinGameByInviteResultT,
   }
 }
 
-export const addPlayerInputMutation = `
-  mutation AddPlayer($input: AddPlayerInput!) {
-    addPlayerResult: addPlayer(input: $input) {
-      status
+export const joinGameByInviteInputMutation = `
+  mutation JoinGameByInvite($input: JoinGameByInviteInput!) {
+    joinGameByInviteResult: joinGameByInvite(input: $input) {
+      gameInstanceId
     }
   }
 `;
@@ -76,7 +178,7 @@ export type StartPlayingResultT = {
 
 export type StartPlayingResponseT = {
   data: {
-    StartPlayingResult: StartPlayingResultT,
+    startPlayingResult: StartPlayingResultT,
   }
 }
 
@@ -102,7 +204,7 @@ export type SubmitGuessResultT = {
 
 export type SubmitGuessResponseT = {
   data: {
-    SubmitGuessResult: SubmitGuessResultT,
+    submitGuessResult: SubmitGuessResultT,
   }
 }
 

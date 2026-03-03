@@ -9,14 +9,14 @@ import { createAuthSchema } from './AuthSchema';
 describe('createAuthSchema', () => {
   const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
   const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
-  const pluginConfig: AuthPluginConfigT = {
+  const publicPluginConfig: AuthPluginConfigT = {
     getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
     getSignupPluginAdapter: () => mock_SignupPluginAdapter,
   };
 
   it('creates a working schema and resolves guestLogin', async () => {
     // --- create schema ---
-    const schema = createAuthSchema(pluginConfig);
+    const schema = createAuthSchema(publicPluginConfig);
 
     // --- create Apollo server ---
     const server = new ApolloServer<ApolloContextT>({ schema });

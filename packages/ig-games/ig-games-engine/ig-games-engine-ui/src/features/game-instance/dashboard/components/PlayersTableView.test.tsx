@@ -32,7 +32,7 @@ describe("PlayersTableView", () => {
 
   it("does not render when current user is not in players list", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: "otherUserId",
+      playerId: "otherUserId",
       playerRole: 'player',
     } as PublicPlayerInfoT;
     const { queryByTestId } = render(
@@ -48,7 +48,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly withAdminButtons = false", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: curAccountId,
+      playerId: curAccountId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -70,7 +70,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, no admin", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: curAccountId,
+      playerId: curAccountId,
       playerRole: 'player',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -92,7 +92,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, admin", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerAccountId: curAccountId,
+      playerId: curAccountId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -114,11 +114,11 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, multiple players", () => {
     const publicPlayerInfo1: PublicPlayerInfoT = {
-      playerAccountId: curAccountId,
+      playerId: curAccountId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const publicPlayerInfo2: PublicPlayerInfoT = {
-      playerAccountId: 'otherUserId',
+      playerId: 'otherUserId',
       playerRole: 'player',
     } as PublicPlayerInfoT;
     const { queryAllByTestId } = render(

@@ -3,7 +3,7 @@ import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GameModel from '../../../domains/game/model/rtk/GameModel';
+import * as GameConfigModelModule from '../../../domains/game-config/model/rtk/GameConfigModel';
 import { GameDashboardView } from './GameDashboardView';
 
 // mocks
@@ -30,53 +30,52 @@ jest.mock('./GameInstanceSummaryView', () => {
 
 describe('GameDashboardView', () => {
   const { onAppErrorMock } = __engineAppUiMocks;
-  const useGameModelSpy = jest.spyOn(GameModel, 'useGameModel');
+  const spy_useGameConfigModel = jest.spyOn(GameConfigModelModule, 'useGameConfigModel');
+  const gameConfigId = 'GC1'
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders loading screen', () => {
-    useGameModelSpy.mockReturnValue({
+    spy_useGameConfigModel.mockReturnValue({
       isLoading: true,
       isError: false,
     });
 
-    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
     const { queryByTestId } = render(
-      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
+      <GameDashboardView gameConfigId={gameConfigId} />
     );
 
     expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
   });
 
   it('renders error', () => {
-    useGameModelSpy.mockReturnValue({
+    spy_useGameConfigModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
     });
 
-    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
     render(
-      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
+      <GameDashboardView gameConfigId={gameConfigId} />
     );
 
     expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
   });
 
   it('renders properly', async () => {
-    const joinedPublicGameConfig = buildPublicGameConfigMock({ gameName: 'g1' });
-    useGameModelSpy.mockReturnValue({
+    spy_useGameConfigModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
+        publicGameConfig: buildPublicGameConfigMock(),
         gameInstanceIds: ['giid-1', 'giid-2'],
       },
     });
 
     const { getByTestId, getAllByTestId } = render(
-      <GameDashboardView joinedPublicGameConfig={joinedPublicGameConfig}/>
+      <GameDashboardView gameConfigId={gameConfigId}/>
     );
 
     getByTestId('GameConfigCardView-tid');

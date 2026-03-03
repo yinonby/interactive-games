@@ -4,13 +4,18 @@ import type { ImageInfoT } from './CommonTypes'
 
 export type PublicLevelConfigT = {
   levelName?: string,
-} & ({
+  publicPluginConfig: PublicCodeLevelConfigT | PublicWordleLevelConfigT,
+}
+
+export type PublicCodeLevelConfigT = {
   kind: 'code',
-  publicCodePuzzleConfig: PublicCodePuzzleConfigT
-} | {
+  publicCodePuzzleConfig: PublicCodePuzzleConfigT,
+}
+
+export type PublicWordleLevelConfigT = {
   kind: 'wordle',
   publicWordleConfig: PublicWordleConfigT,
-})
+}
 
 export type PublicCodePuzzleConfigT = {
   kind: 'alphabetic' | 'numeric' | 'alphanumeric',

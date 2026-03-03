@@ -9,7 +9,7 @@ import type { TestableComponentT } from '../../../../types/ComponentTypes';
 import { PlayerTableRow } from './PlayerTableRow';
 
 export type PlayersTableViewPropsT = TestableComponentT & {
-  publicPlayerInfos: [PublicPlayerInfoT, ...PublicPlayerInfoT[]],
+  publicPlayerInfos: PublicPlayerInfoT[],
   withAdminButtons?: boolean,
 };
 
@@ -19,14 +19,14 @@ export const PlayersTableView: FC<PlayersTableViewPropsT> = (props) => {
   const logger = useClientLogger();
   const { curAccountId } = useAuth();
 
-  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerAccountId === curAccountId);
+  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curAccountId);
   if (curPublicPlayerInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player, curAccountId [${curAccountId}]`);
     return null;
   }
   const isCurUserAdminPlayer = curPublicPlayerInfo.playerRole === 'admin';
   const otherPublicPlayerInfos = publicPlayerInfos
-    .filter(e => e.playerAccountId !== curAccountId)
+    .filter(e => e.playerId !== curAccountId)
     .sort(comparePlayersForDisplaySort);
 
   return (

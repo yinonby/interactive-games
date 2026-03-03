@@ -20,13 +20,19 @@ export type LevelStateT = {
   levelStatus: LevelStatusT,
   startTimeTs?: number,
   solvedTimeTs?: number,
-} & ({
+  pluginState: CodeLevelStateT | WordleLevelStateT,
+}
+
+export type CodeLevelStateT = {
   kind: 'code',
   publicCodePuzzleConfig: PublicCodePuzzleConfigT,
   codeSolution: string,
-} | {
+  isCaseSensitive?: boolean,
+}
+
+export type WordleLevelStateT = {
   kind: 'wordle',
   publicWordleConfig: PublicWordleConfigT,
   publicWordleState: PublicWordleStateT,
   wordleSolution: string,
-});
+}

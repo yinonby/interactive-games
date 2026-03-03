@@ -1,12 +1,11 @@
 
 import { __engineAppUiMocks, type AppErrorCodeT } from '@ig/app-engine-ui';
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import type { GamesUserConfigT, PublicGameConfigT } from '@ig/games-engine-models';
-import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
+import { buildGameUserMock, buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import * as GamesConfigModel from '../../../domains/games-app/model/rtk/GamesAppModel';
-import * as GamesUserConfigModel from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
+import * as GameUserModelModule from '../../../domains/game-user/model/rtk/GameUserModel';
+import * as GamesAppModelModule from '../../../domains/games-app/model/rtk/GamesAppModel';
 import { AvailableGamesView } from './AvailableGamesView';
 
 jest.mock("./JoinableGameCardView", () => {
@@ -20,23 +19,23 @@ jest.mock("./JoinableGameCardView", () => {
 
 describe("AvailableGamesView", () => {
   const { onAppErrorMock } = __engineAppUiMocks;
-  const useGamesConfigModelSpy = jest.spyOn(GamesConfigModel, 'useGamesAppModel');
-  const useGamesUserConfigModelSpy = jest.spyOn(GamesUserConfigModel, 'useGamesUserConfigModel');
+  const spy_useGamesAppModel = jest.spyOn(GamesAppModelModule, 'useGamesAppModel');
+  const spy_useGameUserModel = jest.spyOn(GameUserModelModule, 'useGameUserModel');
 
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
   it("renders Loading when either model is loading", () => {
-    useGamesConfigModelSpy.mockReturnValue({
+    spy_useGamesAppModel.mockReturnValue({
       isLoading: true,
       isError: false,
       data: undefined
     });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { gamesUserConfig: {} as GamesUserConfigT },
+      data: { publicGameUser: buildGameUserMock() },
     });
 
     const { queryByTestId } = render(<AvailableGamesView />);
@@ -44,16 +43,16 @@ describe("AvailableGamesView", () => {
   });
 
   it("renders Error when games-config model has error", () => {
-    useGamesConfigModelSpy.mockReturnValue({
+    spy_useGamesAppModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "ERR" as AppErrorCodeT,
       data: undefined
     });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { gamesUserConfig: {} as GamesUserConfigT },
+      data: { publicGameUser: buildGameUserMock() },
     });
 
     render(<AvailableGamesView />);
@@ -62,12 +61,12 @@ describe("AvailableGamesView", () => {
   });
 
   it("renders Error when user-config model has error", () => {
-    useGamesConfigModelSpy.mockReturnValue({
+    spy_useGamesAppModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: { minimalPublicGameConfigs: [] },
     });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "ERR" as AppErrorCodeT,
@@ -80,28 +79,24 @@ describe("AvailableGamesView", () => {
 
   it('renders "No games are available" when user has joined all available games', () => {
     const availableMinimalPublicGameConfigs = [
-      buildPublicGameConfigMock({ gameConfigId: "g1" }),
-      buildPublicGameConfigMock({ gameConfigId: "g2" }),
+      buildPublicGameConfigMock({ gameConfigId: "GC1" }),
+      buildPublicGameConfigMock({ gameConfigId: "GC2" }),
     ];
-    const joinedPublicGameConfigs: PublicGameConfigT[] = [
-      buildPublicGameConfigMock({ gameConfigId: "g1" }),
-      buildPublicGameConfigMock({ gameConfigId: "g2" }),
-    ]
 
-    useGamesConfigModelSpy.mockReturnValue({
+    spy_useGamesAppModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
         minimalPublicGameConfigs: availableMinimalPublicGameConfigs,
       }
     });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: joinedPublicGameConfigs,
-        }
+        publicGameUser: buildGameUserMock({
+          joinedGameConfigIds: ['GC1', 'GC2']
+        }),
       }
     });
 
@@ -114,27 +109,24 @@ describe("AvailableGamesView", () => {
 
   it('renders "Available games:" and grid when there are non-joined games', () => {
     const availableMinimalPublicGameConfigs = [
-      buildPublicGameConfigMock({ gameConfigId: "g1" }),
-      buildPublicGameConfigMock({ gameConfigId: "g2" }),
+      buildPublicGameConfigMock({ gameConfigId: "GC1" }),
+      buildPublicGameConfigMock({ gameConfigId: "GC2" }),
     ];
-    const joinedPublicGameConfigs: PublicGameConfigT[] = [
-      buildPublicGameConfigMock({ gameConfigId: "g1" }),
-    ]
 
-    useGamesConfigModelSpy.mockReturnValue({
+    spy_useGamesAppModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
         minimalPublicGameConfigs: availableMinimalPublicGameConfigs,
       }
     });
-    useGamesUserConfigModelSpy.mockReturnValue({
+    spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: false,
       data: {
-        gamesUserConfig: {
-          joinedPublicGameConfigs: joinedPublicGameConfigs,
-        }
+        publicGameUser: buildGameUserMock({
+          joinedGameConfigIds: ['GC1']
+        }),
       }
     });
 

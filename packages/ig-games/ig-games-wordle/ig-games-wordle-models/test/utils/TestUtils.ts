@@ -8,10 +8,11 @@ if (process.env.NODE_ENV !== 'test') {
 const basePublicWordleConfig: PublicWordleConfigT = {
   langCode: 'en',
   wordLength: 5,
+  difficulty: 'easy',
   allowedGuessesNum: 6,
 };
 
-export const buildFullTestPublicWordleConfig = (overrides: Partial<PublicWordleConfigT>): PublicWordleConfigT => ({
+export const buildPublicWordleConfigMock = (overrides: Partial<PublicWordleConfigT>): PublicWordleConfigT => ({
   ...basePublicWordleConfig,
   ...overrides,
 });

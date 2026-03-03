@@ -1,31 +1,48 @@
 
 import { ApolloServer } from '@apollo/server';
-import type { GameInstancesTableAdapter, GamesDbAdapter } from '@ig/games-engine-be-models';
-import { getGameConfigInstanceIdsQuery, type GetGameConfigInstanceIdsResultT } from '@ig/games-engine-models';
+import type {
+  GameInstancesTableAdapter,
+  GamesDbAdapter, GamesUserAdapter
+} from '@ig/games-engine-be-models';
+import {
+  getGameInstanceIdsForGameConfigQuery,
+  type GetGameInstanceIdsForGameConfigResultT
+} from '@ig/games-engine-models';
+import type { WordleAdapter } from '@ig/games-wordle-be-models';
 import { createGameInstanceSchema } from './GameInstanceSchema';
 
 describe('createGameInstanceSchema', () => {
   it('creates a working schema and resolves getGameConfigs', async () => {
     // --- mock table adapter ---
     const mock_GameInstancesTableAdapter: Partial<GameInstancesTableAdapter> = {
-      getGameConfigInstanceIds: vi.fn().mockResolvedValue(['GI1']),
+      getGameInstanceIdsForGameConfig: vi.fn().mockResolvedValue(['GI1']),
     };
 
     // --- mock db adapter ---
-    const mock_GamesDbAdapter: GamesDbAdapter = {
-      getGameInstancesTableAdapter: () => mock_GameInstancesTableAdapter,
-    } as GamesDbAdapter;
+    const mock_GamesDbAdapter: Partial<GamesDbAdapter> = {
+      getGameConfigsTableAdapter: vi.fn(),
+      getGameInstancesTableAdapter: () => mock_GameInstancesTableAdapter as GameInstancesTableAdapter,
+    };
+
+    const mock_gamesPlayerInfoAdapter: GamesUserAdapter = {
+      retrieveGameUserInfo: vi.fn(),
+    }
+
+    const mock_wordleAdapter: WordleAdapter = {
+      generateWordleSolution: vi.fn(),
+    }
 
     // --- create schema ---
-    const schema = createGameInstanceSchema(mock_GamesDbAdapter);
+    const schema = createGameInstanceSchema(mock_GamesDbAdapter as GamesDbAdapter,
+      mock_gamesPlayerInfoAdapter, mock_wordleAdapter);
 
     // --- create Apollo server ---
     const server = new ApolloServer({ schema });
     await server.start();
 
     // --- execute query ---
-    const result = await server.executeOperation<GetGameConfigInstanceIdsResultT>({
-      query: getGameConfigInstanceIdsQuery,
+    const result = await server.executeOperation<GetGameInstanceIdsForGameConfigResultT>({
+      query: getGameInstanceIdsForGameConfigQuery,
       variables: { gameConfigId: 'GC1' },
     });
 
@@ -41,6 +58,6 @@ describe('createGameInstanceSchema', () => {
     expect(data.gameInstanceIds[0]).toEqual('GI1');
 
     // --- ensure logic path was called ---
-    expect(mock_GameInstancesTableAdapter.getGameConfigInstanceIds).toHaveBeenCalledOnce();
+    expect(mock_GameInstancesTableAdapter.getGameInstanceIdsForGameConfig).toHaveBeenCalledOnce();
   });
 });

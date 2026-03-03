@@ -27,6 +27,8 @@
     "@ig/be-utils": "*",
     "@ig/games-engine-be-models": "*",
     "@ig/games-engine-models": "*",
+    "@ig/games-wordle-be-models": "*",
+    "@ig/games-wordle-be-logic": "*",
     "@ig/utils": "*",
     "express": "^5.2.1",
     "graphql": "^16.12.0"

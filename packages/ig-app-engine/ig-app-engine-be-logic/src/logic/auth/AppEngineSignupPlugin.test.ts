@@ -3,7 +3,7 @@ import type { AccountsTableAdapter } from '@ig/app-engine-be-models';
 import type { CookieUtils } from '@ig/be-utils';
 import * as BeUtilsModule from '@ig/be-utils';
 import * as UiltsModule from '@ig/utils';
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 import { AppEngineSignupPlugin, AppEngineSignupPluginTransaction } from './AppEngineSignupPlugin';
 
 describe('AppEngineSignupPlugin', () => {
@@ -12,11 +12,12 @@ describe('AppEngineSignupPlugin', () => {
   const jwtExpiresInMs = 1000;
   const jwtCookieDomain = 'localhost';
   const jwtCookieIsSecure = false;
-  const buildJWTSpy = vi.spyOn(BeUtilsModule, 'buildJWT');
-  const CookieUtilsSpy = vi.spyOn(BeUtilsModule, 'CookieUtils');
+  const spy_buildJWT = vi.spyOn(BeUtilsModule, 'buildJWT');
+  const spy_decodeJwt = vi.spyOn(BeUtilsModule, 'decodeJwt');
+  const spy_CookieUtils = vi.spyOn(BeUtilsModule, 'CookieUtils');
   const mock_setCookie = vi.fn();
 
-  CookieUtilsSpy.mockImplementation(() => ({
+  spy_CookieUtils.mockImplementation(() => ({
     setCookie: mock_setCookie,
   } as unknown as CookieUtils));
 
@@ -35,7 +36,7 @@ describe('AppEngineSignupPlugin', () => {
   });
 
   it('should build JWT and set cookie on signup response', async () => {
-    buildJWTSpy.mockReturnValue('mocked-jwt');
+    spy_buildJWT.mockReturnValue('mocked-jwt');
 
     const plugin = new AppEngineSignupPlugin(
       jwtSecret,
@@ -48,7 +49,7 @@ describe('AppEngineSignupPlugin', () => {
 
     await plugin.onSignupResponse(user, authId, res);
 
-    expect(buildJWTSpy).toHaveBeenCalledWith(
+    expect(spy_buildJWT).toHaveBeenCalledWith(
       {
         userId: user.userId,
         accountId: authId,
@@ -65,6 +66,118 @@ describe('AppEngineSignupPlugin', () => {
       'mocked-jwt',
       res,
     );
+  });
+
+  describe('extractRequestAuthId', () => {
+    it('returns null when no cookies', () => {
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = {} as Request;
+      expect(plugin.extractRequestAuthId(req)).toEqual(null);
+    });
+
+    it('returns null when no auth cookie', () => {
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = { cookies: {} } as Request;
+      expect(plugin.extractRequestAuthId(req)).toEqual(null);
+    });
+
+    it('fails when decode throws', () => {
+      spy_decodeJwt.mockImplementation(() => { throw new Error('ERROR') });
+
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = {
+        cookies: {
+          [authJwtPropNames.cookieName]: 'COOKIE',
+        }
+      } as Request;
+      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+    });
+
+    it('fails when jwt payload is a string', () => {
+      spy_decodeJwt.mockReturnValue('invalid string token');
+
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = {
+        cookies: {
+          [authJwtPropNames.cookieName]: 'COOKIE',
+        }
+      } as Request;
+      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+    });
+
+    it('fails when jwt payload does not contain account id', () => {
+      spy_decodeJwt.mockReturnValue({});
+
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = {
+        cookies: {
+          [authJwtPropNames.cookieName]: 'COOKIE',
+        }
+      } as Request;
+      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+    });
+
+    it('succeeds  ', () => {
+      spy_decodeJwt.mockReturnValue({
+        [authJwtPropNames.accountIdFieldName]: 'ACC1'
+      });
+
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+      );
+
+      const req: Request = {
+        cookies: {
+          [authJwtPropNames.cookieName]: 'COOKIE',
+        }
+      } as Request;
+      expect(plugin.extractRequestAuthId(req)).toEqual('ACC1');
+    });
   });
 });
 
@@ -101,7 +214,7 @@ describe('AppEngineSignupPluginTransaction', () => {
       {
         accountId: 'new-account-id',
         userId: user.userId,
-        nickname: '',
+        nickname: 'nickname',
       },
       ctx,
     );

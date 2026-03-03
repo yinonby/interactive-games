@@ -1,9 +1,7 @@
 
-import { useAppErrorHandling } from '@ig/app-engine-ui';
-import type { GameConfigIdT, PublicGameConfigT } from '@ig/games-engine-models';
-import { RnuiActivityIndicator, RnuiAppContent } from '@ig/rnui';
-import React, { useEffect, type FC } from 'react';
-import { useGamesUserConfigModel } from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
+import type { GameConfigIdT } from '@ig/games-engine-models';
+import { RnuiAppContent } from '@ig/rnui';
+import React, { type FC } from 'react';
 import { GameDashboardView } from '../components/GameDashboardView';
 
 export type GameDashboardViewPageContentPropsT = {
@@ -12,30 +10,10 @@ export type GameDashboardViewPageContentPropsT = {
 
 export const GameDashboardViewPageContent: FC<GameDashboardViewPageContentPropsT> = (props) => {
   const { gameConfigId } = props;
-  const { isLoading, isError, appErrCode, data: gamesUserConfigModelData } = useGamesUserConfigModel();
-  const { onAppError } = useAppErrorHandling();
-
-  useEffect(() => {
-    if (isError) {
-      onAppError(appErrCode);
-    }
-  }, [isError, onAppError, appErrCode]);
-
-  if (isLoading) return <RnuiActivityIndicator testID="RnuiActivityIndicator-tid" size="large"/>;
-  if (isError) {
-    return null;
-  }
-
-  const publicGameConfig: PublicGameConfigT | undefined =
-    gamesUserConfigModelData.gamesUserConfig.joinedPublicGameConfigs.find(e => e.gameConfigId === gameConfigId);
-
-  if (publicGameConfig === undefined) {
-    return null;
-  }
 
   return (
     <RnuiAppContent testID="RnuiAppContent-tid">
-      <GameDashboardView testID="GameDashboardView-tid" joinedPublicGameConfig={publicGameConfig} />
+      <GameDashboardView testID="GameDashboardView-tid" gameConfigId={gameConfigId} />
     </RnuiAppContent>
   );
 };

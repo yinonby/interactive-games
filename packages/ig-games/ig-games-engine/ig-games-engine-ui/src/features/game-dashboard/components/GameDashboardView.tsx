@@ -1,16 +1,16 @@
 
 import { useAppErrorHandling } from '@ig/app-engine-ui';
-import type { PublicGameConfigT } from '@ig/games-engine-models';
+import type { GameConfigIdT } from '@ig/games-engine-models';
 import { RnuiActivityIndicator, RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';
-import { useGameModel } from '../../../domains/game/model/rtk/GameModel';
+import { useGameConfigModel } from '../../../domains/game-config/model/rtk/GameConfigModel';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { GameConfigCardView } from './GameConfigCardView';
 import { GameInstanceSummaryView } from './GameInstanceSummaryView';
 
 export type GameDashboardViewPropsT = TestableComponentT & {
-  joinedPublicGameConfig: PublicGameConfigT,
+  gameConfigId: GameConfigIdT,
 };
 
 export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
@@ -18,8 +18,8 @@ export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
     isLoading,
     isError,
     appErrCode,
-    data: gamesUserConfigModelData
-  } = useGameModel(props.joinedPublicGameConfig.gameConfigId);
+    data: gameConfigModel
+  } = useGameConfigModel(props.gameConfigId);
   const { onAppError } = useAppErrorHandling();
 
   useEffect(() => {
@@ -37,13 +37,13 @@ export const GameDashboardView: FC<GameDashboardViewPropsT> = (props) => {
     <RnuiGrid>
       <RnuiGridItem key="summary" xs={12} sm={12} md={6} lg={4} xl={4} >
         <View>
-          <GameConfigCardView testID='GameConfigCardView-tid' publicGameConfig={props.joinedPublicGameConfig} />
+          <GameConfigCardView testID='GameConfigCardView-tid' publicGameConfig={gameConfigModel.publicGameConfig} />
         </View>
       </RnuiGridItem>
 
       <RnuiGridItem key="instances" xs={12} sm={12} md={6} lg={8} xl={8} >
         <RnuiGrid>
-          {gamesUserConfigModelData.gameInstanceIds.map((e, index) => (
+          {gameConfigModel.gameInstanceIds.map((e, index) => (
             <RnuiGridItem key={"instance" + index} xs={12} sm={12} md={12} lg={6} xl={6} >
               <RnuiCard>
                 <GameInstanceSummaryView

@@ -1,7 +1,7 @@
 
 import { RnuiAppContent } from '@ig/rnui';
 import React, { type FC } from 'react';
-import { GamesAcceptInviteView } from '../components/accept-invite/GamesAcceptInviteView';
+import { GamesAcceptInviteView } from '../components/join-game-by-invite/GamesAcceptInviteView';
 
 export const GamesAcceptInvitePageContent: FC<{ invitationCode: string }> = ({ invitationCode }) => {
   return (

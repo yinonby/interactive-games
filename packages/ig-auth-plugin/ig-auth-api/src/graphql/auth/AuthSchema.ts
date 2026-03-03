@@ -10,11 +10,11 @@ import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthResolvers } from './AuthResolvers';
 
 export const createAuthSchema = (
-  pluginConfig: AuthPluginConfigT,
+  publicPluginConfig: AuthPluginConfigT,
 ): GraphQLSchema => {
-  const signupPluginAdapter: SignupPluginAdapter | undefined = pluginConfig.getSignupPluginAdapter();
+  const signupPluginAdapter: SignupPluginAdapter | undefined = publicPluginConfig.getSignupPluginAdapter();
   const signupServiceTransactionAdapter: SignupServiceTransactionAdapter =
-    pluginConfig.getSignupServiceTransactionAdapter();
+    publicPluginConfig.getSignupServiceTransactionAdapter();
   const signupServiceAdapter = new SignupService(signupServiceTransactionAdapter, signupPluginAdapter);
   const authLogic = new AuthLogic(signupServiceAdapter);
 
