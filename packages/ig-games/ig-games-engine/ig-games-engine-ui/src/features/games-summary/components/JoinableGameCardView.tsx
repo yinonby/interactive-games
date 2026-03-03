@@ -1,13 +1,14 @@
 
-import { useAppConfig, useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
+import {
+  useAppConfig, useAppErrorHandling,
+  useAppLocalization, useGenericStyles
+} from '@ig/app-engine-ui';
 import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
 import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTable, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
-import {
-  useGamesUserConfigController
-} from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+import { useGameUserController } from '../../../domains/game-user/controller/user-actions/GameUserController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { GameImageCard } from '../../common/game-info/GameImageCard';
 import { MinimalPublicGameConfigTableRows } from './MinimalPublicGameConfigTableRows';
@@ -19,14 +20,14 @@ export type JoinableGameCardViewPropsT = TestableComponentT & {
 export const JoinableGameCardView: FC<JoinableGameCardViewPropsT> = ({ minimalPublicGameConfig }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
-  const { onPlayGame } = useGamesUserConfigController();
+  const { onAddGameConfigId } = useGameUserController();
   const { navigate } = usePlatformUiNavigation();
   const { onUnknownError } = useAppErrorHandling();
   const genericStyles = useGenericStyles();
 
   const handlePlayGamePress = async (): Promise<void> => {
     try {
-      await onPlayGame(minimalPublicGameConfig.gameConfigId);
+      await onAddGameConfigId(minimalPublicGameConfig.gameConfigId);
       const url = gamesUiUrlPathsAdapter.buildGameDashboardUrlPath(minimalPublicGameConfig.gameConfigId);
       navigate(url);
     } catch (error: unknown) {

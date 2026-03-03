@@ -1,5 +1,6 @@
 
 import { type LoggerAdapter } from '@ig/utils';
+import cookieParser from 'cookie-parser';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Application, type NextFunction, type Request, type Response } from 'express';
 import { DbClient } from '../db/DbClient';
@@ -15,14 +16,25 @@ export type ExpressAppSignalHandler = {
   exit: (ret?: number) => void,
 }
 
+export type ExpressAppHandlersT = {
+  signalHandler?: ExpressAppSignalHandler,
+  corsMiddleware?: (options?: CorsOptions) => (req: Request, res: Response, next: NextFunction) => void,
+  cookieParserMiddleware?: () => (req: Request, res: Response, next: NextFunction) => void,
+  jsonMiddleware?: () => (req: Request, res: Response, next: NextFunction) => void,
+}
+
 export class ExpressApp {
   private app: Application;
 
   constructor(
     private expressAppStarterInfo: ExpressAppStarterInfoT,
     private logger: LoggerAdapter = new BeLogger(),
-    private signalHandler: ExpressAppSignalHandler = process,
-    private corsMiddleware: (options?: CorsOptions) => (req: Request, res: Response, next: NextFunction) => void = cors,
+    private handlers: ExpressAppHandlersT = {
+      signalHandler: process,
+      corsMiddleware: cors,
+      cookieParserMiddleware: cookieParser,
+      jsonMiddleware: express.json,
+    },
   ) {
     this.app = express();
   }
@@ -34,8 +46,15 @@ export class ExpressApp {
     this.logger.info(`Initializing CORS...`);
     this.initCors();
 
+    // Middleware to parse cookies
+    if (this.handlers.cookieParserMiddleware) {
+      this.app.use(this.handlers.cookieParserMiddleware());
+    }
+
     // Middleware to parse JSON bodies
-    this.app.use(express.json());
+    if (this.handlers.jsonMiddleware) {
+      this.app.use(this.handlers.jsonMiddleware());
+    }
 
     let dbClient: DbClient | null = null;
     if (this.expressAppStarterInfo.dbInfo) {
@@ -54,7 +73,7 @@ export class ExpressApp {
     await this.postInit();
 
     let isShuttingDown = false;
-    const shutdown = async (signal: string): Promise<void> => {
+    const createShutdownHandler = (signalHandler: ExpressAppSignalHandler) => async (signal: string): Promise<void> => {
       if (isShuttingDown) {
         return;
       }
@@ -66,11 +85,14 @@ export class ExpressApp {
       }
 
       this.logger.info(`Received ${signal} signal. Closing server...`);
-      this.signalHandler.exit(0);
+      signalHandler.exit(0);
     }
 
-    this.signalHandler.on('SIGINT', shutdown);
-    this.signalHandler.on('SIGTERM', shutdown);
+    if (this.handlers.signalHandler !== undefined) {
+      const shutdownHandler = createShutdownHandler(this.handlers.signalHandler);
+      this.handlers.signalHandler.on('SIGINT', shutdownHandler);
+      this.handlers.signalHandler.on('SIGTERM', shutdownHandler);
+    }
 
     // Start the server
     this.app.listen(this.expressAppStarterInfo.listerPort, () => {
@@ -79,11 +101,11 @@ export class ExpressApp {
   }
 
   private initCors(): void {
-    if (this.expressAppStarterInfo.corsAllowOrigins !== undefined) {
+    if (this.handlers.corsMiddleware != undefined && this.expressAppStarterInfo.corsAllowOrigins !== undefined) {
       for (const corsAllowOrigin of this.expressAppStarterInfo.corsAllowOrigins) {
         this.logger.info(`Initializing CORS for [${corsAllowOrigin}]...`);
 
-        this.app.use(this.corsMiddleware({
+        this.app.use(this.handlers.corsMiddleware({
           origin: corsAllowOrigin,
           credentials: true, // for cookies/auth
         }));
@@ -114,7 +136,7 @@ export class ExpressApp {
     for (const expressPluginContainer of this.expressAppStarterInfo.expressPluginContainers) {
       if (expressPluginContainer.routeConfig !== undefined) {
         const router = await expressPluginContainer.routeConfig.expressPlugin
-          .initRouter(this.expressAppStarterInfo.appInfo, expressPluginContainer.routeConfig.pluginConfig);
+          .initRouter(this.expressAppStarterInfo.appInfo, expressPluginContainer.routeConfig.publicPluginConfig);
 
         this.app.use(expressPluginContainer.routeConfig.route, router);
       }
@@ -124,7 +146,7 @@ export class ExpressApp {
   private async postInit(): Promise<void> {
     for (const expressPluginContainer of this.expressAppStarterInfo.expressPluginContainers) {
       if (expressPluginContainer.postInitCb !== undefined) {
-        await expressPluginContainer.postInitCb(expressPluginContainer.routeConfig?.pluginConfig);
+        await expressPluginContainer.postInitCb(expressPluginContainer.routeConfig?.publicPluginConfig);
       }
     }
   }

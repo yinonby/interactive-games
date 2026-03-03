@@ -5,8 +5,8 @@ import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton } from '@ig/rnui';
 import React, { type FC } from 'react';
 import {
-    useGamesUserConfigController
-} from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+  useGameInstanceController
+} from '../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 
 export type CreateGameInstanceButtonPropsT = TestableComponentT & {
@@ -16,7 +16,7 @@ export type CreateGameInstanceButtonPropsT = TestableComponentT & {
 export const CreateGameInstanceButton: FC<CreateGameInstanceButtonPropsT> = ({ gameConfigId }) => {
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { t } = useAppLocalization();
-  const { onCreateGameInstance } = useGamesUserConfigController();
+  const { onCreateGameInstance } = useGameInstanceController();
   const { navigate } = usePlatformUiNavigation();
   const { onUnknownError } = useAppErrorHandling();
 

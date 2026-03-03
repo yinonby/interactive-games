@@ -43,6 +43,9 @@ export class MongoAccountsTable extends MongoDbTable<AccountT> implements Accoun
   }
 
   public async createAccount(user: AccountT): Promise<void> {
+    if (user.nickname === '') {
+      throw new Error('Unexpected empty nickname');
+    }
     await this.getModel().insertOne(user);
   }
 }

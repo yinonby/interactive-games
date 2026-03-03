@@ -5,12 +5,14 @@ import {
 } from '@ig/app-engine-ui';
 import { Axios, type HttpAdapter } from '@ig/client-utils';
 import type {
-  GameInstanceExposedInfoT,
+  CreateGameInstanceResponseT,
+  GetGameInstanceIdsForGameConfigResponseT,
   GetGameInstanceResponseT,
-  PostGameInstanceStartResponseT,
-  PostGameInstanceSubmitGuessResponseT
+  JoinGameByInviteResponseT,
+  StartPlayingResponseT,
+  SubmitGuessResponseT
 } from '@ig/games-engine-models';
-import { buildTestGameState } from '@ig/games-engine-models/test-utils';
+import { buildPublicGameInstanceMock } from '@ig/games-engine-models/test-utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -27,41 +29,62 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-let gameInstanceExposedInfoMock1: GameInstanceExposedInfoT;
+let currentRequest:
+  | 'getGameInstanceIdsForGameConfig'
+  | 'getPublicGameInstance'
+  | 'createGameInstace'
+  | 'joinGameByInvite'
+  | 'startPlaying'
+  | 'submitGuess'
+  | 'error' = 'error';
 
 export const server = setupServer(
-  // get chat
-  http.get(apiUrl + '/games/game-instance/giid-1', () => {
-    return HttpResponse.json({ gameInstanceExposedInfo: gameInstanceExposedInfoMock1 });
-  }),
-
-  http.get(apiUrl + '/games/game-instance/giid-2', () => {
-    return HttpResponse.error();
-  }),
-
-  // post start game
-  http.post(apiUrl + '/games/game-instance/giid-1/start', () => {
-    gameInstanceExposedInfoMock1.gameState.gameStatus = 'inProcess';
-    const response: PostGameInstanceStartResponseT = {
-      status: 'ok',
-    };
-    return HttpResponse.json(response);
-  }),
-
-  http.post(apiUrl + '/games/game-instance/giid-2/start', () => {
-    return HttpResponse.error();
-  }),
-
-  // post submit guess
-  http.post(apiUrl + '/games/game-instance/giid-1/submit-guess', () => {
-    const response: PostGameInstanceSubmitGuessResponseT= {
-      isGuessCorrect: true,
-    };
-    return HttpResponse.json(response);
-  }),
-
-  http.post(apiUrl + '/games/game-instance/giid-2/submit-guess', () => {
-    return HttpResponse.error();
+  http.post(apiUrl + '/games/graphql', () => {
+    if (currentRequest === 'getGameInstanceIdsForGameConfig') {
+      const response: GetGameInstanceIdsForGameConfigResponseT = {
+        data: {
+          gameInstanceIds: ['GI1'],
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'getPublicGameInstance') {
+      const response: GetGameInstanceResponseT = {
+        data: {
+          publicGameInstance: buildPublicGameInstanceMock(),
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'createGameInstace') {
+      const response: CreateGameInstanceResponseT = {
+        data: {
+          createGameInstanceResult: { gameInstanceId: 'GI1' },
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'joinGameByInvite') {
+      const response: JoinGameByInviteResponseT = {
+        data: {
+          joinGameByInviteResult: { gameInstanceId: 'GI1' },
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'startPlaying') {
+      const response: StartPlayingResponseT = {
+        data: {
+          startPlayingResult: { status: 'ok' },
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'submitGuess') {
+      const response: SubmitGuessResponseT = {
+        data: {
+          submitGuessResult: { isGuessCorrect: true },
+        },
+      };
+      return HttpResponse.json(response);
+    } else if (currentRequest === 'error') {
+      return HttpResponse.error();
+    }
   }),
 );
 
@@ -85,125 +108,142 @@ describe('GameInstanceRtkApi', () => {
   beforeAll(() => {
     server.listen();
   });
-  beforeEach(() => {
-    gameInstanceExposedInfoMock1 = {
-      gameInstanceId: 'giid-1',
-      gameState: buildTestGameState({ gameStatus: 'notStarted' }),
-    } as GameInstanceExposedInfoT;
-  })
+
   afterEach(() => {
     server.resetHandlers();
   });
+
   afterAll(() => server.close());
 
-  describe('getGameInstance', () => {
-    it('fetches game instance', async () => {
+  describe('getGameInstanceIdsForGameConfig', () => {
+    it('fetches game instance ids', async () => {
       const store = createTestStore();
 
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstance.initiate('giid-1')
+      currentRequest = 'getGameInstanceIdsForGameConfig';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.getGameInstanceIdsForGameConfig.initiate('GC1')
       );
-      if (result.data === undefined) {
+      if (rtkResult.data === undefined) {
         throw new Error('result.data is undefined');
       }
 
-      const getGameInstanceResponse: GetGameInstanceResponseT = result.data;
-      expect(getGameInstanceResponse.gameInstanceExposedInfo.gameInstanceId).toEqual('giid-1');
-    });
-
-    it('does not fetch game instance when game instance id is invalid', async () => {
-      const store = createTestStore();
-
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstance.initiate('giid-2')
-      );
-
-      expect(result.isError).toBeTruthy();
-      expect(result.data).toBeUndefined();
+      expect(rtkResult.data.gameInstanceIds).toEqual(['GI1']);
     });
   });
 
-  describe('startGame', () => {
-    it('posts game instance start', async () => {
+  describe('getPublicGameInstance', () => {
+    it('fetches game instance', async () => {
       const store = createTestStore();
 
-      // verify game not started
-      const result1 = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstance.initiate('giid-1')
+      currentRequest = 'getPublicGameInstance';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.getPublicGameInstance.initiate('GI1')
       );
-      if (result1.data === undefined) {
-        throw new Error('result1.data is undefined');
-      }
-      const getGameInstanceResponse1: GetGameInstanceResponseT = result1.data;
-      expect(getGameInstanceResponse1.gameInstanceExposedInfo.gameState.gameStatus).toEqual('notStarted');
-
-      // start game
-      const result2 = await store.dispatch(
-        gameInstanceRtkApiEndpoints.startGame.initiate('giid-1')
-      );
-      if (result2.data === undefined) {
-        throw new Error('result2.data is undefined');
+      if (rtkResult.data === undefined) {
+        throw new Error('rtkResult.data is undefined');
       }
 
-      // verify tags invalidated and game is started
-      const result3 = await store.dispatch(
-        gameInstanceRtkApiEndpoints.getGameInstance.initiate('giid-1')
-      );
-      if (result3.data === undefined) {
-        throw new Error('result3.data is undefined');
-      }
-      const getGameInstanceResponse3: GetGameInstanceResponseT = result3.data;
-      expect(getGameInstanceResponse3.gameInstanceExposedInfo.gameState.gameStatus).toEqual('inProcess');
+      expect(rtkResult.data.publicGameInstance).not.toEqual(null);
+    });
+  });
 
-      // return
-      const response: PostGameInstanceStartResponseT = result2.data;
-      expect(response.status).toEqual('ok');
+  describe('createGameInstace', () => {
+    it('posts join game request', async () => {
+      const store = createTestStore();
+
+      currentRequest = 'createGameInstace';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.createGameInstace.initiate({ gameConfigId: 'GC1' })
+      );
+      if (rtkResult.data === undefined) {
+        throw new Error('rtkResult.data is undefined');
+      }
+
+      expect(rtkResult.data.createGameInstanceResult).toEqual({ gameInstanceId: 'GI1' });
     });
 
-    it('does not post game instance start when game instance id is invalid', async () => {
+    it('handles error', async () => {
       const store = createTestStore();
 
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.startGame.initiate('giid-2')
+      currentRequest = 'error';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.createGameInstace.initiate({ gameConfigId: 'GC1' })
       );
 
-      expect(result.error).toBeTruthy();
-      expect(result.data).toBeUndefined();
+      expect(rtkResult.error).toBeTruthy();
+      expect(rtkResult.data).toBeUndefined();
+    });
+  });
+
+  describe('joinGameByInvite', () => {
+    it('posts join game request', async () => {
+      const store = createTestStore();
+
+      currentRequest = 'joinGameByInvite';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.joinGameByInvite.initiate({ invitationCode: 'INVT1' })
+      );
+      if (rtkResult.data === undefined) {
+        throw new Error('rtkResult.data is undefined');
+      }
+
+      expect(rtkResult.data.joinGameByInviteResult).toEqual({ gameInstanceId: 'GI1' });
+    });
+  });
+
+  describe('startPlaying', () => {
+    it('posts start playing request', async () => {
+      const store = createTestStore();
+
+      currentRequest = 'startPlaying';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.startPlaying.initiate({ gameInstanceId: 'GI1' })
+      );
+      if (rtkResult.data === undefined) {
+        throw new Error('rtkResult.data is undefined');
+      }
+
+      expect(rtkResult.data.startPlayingResult).toEqual({ status: 'ok' });
+    });
+
+    it('posts start playing request, handles error', async () => {
+      const store = createTestStore();
+
+      currentRequest = 'error';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.startPlaying.initiate({ gameInstanceId: 'GI1' })
+      );
+
+      expect(rtkResult.error).toBeTruthy();
+      expect(rtkResult.data).toBeUndefined();
     });
   });
 
   describe('submitGuess', () => {
-    it('submits guess', async () => {
+    it('posts submit guess request', async () => {
       const store = createTestStore();
 
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.submitGuess.initiate({
-          gameInstanceId: 'giid-1',
-          levelIdx: 0,
-          guess: 'Hello',
-        })
+      currentRequest = 'submitGuess';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.submitGuess.initiate({ gameInstanceId: 'GI1', levelIdx: 1, guess: 'World' })
       );
-      if (result.data === undefined) {
-        throw new Error('result.data is undefined');
+      if (rtkResult.data === undefined) {
+        throw new Error('rtkResult.data is undefined');
       }
 
-      const response: PostGameInstanceSubmitGuessResponseT = result.data;
-      expect(response.isGuessCorrect).toEqual(true);
+      expect(rtkResult.data.submitGuessResult).toEqual({ isGuessCorrect: true });
     });
 
-    it('submit guess, with error', async () => {
+    it('posts submit guess request, handles error', async () => {
       const store = createTestStore();
 
-      const result = await store.dispatch(
-        gameInstanceRtkApiEndpoints.submitGuess.initiate({
-          gameInstanceId: 'giid-2',
-          levelIdx: 0,
-          guess: 'Hello',
-        })
+      currentRequest = 'error';
+      const rtkResult = await store.dispatch(
+        gameInstanceRtkApiEndpoints.submitGuess.initiate({ gameInstanceId: 'GI1', levelIdx: 1, guess: 'World' })
       );
 
-      expect(result.error).toBeTruthy();
-      expect(result.data).toBeUndefined();
+      expect(rtkResult.error).toBeTruthy();
+      expect(rtkResult.data).toBeUndefined();
     });
   });
 });

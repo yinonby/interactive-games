@@ -12,7 +12,6 @@ const gamesConfigRtkApi = appRtkApi.injectEndpoints({
           document: getMinimalPublicGameConfigsQuery,
         }
       }),
-      providesTags: ['GamesConfigTag'],
     }),
   }),
   overrideExisting: false,

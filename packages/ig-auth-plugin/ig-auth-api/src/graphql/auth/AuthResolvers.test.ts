@@ -1,6 +1,6 @@
 
 import type { AuthLogicAdapter } from '@ig/auth-be-models';
-import type { AuthIdT, EmailLoginInputT, EmailLoginResultDataT, GuestLoginResultDataT } from '@ig/auth-models';
+import type { AuthIdT, EmailLoginInputT, EmailLoginResultDataT, GuestLoginInputT, GuestLoginResultDataT } from '@ig/auth-models';
 import { createAuthResolvers } from './AuthResolvers';
 
 describe('GameConfigResolvers', () => {
@@ -15,7 +15,8 @@ describe('GameConfigResolvers', () => {
     const resolvers = createAuthResolvers(mockAdapter as AuthLogicAdapter);
 
     // guest login
-    const result = await resolvers.Mutation.guestLogin({}, {}, { res: {} });
+    const input: GuestLoginInputT = { nickname: 'NICKNAME1' };
+    const result = await resolvers.Mutation.guestLogin({}, { input }, { res: {} });
 
     // verify
     const expectedResult: GuestLoginResultDataT = { authId };
@@ -35,7 +36,7 @@ describe('GameConfigResolvers', () => {
 
     // email login
     const input: EmailLoginInputT = { email: 'EMAIL1', password: 'PASS1' };
-    const result = await resolvers.Mutation.emailLogin({}, { input: input }, { res: {} });
+    const result = await resolvers.Mutation.emailLogin({}, { input }, { res: {} });
 
     // verify
     const expectedResult: EmailLoginResultDataT = { authId };

@@ -1,10 +1,10 @@
 
 import type { AuthIdT, EmailLoginInputT, UserT } from '@ig/auth-models';
 import type { DbTransactionContext } from '@ig/be-utils';
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 
 export interface AuthLogicAdapter {
-  guestLogin(res: Response): Promise<AuthIdT>;
+  guestLogin(res: Response, nickname: string): Promise<AuthIdT>;
   emailLogin(input: EmailLoginInputT, res: Response): Promise<AuthIdT>;
 }
 
@@ -16,6 +16,7 @@ export interface SignupServiceTransactionAdapter {
 // exported to be implemented by the signup plugin
 export interface SignupPluginAdapter {
   onSignupResponse(user: UserT, authId: AuthIdT, res: Response): Promise<void>;
+  extractRequestAuthId(req: Request): AuthIdT | null;
 }
 
 // exported to be implemented by the signup plugin's DB package

@@ -21,7 +21,7 @@ describe("handleGamesInstanceWebSocketMessage", () => {
     jest.clearAllMocks();
   });
 
-  it("dispatches invalidateTags on gamesUserConfigUpdate", () => {
+  it("dispatches invalidateTags on gamesInstanceUpdate", () => {
     const invalidateResult = { type: "TEST_ACTION", payload: [] };
 
     // make invalidateTags return a fake action
@@ -37,7 +37,7 @@ describe("handleGamesInstanceWebSocketMessage", () => {
 
     expect(gameInstanceRtkApiUtil.invalidateTags).toHaveBeenCalledTimes(1);
     expect(gameInstanceRtkApiUtil.invalidateTags).toHaveBeenCalledWith([
-      { type: 'GamesInstanceTag', id: "giid-1" }
+      { type: 'GameInstanceTag', id: "giid-1" }
     ]);
 
     expect(dispatch).toHaveBeenCalledTimes(1);

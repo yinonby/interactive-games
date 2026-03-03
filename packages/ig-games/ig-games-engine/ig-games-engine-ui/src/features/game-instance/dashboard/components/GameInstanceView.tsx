@@ -2,7 +2,7 @@
 import { useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { useAuth } from '@ig/auth-ui';
 import { ChatView } from '@ig/chat-ui';
-import { getGameInstanceConversationId, type GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import { getGameInstanceConversationId, type PublicGameInstanceT } from '@ig/games-engine-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -14,25 +14,25 @@ import { LevelsView } from './LevelsView';
 import { PlayersView } from './PlayersView';
 
 export type GameInstanceViewPropsT = TestableComponentT & {
-  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+  publicGameInstance: PublicGameInstanceT,
 };
 
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo } = props;
-  const { playerExposedInfos } = gameInstanceExposedInfo;
+  const { publicGameInstance } = props;
+  const { publicPlayerInfos } = publicGameInstance;
   const { curAccountId } = useAuth();
-  const gameInfo = gameInstanceExposedInfo.gameInfo;
+  const publicGameConfig = publicGameInstance.publicGameConfig;
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();
 
-  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerAccountId === curAccountId);
-  if (curPlayerExposedInfo === undefined) {
+  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curAccountId);
+  if (curPublicPlayerInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player,` +
-      `gameInstanceId [${gameInstanceExposedInfo.gameInstanceId}] curAccountId [${curAccountId}]`);
+      `gameInstanceId [${publicGameInstance.gameInstanceId}] curAccountId [${curAccountId}]`);
     return null;
   }
 
-  const isCurUserAdminPlayer = curPlayerExposedInfo.playerRole === "admin";
+  const isCurUserAdminPlayer = curPublicPlayerInfo.playerRole === "admin";
 
   return (
     <View testID='container-tid'>
@@ -40,24 +40,24 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
         <RnuiGridItem key="invite" xs={12} sm={12} md={12} lg={12} xl={12} >
           {isCurUserAdminPlayer &&
             <RnuiCard>
-              <InviteView testID="InviteView-tid" gameInstanceExposedInfo={gameInstanceExposedInfo} />
+              <InviteView testID="InviteView-tid" publicGameInstance={publicGameInstance} />
             </RnuiCard>
           }
         </RnuiGridItem>
 
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
-            <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={gameInfo} includeFreeLabel={false}>
+            <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={publicGameConfig} includeFreeLabel={false}>
               <View style={genericStyles.spacing}>
                 <GameInstanceConfigSummaryView
                   testID="GameInstanceConfigSummaryView-tid"
-                  gameInstanceExposedInfo={gameInstanceExposedInfo}
+                  publicGameInstance={publicGameInstance}
                 />
 
-                {gameInstanceExposedInfo.gameState.gameStatus !== 'notStarted' &&
+                {publicGameInstance.gameState.gameStatus !== 'notStarted' &&
                   <LevelsView
                     testID='LevelsView-tid'
-                    gameInstanceExposedInfo={gameInstanceExposedInfo}
+                    publicGameInstance={publicGameInstance}
                   />
                 }
             </View>
@@ -70,7 +70,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
             <RnuiCard >
               <PlayersView
                 testID="PlayersView-tid"
-                gameInstanceExposedInfo={gameInstanceExposedInfo}
+                publicGameInstance={publicGameInstance}
                 withAdminButtons
               />
             </RnuiCard>
@@ -78,9 +78,9 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
             <RnuiCard >
               <ChatView
                 testID="ChatView-tid"
-                conversationId={getGameInstanceConversationId(gameInstanceExposedInfo.gameInstanceId)}
+                conversationId={getGameInstanceConversationId(publicGameInstance.gameInstanceId)}
                 senderId={curAccountId}
-                senderDisplayName={curPlayerExposedInfo.playerNickname}
+                senderDisplayName={curPublicPlayerInfo.playerNickname}
               />
             </RnuiCard>
           </View>

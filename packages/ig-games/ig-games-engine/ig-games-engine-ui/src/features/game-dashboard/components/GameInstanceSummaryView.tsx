@@ -35,12 +35,12 @@ export const GameInstanceSummaryView: FC<GameInstanceSummaryViewPropsT> = (props
     <View style={genericStyles.spacing}>
       <GameStatusView
         testID="GameStatusView-tid"
-        gameStatus={gameInstanceModelData.gameInstanceExposedInfo.gameState.gameStatus}
+        gameStatus={gameInstanceModelData.publicGameInstance.gameState.gameStatus}
       />
 
       <PlayersTableView
         testID='PlayersTableView-tid'
-        playerExposedInfos={gameInstanceModelData.gameInstanceExposedInfo.playerExposedInfos}
+        publicPlayerInfos={gameInstanceModelData.publicGameInstance.publicPlayerInfos}
         withAdminButtons={false}
       />
 

@@ -53,20 +53,20 @@ describe("useGamesAppModel", () => {
   });
 
   it("returns data when query succeeds", () => {
-    const mockedResult: GetMinimalPublicGameConfigsResultT = {
+    const apiResult: GetMinimalPublicGameConfigsResultT = {
       minimalPublicGameConfigs: [],
     };
     useGetMinimalPublicGameConfigsQuerySpy.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: mockedResult,
+      data: apiResult,
       refetch: jest.fn(),
     });
 
     expect(useGamesAppModel()).toEqual({
       isLoading: false,
       isError: false,
-      data: { minimalPublicGameConfigs: mockedResult.minimalPublicGameConfigs },
+      data: { minimalPublicGameConfigs: apiResult.minimalPublicGameConfigs },
     });
   });
 });

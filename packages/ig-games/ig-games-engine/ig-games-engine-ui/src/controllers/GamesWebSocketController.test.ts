@@ -4,14 +4,6 @@ import type { GamesWebSocketMessagePayloadT, GamesWebSocketMsgKindT } from '@ig/
 import type { LoggerAdapter } from '@ig/utils';
 import { handleGamesWebSocketMessage } from './GamesWebSocketController';
 
-// mocks
-jest.mock(
-  '../domains/user-config/controller/ws-actions/GamesUserConfigWebSocketController',
-  () => ({
-    handleGamesUserConfigWebSocketMessage: jest.fn(),
-  })
-);
-
 jest.mock(
   '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController',
   () => ({
@@ -20,12 +12,9 @@ jest.mock(
 );
 
 // import after mocks
-import {
-    handleGamesUserConfigWebSocketMessage,
-} from '../domains/user-config/controller/ws-actions/GamesUserConfigWebSocketController';
 
 import {
-    handleGamesInstanceWebSocketMessage,
+  handleGamesInstanceWebSocketMessage,
 } from '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController';
 
 // tests
@@ -36,24 +25,6 @@ describe('handleGamesWebSocketMessage', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  it('handles gamesUserConfigUpdate messages', () => {
-    const wassHandled = handleGamesWebSocketMessage(
-      'gamesUserConfigUpdate',
-      undefined,
-      dispatch,
-      logger,
-    );
-
-    expect(wassHandled).toBe(true);
-    expect(handleGamesUserConfigWebSocketMessage).toHaveBeenCalledTimes(1);
-    expect(handleGamesUserConfigWebSocketMessage).toHaveBeenCalledWith(
-      'gamesUserConfigUpdate',
-      dispatch
-    );
-
-    expect(handleGamesInstanceWebSocketMessage).not.toHaveBeenCalled();
   });
 
   it('handles gamesInstanceUpdate messages', () => {
@@ -73,8 +44,6 @@ describe('handleGamesWebSocketMessage', () => {
       payload,
       dispatch,
     );
-
-    expect(handleGamesUserConfigWebSocketMessage).not.toHaveBeenCalled();
   });
 
   it('does not handle other messages', () => {
@@ -86,7 +55,6 @@ describe('handleGamesWebSocketMessage', () => {
     );
 
     expect(wassHandled).toBe(false);
-    expect(handleGamesUserConfigWebSocketMessage).not.toHaveBeenCalled();
     expect(handleGamesInstanceWebSocketMessage).not.toHaveBeenCalled();
   });
 });

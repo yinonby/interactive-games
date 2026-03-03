@@ -3,9 +3,13 @@ import type { AccountsTableAdapter } from '@ig/app-engine-be-models';
 import type { AccountIdT, AccountT } from '@ig/app-engine-models';
 import type { SignupPluginAdapter, SignupPluginTransactionAdapter } from '@ig/auth-be-models';
 import type { AuthIdT, UserIdT, UserT } from '@ig/auth-models';
-import { buildJWT, CookieUtils, type DbTransactionContext, type JwtAlgorithmT } from '@ig/be-utils';
-import { generateUuidv4 } from '@ig/utils';
-import { type Response } from 'express';
+import {
+  BeLogger, buildJWT, CookieUtils, decodeJwt,
+  type DbTransactionContext, type JwtAlgorithmT, type JWTPayload
+} from '@ig/be-utils';
+import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
+import { type Request, type Response } from 'express';
+import { EngineApiError } from '../../types/EngineApiTypes';
 
 export type AuthJwtPropNamesT = {
   accountIdFieldName: string,
@@ -22,6 +26,7 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
     jwtCookieIsSecure: boolean,
     private readonly authJwtPropNames: AuthJwtPropNamesT,
     private cookieUtils = new CookieUtils(jwtCookieDomain, jwtCookieIsSecure, jwtExpiresInMs),
+    private logger: LoggerAdapter = new BeLogger(),
   ) { }
 
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -29,6 +34,39 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
     // set jwt cookie
     const accountId = authId as AccountIdT;
     this.setJwt(user.userId, accountId, res);
+  }
+
+  public extractRequestAuthId(req: Request): AuthIdT | null {
+    if (req.cookies === undefined) {
+      this.logger.debug('Missing request cookies');
+      return null;
+    }
+
+    const cookie = req.cookies[this.authJwtPropNames.cookieName];
+    if (cookie === undefined) {
+      this.logger.debug('Missing Jwt token cookie');
+      return null;
+    }
+
+    let decodedJwt: string | JWTPayload;
+    try {
+      decodedJwt = decodeJwt(cookie, this.jwtSecret);
+    } catch (error: unknown) {
+      this.logger.debug('Invalid Jwt token', error);
+      throw new EngineApiError('Invalid Jwt token', 'engineApiError:invalidJwt');
+    }
+
+    if (typeof decodedJwt === 'string') {
+      this.logger.debug('Invalid Jwt payload');
+      throw new EngineApiError('Invalid Jwt payload', 'engineApiError:invalidJwt');
+    }
+
+    if (decodedJwt[this.authJwtPropNames.accountIdFieldName] === undefined) {
+      this.logger.debug('Jwt token missing account id');
+      throw new EngineApiError('Jwt token missing account id', 'engineApiError:invalidJwt');
+    }
+
+    return decodedJwt[this.authJwtPropNames.accountIdFieldName] as AuthIdT;
   }
 
   // service methods
@@ -56,7 +94,7 @@ export class AppEngineSignupPluginTransaction implements SignupPluginTransaction
     const newAccount: AccountT = {
       accountId: newAccountId,
       userId: user.userId,
-      nickname: "",
+      nickname: nickname,
     }
 
     await this.accountsTableAdapter.createAccount(newAccount, ctx);

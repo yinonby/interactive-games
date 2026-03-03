@@ -86,7 +86,7 @@ describe('GameInstanceView', () => {
       isLoading: false,
       isError: false,
       data: {
-        gameInstanceExposedInfo: buildTestGameInstanceExposedInfo({
+        publicGameInstance: buildTestGameInstanceExposedInfo({
           gameState: buildTestGameState({ gameStatus: 'ended' })
         }),
       },

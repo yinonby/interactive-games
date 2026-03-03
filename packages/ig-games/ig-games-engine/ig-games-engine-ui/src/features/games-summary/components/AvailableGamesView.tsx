@@ -1,19 +1,18 @@
 
 import { useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { MinimalPublicGameConfigT } from '@ig/games-engine-models';
+import type { GameConfigIdT, MinimalPublicGameConfigT } from '@ig/games-engine-models';
 import { RnuiActivityIndicator, RnuiGridItem, RnuiMasonryGrid, RnuiText } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';
+import { useGameUserModel } from '../../../domains/game-user/model/rtk/GameUserModel';
 import { useGamesAppModel } from '../../../domains/games-app/model/rtk/GamesAppModel';
-import { useGamesUserConfigModel } from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
 import { JoinableGameCardView } from './JoinableGameCardView';
 
 const getNonJoinedMinimalGameConfigs = (
   availableMinimalPublicGameConfigs: MinimalPublicGameConfigT[],
-  joinedPublicGameConfigs: MinimalPublicGameConfigT[],
+  joinedPublicGameConfigIds: GameConfigIdT[],
 ): MinimalPublicGameConfigT[] => {
-  return availableMinimalPublicGameConfigs.filter(e => !joinedPublicGameConfigs
-    .find(e2 => e2.gameConfigId === e.gameConfigId));
+  return availableMinimalPublicGameConfigs.filter(e => !joinedPublicGameConfigIds.find(e2 => e2 === e.gameConfigId));
 };
 
 export type AvailableGamesViewPropsT = object;
@@ -28,32 +27,32 @@ export const AvailableGamesView: FC<AvailableGamesViewPropsT> = () => {
     data: gamesConfigModel
   } = useGamesAppModel();
   const {
-    isLoading: isUserConfigLoading,
-    isError: isUserConfigError,
-    appErrCode: userConfigErrCode,
-    data: gamesUserConfigModel,
-  } = useGamesUserConfigModel();
+    isLoading: gameUserModel_isLoading,
+    isError: gameUserModel_isError,
+    appErrCode: gameUserModel_appErrCode,
+    data: gameUserModel_data,
+  } = useGameUserModel();
   const genericStyles = useGenericStyles();
 
   useEffect(() => {
     if (isAppConfigError) {
       onAppError(appConfigErrCode);
-    } else if (isUserConfigError) {
-      onAppError(userConfigErrCode);
+    } else if (gameUserModel_isError) {
+      onAppError(gameUserModel_appErrCode);
     }
-  }, [isAppConfigError, appConfigErrCode, isUserConfigError, userConfigErrCode, onAppError]);
+  }, [isAppConfigError, appConfigErrCode, gameUserModel_isError, gameUserModel_appErrCode, onAppError]);
 
-  if (isAppConfigLoading || isUserConfigLoading) return (
+  if (isAppConfigLoading || gameUserModel_isLoading) return (
     <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>
   );
 
-  if (isAppConfigError || isUserConfigError) {
+  if (isAppConfigError || gameUserModel_isError) {
     return null;
   }
 
   const nonJoinedMinimalGameConfigs = getNonJoinedMinimalGameConfigs(
     gamesConfigModel.minimalPublicGameConfigs,
-    gamesUserConfigModel.gamesUserConfig.joinedPublicGameConfigs);
+    gameUserModel_data.publicGameUser.joinedGameConfigIds);
 
   return (
     <View style={genericStyles.spacing}>

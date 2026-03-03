@@ -1,10 +1,10 @@
 
 import { extractAppErrorCodeFromUnknownObject, type ModelT } from '@ig/app-engine-ui';
-import { type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-engine-models';
-import { useGetGameInstanceQuery } from './GameInstanceRtkApi';
+import { type GameInstanceIdT, type PublicGameInstanceT } from '@ig/games-engine-models';
+import { useGetPublicGameInstanceQuery } from './GameInstanceRtkApi';
 
 export type GameInstanceModelDataT = {
-  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+  publicGameInstance: PublicGameInstanceT,
 };
 
 export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
@@ -15,7 +15,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     isError: isGameInstanceError,
     error: gameInstanceError,
     data: gameInstanceResponse
-  } = useGetGameInstanceQuery(gameInstanceId);
+  } = useGetPublicGameInstanceQuery(gameInstanceId);
 
   if (isGameInstanceLoading) {
     return {
@@ -40,7 +40,7 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
     isLoading: false,
     isError: false,
     data: {
-      gameInstanceExposedInfo: gameInstanceResponse.gameInstanceExposedInfo,
+      publicGameInstance: gameInstanceResponse.publicGameInstance,
     }
   }
 }

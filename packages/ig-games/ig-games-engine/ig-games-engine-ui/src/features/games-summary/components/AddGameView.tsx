@@ -5,13 +5,15 @@ import { usePlatformUiNavigation } from '@ig/platform-ui';
 import { RnuiButton, RnuiTextInput } from '@ig/rnui';
 import { useState, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useGamesUserConfigController } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+import {
+  useGameInstanceController
+} from '../../../domains/game-instance/controller/user-actions/GameInstanceController';
 
 export type AddGameViewPropsT = object;
 
 export const AddGameView: FC<AddGameViewPropsT> = () => {
   const [invitationCode, setInvitationCode] = useState<string>("");
-  const { onAcceptInvite } = useGamesUserConfigController();
+  const { onJoinGameByInvite } = useGameInstanceController();
   const { t } = useAppLocalization();
   const { gamesUiUrlPathsAdapter } = useAppConfig();
   const { navigate } = usePlatformUiNavigation();
@@ -20,7 +22,7 @@ export const AddGameView: FC<AddGameViewPropsT> = () => {
   const handlePress = async (): Promise<void> => {
     if (invitationCode !== "") {
       try {
-        const gameInstanceId: GameInstanceIdT = await onAcceptInvite(invitationCode);
+        const gameInstanceId: GameInstanceIdT = await onJoinGameByInvite(invitationCode);
 
         const url = gamesUiUrlPathsAdapter.buildGameInstanceDashboardUrlPath(gameInstanceId);
         navigate(url);
@@ -47,7 +49,7 @@ export const AddGameView: FC<AddGameViewPropsT> = () => {
         />
       </View>
       <RnuiButton testID="add-game-button" onPress={handlePress} disabled={invitationCode === ""}>
-        {t("games:joinGame")}
+        {t("games:joinGameByInvite")}
       </RnuiButton>
     </View>
   );

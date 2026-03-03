@@ -79,7 +79,7 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
     );
 
     // verify calls
-    expect(getLocalUserIdSpy).toHaveBeenCalledWith();
+    expect(getLocalUserIdSpy).toHaveBeenCalled();
     expect(onGuestLoginMock).toHaveBeenCalled();
     expect(onUnknownErrorMock).toHaveBeenCalledWith('ERROR');
   });
@@ -102,8 +102,8 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
     );
 
     // verify calls
-    expect(getLocalUserIdSpy).toHaveBeenCalledWith();
-    expect(onGuestLoginMock).toHaveBeenCalledWith();
+    expect(getLocalUserIdSpy).toHaveBeenCalled();
+    expect(onGuestLoginMock).toHaveBeenCalled();
     expect(setLocalUserIdSpy).toHaveBeenCalledWith('ACCOUNT1');
   });
 

@@ -1,6 +1,6 @@
 
 import { useAppErrorHandling } from '@ig/app-engine-ui';
-import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { PublicGameInstanceT } from '@ig/games-engine-models';
 import type React from 'react';
 import { useState, type FC } from 'react';
 import {
@@ -10,12 +10,12 @@ import type { TestableComponentT } from '../../../../types/ComponentTypes';
 import { LevelView } from './LevelView';
 
 export type LevelsViewPropsT = TestableComponentT & {
-  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+  publicGameInstance: PublicGameInstanceT,
 };
 
 export const LevelsView: FC<LevelsViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo } = props;
-  const { gameState } = gameInstanceExposedInfo;
+  const { publicGameInstance } = props;
+  const { gameState } = publicGameInstance;
   const { onSubmitGuess } = useGameInstanceController();
   const { onUnknownError } = useAppErrorHandling();
 
@@ -26,7 +26,7 @@ export const LevelsView: FC<LevelsViewPropsT> = (props) => {
 
   const handleSubmitGuess = async (guess: string): Promise<boolean> => {
     try {
-      const isCorrectGuess = await onSubmitGuess(gameInstanceExposedInfo.gameInstanceId, curLevelIdx, guess);
+      const isCorrectGuess = await onSubmitGuess(publicGameInstance.gameInstanceId, curLevelIdx, guess);
 
       return isCorrectGuess;
     } catch (error: unknown) {

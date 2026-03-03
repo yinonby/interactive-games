@@ -93,5 +93,17 @@ describe('MongoAccountsTable', () => {
       const res2 = await instance.getAccounts();
       expect(res2).toHaveLength(1);
     });
+
+    it('should fail to create user with an empty nickname', async () => {
+      const mockAccount1: AccountT = buildFullTestAccount({
+        nickname: '',
+      });
+      const instance = new MongoAccountsTable();
+
+      const res1 = await instance.getAccounts();
+      expect(res1).toHaveLength(0);
+
+      await expect(instance.createAccount(mockAccount1)).rejects.toThrow();
+    });
   });
 });

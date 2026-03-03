@@ -30,7 +30,8 @@ describe('AuthLogic', () => {
 
     // guestLogin
     const res: Response = {} as Response;
-    const authId = await logic.guestLogin(res);
+    const nickname = 'NICKNAME1';
+    const authId = await logic.guestLogin(res, nickname);
 
     // verify
     expect(mock_signup).toHaveBeenCalled();

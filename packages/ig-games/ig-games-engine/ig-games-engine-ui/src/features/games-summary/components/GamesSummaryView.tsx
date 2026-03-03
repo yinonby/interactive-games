@@ -3,13 +3,13 @@ import { useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/a
 import { RnuiActivityIndicator, RnuiCard, RnuiText } from '@ig/rnui';
 import React, { useEffect, type FC } from 'react';
 import { View } from 'react-native';
-import { useGamesUserConfigModel } from '../../../domains/user-config/model/rtk/GamesUserConfigModel';
+import { useGameUserModel } from '../../../domains/game-user/model/rtk/GameUserModel';
 import { GamesTableView } from './GamesTableView';
 
 export type GamesSummaryViewPropsT = object;
 
 export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
-  const { isLoading, isError, appErrCode, data: gamesUserConfigModel } = useGamesUserConfigModel();
+  const { isLoading, isError, appErrCode, data: gameUserModel } = useGameUserModel();
   const { t } = useAppLocalization();
   const { onAppError } = useAppErrorHandling();
   const genericStyles = useGenericStyles();
@@ -25,15 +25,15 @@ export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
     return null;
   }
 
-  const joinedPublicGameConfigs = gamesUserConfigModel.gamesUserConfig.joinedPublicGameConfigs;
+  const joinedGameConfigIds = gameUserModel.publicGameUser.joinedGameConfigIds;
 
   return (
     <View style={genericStyles.spacing}>
-      {joinedPublicGameConfigs.length === 0 &&
+      {joinedGameConfigIds.length === 0 &&
         <RnuiText variant="titleSmall">{t("games:userNoGamesAbailable")}</RnuiText>
       }
 
-      {joinedPublicGameConfigs.length > 0 &&
+      {joinedGameConfigIds.length > 0 &&
         <RnuiCard testID="current-games-card-tid">
           <View style={genericStyles.spacing}>
             <View style={genericStyles.alignTextToTableCell}>
@@ -42,7 +42,7 @@ export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
 
             <GamesTableView
               testID="current-games-table-view-tid"
-              joinedPublicGameConfigs={joinedPublicGameConfigs}
+              joinedGameConfigIds={joinedGameConfigIds}
             />
           </View>
         </RnuiCard>

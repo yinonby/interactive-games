@@ -1,6 +1,6 @@
 
 import { useAppConfig, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { PublicGameInstanceT } from '@ig/games-engine-models';
 import { RnuiButton, RnuiCopyToClipboard, RnuiQrCode, RnuiText } from '@ig/rnui';
 import type React from 'react';
 import type { FC } from 'react';
@@ -8,16 +8,16 @@ import { View } from 'react-native';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
 
 export type InviteViewPropsT = TestableComponentT & {
-  gameInstanceExposedInfo: GameInstanceExposedInfoT,
+  publicGameInstance: PublicGameInstanceT,
 };
 
 export const InviteView: FC<InviteViewPropsT> = (props) => {
-  const { gameInstanceExposedInfo } = props;
+  const { publicGameInstance } = props;
   const { t } = useAppLocalization();
-  const { invitationCode, gameInfo, playerExposedInfos } = gameInstanceExposedInfo;
+  const { invitationCode, publicGameConfig, publicPlayerInfos } = publicGameInstance;
   const { gameUiConfig } = useAppConfig();
   const invitationUrl = gameUiConfig.apiUrl + "/games/accept-invite/" + invitationCode;
-  const isSaturated = playerExposedInfos.length >= gameInfo.maxParticipants - 1;
+  const isSaturated = publicPlayerInfos.length >= publicGameConfig.maxParticipants - 1;
   const genericStyles = useGenericStyles();
 
   const handlePress = () => {

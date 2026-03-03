@@ -1,11 +1,7 @@
 
 
-import { type WordleExposedConfigT } from '@ig/games-wordle-models';
+import { type PublicWordleConfigT } from '@ig/games-wordle-models';
 
-export type WordleConfigT = WordleExposedConfigT & {
-  solution: WordleSolutionT,
-}
-
-export type WordleSolutionT = {
-  word: string,
+export interface WordleAdapter {
+  generateWordleSolution(publicWordleConfig: PublicWordleConfigT): string;
 }

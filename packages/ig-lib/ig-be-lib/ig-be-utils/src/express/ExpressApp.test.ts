@@ -28,10 +28,6 @@ describe('ExpressApp', () => {
     listen: listenMock,
   } as unknown as ReturnType<typeof express>);
 
-  const jsonSpy = vi.spyOn(express, 'json');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  jsonSpy.mockReturnValue('JSONFNMOCK' as any);
-
   // start a local mongo inmem server
   const mongoInmemDbServer = new MongoInmemDbServer();
   let mongoConnString: string;
@@ -48,13 +44,30 @@ describe('ExpressApp', () => {
     await mongoInmemDbServer.stopDb();
   });
 
-  it('should initialize with defaults', () => {
+  it('should initialize with defaults', async () => {
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [],
     };
-    new ExpressApp(mockStarterInfo);
+    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo);
+    await expressApp.startApp();
+  });
+
+  it('should use cookie parser middleware', async () => {
+    const mockStarterInfo: ExpressAppStarterInfoT = {
+      listerPort: 1287,
+      appInfo: { appVersion: '1.1' },
+      expressPluginContainers: [],
+    };
+    const mock_cookieParserMiddleware = vi.fn().mockReturnValue('MOCK');
+
+    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger, {
+      cookieParserMiddleware: mock_cookieParserMiddleware,
+    });
+    await expressApp.startApp();
+
+    expect(useMock).toHaveBeenCalledWith('MOCK');
   });
 
   it('should use json middleware', async () => {
@@ -63,30 +76,32 @@ describe('ExpressApp', () => {
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [],
     };
-    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
+    const mock_jsonMiddleware = vi.fn().mockReturnValue('MOCK');
+
+    const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger, {
+      jsonMiddleware: mock_jsonMiddleware,
+    });
     await expressApp.startApp();
 
-    expect(useMock).toHaveBeenNthCalledWith(1, 'JSONFNMOCK'); // express.json()
+    expect(useMock).toHaveBeenCalledWith('MOCK');
   });
 
   it('should initialize with CORS', async () => {
-    const corsMiddlewareMock = vi.fn().mockReturnValue('CORSRES');
-    const signalHandler: ExpressAppSignalHandler = {
-      on: vi.fn(),
-      exit: vi.fn(),
-    }
     const mockStarterInfo: ExpressAppStarterInfoT = {
       listerPort: 1287,
       appInfo: { appVersion: '1.1' },
       expressPluginContainers: [],
       corsAllowOrigins: ['origin1']
     };
+    const mock_corsMiddleware = vi.fn().mockReturnValue('MOCK');
 
-    const expressApp = new ExpressApp(mockStarterInfo, mockLogger, signalHandler, corsMiddlewareMock);
+    const expressApp = new ExpressApp(mockStarterInfo, mockLogger, {
+      corsMiddleware: mock_corsMiddleware
+    });
     await expressApp.startApp();
 
-    expect(corsMiddlewareMock).toHaveBeenCalledWith({ origin: 'origin1', credentials: true });
-    expect(useMock).toHaveBeenCalledWith('CORSRES');
+    expect(mock_corsMiddleware).toHaveBeenCalledWith({ origin: 'origin1', credentials: true });
+    expect(useMock).toHaveBeenCalledWith('MOCK');
   });
 
   it('should init db, without db adapter', async () => {
@@ -148,7 +163,7 @@ describe('ExpressApp', () => {
           expressPlugin: {
             initRouter: initRouterMock,
           },
-          pluginConfig: 5,
+          publicPluginConfig: 5,
         }
       }],
     };
@@ -171,7 +186,7 @@ describe('ExpressApp', () => {
           expressPlugin: {
             initRouter: initRouterMock,
           },
-          pluginConfig: 5,
+          publicPluginConfig: 5,
         },
         postInitCb: postInitMock,
       }],
@@ -179,7 +194,7 @@ describe('ExpressApp', () => {
     const expressApp: ExpressApp = new ExpressApp(mockStarterInfo, mockLogger);
     await expressApp.startApp();
 
-    expect(postInitMock).toHaveBeenCalledWith(mockStarterInfo.expressPluginContainers[0].routeConfig?.pluginConfig);
+    expect(postInitMock).toHaveBeenCalledWith(mockStarterInfo.expressPluginContainers[0].routeConfig?.publicPluginConfig);
   });
 
   it('should call post init callback, without plugin config', async () => {
@@ -226,12 +241,14 @@ describe('ExpressApp', () => {
 
     const onMock = vi.fn();
     const exitMock = vi.fn();
-    const signalHandler: ExpressAppSignalHandler = {
+    const mock_signalHandler: ExpressAppSignalHandler = {
       on: onMock,
       exit: exitMock,
     }
 
-    const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
+    const app = new ExpressApp(mockStarterInfo, mockLogger, {
+      signalHandler: mock_signalHandler,
+    });
     await app.startApp();
 
     const sigint = 'SIGINT';
@@ -264,12 +281,14 @@ describe('ExpressApp', () => {
 
     const onMock = vi.fn();
     const exitMock = vi.fn();
-    const signalHandler: ExpressAppSignalHandler = {
+    const mock_signalHandler: ExpressAppSignalHandler = {
       on: onMock,
       exit: exitMock,
     }
 
-    const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
+    const app = new ExpressApp(mockStarterInfo, mockLogger, {
+      signalHandler: mock_signalHandler,
+    });
     await app.startApp();
 
     const sigterm = 'SIGTERM';
@@ -293,12 +312,14 @@ describe('ExpressApp', () => {
 
     const onMock = vi.fn();
     const exitMock = vi.fn();
-    const signalHandler: ExpressAppSignalHandler = {
+    const mock_signalHandler: ExpressAppSignalHandler = {
       on: onMock,
       exit: exitMock,
     }
 
-    const app = new ExpressApp(mockStarterInfo, mockLogger, signalHandler);
+    const app = new ExpressApp(mockStarterInfo, mockLogger, {
+      signalHandler: mock_signalHandler,
+    });
     await app.startApp();
 
     const sigint = 'SIGINT';
