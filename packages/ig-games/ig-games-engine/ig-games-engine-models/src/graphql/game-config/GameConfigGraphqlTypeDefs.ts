@@ -8,7 +8,7 @@ export const gameConfigGraphqlTypesTypeDefs = gql`
     jointGame
   }
 
-  type LevelExposedConfig {
+  type PublicLevelConfig {
     levelName: String
   }
 
@@ -32,15 +32,11 @@ export const gameConfigGraphqlTypesTypeDefs = gql`
     imageInfo: ImageInfo!
     extraTimeMinutes: Int!
     extraTimeLimitDurationInfo: DurationInfo!
-    levelExposedConfigs: [LevelExposedConfig!]!
+    publicLevelConfigs: [PublicLevelConfig!]!
   }
 
   enum SolutionKind {
     textSolution
-  }
-
-  type FixedGameSolution {
-    kind: SolutionKind
   }
 
   type GameConfig {
@@ -53,16 +49,16 @@ export const gameConfigGraphqlTypesTypeDefs = gql`
     imageInfo: ImageInfo!
     extraTimeMinutes: Int!
     extraTimeLimitDurationInfo: DurationInfo!
-    levelExposedConfigs: [LevelExposedConfig!]!
-    fixedGameSolution: FixedGameSolution
+    publicLevelConfigs: [PublicLevelConfig!]!
   }
 `;
 
 const gameConfigGraphqlQueryTypeDefs = gql`
   type Query {
     getGameConfigs: [GameConfig!]! @auth(requires: gamesSystemAdmin)
+    getPublicGameConfigs(gameConfigIds: [ID!]): [PublicGameConfig!]!
     getMinimalPublicGameConfigs: [MinimalPublicGameConfig!]!
-    getPublicGameConfigs: [PublicGameConfig!]!
+    getPublicGameConfig(gameConfigId: ID!): PublicGameConfig!
   }
 `;
 
@@ -85,10 +81,10 @@ const gameConfigGraphqlMutationTypeDefs = gql`
     imageInfo: ImageInfoInput
     extraTimeMinutes: Int
     extraTimeLimitDurationInfo: DurationInfoInput
-    levelExposedConfigs: [LevelExposedConfigInput!]
+    publicLevelConfigs: [PublicLevelConfigInput!]
   }
 
-  input LevelExposedConfigInput {
+  input PublicLevelConfigInput {
     levelName: String
   }
 

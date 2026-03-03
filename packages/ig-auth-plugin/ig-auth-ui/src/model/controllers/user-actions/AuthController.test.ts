@@ -17,10 +17,10 @@ describe('AppConfigController', () => {
 
       const { result } = renderHook(() => useAuthController());
 
-      await expect(result.current.onGuestLogin()).rejects.toThrow();
+      const nickname = 'Jim Carrey';
+      await expect(result.current.onGuestLogin(nickname)).rejects.toThrow();
 
-      expect(guestLoginMock).toHaveBeenCalledTimes(1);
-      expect(guestLoginMock).toHaveBeenCalled();
+      expect(guestLoginMock).toHaveBeenCalledWith({ nickname });
     });
 
     it('calls guestLogin, succeeds', async () => {
@@ -34,10 +34,10 @@ describe('AppConfigController', () => {
 
       const { result } = renderHook(() => useAuthController());
 
-      const accountId: AccountIdT = await result.current.onGuestLogin();
+      const nickname = 'Jim Carrey';
+      const accountId: AccountIdT = await result.current.onGuestLogin(nickname);
 
-      expect(guestLoginMock).toHaveBeenCalledTimes(1);
-      expect(guestLoginMock).toHaveBeenCalled();
+      expect(guestLoginMock).toHaveBeenCalledWith({ nickname });
       expect(accountId).toEqual('ACCOUNT1');
     });
   });

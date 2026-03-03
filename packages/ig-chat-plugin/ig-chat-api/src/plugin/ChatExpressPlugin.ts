@@ -5,11 +5,11 @@ import { createGraphqlRouter } from '../graphql/server/GraphqlRouter';
 import type { ChatPluginConfigT } from '../types/ChatPluginTypes';
 
 export const chatApiPlugin: ExpressPluginT<ChatPluginConfigT> = {
-  initRouter: async (appInfo: ExpressAppInfoT, pluginConfig: ChatPluginConfigT): Promise<Router> => {
+  initRouter: async (appInfo: ExpressAppInfoT, publicPluginConfig: ChatPluginConfigT): Promise<Router> => {
     // init prisma db
-    await pluginConfig.chatDbAdapter.init();
+    await publicPluginConfig.chatDbAdapter.init();
 
-    const router = await createGraphqlRouter(pluginConfig.chatDbAdapter);
+    const router = await createGraphqlRouter(publicPluginConfig.chatDbAdapter);
 
     return router;
   },

@@ -15,6 +15,7 @@ export default {
     '^@test/(.*)$': '<rootDir>/test/$1',
     '@ig/app-engine-ui/test-utils': '<rootDir>/../../../ig-app-engine/ig-app-engine-ui/test/test-index.ts',
     '@ig/games-engine-models/test-utils': '<rootDir>/../ig-games-engine-models/test/test-index.ts',
+    '@ig/games-wordle-models/test-utils': '<rootDir>/../../ig-games-wordle/ig-games-wordle-models/test/test-index.ts',
     '^msw/node$': '<rootDir>/../../../../node_modules/msw/lib/node/index.js', // <-- key fix
   },
 }

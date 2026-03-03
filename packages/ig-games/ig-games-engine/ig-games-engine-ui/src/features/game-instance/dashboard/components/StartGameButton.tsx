@@ -4,7 +4,7 @@ import type { GameInstanceIdT } from '@ig/games-engine-models';
 import { RnuiButton } from '@ig/rnui';
 import React, { type FC } from 'react';
 import {
-  useGameInstanceController
+    useGameInstanceController
 } from '../../../../domains/game-instance/controller/user-actions/GameInstanceController';
 import type { TestableComponentT } from '../../../../types/ComponentTypes';
 
@@ -15,12 +15,12 @@ export type StartGameButtonPropsT = TestableComponentT & {
 export const StartGameButton: FC<StartGameButtonPropsT> = (props) => {
   const { gameInstanceId } = props;
   const { t } = useAppLocalization();
-  const { onStartGame } = useGameInstanceController();
+  const { onStartPlaying } = useGameInstanceController();
   const { onUnknownError } = useAppErrorHandling();
 
   const handlePress = async (): Promise<void> => {
     try {
-      await onStartGame(gameInstanceId);
+      await onStartPlaying(gameInstanceId);
     } catch (error: unknown) {
       onUnknownError(error);
     }

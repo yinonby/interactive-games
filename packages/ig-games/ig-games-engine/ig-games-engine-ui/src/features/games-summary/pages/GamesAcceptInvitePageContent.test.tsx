@@ -4,7 +4,7 @@ import React from 'react';
 import { GamesAcceptInvitePageContent } from './GamesAcceptInvitePageContent';
 
 // mocks
-jest.mock("../components/accept-invite/GamesAcceptInviteView", () => {
+jest.mock("../components/join-game-by-invite/GamesAcceptInviteView", () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 

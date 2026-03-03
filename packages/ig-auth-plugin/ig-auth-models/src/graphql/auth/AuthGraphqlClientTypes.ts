@@ -16,6 +16,10 @@ export type HealthQuryResultT = {
 
 // mutation
 
+export type GuestLoginInputT = {
+  nickname: string,
+}
+
 export type GuestLoginResultDataT = {
   authId: AuthIdT,
 }
@@ -29,8 +33,8 @@ export type GuestLoginResponseT = {
 }
 
 export const guestLoginMutation = `
-  mutation GuestLogin {
-    guestLoginResult: guestLogin {
+  mutation GuestLogin($input: GuestLoginInput!) {
+    guestLoginResult: guestLogin(input: $input) {
       authId
     }
   }

@@ -7,18 +7,18 @@ import { GameConfigLogic } from './GameConfigLogic';
 describe('GameConfigLogic', () => {
   let mockTableAdapter: GameConfigsTableAdapter;
   let logic: GameConfigLogic;
-  const getGameConfigsMock = vi.fn();
-  const getGameConfigMock = vi.fn();
-  const createGameConfigMock = vi.fn();
-  const updateGameConfigMock = vi.fn();
+  const mock_getGameConfigs = vi.fn();
+  const mock_getGameConfig = vi.fn();
+  const mock_createGameConfig = vi.fn();
+  const mock_updateGameConfig = vi.fn();
 
   beforeEach(() => {
     // Create a fresh mock before each test
     mockTableAdapter = {
-      getGameConfigs: getGameConfigsMock,
-      getGameConfig: getGameConfigMock,
-      createGameConfig: createGameConfigMock,
-      updateGameConfig: updateGameConfigMock,
+      getGameConfigs: mock_getGameConfigs,
+      getGameConfig: mock_getGameConfig,
+      createGameConfig: mock_createGameConfig,
+      updateGameConfig: mock_updateGameConfig,
     };
 
     logic = new GameConfigLogic(mockTableAdapter);
@@ -29,11 +29,24 @@ describe('GameConfigLogic', () => {
       buildGameConfigMock({}),
     ];
 
-    getGameConfigsMock.mockResolvedValue(mockGameConfigs);
+    mock_getGameConfigs.mockResolvedValue(mockGameConfigs);
 
     const result = await logic.getGameConfigs();
 
-    expect(mockTableAdapter.getGameConfigs).toHaveBeenCalled();
+    expect(mock_getGameConfigs).toHaveBeenCalled();
+    expect(result).toEqual(mockGameConfigs);
+  });
+
+  it('getPublicGameConfigs calls table adapter and returns data', async () => {
+    const mockGameConfigs: GameConfigT[] = [
+      buildGameConfigMock({}),
+    ];
+
+    mock_getGameConfigs.mockResolvedValue(mockGameConfigs);
+
+    const result = await logic.getPublicGameConfigs();
+
+    expect(mock_getGameConfigs).toHaveBeenCalled();
     expect(result).toEqual(mockGameConfigs);
   });
 
@@ -46,29 +59,53 @@ describe('GameConfigLogic', () => {
       ...gameConfigNoId,
     });
 
-    getGameConfigMock.mockResolvedValue(mockGameConfig);
+    mock_getGameConfig.mockResolvedValue(mockGameConfig);
 
     const result = await logic.getGameConfig('GCID1');
 
-    expect(mockTableAdapter.getGameConfig).toHaveBeenCalled();
+    expect(mock_getGameConfig).toHaveBeenCalled();
     expect(result).toEqual(mockGameConfig);
   });
 
-  it('getGameConfig returns null when there is no game config', async () => {
-    getGameConfigMock.mockResolvedValue(null);
+  it('getGameConfig returns throws when there is no game config', async () => {
+    mock_getGameConfig.mockResolvedValue(null);
 
-    const result = await logic.getGameConfig('GCID1');
+    await expect(logic.getGameConfig('GCID1')).rejects.toThrow();
 
-    expect(mockTableAdapter.getGameConfig).toHaveBeenCalled();
-    expect(result).toEqual(null);
+    expect(mock_getGameConfig).toHaveBeenCalled();
+  });
+
+  it('getPublicGameConfig calls table adapter and returns data', async () => {
+    const gameConfigNoId = buildGameConfigNoIdMock({
+      gameName: 'g1',
+    });
+    const mockGameConfig: GameConfigT = buildGameConfigMock({
+      gameConfigId: 'GCID1',
+      ...gameConfigNoId,
+    });
+
+    mock_getGameConfig.mockResolvedValue(mockGameConfig);
+
+    const result = await logic.getPublicGameConfig('GCID1');
+
+    expect(mock_getGameConfig).toHaveBeenCalled();
+    expect(result).toEqual(mockGameConfig);
+  });
+
+  it('getPublicGameConfig returns throws when there is no game config', async () => {
+    mock_getGameConfig.mockResolvedValue(null);
+
+    await expect(logic.getPublicGameConfig('GCID1')).rejects.toThrow();
+
+    expect(mock_getGameConfig).toHaveBeenCalled();
   });
 
   it('createGameConfig calls table adapter with correct argument', async () => {
-    const newGameInfoNoId: GameConfigNoIdT = buildGameConfigNoIdMock();
+    const newGameConfigNoId: GameConfigNoIdT = buildGameConfigNoIdMock();
 
-    await logic.createGameConfig('GCID1', newGameInfoNoId);
+    await logic.createGameConfig('GCID1', newGameConfigNoId);
 
-    expect(mockTableAdapter.createGameConfig).toHaveBeenCalledWith('GCID1', newGameInfoNoId);
+    expect(mock_createGameConfig).toHaveBeenCalledWith('GCID1', newGameConfigNoId);
   });
 
   it('updateGameConfig calls table adapter with correct argument', async () => {
@@ -80,7 +117,7 @@ describe('GameConfigLogic', () => {
 
     const result = await logic.updateGameConfig(input);
 
-    expect(mockTableAdapter.updateGameConfig).toHaveBeenCalledWith('GCID1', partialGameConfigNoId);
+    expect(mock_updateGameConfig).toHaveBeenCalledWith('GCID1', partialGameConfigNoId);
     expect(result).toEqual({ status: 'ok' });
   });
 });

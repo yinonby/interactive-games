@@ -34,7 +34,8 @@ export const AuthProvider: React.FC<PropsWithChildren<AuthProviderPropsT>> = (pr
         } else {
           logger.info('No curAccountId found, initiating guest login');
           try {
-            const newUserId = await onGuestLogin();
+            const nickname = 'Jim Carrey'; // TODO fix this with user input
+            const newUserId = await onGuestLogin(nickname);
             logger.info('Retrieved user id after a guest login');
             await setLocalAccountId(newUserId);
             setCurUserId(newUserId);

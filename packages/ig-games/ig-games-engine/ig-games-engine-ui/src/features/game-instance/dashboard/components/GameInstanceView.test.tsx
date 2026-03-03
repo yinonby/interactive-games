@@ -1,8 +1,8 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { __authUiMocks } from '@ig/auth-ui';
-import type { GameInstanceExposedInfoT } from '@ig/games-engine-models';
-import { buildPublicGameConfigMock, buildTestGameInstanceExposedInfo, buildTestGameState, buildTestPlayerExposedInfo } from '@ig/games-engine-models/test-utils';
+import type { PublicGameInstanceT } from '@ig/games-engine-models';
+import { buildPublicGameConfigMock, buildTestGameInstanceExposedInfo, buildTestGameState, buildTestPublicPlayerInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { GameInstanceView } from './GameInstanceView';
@@ -78,16 +78,16 @@ describe('GameInstanceView', () => {
   });
 
   it('does not render when current user is not in players list', () => {
-    // build gameInstanceExposedInfo
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerAccountId: 'otherUser',
+    // build publicGameInstance
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
+      publicPlayerInfos: [buildTestPublicPlayerInfo({
+        playerId: 'otherUser',
         playerRole: 'player',
       })],
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
+      <GameInstanceView publicGameInstance={publicGameInstance} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -96,13 +96,13 @@ describe('GameInstanceView', () => {
   });
 
   it('renders correctly, with InviteView for admin and LevelsView when game is not notStarted', () => {
-    // build gameInstanceExposedInfo
-    const gameInfo = buildPublicGameConfigMock({});
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    // build publicGameInstance
+    const publicGameConfig = buildPublicGameConfigMock({});
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'gid-1',
-      gameInfo: gameInfo,
-      playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerAccountId: curUserIdMock,
+      publicGameConfig: publicGameConfig,
+      publicPlayerInfos: [buildTestPublicPlayerInfo({
+        playerId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({
@@ -111,7 +111,7 @@ describe('GameInstanceView', () => {
     });
 
     const { getByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
+      <GameInstanceView publicGameInstance={publicGameInstance} />
     );
 
     expect(useAuthMock).toHaveBeenCalled();
@@ -124,7 +124,7 @@ describe('GameInstanceView', () => {
 
     // second grid item
     const card = getByTestId('GameImageCard-tid');
-    expect(card.props.minimalPublicGameConfig).toEqual(gameInfo);
+    expect(card.props.minimalPublicGameConfig).toEqual(publicGameConfig);
     expect(card.props.includeFreeLabel).toEqual(false);
 
     getByTestId('GameInstanceConfigSummaryView-tid');
@@ -136,13 +136,13 @@ describe('GameInstanceView', () => {
   });
 
   it('does not render InviteView for non-admin', () => {
-    // build gameInstanceExposedInfo
-    const gameInfo = buildPublicGameConfigMock({});
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    // build publicGameInstance
+    const publicGameConfig = buildPublicGameConfigMock({});
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'gid-1',
-      gameInfo: gameInfo,
-      playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerAccountId: curUserIdMock,
+      publicGameConfig: publicGameConfig,
+      publicPlayerInfos: [buildTestPublicPlayerInfo({
+        playerId: curUserIdMock,
         playerRole: 'player',
       })],
       gameState: buildTestGameState({
@@ -151,20 +151,20 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
+      <GameInstanceView publicGameInstance={publicGameInstance} />
     );
 
     expect(queryByTestId('InviteView-tid')).toBeNull();
   });
 
   it('does not render LevelsView when game is notStarted', () => {
-    // build gameInstanceExposedInfo
-    const gameInfo = buildPublicGameConfigMock({});
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    // build publicGameInstance
+    const publicGameConfig = buildPublicGameConfigMock({});
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'gid-1',
-      gameInfo: gameInfo,
-      playerExposedInfos: [buildTestPlayerExposedInfo({
-        playerAccountId: curUserIdMock,
+      publicGameConfig: publicGameConfig,
+      publicPlayerInfos: [buildTestPublicPlayerInfo({
+        playerId: curUserIdMock,
         playerRole: 'admin',
       })],
       gameState: buildTestGameState({
@@ -173,7 +173,7 @@ describe('GameInstanceView', () => {
     });
 
     const { queryByTestId } = render(
-      <GameInstanceView gameInstanceExposedInfo={gameInstanceExposedInfo} />
+      <GameInstanceView publicGameInstance={publicGameInstance} />
     );
 
     expect(queryByTestId('LevelsView-tid')).toBeNull();

@@ -1,4 +1,5 @@
 
+import { type EngineApiErrorCodeT } from '@ig/app-engine-models';
 import { type GamesApiServerErrorCodeT } from '@ig/games-engine-models';
 
 export type AppApiServerErrorT = {
@@ -7,6 +8,7 @@ export type AppApiServerErrorT = {
 };
 
 export type ApiServerErrorCodeT =
+  | EngineApiErrorCodeT
   | GamesApiServerErrorCodeT
   | "apiError:server"
 ;

@@ -1,6 +1,6 @@
 
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
-import { type GameInstanceExposedInfoT, type GameInstanceIdT } from '@ig/games-engine-models';
+import { type GameInstanceIdT, type PublicGameInstanceT } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
@@ -49,7 +49,7 @@ describe('GameInstanceView', () => {
   });
 
   it('renders correctly when there is data', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: gameInstanceId1,
     });
 
@@ -57,7 +57,7 @@ describe('GameInstanceView', () => {
       isLoading: false,
       isError: false,
       data: {
-        gameInstanceExposedInfo: gameInstanceExposedInfo,
+        publicGameInstance: publicGameInstance,
       },
     });
 
@@ -66,6 +66,6 @@ describe('GameInstanceView', () => {
     );
 
     const view = getByTestId("GameInstanceView-tid");
-    expect(view.props.gameInstanceExposedInfo).toEqual({ gameInstanceId: gameInstanceId1 });
+    expect(view.props.publicGameInstance).toEqual({ gameInstanceId: gameInstanceId1 });
   });
 });

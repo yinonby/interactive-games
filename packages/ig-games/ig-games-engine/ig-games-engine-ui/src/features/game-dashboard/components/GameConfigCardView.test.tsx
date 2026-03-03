@@ -38,10 +38,10 @@ jest.mock('../../games-summary/components/PublicGameConfigSummaryView', () => {
 
 describe('GameConfigCardView', () => {
   it('renders properly', async () => {
-    const gameInfo: PublicGameConfigT = buildPublicGameConfigMock({});
+    const publicGameConfig: PublicGameConfigT = buildPublicGameConfigMock({});
 
     const { getByTestId } = render(
-      <GameConfigCardView gameInfo={gameInfo} />
+      <GameConfigCardView publicGameConfig={publicGameConfig} />
     );
 
     getByTestId('GameImageCard-tid');

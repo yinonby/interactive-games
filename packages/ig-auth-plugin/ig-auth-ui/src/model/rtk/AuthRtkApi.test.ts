@@ -52,8 +52,9 @@ describe('AppRtkApi', () => {
   it('posts a guest login request', async () => {
     const store = createTestStore();
 
+    const nickname = 'NICKNAME1';
     const response = await store.dispatch(
-      authRtkApiEndpoints.guestLogin.initiate()
+      authRtkApiEndpoints.guestLogin.initiate({ nickname })
     );
     const result: GuestLoginResultT | undefined = response.data;
 

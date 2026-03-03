@@ -29,7 +29,7 @@ export const GameInstanceContainer: FC<GameInstanceContainerPropsT> = ({ gameIns
   return (
     <GameInstanceView
       testID="GameInstanceView-tid"
-      gameInstanceExposedInfo={gameInstanceModelData.gameInstanceExposedInfo}
+      publicGameInstance={gameInstanceModelData.publicGameInstance}
     />
   );
 };

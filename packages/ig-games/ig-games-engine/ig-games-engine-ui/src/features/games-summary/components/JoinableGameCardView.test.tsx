@@ -6,8 +6,8 @@ import { __puiMocks } from '@ig/platform-ui';
 import { MIN_TO_MS } from '@ig/utils';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
-import type { GamesUserConfigControllerT } from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
-import * as GamesUserConfigController from '../../../domains/user-config/controller/user-actions/GamesUserConfigController';
+import type { GameUserControllerT } from '../../../domains/game-user/controller/user-actions/GameUserController';
+import * as GameUserControllerModule from '../../../domains/game-user/controller/user-actions/GameUserController';
 import * as GameViewUtils from '../../../utils/GameViewUtils';
 import { JoinableGameCardView } from './JoinableGameCardView';
 
@@ -37,24 +37,22 @@ describe('JoinableGameCardView', () => {
     onUnknownErrorMock,
   } = __engineAppUiMocks;
   const { navigateMock } = __puiMocks;
-  const onPlayGameMock = jest.fn();
-  const useUserConfigControllerSpy = jest.spyOn(GamesUserConfigController, 'useGamesUserConfigController');
-  const getGameConfigImagePropsSpy = jest.spyOn(GameViewUtils, 'getGameConfigImageProps');
+  const mock_onAddGameConfigId = jest.fn();
+  const spy_useGameUserController = jest.spyOn(GameUserControllerModule, 'useGameUserController');
+  const spy_getGameConfigImageProps = jest.spyOn(GameViewUtils, 'getGameConfigImageProps');
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    getGameConfigImagePropsSpy.mockReturnValue(undefined);
+    spy_getGameConfigImageProps.mockReturnValue(undefined);
   });
 
   it('renders correctly', async () => {
-    useUserConfigControllerSpy.mockReturnValue({
-      onPlayGame: onPlayGameMock,
-      onAcceptInvite: jest.fn(),
-      onCreateGameInstance: jest.fn(),
-    } as GamesUserConfigControllerT);
+    spy_useGameUserController.mockReturnValue({
+      onAddGameConfigId: mock_onAddGameConfigId,
+    } as unknown as GameUserControllerT);
 
-    onPlayGameMock.mockResolvedValue('game-instance-123');
+    mock_onAddGameConfigId.mockResolvedValue('game-instance-123');
 
     const minimalPublicGameConfig = buildMinimalPublicGameConfigMock({
       gameConfigId: 'gcid-1',
@@ -77,14 +75,12 @@ describe('JoinableGameCardView', () => {
     getByText(buildMockedTranslation('games:play'));
   });
 
-  it('navigates to the game instance returned by onPlayGame when Play is pressed', async () => {
-    useUserConfigControllerSpy.mockReturnValue({
-      onPlayGame: onPlayGameMock,
-      onAcceptInvite: jest.fn(),
-      onCreateGameInstance: jest.fn(),
-    } as GamesUserConfigControllerT);
+  it('navigates to the game instance returned by onAddGameConfigId when Play is pressed', async () => {
+    spy_useGameUserController.mockReturnValue({
+      onAddGameConfigId: mock_onAddGameConfigId,
+    } as unknown as GameUserControllerT);
 
-    onPlayGameMock.mockResolvedValue('giid-123');
+    mock_onAddGameConfigId.mockResolvedValue('giid-123');
     buildGameDashboardUrlPathMock.mockReturnValue('mockedUrl');
 
     const { getByTestId } = render(
@@ -106,20 +102,18 @@ describe('JoinableGameCardView', () => {
       fireEvent.press(btn);
     });
 
-    expect(onPlayGameMock).toHaveBeenCalledWith('gcid-1');
+    expect(mock_onAddGameConfigId).toHaveBeenCalledWith('gcid-1');
     expect(buildGameDashboardUrlPathMock).toHaveBeenCalledWith('gcid-1');
     expect(navigateMock).toHaveBeenCalledWith('mockedUrl');
   });
 
-  it('handles error thrown by onPlayGame', async () => {
-    useUserConfigControllerSpy.mockReturnValue({
-      onPlayGame: onPlayGameMock,
-      onAcceptInvite: jest.fn(),
-      onCreateGameInstance: jest.fn(),
-    } as GamesUserConfigControllerT);
+  it('handles error thrown by onAddGameConfigId', async () => {
+    spy_useGameUserController.mockReturnValue({
+      onAddGameConfigId: mock_onAddGameConfigId,
+    } as unknown as GameUserControllerT);
 
     const error = "ERR";
-    onPlayGameMock.mockRejectedValue(error);
+    mock_onAddGameConfigId.mockRejectedValue(error);
 
     const { getByTestId } = render(
       <JoinableGameCardView
@@ -140,7 +134,7 @@ describe('JoinableGameCardView', () => {
       fireEvent.press(btn);
     });
 
-    expect(onPlayGameMock).toHaveBeenCalledWith('gcid-1');
+    expect(mock_onAddGameConfigId).toHaveBeenCalledWith('gcid-1');
     expect(onUnknownErrorMock).toHaveBeenCalledWith(error);
   });
 });

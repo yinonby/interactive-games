@@ -1,15 +1,22 @@
 
 import { type LangCodeT } from '@ig/utils';
 
-export type WordleExposedConfigT = {
+export type WordleSolutionConfigT = {
+  easy: string[],
+  medium: string[],
+  hard: string[],
+}
+
+export type PublicWordleConfigT = {
   langCode: LangCodeT
   wordLength: number,
+  difficulty: 'easy' | 'medium' | 'hard',
   allowedGuessesNum: number,
 }
 
-export type WordleStateT = {
+export type PublicWordleStateT = {
   guessDatas: WordleGuessDataT[],
-  correctSolution?: string,
+  correctGuess?: string,
 }
 
 export type WordleGuessDataT = {

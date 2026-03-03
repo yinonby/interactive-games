@@ -1,16 +1,45 @@
 
-import type { GameInstanceExposedInfoT, PlayerExposedInfoT } from '../../src/types/game/GameInstanceTypes';
-import type { GameStateT, LevelStateT } from '../../src/types/game/GameStateTypes';
+import type { GameInstanceT, PublicGameInstanceT, PublicPlayerInfoT } from '../../src/types/game/GameInstanceTypes';
+import type { CodeLevelStateT, GameStateT, LevelStateT, WordleLevelStateT } from '../../src/types/game/GameStateTypes';
 import type {
   GameConfigNoIdT,
   GameConfigT,
+  GameUserT,
   MinimalPublicGameConfigT,
-  PublicGameConfigT
+  PublicGameConfigT,
+  PublicGameUserT
 } from '../../src/types/game/GameTypes';
+import type { PublicCodeLevelConfigT, PublicLevelConfigT } from '../../src/types/game/LevelTypes';
 
 if (process.env.NODE_ENV !== 'test') {
   throw new Error('TestUtils should only be used in testing');
 }
+
+// game user
+
+const basePublicGameUser: PublicGameUserT = {
+  gameUserId: 'USER1',
+  joinedGameConfigIds: [],
+};
+
+export const buildPublicGameUserMock = (
+  overrides?: Partial<PublicGameUserT>
+): PublicGameUserT => ({
+  ...basePublicGameUser,
+  ...overrides,
+});
+
+const baseGameUser: GameUserT = {
+  gameUserId: 'USER1',
+  joinedGameConfigIds: [],
+};
+
+export const buildGameUserMock = (
+  overrides?: Partial<GameUserT>
+): GameUserT => ({
+  ...baseGameUser,
+  ...overrides,
+});
 
 // game config
 
@@ -28,14 +57,11 @@ const basePublicGameConfig: PublicGameConfigT = {
   ...baseMinimalPublicGameConfig,
   extraTimeMinutes: 2,
   extraTimeLimitDurationInfo: { kind: 'unlimited' },
-  levelExposedConfigs: [],
+  publicLevelConfigs: [],
 };
 
 const baseGameConfig: GameConfigT = {
   ...basePublicGameConfig,
-    fixedGameSolution: {
-      kind: 'textSolution',
-    },
 };
 
 export const buildMinimalPublicGameConfigMock = (
@@ -66,15 +92,37 @@ export const buildGameConfigNoIdMock = (
   ...overrides,
 });
 
+// level config
+
+const basePublicCodeLevelConfig: PublicCodeLevelConfigT = {
+  kind: 'code',
+  publicCodePuzzleConfig: {
+    kind: 'alphabetic',
+    codeLength: 1,
+  }
+}
+
+const basePublicLevelConfig: PublicLevelConfigT = {
+  levelName: 'LEVEL1',
+  publicPluginConfig: basePublicCodeLevelConfig,
+}
+
+export const buildPublicLevelConfig = (
+  overrides?: Partial<PublicLevelConfigT>
+): PublicLevelConfigT => ({
+  ...basePublicLevelConfig,
+  ...overrides,
+});
+
 // game instance
 
-export const buildTestGameInstanceExposedInfo = (overrides?: Partial<GameInstanceExposedInfoT>) => ({
+export const buildTestGameInstanceExposedInfo = (overrides?: Partial<PublicGameInstanceT>) => ({
   ...overrides
-} as GameInstanceExposedInfoT);
+} as PublicGameInstanceT);
 
-export const buildTestPlayerExposedInfo = (overrides?: Partial<PlayerExposedInfoT>) => ({
+export const buildTestPublicPlayerInfo = (overrides?: Partial<PublicPlayerInfoT>) => ({
   ...overrides
-} as PlayerExposedInfoT);
+} as PublicPlayerInfoT);
 
 export const buildTestGameState = (overrides?: Partial<GameStateT>) => ({
   ...overrides
@@ -83,3 +131,97 @@ export const buildTestGameState = (overrides?: Partial<GameStateT>) => ({
 export const buildTestLevelState = (overrides?: Partial<LevelStateT>) => ({
   ...overrides
 } as LevelStateT);
+
+const baseGameState: GameStateT = {
+  gameStatus: 'ended',
+  levelStates: [],
+}
+
+export const buildGameStateMock = (
+  overrides?: Partial<GameStateT>
+): GameStateT => ({
+  ...baseGameState,
+  ...overrides,
+});
+
+const basePublicGameInstance: PublicGameInstanceT = {
+  gameInstanceId: 'GI1',
+  invitationCode: 'INT1',
+  publicGameConfig: buildPublicGameConfigMock(),
+  gameState: buildGameStateMock(),
+  publicPlayerInfos: [],
+};
+
+export const buildPublicGameInstanceMock = (
+  overrides?: Partial<PublicGameInstanceT>
+): PublicGameInstanceT => ({
+  ...basePublicGameInstance,
+  ...overrides,
+});
+
+const baseGameInstance: GameInstanceT = {
+  ...basePublicGameInstance,
+}
+
+export const buildGameInstanceMock = (
+  overrides?: Partial<GameInstanceT>
+): PublicGameInstanceT => ({
+  ...baseGameInstance,
+  ...overrides,
+});
+
+const baseLevelState: LevelStateT = {
+  levelStatus: 'notStarted',
+  pluginState: {
+    kind: 'code',
+    publicCodePuzzleConfig: {
+      kind: 'alphabetic',
+      codeLength: 5,
+    },
+    codeSolution: 'World',
+  },
+}
+
+export const buildLevelStateMock = (
+  overrides?: Partial<LevelStateT>
+): LevelStateT => ({
+  ...baseLevelState,
+  ...overrides,
+});
+
+const baseCodeLevelState: CodeLevelStateT = {
+  kind: 'code',
+  publicCodePuzzleConfig: {
+    kind: 'alphabetic',
+    codeLength: 5,
+  },
+  codeSolution: 'World',
+}
+
+export const buildCodeLevelStateMock = (
+  overrides?: Partial<CodeLevelStateT>
+): CodeLevelStateT => ({
+  ...baseCodeLevelState,
+  ...overrides,
+});
+
+const baseWordleLevelState: WordleLevelStateT = {
+  kind: 'wordle',
+  publicWordleConfig: {
+    langCode: 'en',
+    wordLength: 5,
+    difficulty: 'easy',
+    allowedGuessesNum: 2,
+  },
+  publicWordleState: {
+    guessDatas: [],
+  },
+  wordleSolution: 'World',
+}
+
+export const buildWordleLevelStateMock = (
+  overrides?: Partial<WordleLevelStateT>
+): WordleLevelStateT => ({
+  ...baseWordleLevelState,
+  ...overrides,
+});

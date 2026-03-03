@@ -14,9 +14,9 @@ describe('StartGameButton', () => {
     onUnknownErrorMock,
   } = __engineAppUiMocks;
   const useGameInstanceControllerSpy = jest.spyOn(GameInstanceController, 'useGameInstanceController');
-  const onStartGameMock = jest.fn();
+  const onStartPlayingMock = jest.fn();
   useGameInstanceControllerSpy.mockReturnValue({
-    onStartGame: onStartGameMock,
+    onStartPlaying: onStartPlayingMock,
     onSendChatMessage: jest.fn(),
   } as unknown as GameInstanceControllerT);
   const gameInstanceId = 'ABC';
@@ -36,9 +36,9 @@ describe('StartGameButton', () => {
     getByText(buildMockedTranslation('games:startGame'));
   });
 
-  it('calls onStartGame when button is pressed', async () => {
+  it('calls onStartPlaying when button is pressed', async () => {
     // setup mocks
-    onStartGameMock.mockImplementation(() => {});
+    onStartPlayingMock.mockImplementation(() => {});
 
     // render
     const { getByTestId } = render(
@@ -52,13 +52,13 @@ describe('StartGameButton', () => {
     });
 
     // verify calls
-    expect(onStartGameMock).toHaveBeenCalledWith(gameInstanceId);
+    expect(onStartPlayingMock).toHaveBeenCalledWith(gameInstanceId);
     expect(onUnknownErrorMock).not.toHaveBeenCalled();
   });
 
-  it('calls onStartGame when button is pressed and handles error', async () => {
+  it('calls onStartPlaying when button is pressed and handles error', async () => {
     // setup mocks
-    onStartGameMock.mockRejectedValue('ERR');
+    onStartPlayingMock.mockRejectedValue('ERR');
 
     // render
     const { getByTestId } = render(
@@ -72,7 +72,7 @@ describe('StartGameButton', () => {
     });
 
     // verify calls
-    expect(onStartGameMock).toHaveBeenCalledWith(gameInstanceId);
+    expect(onStartPlayingMock).toHaveBeenCalledWith(gameInstanceId);
     expect(onUnknownErrorMock).toHaveBeenCalledWith('ERR');
   });
 });

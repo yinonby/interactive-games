@@ -7,8 +7,17 @@
     "invalidResponse": "An unexpected server error has occurred, please refresh your page or app",
     "unknown": "An unknown error has occurred, please refresh your page or app"
   },
+  "engineApiError": {
+    "invalidJwt": "Invalid authentication token"
+  },
   "gamesApiError": {
+    "unknownError": "Unknown server error",
+    "notAuthenticated": "User not authenticated",
     "invalidInvitationCode": "The invitation code is invalid",
-    "gameInstanceAlreadyJoined": "You have already joined this game"
+    "gameConfigNotFound": "Server error",
+    "gameInstanceAlreadyJoined": "You have already joined this game",
+    "gameInstanceNotFound": "Server error",
+    "cannotRetrievePlayerNickname": "Server errror",
+    "invalidInput": "Invalid input"
   }
 }

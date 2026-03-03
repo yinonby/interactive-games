@@ -21,14 +21,14 @@ describe('authApiPlugin', () => {
     const mockAppInfo = {} as ExpressAppInfoT;
     const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
     const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
-    const pluginConfig: AuthPluginConfigT = {
+    const publicPluginConfig: AuthPluginConfigT = {
       getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
       getSignupPluginAdapter: () => mock_SignupPluginAdapter,
     };
 
-    const router = await authApiPlugin.initRouter(mockAppInfo, pluginConfig);
+    const router = await authApiPlugin.initRouter(mockAppInfo, publicPluginConfig);
 
-    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(pluginConfig);
+    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(publicPluginConfig);
     expect(router).toBe(mockRouter);
   });
 });

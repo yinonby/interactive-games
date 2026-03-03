@@ -8,14 +8,14 @@ import { createGraphqlRouter } from './GraphqlRouter';
 describe('GraphqlRouter', () => {
   const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
   const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
-  const pluginConfig: AuthPluginConfigT = {
+  const publicPluginConfig: AuthPluginConfigT = {
     getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
     getSignupPluginAdapter: () => mock_SignupPluginAdapter,
   };
   let app: express.Express;
 
   beforeAll(async () => {
-    const router = await createGraphqlRouter(pluginConfig);
+    const router = await createGraphqlRouter(publicPluginConfig);
     app = express();
     app.use(express.json());
     app.use(router);

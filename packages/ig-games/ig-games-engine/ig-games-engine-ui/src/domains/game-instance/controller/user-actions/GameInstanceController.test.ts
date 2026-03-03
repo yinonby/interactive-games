@@ -6,107 +6,197 @@ import { useGameInstanceController } from './GameInstanceController';
 jest.mock('../../model/rtk/GameInstanceRtkApi');
 
 describe('useGameInstanceController', () => {
-  it('calls startGame', async () => {
-    const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const startGameMock = jest.fn().mockResolvedValue({ data: {}});
+  const spy_useCreateGameInstaceMutation = jest.spyOn(GameInstanceRtkApi, 'useCreateGameInstaceMutation');
+  const spy_useJoinGameByInviteMutation = jest.spyOn(GameInstanceRtkApi, 'useJoinGameByInviteMutation');
+  const spy_useStartPlayingMutation = jest.spyOn(GameInstanceRtkApi, 'useStartPlayingMutation');
+  const spy_useSubmitGuessMutation = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
 
-    useStartGameMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [startGameMock, jest.fn() as any]
-    );
+  beforeAll(() => {
+    jest.clearAllMocks();
 
-    useSubmitGuessMutationSpy.mockReturnValue(
+    spy_useCreateGameInstaceMutation.mockReturnValue(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [jest.fn(), jest.fn() as any]
     );
-
-    const { result } = renderHook(() => useGameInstanceController());
-
-    await act(async () => {
-      await result.current.onStartGame('giid-1');
-    });
-
-    expect(startGameMock).toHaveBeenCalledTimes(1);
-    expect(startGameMock).toHaveBeenCalledWith('giid-1');
+    spy_useJoinGameByInviteMutation.mockReturnValue(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      [jest.fn(), jest.fn() as any]
+    );
+    spy_useStartPlayingMutation.mockReturnValue(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      [jest.fn(), jest.fn() as any]
+    );
+    spy_useSubmitGuessMutation.mockReturnValue(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      [jest.fn(), jest.fn() as any]
+    );
   });
 
-  it('calls startGame and handles error', async () => {
-    const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const startGameMock = jest.fn().mockResolvedValue({ error: {}});
+  describe('createGameInstance', () => {
+    it('calls createGameInstance with the provided data', async () => {
+      const mock_createGameInstance = jest.fn().mockResolvedValue({ data: {
+        createGameInstanceResult: {
+          gameInstanceId: 'GI1'
+        }
+     }});
 
-    useStartGameMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [startGameMock, jest.fn() as any]
-    );
+      spy_useCreateGameInstaceMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_createGameInstance, jest.fn() as any]
+      );
 
-    useSubmitGuessMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [jest.fn(), jest.fn() as any]
-    );
+      const { result } = renderHook(() => useGameInstanceController());
 
-    const { result } = renderHook(() => useGameInstanceController());
+      await act(async () => {
+        await result.current.onCreateGameInstance('GC1');
+      });
 
-    // verify throws
-    await expect(result.current.onStartGame('giid-1')).rejects.toThrow();
-
-
-    // verify calls
-    expect(startGameMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls submitGuess with the provided data', async () => {
-    const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const submitGuessMock = jest.fn().mockResolvedValue({ data: {}});
-
-    useStartGameMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [jest.fn(), jest.fn() as any]
-    );
-
-    useSubmitGuessMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [submitGuessMock, jest.fn() as any]
-    );
-
-    const { result } = renderHook(() => useGameInstanceController());
-
-    await act(async () => {
-      await result.current.onSubmitGuess('giid-1', 0, 'Hello');
+      expect(mock_createGameInstance).toHaveBeenCalledTimes(1);
+      expect(mock_createGameInstance).toHaveBeenCalledWith({
+        gameConfigId: 'GC1',
+      });
     });
 
-    expect(submitGuessMock).toHaveBeenCalledTimes(1);
-    expect(submitGuessMock).toHaveBeenCalledWith({
-      gameInstanceId: 'giid-1',
-      levelIdx: 0,
-      guess: 'Hello',
+    it('handles error thrown by createGameInstance', async () => {
+      const mock_createGameInstance = jest.fn().mockResolvedValue({ error: {} });
+
+      spy_useCreateGameInstaceMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_createGameInstance, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      // verify throws
+      await expect(result.current.onCreateGameInstance('GC1')).rejects.toThrow();
+
+      // verify calls
+      expect(mock_createGameInstance).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('handles error thrown by postChatMessage', async () => {
-    const useStartGameMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useStartGameMutation');
-    const useSubmitGuessMutationSpy = jest.spyOn(GameInstanceRtkApi, 'useSubmitGuessMutation');
-    const submitGuessMock = jest.fn().mockResolvedValue({ error: {}});
+  describe('joinGameByInvite', () => {
+    it('calls joinGameByInvite with the provided data', async () => {
+      const mock_joinGameByInvite = jest.fn().mockResolvedValue({ data: {
+        joinGameByInviteResult: {
+          gameInstanceId: 'GI1'
+        }
+      }});
 
-    useStartGameMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [jest.fn(), jest.fn() as any]
-    );
+      spy_useJoinGameByInviteMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_joinGameByInvite, jest.fn() as any]
+      );
 
-    useSubmitGuessMutationSpy.mockReturnValue(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [submitGuessMock, jest.fn() as any]
-    );
+      const { result } = renderHook(() => useGameInstanceController());
 
-    const { result } = renderHook(() => useGameInstanceController());
+      await act(async () => {
+        await result.current.onJoinGameByInvite('INVT1');
+      });
 
-    // verify throws
-    await expect(result.current.onSubmitGuess('giid-1', 0, 'Hello')).rejects.toThrow();
+      expect(mock_joinGameByInvite).toHaveBeenCalledTimes(1);
+      expect(mock_joinGameByInvite).toHaveBeenCalledWith({
+        invitationCode: 'INVT1',
+      });
+    });
+
+    it('handles error thrown by joinGameByInvite', async () => {
+      const mock_joinGameByInvite = jest.fn().mockResolvedValue({ error: {} });
+
+      spy_useJoinGameByInviteMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_joinGameByInvite, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      // verify throws
+      await expect(result.current.onJoinGameByInvite('INVT1')).rejects.toThrow();
+
+      // verify calls
+      expect(mock_joinGameByInvite).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('startPlaying', () => {
+    it('calls startPlaying', async () => {
+      const mock_startPlaying = jest.fn().mockResolvedValue({ data: {} });
+
+      spy_useStartPlayingMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_startPlaying, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      await act(async () => {
+        await result.current.onStartPlaying('GI1');
+      });
+
+      expect(mock_startPlaying).toHaveBeenCalledTimes(1);
+      expect(mock_startPlaying).toHaveBeenCalledWith({
+        gameInstanceId: 'GI1'
+      });
+    });
+
+    it('calls startPlaying and handles error', async () => {
+      const mock_startPlaying = jest.fn().mockResolvedValue({ error: {} });
+
+      spy_useStartPlayingMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_startPlaying, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      // verify throws
+      await expect(result.current.onStartPlaying('GI1')).rejects.toThrow();
 
 
-    // verify calls
-    expect(submitGuessMock).toHaveBeenCalledTimes(1);
+      // verify calls
+      expect(mock_startPlaying).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('submitGuess', () => {
+    it('calls submitGuess with the provided data', async () => {
+      const mock_submitGuess = jest.fn().mockResolvedValue({ data: { submitGuessResult: { isGuessCorrect: true }}});
+
+      spy_useSubmitGuessMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_submitGuess, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      await act(async () => {
+        await result.current.onSubmitGuess('GI1', 0, 'Hello');
+      });
+
+      expect(mock_submitGuess).toHaveBeenCalledTimes(1);
+      expect(mock_submitGuess).toHaveBeenCalledWith({
+        gameInstanceId: 'GI1',
+        levelIdx: 0,
+        guess: 'Hello',
+      });
+    });
+
+    it('handles error thrown by submitGuess', async () => {
+      const mock_submitGuess = jest.fn().mockResolvedValue({ error: {} });
+
+      spy_useSubmitGuessMutation.mockReturnValue(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [mock_submitGuess, jest.fn() as any]
+      );
+
+      const { result } = renderHook(() => useGameInstanceController());
+
+      // verify throws
+      await expect(result.current.onSubmitGuess('GI1', 0, 'Hello')).rejects.toThrow();
+
+
+      // verify calls
+      expect(mock_submitGuess).toHaveBeenCalledTimes(1);
+    });
   });
 });

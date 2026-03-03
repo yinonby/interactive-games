@@ -36,7 +36,8 @@ export const useExpressAppStarterInfo = (
   const authPluginContainer: ExpressPluginContainerT<AuthPluginConfigT> = useAuthPluginContainer(authMongoDb,
     engineMongoDb);
   const chatPluginContainer: ExpressPluginContainerT<ChatPluginConfigT> = useChatPluginContainer(gamesPrismaDb);
-  const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> = useGamesPluginContainer(gamesMongoDb);
+  const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> =
+    useGamesPluginContainer(gamesMongoDb, engineMongoDb);
 
   return {
     listerPort: apiEnvVars.apiListenPort,

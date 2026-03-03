@@ -1,7 +1,7 @@
 
 import { useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
 import type { LevelStatusT } from '@ig/games-engine-models';
-import type { LetterAnalysisT, WordleExposedConfigT, WordleStateT } from '@ig/games-wordle-models';
+import type { LetterAnalysisT, PublicWordleConfigT, PublicWordleStateT } from '@ig/games-wordle-models';
 import { RnuiButton, RnuiCodeInput, RnuiText, TestableComponentT, useRnuiSnackbar } from '@ig/rnui';
 import React, { useState, type FC } from 'react';
 import { View, type ColorValue } from 'react-native';
@@ -13,21 +13,21 @@ const letterAnalysisToBackgroundColor: Record<LetterAnalysisT, ColorValue> = {
 }
 
 export type WordleViewPropsT = TestableComponentT & {
-  wordleExposeConfig: WordleExposedConfigT,
-  wordleState: WordleStateT,
+  publicWordleConfig: PublicWordleConfigT,
+  publicWordleState: PublicWordleStateT,
   levelStatus: LevelStatusT,
   onSubmitGuess: (guess: string) => Promise<boolean>,
   snackbarDurationMs?: number;
 };
 
 export const WordleView: FC<WordleViewPropsT> = (props) => {
-  const { wordleExposeConfig, wordleState, levelStatus, onSubmitGuess, snackbarDurationMs = 5000 } = props;
+  const { publicWordleConfig, publicWordleState, levelStatus, onSubmitGuess, snackbarDurationMs = 5000 } = props;
   const { t } = useAppLocalization();
   const { onShowSnackbar } = useRnuiSnackbar();
   const genericStyles = useGenericStyles();
   const [guess, setGuess] = useState('');
-  const isGuessSubmittable = guess.length === wordleExposeConfig.wordLength;
-  const guessesLeft = wordleExposeConfig.allowedGuessesNum - wordleState.guessDatas.length;
+  const isGuessSubmittable = guess.length === publicWordleConfig.wordLength;
+  const guessesLeft = publicWordleConfig.allowedGuessesNum - publicWordleState.guessDatas.length;
 
   const handleInputChange = async (input: string): Promise<void> => {
     setGuess(input);
@@ -50,11 +50,11 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
 
   return (
     <View style={genericStyles.spacing}>
-      {wordleState.guessDatas.map((e, index) =>
+      {publicWordleState.guessDatas.map((e, index) =>
         <View key={index} style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-full-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             value={e.guess}
             size='small'
             tileTextColors={e.letterAnalyses.map(() => 'white')}
@@ -68,7 +68,7 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         <View style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-input-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             value={guess}
             onChange={handleInputChange}
             size='small'
@@ -90,7 +90,7 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         <View key={index} style={genericStyles.flexRow}>
           <RnuiCodeInput
             testID='RnuiCodeInput-empty-tid'
-            length={wordleExposeConfig.wordLength}
+            length={publicWordleConfig.wordLength}
             size='small'
             disabled
           />
@@ -103,10 +103,10 @@ export const WordleView: FC<WordleViewPropsT> = (props) => {
         </RnuiText>
       }
 
-      {levelStatus === 'solved' && wordleState.correctSolution &&
+      {levelStatus === 'solved' && publicWordleState.correctGuess &&
         <View style={[genericStyles.flexRow, genericStyles.spacing]}>
           <RnuiText testID='chat-title-tid' variant='titleSmall'>{t('common:solution') + ":"}</RnuiText>
-          <RnuiText testID='chat-title-tid' variant='titleSmall'>{wordleState.correctSolution}</RnuiText>
+          <RnuiText testID='chat-title-tid' variant='titleSmall'>{publicWordleState.correctGuess}</RnuiText>
         </View>
       }
     </View>

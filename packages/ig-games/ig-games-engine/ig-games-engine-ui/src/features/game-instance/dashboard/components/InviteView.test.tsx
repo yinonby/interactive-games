@@ -1,7 +1,7 @@
 
 import { useAppConfig } from '@ig/app-engine-ui';
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
-import type { GameConfigIdT, GameInstanceExposedInfoT } from '@ig/games-engine-models';
+import type { GameConfigIdT, PublicGameInstanceT } from '@ig/games-engine-models';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { InviteView } from './InviteView';
@@ -9,17 +9,17 @@ import { InviteView } from './InviteView';
 // tests
 
 describe("InviteView", () => {
-  const baseGameInstance: GameInstanceExposedInfoT = {
+  const baseGameInstance: PublicGameInstanceT = {
     invitationCode: "ABC123",
-    gameInfo: { maxParticipants: 4 } as unknown as GameConfigIdT,
-    playerExposedInfos: [],
-  } as unknown as GameInstanceExposedInfoT;
+    publicGameConfig: { maxParticipants: 4 } as unknown as GameConfigIdT,
+    publicPlayerInfos: [],
+  } as unknown as PublicGameInstanceT;
 
   it("renders component properly", () => {
     const { gameUiConfig } = useAppConfig();
 
     const { getByTestId, getByText } = render(
-      <InviteView gameInstanceExposedInfo={baseGameInstance} />
+      <InviteView publicGameInstance={baseGameInstance} />
     );
 
     getByTestId("invite-code-title-tid");
@@ -45,7 +45,7 @@ describe("InviteView", () => {
 
   it("handles press share link", async () => {
     const { getByTestId } = render(
-      <InviteView gameInstanceExposedInfo={baseGameInstance} />
+      <InviteView publicGameInstance={baseGameInstance} />
     );
 
     const shareButton = getByTestId("share-btn-tid");

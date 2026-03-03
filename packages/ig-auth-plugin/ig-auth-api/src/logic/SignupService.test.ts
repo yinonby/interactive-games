@@ -16,7 +16,7 @@ describe('SignupService', () => {
   const mockOnSignupResponse = vi.fn();
 
   let transactionAdapter: SignupServiceTransactionAdapter;
-  let pluginAdapter: SignupPluginAdapter;
+  let pluginAdapter: Partial<SignupPluginAdapter>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,7 +35,7 @@ describe('SignupService', () => {
 
     const service = new SignupService(
       transactionAdapter,
-      pluginAdapter,
+      pluginAdapter as SignupPluginAdapter,
     );
 
     const result = await service.signup(user, nickname, res);

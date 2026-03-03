@@ -3,7 +3,7 @@ import type { PlayerRoleT, PlayerStatusT } from '@ig/games-engine-models';
 export type GamesTranslationKeyT =
   | 'games:noGamesAbailable'
   | 'games:invitationCode'
-  | 'games:joinGame'
+  | 'games:joinGameByInvite'
   | 'games:startGame'
   | 'games:abailableGames'
   | 'games:userNoGamesAbailable'

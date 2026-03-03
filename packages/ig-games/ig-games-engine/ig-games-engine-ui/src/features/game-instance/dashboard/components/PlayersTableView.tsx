@@ -1,7 +1,7 @@
 
 import { useAppLocalization, useClientLogger } from '@ig/app-engine-ui';
 import { useAuth } from '@ig/auth-ui';
-import { comparePlayersForDisplaySort, type PlayerExposedInfoT } from '@ig/games-engine-models';
+import { comparePlayersForDisplaySort, type PublicPlayerInfoT } from '@ig/games-engine-models';
 import { RnuiTable, RnuiTableHeader, RnuiTableTitle, RnuiText } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -9,24 +9,24 @@ import type { TestableComponentT } from '../../../../types/ComponentTypes';
 import { PlayerTableRow } from './PlayerTableRow';
 
 export type PlayersTableViewPropsT = TestableComponentT & {
-  playerExposedInfos: [PlayerExposedInfoT, ...PlayerExposedInfoT[]],
+  publicPlayerInfos: PublicPlayerInfoT[],
   withAdminButtons?: boolean,
 };
 
 export const PlayersTableView: FC<PlayersTableViewPropsT> = (props) => {
-  const { playerExposedInfos, withAdminButtons } = props;
+  const { publicPlayerInfos, withAdminButtons } = props;
   const { t } = useAppLocalization();
   const logger = useClientLogger();
   const { curAccountId } = useAuth();
 
-  const curPlayerExposedInfo = playerExposedInfos.find(e => e.playerAccountId === curAccountId);
-  if (curPlayerExposedInfo === undefined) {
+  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curAccountId);
+  if (curPublicPlayerInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player, curAccountId [${curAccountId}]`);
     return null;
   }
-  const isCurUserAdminPlayer = curPlayerExposedInfo.playerRole === 'admin';
-  const otherPlayerExposedInfos = playerExposedInfos
-    .filter(e => e.playerAccountId !== curAccountId)
+  const isCurUserAdminPlayer = curPublicPlayerInfo.playerRole === 'admin';
+  const otherPublicPlayerInfos = publicPlayerInfos
+    .filter(e => e.playerId !== curAccountId)
     .sort(comparePlayersForDisplaySort);
 
   return (
@@ -50,17 +50,17 @@ export const PlayersTableView: FC<PlayersTableViewPropsT> = (props) => {
         testID="player-row-tid"
         isCurUserAdminPlayer={isCurUserAdminPlayer}
         isCurUser={true}
-        playerExposedInfo={curPlayerExposedInfo}
+        publicPlayerInfo={curPublicPlayerInfo}
         withAdminButtons={withAdminButtons}
       />
 
-      {otherPlayerExposedInfos.map((e, index) =>
+      {otherPublicPlayerInfos.map((e, index) =>
         <View key={index}>
           <PlayerTableRow
             testID="player-row-tid"
             isCurUserAdminPlayer={isCurUserAdminPlayer}
             isCurUser={false}
-            playerExposedInfo={e}
+            publicPlayerInfo={e}
             withAdminButtons={withAdminButtons}
           />
         </View>

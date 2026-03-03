@@ -2,7 +2,7 @@
 import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { __authUiMocks } from '@ig/auth-ui';
-import type { PlayerExposedInfoT } from '@ig/games-engine-models';
+import type { PublicPlayerInfoT } from '@ig/games-engine-models';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { PlayersTableView } from './PlayersTableView';
@@ -31,12 +31,12 @@ describe("PlayersTableView", () => {
   });
 
   it("does not render when current user is not in players list", () => {
-    const playerExposedInfo: PlayerExposedInfoT = {
-      playerAccountId: "otherUserId",
+    const publicPlayerInfo: PublicPlayerInfoT = {
+      playerId: "otherUserId",
       playerRole: 'player',
-    } as PlayerExposedInfoT;
+    } as PublicPlayerInfoT;
     const { queryByTestId } = render(
-      <PlayersTableView playerExposedInfos={[playerExposedInfo]} />
+      <PlayersTableView publicPlayerInfos={[publicPlayerInfo]} />
     );
 
     // verify calls
@@ -47,12 +47,12 @@ describe("PlayersTableView", () => {
   });
 
   it("renders component properly withAdminButtons = false", () => {
-    const playerExposedInfo: PlayerExposedInfoT = {
-      playerAccountId: curAccountId,
+    const publicPlayerInfo: PublicPlayerInfoT = {
+      playerId: curAccountId,
       playerRole: 'admin',
-    } as PlayerExposedInfoT;
+    } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
-      <PlayersTableView playerExposedInfos={[playerExposedInfo]} withAdminButtons={false} />
+      <PlayersTableView publicPlayerInfos={[publicPlayerInfo]} withAdminButtons={false} />
     );
 
     getByTestId("table-tid");
@@ -69,12 +69,12 @@ describe("PlayersTableView", () => {
   });
 
   it("renders component properly, withAdminButtons = true, no admin", () => {
-    const playerExposedInfo: PlayerExposedInfoT = {
-      playerAccountId: curAccountId,
+    const publicPlayerInfo: PublicPlayerInfoT = {
+      playerId: curAccountId,
       playerRole: 'player',
-    } as PlayerExposedInfoT;
+    } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
-      <PlayersTableView playerExposedInfos={[playerExposedInfo]} />
+      <PlayersTableView publicPlayerInfos={[publicPlayerInfo]} />
     );
 
     getByTestId("table-tid");
@@ -91,12 +91,12 @@ describe("PlayersTableView", () => {
   });
 
   it("renders component properly, withAdminButtons = true, admin", () => {
-    const playerExposedInfo: PlayerExposedInfoT = {
-      playerAccountId: curAccountId,
+    const publicPlayerInfo: PublicPlayerInfoT = {
+      playerId: curAccountId,
       playerRole: 'admin',
-    } as PlayerExposedInfoT;
+    } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
-      <PlayersTableView playerExposedInfos={[playerExposedInfo]} withAdminButtons />
+      <PlayersTableView publicPlayerInfos={[publicPlayerInfo]} withAdminButtons />
     );
 
     getByTestId("table-tid");
@@ -113,16 +113,16 @@ describe("PlayersTableView", () => {
   });
 
   it("renders component properly, multiple players", () => {
-    const playerExposedInfo1: PlayerExposedInfoT = {
-      playerAccountId: curAccountId,
+    const publicPlayerInfo1: PublicPlayerInfoT = {
+      playerId: curAccountId,
       playerRole: 'admin',
-    } as PlayerExposedInfoT;
-    const playerExposedInfo2: PlayerExposedInfoT = {
-      playerAccountId: 'otherUserId',
+    } as PublicPlayerInfoT;
+    const publicPlayerInfo2: PublicPlayerInfoT = {
+      playerId: 'otherUserId',
       playerRole: 'player',
-    } as PlayerExposedInfoT;
+    } as PublicPlayerInfoT;
     const { queryAllByTestId } = render(
-      <PlayersTableView playerExposedInfos={[playerExposedInfo1, playerExposedInfo2]} />
+      <PlayersTableView publicPlayerInfos={[publicPlayerInfo1, publicPlayerInfo2]} />
     );
 
     const playerRows = queryAllByTestId("player-row-tid");

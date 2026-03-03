@@ -1,7 +1,7 @@
 
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import {
-  type GameInstanceExposedInfoT
+  type PublicGameInstanceT
 } from '@ig/games-engine-models';
 import {
   buildPublicGameConfigMock, buildTestGameInstanceExposedInfo,
@@ -32,8 +32,8 @@ jest.mock('./StartGameButton', () => {
 
 describe('GameInstanceConfigSummaryView', () => {
   it('renders component properly', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameInfo: buildPublicGameConfigMock({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
+      publicGameConfig: buildPublicGameConfigMock({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -44,7 +44,7 @@ describe('GameInstanceConfigSummaryView', () => {
     });
 
     const { getByTestId, getByText } = render(<GameInstanceConfigSummaryView
-      gameInstanceExposedInfo={gameInstanceExposedInfo}
+      publicGameInstance={publicGameInstance}
     />);
 
     getByTestId('title-tid');
@@ -58,9 +58,9 @@ describe('GameInstanceConfigSummaryView', () => {
   });
 
   it('renders start button when game status is notStarted', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
       gameInstanceId: 'giid-1',
-      gameInfo: buildPublicGameConfigMock({
+      publicGameConfig: buildPublicGameConfigMock({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -71,15 +71,15 @@ describe('GameInstanceConfigSummaryView', () => {
     });
 
     const { getByTestId } = render(<GameInstanceConfigSummaryView
-      gameInstanceExposedInfo={gameInstanceExposedInfo}
+      publicGameInstance={publicGameInstance}
     />);
 
     getByTestId('StartGameButton-tid');
   });
 
   it('does not render start button when game status is not notStarted', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameInfo: buildPublicGameConfigMock({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
+      publicGameConfig: buildPublicGameConfigMock({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(60) },
         maxParticipants: 6,
@@ -90,15 +90,15 @@ describe('GameInstanceConfigSummaryView', () => {
     });
 
     const { queryByTestId } = render(<GameInstanceConfigSummaryView
-      gameInstanceExposedInfo={gameInstanceExposedInfo}
+      publicGameInstance={publicGameInstance}
     />);
 
     expect(queryByTestId('StartGameButton-tid')).toBeNull();
   });
 
   it('renders properly when max duration is unlimited', () => {
-    const gameInstanceExposedInfo: GameInstanceExposedInfoT = buildTestGameInstanceExposedInfo({
-      gameInfo: buildPublicGameConfigMock({
+    const publicGameInstance: PublicGameInstanceT = buildTestGameInstanceExposedInfo({
+      publicGameConfig: buildPublicGameConfigMock({
         gameName: 'Treasure Hunt 1',
         maxDurationInfo: { kind: 'unlimited' },
         maxParticipants: 6,
@@ -109,7 +109,7 @@ describe('GameInstanceConfigSummaryView', () => {
     });
 
     const { getByText } = render(<GameInstanceConfigSummaryView
-      gameInstanceExposedInfo={gameInstanceExposedInfo}
+      publicGameInstance={publicGameInstance}
     />);
 
     getByText(buildMockedTranslation('common:duration') + ': ' + buildMockedTranslation('common:unlimited'));

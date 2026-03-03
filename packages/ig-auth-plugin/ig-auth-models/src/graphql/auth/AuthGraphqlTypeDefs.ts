@@ -10,8 +10,12 @@ const authGraphqlQueryTypeDefs = gql`
 
 const authGraphqlMutationTypeDefs = gql`
   type Mutation {
-    guestLogin: GuestLoginResult!
+    guestLogin(input: GuestLoginInput!): GuestLoginResult!
     emailLogin(input: EmailLoginInput!): EmailLoginResult!
+  }
+
+  input GuestLoginInput {
+    nickname: String!
   }
 
   type GuestLoginResult {

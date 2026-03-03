@@ -11,7 +11,7 @@ export const useChatPluginContainer = (
     routeConfig: {
       route: '/api/chat',
       expressPlugin: chatApiPlugin,
-      pluginConfig: {
+      publicPluginConfig: {
         chatDbAdapter: chatDbAdapter,
       },
     },

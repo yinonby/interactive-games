@@ -20,7 +20,7 @@ describe('handleChatUpdateWebSocketMessage', () => {
     jest.clearAllMocks();
   });
 
-  it('dispatches invalidateTags on gamesUserConfigUpdate', () => {
+  it('dispatches invalidateTags on chat update', () => {
     const invalidateResult = { type: 'TEST_ACTION', payload: [] };
 
     // make invalidateTags return a fake action

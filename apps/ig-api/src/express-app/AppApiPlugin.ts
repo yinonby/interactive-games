@@ -31,7 +31,7 @@ export const useAppApiPluginContainer = (): ExpressPluginContainerT<unknown> => 
     routeConfig: {
       route: '/api',
       expressPlugin: useAppApiPlugin(),
-      pluginConfig: undefined,
+      publicPluginConfig: undefined,
     }
   }
 

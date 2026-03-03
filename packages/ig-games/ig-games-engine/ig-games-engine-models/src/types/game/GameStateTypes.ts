@@ -1,5 +1,6 @@
 
-import type { WordleExposedConfigT, WordleStateT } from '@ig/games-wordle-models';
+import type { PublicWordleConfigT, PublicWordleStateT } from '@ig/games-wordle-models';
+import type { PublicCodePuzzleConfigT } from './LevelTypes';
 
 export type GameStateT = {
   gameStatus: GameStatusT,
@@ -11,16 +12,27 @@ export type GameStateT = {
 
 export type GameStatusT = 'notStarted' | 'inProcess' | 'ended';
 
-// level
+// level state holds a copy of the level config, in order to simplify
+
+export type LevelStatusT = 'notStarted' | 'levelInProcess' | 'solved' | 'failed';
 
 export type LevelStateT = {
   levelStatus: LevelStatusT,
   startTimeTs?: number,
   solvedTimeTs?: number,
-} & ({
-  kind: 'wordle',
-  wordleExposedConfig: WordleExposedConfigT,
-  wordleState: WordleStateT,
-})
+  pluginState: CodeLevelStateT | WordleLevelStateT,
+}
 
-export type LevelStatusT = 'notStarted' | 'levelInProcess' | 'solved' | 'failed';
+export type CodeLevelStateT = {
+  kind: 'code',
+  publicCodePuzzleConfig: PublicCodePuzzleConfigT,
+  codeSolution: string,
+  isCaseSensitive?: boolean,
+}
+
+export type WordleLevelStateT = {
+  kind: 'wordle',
+  publicWordleConfig: PublicWordleConfigT,
+  publicWordleState: PublicWordleStateT,
+  wordleSolution: string,
+}

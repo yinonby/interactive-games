@@ -8,10 +8,10 @@ import { createAuthSchema } from '../auth/AuthSchema';
 
 // returns an express router for this graphql endpoint
 export async function createGraphqlRouter(
-  pluginConfig: AuthPluginConfigT,
+  publicPluginConfig: AuthPluginConfigT,
 ): Promise<Router> {
   const router = Router();
-  const authSchema = createAuthSchema(pluginConfig);
+  const authSchema = createAuthSchema(publicPluginConfig);
 
   // create the combined schema
   const schema = mergeSchemas({

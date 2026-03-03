@@ -13,11 +13,11 @@ export type LevelViewPropsT = TestableComponentT & {
 export const LevelView: FC<LevelViewPropsT> = (props) => {
   const { levelState, onSubmitGuess } = props;
 
-  if (levelState.kind === 'wordle') {
+  if (levelState.pluginState.kind === 'wordle') {
     return <WordleView
       testID='WordleView-tid'
-      wordleExposeConfig={levelState.wordleExposedConfig}
-      wordleState={levelState.wordleState}
+      publicWordleConfig={levelState.pluginState.publicWordleConfig}
+      publicWordleState={levelState.pluginState.publicWordleState}
       levelStatus={levelState.levelStatus}
       onSubmitGuess={onSubmitGuess}
     />

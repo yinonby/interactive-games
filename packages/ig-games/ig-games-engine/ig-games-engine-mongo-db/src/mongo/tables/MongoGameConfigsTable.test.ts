@@ -26,7 +26,26 @@ describe('MongoGameConfigsTable', () => {
   });
 
   describe('getGameConfigs', () => {
-    it('should return array of game configs', async () => {
+    it('should return array of selected game configs', async () => {
+      const mockPublicGameConfig1: PublicGameConfigT = buildPublicGameConfigMock({
+        gameName: 'g1',
+      });
+      const mockPublicGameConfig2: PublicGameConfigT = buildPublicGameConfigMock({
+        gameName: 'g2',
+      });
+      const instance = new MongoGameConfigsTable();
+
+      const res1 = await instance.getGameConfigs();
+      expect(res1).toHaveLength(0);
+
+      await instance.createGameConfig('GCID1', mockPublicGameConfig1);
+      await instance.createGameConfig('GCID2', mockPublicGameConfig2);
+
+      const res2 = await instance.getGameConfigs(['GCID2']);
+      expect(res2).toHaveLength(1);
+    });
+
+    it('should return array of all game configs', async () => {
       const mockPublicGameConfig1: PublicGameConfigT = buildPublicGameConfigMock({
         gameName: 'g1',
       });

@@ -13,6 +13,6 @@ export const getAccountSchemaDef = (): SchemaDefinition<AccountT> => ({
   },
   nickname: {
     type: String,
-    required: false,
+    required: true,
   },
 })

@@ -15,13 +15,13 @@ export type ExpressPluginContainerT<PLUGIN_CONFIG_T> = {
   routeConfig?: {
     route: string, // decided by the top level app
     expressPlugin: ExpressPluginT<PLUGIN_CONFIG_T>,
-    pluginConfig: PLUGIN_CONFIG_T,
+    publicPluginConfig: PLUGIN_CONFIG_T,
   },
-  postInitCb?: (pluginConfig: PLUGIN_CONFIG_T) => Promise<void>,
+  postInitCb?: (publicPluginConfig: PLUGIN_CONFIG_T) => Promise<void>,
 }
 
 export interface ExpressPluginT<PLUGIN_CONFIG_T> {
-  initRouter(appInfo: ExpressAppInfoT, pluginConfig: PLUGIN_CONFIG_T): Promise<Router>;
+  initRouter(appInfo: ExpressAppInfoT, publicPluginConfig: PLUGIN_CONFIG_T): Promise<Router>;
 }
 
 export type ExpressAppInfoT = {
