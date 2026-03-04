@@ -11,13 +11,21 @@ export type GameConfigsModelT = ModelT<GameConfigsModelDataT>;
 
 export const useGameConfigsModel = (gameConfigIds: GameConfigIdT[]): GameConfigsModelT => {
   const {
+    isUninitialized,
     isLoading: getPublicGameConfigs_data_isLoading,
     isError: getPublicGameConfigs_isError,
     error: getPublicGameConfigs_error,
     data: getPublicGameConfigs_data,
   } = useGetPublicGameConfigsQuery(gameConfigIds);
 
-  if (getPublicGameConfigs_data_isLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (getPublicGameConfigs_data_isLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -27,12 +35,6 @@ export const useGameConfigsModel = (gameConfigIds: GameConfigIdT[]): GameConfigs
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(getPublicGameConfigs_error),
-    }
-  } else if (getPublicGameConfigs_data === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

@@ -13,19 +13,28 @@ export type GameConfigModelT = ModelT<GameConfigModelDataT>;
 
 export const useGameConfigModel = (gameConfigId: GameConfigIdT): GameConfigModelT => {
   const {
+    isUninitialized: getPublicGameConfig_isUninitialized,
     isLoading: getPublicGameConfig_data_isLoading,
     isError: getPublicGameConfig_isError,
     error: getPublicGameConfig_error,
     data: getPublicGameConfig_data,
   } = useGetPublicGameConfigQuery(gameConfigId);
   const {
+    isUninitialized: getGameInstanceIds_isUninitialized,
     isLoading: getGameInstanceIds_isLoading,
     isError: getGameInstanceIds_isError,
     error: getGameInstanceIds_error,
     data: getGameInstanceIds_data,
   } = useGetGameInstanceIdsForGameConfigQuery(gameConfigId);
 
-  if (getPublicGameConfig_data_isLoading || getGameInstanceIds_isLoading) {
+  if (getPublicGameConfig_isUninitialized || getGameInstanceIds_isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (getPublicGameConfig_data_isLoading || getGameInstanceIds_isLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -41,18 +50,6 @@ export const useGameConfigModel = (gameConfigId: GameConfigIdT): GameConfigModel
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(getGameInstanceIds_error),
-    }
-  } else if (getPublicGameConfig_data === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
-    }
-  } else if (getGameInstanceIds_data === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

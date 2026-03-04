@@ -1,10 +1,10 @@
 
-import { useAppErrorHandling, useGenericStyles } from '@ig/app-engine-ui';
+import { useGenericStyles } from '@ig/app-engine-ui';
 import type { GameInstanceIdT } from '@ig/games-engine-models';
-import { RnuiActivityIndicator } from '@ig/rnui';
-import React, { useEffect, type FC } from 'react';
+import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { useGameInstanceModel } from '../../../domains/game-instance/model/rtk/GameInstanceModel';
+import { ModelLoadingView } from '../../../features/common/ModelLoadingView';
 import type { TestableComponentT } from '../../../types/ComponentTypes';
 import { GameStatusView } from '../../game-instance/common/GameStatusView';
 import { PlayersTableView } from '../../game-instance/dashboard/components/PlayersTableView';
@@ -17,18 +17,16 @@ export type GameInstanceSummaryViewPropsT = TestableComponentT & {
 export const GameInstanceSummaryView: FC<GameInstanceSummaryViewPropsT> = (props) => {
   const { gameInstanceId } = props;
   const { isLoading, isError, appErrCode, data: gameInstanceModelData } = useGameInstanceModel(gameInstanceId);
-  const { onAppError } = useAppErrorHandling();
   const genericStyles = useGenericStyles();
 
-  useEffect(() => {
-    if (isError) {
-      onAppError(appErrCode);
-    }
-  }, [isError, onAppError, appErrCode]);
-
-  if (isLoading) return <RnuiActivityIndicator testID="RnuiActivityIndicator-tid" size="large"/>;
-  if (isError) {
-    return null;
+  if (isLoading || isError) {
+    return (
+      <ModelLoadingView
+        testID='ModelLoadingView-tid'
+        isLoading={isLoading}
+        appErrCode={isError ? appErrCode : null}
+      />
+    );
   }
 
   return (

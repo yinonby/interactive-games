@@ -1,5 +1,4 @@
 
-import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildPublicGameConfigMock } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
@@ -7,6 +6,15 @@ import * as GameConfigModelModule from '../../../domains/game-config/model/rtk/G
 import { GameDashboardView } from './GameDashboardView';
 
 // mocks
+
+jest.mock('../../../features/common/ModelLoadingView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ModelLoadingView: View,
+  };
+});
 
 jest.mock('./GameConfigCardView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -29,7 +37,6 @@ jest.mock('./GameInstanceSummaryView', () => {
 // tests
 
 describe('GameDashboardView', () => {
-  const { onAppErrorMock } = __engineAppUiMocks;
   const spy_useGameConfigModel = jest.spyOn(GameConfigModelModule, 'useGameConfigModel');
   const gameConfigId = 'GC1'
 
@@ -37,31 +44,31 @@ describe('GameDashboardView', () => {
     jest.clearAllMocks();
   });
 
-  it('renders loading screen', () => {
+  it('renders ModelLoadingView when loading', () => {
     spy_useGameConfigModel.mockReturnValue({
       isLoading: true,
       isError: false,
     });
 
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <GameDashboardView gameConfigId={gameConfigId} />
     );
 
-    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
+    getByTestId("ModelLoadingView-tid");
   });
 
-  it('renders error', () => {
+  it('renders ModelLoadingView when error', () => {
     spy_useGameConfigModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
     });
 
-    render(
+    const { getByTestId } = render(
       <GameDashboardView gameConfigId={gameConfigId} />
     );
 
-    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
+    getByTestId("ModelLoadingView-tid");
   });
 
   it('renders properly', async () => {

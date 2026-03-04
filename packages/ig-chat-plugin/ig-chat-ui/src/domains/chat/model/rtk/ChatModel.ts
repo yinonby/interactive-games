@@ -15,13 +15,21 @@ export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
 
 export const useChatModel = (conversationId: ChatConversationIdT): GameInstanceModelT => {
   const {
+    isUninitialized,
     isLoading: isChatLoading,
     isError: isChatError,
     error: chatError,
     data: chatResponse
   } = useGetChatQuery({ conversationId, limit: MAX_INITIAL_CHAT_MESSAGES });
 
-  if (isChatLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (isChatLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -31,12 +39,6 @@ export const useChatModel = (conversationId: ChatConversationIdT): GameInstanceM
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(chatError),
-    }
-  } else if (chatResponse === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

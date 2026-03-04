@@ -1,5 +1,4 @@
 
-import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildTestGameInstanceExposedInfo, buildTestGameState } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
@@ -7,6 +6,15 @@ import * as GameInstanceModel from '../../../domains/game-instance/model/rtk/Gam
 import { GameInstanceSummaryView } from './GameInstanceSummaryView';
 
 // mocks
+
+jest.mock('../../../features/common/ModelLoadingView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ModelLoadingView: View,
+  };
+});
 
 jest.mock('../../../features/game-instance/common/GameStatusView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -38,46 +46,38 @@ jest.mock('./OpenGameInstanceButtonLink', () => {
 // tests
 
 describe('GameInstanceView', () => {
-  const { onAppErrorMock } = __engineAppUiMocks;
   const useGameInstanceModelSpy = jest.spyOn(GameInstanceModel, 'useGameInstanceModel');
+  const gameInstanceId = 'ABC';
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  const gameInstanceId = 'ABC';
-
-  it('renders loading screen', () => {
-    // setup mocks
+  it('renders ModelLoadingView when loading', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: true,
       isError: false,
     });
 
-    // render
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <GameInstanceSummaryView gameInstanceId={gameInstanceId} />
     );
 
-    // verify components
-    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
+    getByTestId("ModelLoadingView-tid");
   });
 
-  it('renders error', () => {
-  // setup mocks
+  it('renders ModelLoadingView when error', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
     });
 
-    // render
-    render(
+    const { getByTestId } = render(
       <GameInstanceSummaryView gameInstanceId={gameInstanceId} />
     );
 
-    // verify calls
-    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
+    getByTestId("ModelLoadingView-tid");
   });
 
   it('renders properly', async () => {

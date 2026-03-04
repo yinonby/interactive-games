@@ -5,9 +5,16 @@ import type { AppConfigT } from '../../../../../ig-app-engine-models';
 export type AppConfigModelT = ModelT<{ appConfig: AppConfigT }>;
 
 export const useAppConfigModel = (): AppConfigModelT => {
-  const { isLoading, isError, error, data: appConfigResponse } = useGetAppConfigQuery();
+  const { isUninitialized, isLoading, isError, error, data: appConfigResponse } = useGetAppConfigQuery();
 
-  if (isLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (isLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -17,12 +24,6 @@ export const useAppConfigModel = (): AppConfigModelT => {
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(error),
-    }
-  } else if (appConfigResponse === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

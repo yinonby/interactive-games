@@ -1,9 +1,10 @@
 
-import { useAppErrorHandling, useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
-import { RnuiActivityIndicator, RnuiCard, RnuiText } from '@ig/rnui';
-import React, { useEffect, type FC } from 'react';
+import { useAppLocalization, useGenericStyles } from '@ig/app-engine-ui';
+import { RnuiCard, RnuiText } from '@ig/rnui';
+import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { useGameUserModel } from '../../../domains/game-user/model/rtk/GameUserModel';
+import { ModelLoadingView } from '../../../features/common/ModelLoadingView';
 import { GamesTableView } from './GamesTableView';
 
 export type GamesSummaryViewPropsT = object;
@@ -11,18 +12,16 @@ export type GamesSummaryViewPropsT = object;
 export const GamesSummaryView: FC<GamesSummaryViewPropsT> = () => {
   const { isLoading, isError, appErrCode, data: gameUserModel } = useGameUserModel();
   const { t } = useAppLocalization();
-  const { onAppError } = useAppErrorHandling();
   const genericStyles = useGenericStyles();
 
-  useEffect(() => {
-    if (isError) {
-      onAppError(appErrCode);
-    }
-  }, [isError, onAppError, appErrCode]);
-
-  if (isLoading) return <RnuiActivityIndicator testID="activity-indicator-tid" size="large"/>;
-  if (isError) {
-    return null;
+  if (isLoading || isError) {
+    return (
+      <ModelLoadingView
+        testID='ModelLoadingView-tid'
+        isLoading={isLoading}
+        appErrCode={isError ? appErrCode : null}
+      />
+    );
   }
 
   const joinedGameConfigIds = gameUserModel.publicGameUser.joinedGameConfigIds;

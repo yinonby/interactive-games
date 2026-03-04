@@ -10,29 +10,38 @@ jest.mock('./ChatRtkApi');
 const conversationId1 = 'c1';
 
 describe('ChatModel', () => {
-  it('calls hooks with correct args', () => {
-    const useGetChatQuerySpy = jest.spyOn(ChatRtkApi, "useGetChatQuery");
+  const spy_useGetChatQuery = jest.spyOn(ChatRtkApi, "useGetChatQuery");
 
-    useGetChatQuerySpy.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: undefined,
+  it('calls hooks with correct args', () => {
+    spy_useGetChatQuery.mockReturnValue({
+      isLoading: true,
       refetch: jest.fn(),
     } as UseGetChatQueryResultT);
 
     renderHook(() => useChatModel(conversationId1));
 
     // verify
-    expect(useGetChatQuerySpy).toHaveBeenCalledWith({
+    expect(spy_useGetChatQuery).toHaveBeenCalledWith({
       conversationId: conversationId1,
       limit: MAX_INITIAL_CHAT_MESSAGES,
     });
   });
 
-  it('returns loading state when query is loading game-instance chat', () => {
-    const useGetChatQuerySpy = jest.spyOn(ChatRtkApi, "useGetChatQuery");
+  it("returns error when query returns uninitialized (unexpected)", () => {
+    spy_useGetChatQuery.mockReturnValue({
+      isUninitialized: true,
+      refetch: jest.fn(),
+    });
 
-    useGetChatQuerySpy.mockReturnValue({
+    expect(useChatModel(conversationId1)).toEqual({
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    });
+  });
+
+  it('returns loading state when query is loading game-instance chat', () => {
+    spy_useGetChatQuery.mockReturnValue({
       isLoading: true,
       isError: false,
       data: undefined,
@@ -49,9 +58,7 @@ describe('ChatModel', () => {
   });
 
   it('returns error state when query has error in game-instance chat', () => {
-    const useGetChatQuerySpy = jest.spyOn(ChatRtkApi, "useGetChatQuery");
-
-    useGetChatQuerySpy.mockReturnValue({
+    spy_useGetChatQuery.mockReturnValue({
       isLoading: false,
       isError: true,
       error: { appErrCode: "apiError:server" },
@@ -69,35 +76,14 @@ describe('ChatModel', () => {
     });
   });
 
-  it('returns error state when game-instance chat data is undefined', () => {
-    const useGetChatQuerySpy = jest.spyOn(ChatRtkApi, "useGetChatQuery");
-
-    useGetChatQuerySpy.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: undefined,
-      refetch: jest.fn(),
-    } as UseGetChatQueryResultT);
-
-    const { result } = renderHook(() => useChatModel(conversationId1));
-
-    expect(result.current).toEqual({
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
-    });
-  });
-
   it('returns data', () => {
-    const useGetChatQuerySpy = jest.spyOn(ChatRtkApi, "useGetChatQuery");
-
     const gameInstanceChatResponse: GetMostRecentChatMessagesResponseT = {
       data: {
         mostRecentChatMessages: [],
       }
     }
 
-    useGetChatQuerySpy.mockReturnValue({
+    spy_useGetChatQuery.mockReturnValue({
       isLoading: false,
       isError: false,
       data: gameInstanceChatResponse.data,
