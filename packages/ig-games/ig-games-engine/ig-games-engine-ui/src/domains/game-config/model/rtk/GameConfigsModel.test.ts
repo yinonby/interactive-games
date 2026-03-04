@@ -17,8 +17,6 @@ describe('GameConfigsModel', () => {
   it('calls hooks with correct args', () => {
     spy_useGetPublicGameConfigsQuery.mockReturnValue({
       isLoading: true,
-      isError: false,
-      data: undefined,
       refetch: jest.fn(),
     });
 
@@ -26,6 +24,19 @@ describe('GameConfigsModel', () => {
 
     // verify
     expect(spy_useGetPublicGameConfigsQuery).toHaveBeenCalledWith(gameConfigIds);
+  });
+
+  it("returns error when query returns uninitialized (unexpected)", () => {
+    spy_useGetPublicGameConfigsQuery.mockReturnValue({
+      isUninitialized: true,
+      refetch: jest.fn(),
+    });
+
+    expect(useGameConfigsModel(gameConfigIds)).toEqual({
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    });
   });
 
   it('returns loading state when query is loading game configs', () => {
@@ -60,23 +71,6 @@ describe('GameConfigsModel', () => {
       isError: true,
       appErrCode: 'apiError:server',
       data: undefined,
-    });
-  });
-
-  it('returns error state when game configs data is undefined', () => {
-    spy_useGetPublicGameConfigsQuery.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: undefined,
-      refetch: jest.fn(),
-    });
-
-    const { result } = renderHook(() => useGameConfigsModel(gameConfigIds));
-
-    expect(result.current).toEqual({
-      isLoading: false,
-      isError: true,
-      appErrCode: 'appError:invalidResponse',
     });
   });
 

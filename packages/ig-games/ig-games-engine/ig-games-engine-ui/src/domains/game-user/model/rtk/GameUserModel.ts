@@ -11,13 +11,21 @@ export type GameUserModelT = ModelT<GameUserModelDataT>;
 
 export const useGameUserModel = (): GameUserModelT => {
   const {
+    isUninitialized,
     isLoading: getPublicGameUser_isLoading,
     isError: getPublicGameUser_isError,
     error: getPublicGameUser_error,
     data: getPublicGameUser_data
   } = useGetPublicGameUserQuery();
 
-  if (getPublicGameUser_isLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (getPublicGameUser_isLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -27,12 +35,6 @@ export const useGameUserModel = (): GameUserModelT => {
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(getPublicGameUser_error),
-    }
-  } else if (getPublicGameUser_data === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

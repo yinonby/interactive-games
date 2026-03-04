@@ -7,13 +7,21 @@ export type GamesAppModelT = ModelT<{ minimalPublicGameConfigs: MinimalPublicGam
 
 export const useGamesAppModel = (): GamesAppModelT => {
   const {
+    isUninitialized,
     isLoading,
     isError,
     error,
     data: getMinimalPublicGameConfigsResponse
   } = useGetMinimalPublicGameConfigsQuery();
 
-  if (isLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (isLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -23,12 +31,6 @@ export const useGamesAppModel = (): GamesAppModelT => {
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(error),
-    }
-  } else if (getMinimalPublicGameConfigsResponse === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

@@ -1,11 +1,19 @@
 
-import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { type GameInstanceIdT, type PublicGameInstanceT } from '@ig/games-engine-models';
 import { buildTestGameInstanceExposedInfo } from '@ig/games-engine-models/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GameInstanceModel from '../../../../domains/game-instance/model/rtk/GameInstanceModel';
 import { GameInstanceContainer } from './GameInstanceContainer';
+
+jest.mock('../../../../features/common/ModelLoadingView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ModelLoadingView: View,
+  };
+});
 
 jest.mock('./GameInstanceView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -17,35 +25,34 @@ jest.mock('./GameInstanceView', () => {
 });
 
 describe('GameInstanceView', () => {
-  const { onAppErrorMock } = __engineAppUiMocks;
   const useGameInstanceModelSpy = jest.spyOn(GameInstanceModel, 'useGameInstanceModel');
   const gameInstanceId1: GameInstanceIdT = "gid-1";
 
-  it('renders loading view', () => {
+  it('renders ModelLoadingView when loading', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: true,
       isError: false,
     });
 
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(queryByTestId("RnuiActivityIndicator-tid")).toBeTruthy();
+    getByTestId("ModelLoadingView-tid");
   });
 
-  it('renders error', () => {
+  it('renders ModelLoadingView when error', () => {
     useGameInstanceModelSpy.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
     });
 
-    render(
+    const { getByTestId } = render(
       <GameInstanceContainer gameInstanceId={gameInstanceId1} />
     );
 
-    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
+    getByTestId("ModelLoadingView-tid");
   });
 
   it('renders correctly when there is data', () => {
