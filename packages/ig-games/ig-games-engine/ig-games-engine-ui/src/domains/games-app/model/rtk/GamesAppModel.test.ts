@@ -1,5 +1,6 @@
 
 import type { GetMinimalPublicGameConfigsResultT } from '@ig/games-engine-models';
+import { renderHook } from '@testing-library/react-native';
 import { useGamesAppModel } from './GamesAppModel';
 import * as GamesConfigRtkApi from './GamesAppRtkApi';
 
@@ -8,6 +9,31 @@ describe("useGamesAppModel", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('calls hooks with correct args', () => {
+    useGetMinimalPublicGameConfigsQuerySpy.mockReturnValue({
+      isLoading: true,
+      refetch: jest.fn(),
+    });
+
+    renderHook(() => useGamesAppModel());
+
+    // verify
+    expect(useGetMinimalPublicGameConfigsQuerySpy).toHaveBeenCalled();
+  });
+
+  it("returns error when query returns uninitialized (unexpected)", () => {
+    useGetMinimalPublicGameConfigsQuerySpy.mockReturnValue({
+      isUninitialized: true,
+      refetch: jest.fn(),
+    });
+
+    expect(useGamesAppModel()).toEqual({
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    });
   });
 
   it("returns loading state when query is loading", () => {
@@ -35,20 +61,6 @@ describe("useGamesAppModel", () => {
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
-    });
-  });
-
-  it("returns error state when data is undefined (no payload)", () => {
-    useGetMinimalPublicGameConfigsQuerySpy.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      refetch: jest.fn(),
-    });
-
-    expect(useGamesAppModel()).toEqual({
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     });
   });
 

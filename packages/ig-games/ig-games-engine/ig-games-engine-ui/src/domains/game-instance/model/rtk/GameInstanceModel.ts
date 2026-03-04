@@ -11,13 +11,21 @@ export type GameInstanceModelT = ModelT<GameInstanceModelDataT>;
 
 export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInstanceModelT => {
   const {
+    isUninitialized,
     isLoading: isGameInstanceLoading,
     isError: isGameInstanceError,
     error: gameInstanceError,
     data: gameInstanceResponse
   } = useGetPublicGameInstanceQuery(gameInstanceId);
 
-  if (isGameInstanceLoading) {
+  if (isUninitialized) {
+    // unexpected, query only returns this when using { skip: true }
+    return {
+      isLoading: false,
+      isError: true,
+      appErrCode: "appError:unknown",
+    }
+  } else if (isGameInstanceLoading) {
     return {
       isLoading: true,
       isError: false,
@@ -27,12 +35,6 @@ export const useGameInstanceModel = (gameInstanceId: GameInstanceIdT): GameInsta
       isLoading: false,
       isError: true,
       appErrCode: extractAppErrorCodeFromUnknownObject(gameInstanceError),
-    }
-  } else if (gameInstanceResponse === undefined) {
-    return {
-      isLoading: false,
-      isError: true,
-      appErrCode: "appError:invalidResponse",
     }
   }
 

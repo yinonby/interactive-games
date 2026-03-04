@@ -16,7 +16,6 @@ export type ApiServerErrorCodeT =
 export type AppErrorCodeT =
   | ApiServerErrorCodeT
   | "appError:networkError"
-  | "appError:invalidResponse"
   | "appError:unknown"
 ;
 
