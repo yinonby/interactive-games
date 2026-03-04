@@ -1,14 +1,20 @@
 
-import { __engineAppUiMocks } from '@ig/app-engine-ui';
 import { buildMockedTranslation } from '@ig/app-engine-ui/test-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import * as GameUserModelModule from '../../../domains/game-user/model/rtk/GameUserModel';
 import { GamesSummaryView } from './GamesSummaryView';
 
-// --------------------
-// Mocks
-// --------------------
+// mocks
+
+jest.mock('../../../features/common/ModelLoadingView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ModelLoadingView: View,
+  };
+});
 
 jest.mock('./GamesTableView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -19,43 +25,40 @@ jest.mock('./GamesTableView', () => {
   };
 });
 
-// --------------------
-// Tests
-// --------------------
+// tests
 
 describe('GamesSummaryView', () => {
-  const { onAppErrorMock } = __engineAppUiMocks;
   const spy_useGameUserModel = jest.spyOn(GameUserModelModule, 'useGameUserModel');
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders loading screen', () => {
+  it('renders ModelLoadingView when loading', () => {
     spy_useGameUserModel.mockReturnValue({
       isLoading: true,
       isError: false,
     });
 
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <GamesSummaryView />
     );
 
-    expect(queryByTestId("activity-indicator-tid")).toBeTruthy();
+    getByTestId("ModelLoadingView-tid");
   });
 
-  it('renders error', () => {
+  it('renders ModelLoadingView when error', () => {
     spy_useGameUserModel.mockReturnValue({
       isLoading: false,
       isError: true,
       appErrCode: "apiError:server",
     });
 
-    render(
+    const { getByTestId } = render(
       <GamesSummaryView />
     );
 
-    expect(onAppErrorMock).toHaveBeenCalledWith("apiError:server");
+    getByTestId("ModelLoadingView-tid");
   });
 
   it('renders empty state when there are no games', () => {
