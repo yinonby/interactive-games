@@ -2,19 +2,21 @@
 
 import { useExpressAppStarterInfo } from '@/express-app/ExpressAppUtils';
 import { BeLogger, ExpressApp, MongoInmemDbServer } from '@ig/be-utils';
+import { getApiEnvVars } from '@ig/env';
 import {
   startTestingSqlDbContainer
 } from '@ig/prisma-utils/test-utils';
 
 async function initApp() {
   const logger = new BeLogger();
+  const apiEnvVars = getApiEnvVars();
   let mongoConnString: string | null = null;
   let sqlDbConnString: string | null = null;
 
   // in development, start local databases and register shutdown handlers
   if (process.env.NODE_ENV === 'development') {
     // start a local mongo inmem server
-    const mongoInmemDbServer = new MongoInmemDbServer();
+    const mongoInmemDbServer = new MongoInmemDbServer(new BeLogger(), apiEnvVars.mongoDb.listenPort);
     mongoConnString = await mongoInmemDbServer.startDb();
 
     // start a local postgres server

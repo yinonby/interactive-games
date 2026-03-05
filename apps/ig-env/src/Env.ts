@@ -9,7 +9,10 @@ type ApiEnvVarsT = {
     jwtSecret: string,
     jwtAlgorithm: string,
     jwtExpiryMs: number,
-  }
+  },
+  mongoDb: {
+    listenPort: number,
+  },
 }
 
 export const getApiEnvVars = (): ApiEnvVarsT => {
@@ -19,6 +22,7 @@ export const getApiEnvVars = (): ApiEnvVarsT => {
   const jwtSecret = getEnvVarStr('IG_ENV__AUTH__JWT_SECRET');
   const jwtAlgorithm = getEnvVarStr('IG_ENV__AUTH__JWT_ALGORITHM');
   const jwtExpiresInDays = getEnvVarInt('IG_ENV__AUTH__JWT_EXPIRY_DAYS');
+  const mongoDbListenPort = getEnvVarInt('IG_ENV__MONGODB__LISTERN_PORT');
 
   return {
     sysDomain: sysDomain,
@@ -28,6 +32,9 @@ export const getApiEnvVars = (): ApiEnvVarsT => {
       jwtSecret: jwtSecret,
       jwtAlgorithm: jwtAlgorithm,
       jwtExpiryMs: DAYS_TO_MS(jwtExpiresInDays),
+    },
+    mongoDb: {
+      listenPort: mongoDbListenPort,
     },
   }
 }

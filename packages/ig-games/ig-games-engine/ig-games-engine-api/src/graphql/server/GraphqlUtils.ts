@@ -21,7 +21,8 @@ export const formatErrorFn = (formattedError: GraphQLFormattedError, error: unkn
     };
   }
 
-  logger.warn('Detected unknown error', originalError);
+  logger.warn('Detected unknown error, formattedError', formattedError);
+  logger.warn('Detected unknown error, error', error);
 
   // Unknown errors → mask them
   return {

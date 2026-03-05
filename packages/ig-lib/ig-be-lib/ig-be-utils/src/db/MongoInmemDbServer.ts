@@ -9,11 +9,13 @@ export class MongoInmemDbServer implements InmemDbServerProvider {
 
   constructor(
     private logger: LoggerAdapter = new BeLogger(),
+    private listenPort?: number,
   ) { }
 
   public async startDb(): Promise<string> {
     // IMPORTANT: use MongoMemoryReplSet for transactions
     this.mongoMemoryReplSet = await MongoMemoryReplSet.create({
+      instanceOpts: [{ port: this.listenPort }],
       replSet: { count: 1 },
     });
     const uri = this.mongoMemoryReplSet.getUri();
