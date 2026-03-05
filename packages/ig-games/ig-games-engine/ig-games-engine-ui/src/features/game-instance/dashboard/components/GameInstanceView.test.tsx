@@ -67,10 +67,10 @@ describe('GameInstanceView', () => {
   const { loggerErrorMock } = __engineAppUiMocks;
   const { useAuthMock } = __authUiMocks;
 
-  // mock curAccountId
+  // mock curAuthId
   const curUserIdMock = 'userIdMock';
   useAuthMock.mockReturnValue({
-    curAccountId: curUserIdMock,
+    curAuthId: curUserIdMock,
   });
 
   beforeEach(() => {

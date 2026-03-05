@@ -194,6 +194,6 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
       expect(getLocalUserIdSpy).toHaveBeenCalled()
     );
 
-    expect(contextValue.curAccountId).toBe(existingUserId);
+    expect(contextValue.curAuthId).toBe(existingUserId);
   });
 });

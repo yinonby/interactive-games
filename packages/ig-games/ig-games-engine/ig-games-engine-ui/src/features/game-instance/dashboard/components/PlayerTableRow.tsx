@@ -29,7 +29,7 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = (props) => {
   }
 
   return (
-    <RnuiTableRow testID="table-row-tid" noHorizontalPadding dense>
+    <RnuiTableRow testID="table-row-tid" noHorizontalPadding dense={!withAdminButtons}>
       <RnuiTableCell testID="RnuiTableCell-tid">
         <RnuiText variant={textVariant} theme={{ colors: { onSurface: textColor } }}>
           {publicPlayerInfo.playerNickname + youStr}
@@ -47,7 +47,7 @@ export const PlayerTableRow: FC<PlayersCardViewPropsT> = (props) => {
         <RnuiTableCell testID="RnuiTableCell-noButtons-tid" endContent><></></RnuiTableCell>
       }
       {withAdminButtons && isCurUserAdminPlayer && !isCurUser &&
-        <RnuiTableCell testID="RnuiTableCell-buttons-tid" endContent>
+        <RnuiTableCell testID="RnuiTableCell-buttons-tid" endContent >
           {publicPlayerInfo.playerStatus === "active" &&
             <RnuiButton testID="suspend-btn-tid" mode="contained-tonal" size="xs" onPress={() => { }}>
               {t("games:suspend")}

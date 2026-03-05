@@ -24,10 +24,10 @@ describe("PlayersTableView", () => {
   const { loggerErrorMock } = __engineAppUiMocks;
   const { useAuthMock } = __authUiMocks;
 
-  // mock curAccountId
-  const curAccountId = "userIdMock";
+  // mock curAuthId
+  const curAuthId = "userIdMock";
   useAuthMock.mockReturnValue({
-    curAccountId: curAccountId,
+    curAuthId: curAuthId,
   });
 
   it("does not render when current user is not in players list", () => {
@@ -48,7 +48,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly withAdminButtons = false", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerId: curAccountId,
+      playerId: curAuthId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -70,7 +70,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, no admin", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerId: curAccountId,
+      playerId: curAuthId,
       playerRole: 'player',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -92,7 +92,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, withAdminButtons = true, admin", () => {
     const publicPlayerInfo: PublicPlayerInfoT = {
-      playerId: curAccountId,
+      playerId: curAuthId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const { getByTestId, getAllByTestId, queryAllByTestId, getByText } = render(
@@ -114,7 +114,7 @@ describe("PlayersTableView", () => {
 
   it("renders component properly, multiple players", () => {
     const publicPlayerInfo1: PublicPlayerInfoT = {
-      playerId: curAccountId,
+      playerId: curAuthId,
       playerRole: 'admin',
     } as PublicPlayerInfoT;
     const publicPlayerInfo2: PublicPlayerInfoT = {
