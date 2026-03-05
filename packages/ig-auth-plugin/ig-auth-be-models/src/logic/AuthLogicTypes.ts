@@ -16,7 +16,7 @@ export interface SignupServiceTransactionAdapter {
 // exported to be implemented by the signup plugin
 export interface SignupPluginAdapter {
   onSignupResponse(user: UserT, authId: AuthIdT, res: Response): Promise<void>;
-  extractRequestAuthId(req: Request): AuthIdT | null;
+  extractRequestAuthId(req: Request): Promise<AuthIdT | null> ;
 }
 
 // exported to be implemented by the signup plugin's DB package

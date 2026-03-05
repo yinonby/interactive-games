@@ -34,11 +34,11 @@ export const formatErrorFn = (formattedError: GraphQLFormattedError, error: unkn
   };
 };
 
-export const buildContext = (
+export const buildContext = async (
   req: Request,
   gamesRequestAdapter: GamesRequestAdapter,
-): GamesGraphqlContextT => {
-  const gameUserId = gamesRequestAdapter.extractGameUserId(req);
+): Promise<GamesGraphqlContextT> => {
+  const gameUserId = await gamesRequestAdapter.extractGameUserId(req);
 
   if (gameUserId === null) {
     throw new GraphQLError('Not authenticated', {

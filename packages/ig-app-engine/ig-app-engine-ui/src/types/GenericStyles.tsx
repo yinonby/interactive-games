@@ -20,6 +20,9 @@ export const useGenericStyles = () => StyleSheet.create({
     alignItems: "flex-start",
     gap: 8,
   },
+  justifyContentCenter: {
+    justifyContent: "center",
+  },
   flex1: {
     flex: 1,
   },

@@ -1,8 +1,8 @@
 
 import { __puiMocks } from '@ig/platform-ui';
-import { getLocalAccountId, setLocalAccountId } from './AuthUtils';
+import { getLocalAuthId, setLocalAuthId } from './AuthUtils';
 
-const localAccountIdKey = 'gnm::localAccountId';
+const localAuthIdKey = 'gnm::localAuthId';
 
 describe('AppConfigUtils', () => {
   const { getItemMock, setItemMock } = __puiMocks;
@@ -10,29 +10,29 @@ describe('AppConfigUtils', () => {
     jest.resetAllMocks();
   });
 
-  it('getLocalAccountId returns stored user id', async () => {
+  it('getLocalAuthId returns stored user id', async () => {
     getItemMock.mockResolvedValue('user-123');
 
-    const result = await getLocalAccountId();
+    const result = await getLocalAuthId();
 
-    expect(getItemMock).toHaveBeenCalledWith(localAccountIdKey);
+    expect(getItemMock).toHaveBeenCalledWith(localAuthIdKey);
     expect(result).toBe('user-123');
   });
 
-  it('getLocalAccountId returns null when no id is stored', async () => {
+  it('getLocalAuthId returns null when no id is stored', async () => {
     getItemMock.mockResolvedValue(null);
 
-    const result = await getLocalAccountId();
+    const result = await getLocalAuthId();
 
-    expect(getItemMock).toHaveBeenCalledWith(localAccountIdKey);
+    expect(getItemMock).toHaveBeenCalledWith(localAuthIdKey);
     expect(result).toBeNull();
   });
 
-  it('setLocalAccountId stores the provided user id', async () => {
+  it('setLocalAuthId stores the provided user id', async () => {
     setItemMock.mockResolvedValue(undefined);
 
-    await setLocalAccountId('user-456');
+    await setLocalAuthId('user-456');
 
-    expect(setItemMock).toHaveBeenCalledWith(localAccountIdKey, 'user-456');
+    expect(setItemMock).toHaveBeenCalledWith(localAuthIdKey, 'user-456');
   });
 });

@@ -20,7 +20,7 @@ export const useGamesPluginContainer = (
   gamesDb: PackageDb & GamesDbAdapter,
   engineDbAdapter: EngineDbAdapter,
 ): ExpressPluginContainerT<GamesPluginConfigT> => {
-  const gamesRequestAdapter: GamesRequestAdapter = useGamesRequestAdapter();
+  const gamesRequestAdapter: GamesRequestAdapter = useGamesRequestAdapter(engineDbAdapter);
   const gamesUserAdapter: GamesUserAdapter = useGamesPlayerInfoAdapter(engineDbAdapter);
   const wordleAdapter: WordleAdapter = useWordleAdapter();
 
@@ -42,12 +42,12 @@ export const useGamesPluginContainer = (
   return gamesPluginContainer;
 }
 
-const useGamesRequestAdapter = (): GamesRequestAdapter => {
-  const getSignupPluginAdapter: SignupPluginAdapter = useSignupPluginAdapter();
+const useGamesRequestAdapter = (engineDbAdapter: EngineDbAdapter): GamesRequestAdapter => {
+  const getSignupPluginAdapter: SignupPluginAdapter = useSignupPluginAdapter(engineDbAdapter);
 
   return {
-    extractGameUserId: (req: Request): GameUserIdT | null => {
-      const authId: AuthIdT | null = getSignupPluginAdapter.extractRequestAuthId(req);
+    extractGameUserId: async (req: Request): Promise<GameUserIdT | null> => {
+      const authId: AuthIdT | null = await getSignupPluginAdapter.extractRequestAuthId(req);
       if (authId === null) {
         return null;
       }

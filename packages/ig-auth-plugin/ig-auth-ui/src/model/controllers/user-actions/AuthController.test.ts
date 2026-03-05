@@ -4,7 +4,7 @@ import { renderHook } from '@testing-library/react-native';
 import * as AuthRtkApi from '../../rtk/AuthRtkApi';
 import { useAuthController } from './AuthController';
 
-describe('AppConfigController', () => {
+describe('AuthController', () => {
   describe('useAuthController', () => {
     it('calls guestLogin, fails', async () => {
       const useGuestLoginMutationSpy = jest.spyOn(AuthRtkApi, 'useGuestLoginMutation');

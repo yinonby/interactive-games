@@ -12,7 +12,7 @@ import { createAuthResolvers } from './AuthResolvers';
 export const createAuthSchema = (
   publicPluginConfig: AuthPluginConfigT,
 ): GraphQLSchema => {
-  const signupPluginAdapter: SignupPluginAdapter | undefined = publicPluginConfig.getSignupPluginAdapter();
+  const signupPluginAdapter: SignupPluginAdapter = publicPluginConfig.getSignupPluginAdapter();
   const signupServiceTransactionAdapter: SignupServiceTransactionAdapter =
     publicPluginConfig.getSignupServiceTransactionAdapter();
   const signupServiceAdapter = new SignupService(signupServiceTransactionAdapter, signupPluginAdapter);
