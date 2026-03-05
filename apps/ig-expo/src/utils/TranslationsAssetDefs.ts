@@ -2,7 +2,9 @@
 import type {
   AppErrorCodeT, CommonTranslationKeyT,
 } from '@ig/app-engine-ui';
+import type { AuthTranslationKeyT } from '@ig/auth-ui-models';
 import type { GamesTranslationKeyT } from '@ig/games-engine-ui-models';
+import enAuthTranslationsJson from '../../assets/translations/en/auth.json';
 import enCommonTranslationsJson from '../../assets/translations/en/common.json';
 import enErrosTranslationsJson from '../../assets/translations/en/errors.json';
 import enGamesTranslationsJson from '../../assets/translations/en/games.json';
@@ -19,6 +21,9 @@ type UnionToIntersectionT<U> =
 type CommonTranslationShapeT =
   UnionToIntersectionT<ExpandKeyT<CommonTranslationKeyT>>;
 
+type AuthTranslationShapeT =
+  UnionToIntersectionT<ExpandKeyT<AuthTranslationKeyT>>;
+
 type GamesTranslationShapeT =
   UnionToIntersectionT<ExpandKeyT<GamesTranslationKeyT>>;
 
@@ -31,8 +36,9 @@ const enResource = {
   gamesApiError: enErrosTranslationsJson.gamesApiError,
   appError: enErrosTranslationsJson.appError,
   common: enCommonTranslationsJson,
+  auth: enAuthTranslationsJson,
   games: enGamesTranslationsJson,
-} satisfies CommonTranslationShapeT & GamesTranslationShapeT & ErrorTranslationShapeT;
+} satisfies CommonTranslationShapeT & AuthTranslationShapeT & GamesTranslationShapeT & ErrorTranslationShapeT;
 
 export const getI18nResources = () => {
   return {

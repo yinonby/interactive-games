@@ -1,16 +1,11 @@
 
 import type { SignupPluginAdapter, SignupServiceTransactionAdapter } from '@ig/auth-be-models';
 import type { AuthIdT, UserT } from '@ig/auth-models';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 
 export type AuthPluginConfigT = {
   getSignupServiceTransactionAdapter: () => SignupServiceTransactionAdapter,
-  getSignupPluginAdapter: () => SignupPluginAdapter | undefined,
-}
-
-export interface ApolloContextT {
-  req: Request;
-  res: Response;
+  getSignupPluginAdapter: () => SignupPluginAdapter,
 }
 
 export interface SignupServiceAdapter {

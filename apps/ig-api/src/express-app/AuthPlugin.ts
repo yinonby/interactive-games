@@ -30,7 +30,7 @@ export const useAuthPluginContainer = (
           tableNamePrefix,
           new AppEngineSignupPluginTransaction(engineDb.getAccountsTableAdapter()),
         ),
-        getSignupPluginAdapter: () => useSignupPluginAdapter(),
+        getSignupPluginAdapter: () => useSignupPluginAdapter(engineDb),
       },
     },
   }
@@ -38,7 +38,7 @@ export const useAuthPluginContainer = (
   return authPluginContainer;
 }
 
-export const useSignupPluginAdapter = (): SignupPluginAdapter => {
+export const useSignupPluginAdapter = (engineDbAdapter: EngineDbAdapter): SignupPluginAdapter => {
   const { sysDomain, authEnvVars } = getApiEnvVars();
 
   const jwtCookieDomain = sysDomain;
@@ -56,5 +56,6 @@ export const useSignupPluginAdapter = (): SignupPluginAdapter => {
     jwtCookieDomain,
     jwtCookieIsSecure,
     authJwtPropNames,
+    () => engineDbAdapter.getAccountsTableAdapter(),
   );
 }

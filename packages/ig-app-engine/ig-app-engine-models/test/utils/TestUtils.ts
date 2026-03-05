@@ -11,7 +11,7 @@ const baseAccount: AccountT = {
   nickname: 'NICKNAME1',
 };
 
-export const buildFullTestAccount = (overrides: Partial<AccountT>): AccountT => ({
+export const buildAccountMock = (overrides?: Partial<AccountT>): AccountT => ({
   ...baseAccount,
   ...overrides,
 });

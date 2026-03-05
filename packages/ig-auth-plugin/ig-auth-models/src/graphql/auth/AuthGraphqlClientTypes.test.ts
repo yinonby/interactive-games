@@ -1,6 +1,6 @@
 
 import { buildSchema, parse, print, validate } from 'graphql';
-import { emailLoginMutation, guestLoginMutation, healthQuery } from './AuthGraphqlClientTypes';
+import { emailLoginMutation, getLoginInfoQuery, guestLoginMutation } from './AuthGraphqlClientTypes';
 import { authGraphqlTypeDefs } from './AuthGraphqlTypeDefs';
 
 describe('GameConfigGraphqlClientTypes', () => {
@@ -8,7 +8,7 @@ describe('GameConfigGraphqlClientTypes', () => {
   const schema = buildSchema(sdl);
 
   it('health query is valid against the GraphQL schema', () => {
-    const document = parse(healthQuery);
+    const document = parse(getLoginInfoQuery);
     const errors = validate(schema, document);
 
     expect(errors).toHaveLength(0);

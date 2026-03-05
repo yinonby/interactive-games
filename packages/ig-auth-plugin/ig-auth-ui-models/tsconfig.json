@@ -15,7 +15,6 @@
     "types": ["vitest/globals"],
     "paths": {
       "@/*": ["src/*"],
-      "@ig/app-engine-models/test-utils": ["../ig-app-engine-models/test/test-index.ts"],
     }
   }
 }

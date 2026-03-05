@@ -2,9 +2,11 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import { mergeSchemas } from '@graphql-tools/schema';
-import { Router } from 'express';
-import type { ApolloContextT, AuthPluginConfigT } from '../../types/AuthPluginTypes';
+import { type Request, type Response, Router } from 'express';
+import type { AuthGraphqlContextT } from '../../types/AuthInternalTypes';
+import type { AuthPluginConfigT } from '../../types/AuthPluginTypes';
 import { createAuthSchema } from '../auth/AuthSchema';
+import { buildContext } from './GraphqlUtils';
 
 // returns an express router for this graphql endpoint
 export async function createGraphqlRouter(
@@ -19,20 +21,21 @@ export async function createGraphqlRouter(
   });
 
   // set up Apollo Server
-  const apolloServer = new ApolloServer<ApolloContextT>({
+  const apolloServer = new ApolloServer<AuthGraphqlContextT>({
     schema,
   });
+
+  const contextFn = async ({ req, res }: { req: Request, res: Response }): Promise<AuthGraphqlContextT> => {
+    return buildContext(req, res, publicPluginConfig.getSignupPluginAdapter());
+  };
+
   await apolloServer.start();
 
   // inject the /graphql route
   router.use(
     '/graphql',
     expressMiddleware(apolloServer, {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      context: async ({ req, res }): Promise<ApolloContextT> => ({
-        req,
-        res,
-      }),
+      context: contextFn,
     }),
   );
 

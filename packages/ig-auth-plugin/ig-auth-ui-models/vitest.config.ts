@@ -13,7 +13,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "@ig/app-engine-models/test-utils": path.resolve(__dirname, "../ig-app-engine-models/test/test-index.ts"),
     },
   },
 });

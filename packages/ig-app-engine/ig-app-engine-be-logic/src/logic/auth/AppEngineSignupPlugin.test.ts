@@ -1,5 +1,6 @@
 
 import type { AccountsTableAdapter } from '@ig/app-engine-be-models';
+import { buildAccountMock } from '@ig/app-engine-models/test-utils';
 import type { CookieUtils } from '@ig/be-utils';
 import * as BeUtilsModule from '@ig/be-utils';
 import * as UiltsModule from '@ig/utils';
@@ -16,6 +17,11 @@ describe('AppEngineSignupPlugin', () => {
   const spy_decodeJwt = vi.spyOn(BeUtilsModule, 'decodeJwt');
   const spy_CookieUtils = vi.spyOn(BeUtilsModule, 'CookieUtils');
   const mock_setCookie = vi.fn();
+
+  const mock_getAccount = vi.fn();
+  const mock_accountsTableAdapter = {
+    getAccount: mock_getAccount,
+  } as unknown as AccountsTableAdapter;
 
   spy_CookieUtils.mockImplementation(() => ({
     setCookie: mock_setCookie,
@@ -45,6 +51,7 @@ describe('AppEngineSignupPlugin', () => {
       jwtCookieDomain,
       jwtCookieIsSecure,
       authJwtPropNames,
+      () => mock_accountsTableAdapter,
     );
 
     await plugin.onSignupResponse(user, authId, res);
@@ -69,7 +76,7 @@ describe('AppEngineSignupPlugin', () => {
   });
 
   describe('extractRequestAuthId', () => {
-    it('returns null when no cookies', () => {
+    it('returns null when no cookies', async () => {
       const plugin = new AppEngineSignupPlugin(
         jwtSecret,
         jwtAlgorithm,
@@ -77,13 +84,15 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = {} as Request;
-      expect(plugin.extractRequestAuthId(req)).toEqual(null);
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
     });
 
-    it('returns null when no auth cookie', () => {
+    it('returns null when no auth cookie', async () => {
       const plugin = new AppEngineSignupPlugin(
         jwtSecret,
         jwtAlgorithm,
@@ -91,13 +100,15 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = { cookies: {} } as Request;
-      expect(plugin.extractRequestAuthId(req)).toEqual(null);
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
     });
 
-    it('fails when decode throws', () => {
+    it('fails when decode throws', async () => {
       spy_decodeJwt.mockImplementation(() => { throw new Error('ERROR') });
 
       const plugin = new AppEngineSignupPlugin(
@@ -107,6 +118,7 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = {
@@ -114,10 +126,10 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
     });
 
-    it('fails when jwt payload is a string', () => {
+    it('fails when jwt payload is a string', async () => {
       spy_decodeJwt.mockReturnValue('invalid string token');
 
       const plugin = new AppEngineSignupPlugin(
@@ -127,6 +139,7 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = {
@@ -134,10 +147,10 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
     });
 
-    it('fails when jwt payload does not contain account id', () => {
+    it('fails when jwt payload does not contain account id', async () => {
       spy_decodeJwt.mockReturnValue({});
 
       const plugin = new AppEngineSignupPlugin(
@@ -147,6 +160,7 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = {
@@ -154,13 +168,14 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      expect(() => plugin.extractRequestAuthId(req)).toThrowError();
+      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
     });
 
-    it('succeeds  ', () => {
+    it('returns null when account does not exist', async () => {
       spy_decodeJwt.mockReturnValue({
         [authJwtPropNames.accountIdFieldName]: 'ACC1'
       });
+      mock_getAccount.mockReturnValue(null)
 
       const plugin = new AppEngineSignupPlugin(
         jwtSecret,
@@ -169,6 +184,7 @@ describe('AppEngineSignupPlugin', () => {
         jwtCookieDomain,
         jwtCookieIsSecure,
         authJwtPropNames,
+        () => mock_accountsTableAdapter,
       );
 
       const req: Request = {
@@ -176,7 +192,35 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      expect(plugin.extractRequestAuthId(req)).toEqual('ACC1');
+
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
+    });
+
+    it('succeeds', async () => {
+      spy_decodeJwt.mockReturnValue({
+        [authJwtPropNames.accountIdFieldName]: 'ACC1'
+      });
+      mock_getAccount.mockReturnValue(buildAccountMock())
+
+      const plugin = new AppEngineSignupPlugin(
+        jwtSecret,
+        jwtAlgorithm,
+        jwtExpiresInMs,
+        jwtCookieDomain,
+        jwtCookieIsSecure,
+        authJwtPropNames,
+        () => mock_accountsTableAdapter,
+      );
+
+      const req: Request = {
+        cookies: {
+          [authJwtPropNames.cookieName]: 'COOKIE',
+        }
+      } as Request;
+
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual('ACC1');
     });
   });
 });

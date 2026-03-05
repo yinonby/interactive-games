@@ -2,7 +2,10 @@
 import React, { type PropsWithChildren } from 'react';
 import { View } from 'react-native';
 import { PlatformUiLink } from '../../../../../ig-lib/ig-client-lib/ig-platform-ui';
-import { RnuiAppContent, RnuiButton, RnuiText, type TestableComponentT } from '../../../../../ig-lib/ig-client-lib/ig-rnui';
+import {
+  RnuiAppContent, RnuiButton,
+  RnuiText, type TestableComponentT
+} from '../../../../../ig-lib/ig-client-lib/ig-rnui';
 import { useGenericStyles } from '../../types/GenericStyles';
 
 type AppErrorPagePropsT = TestableComponentT;
