@@ -19,6 +19,12 @@ initRnuiMocks();
 initClientUtilsMocks();
 initPlatformUiMocks();
 
+jest.mock('react-i18next', () => ({
+  useTranslation: jest.fn().mockReturnValue({
+    t: (key: string) => `translated:${key}`,
+  }),
+}));
+
 declare module "@ig/platform-ui" {
   export const __puiMocks: {
     navigateMock: jest.Mock,

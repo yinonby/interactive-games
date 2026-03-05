@@ -1,0 +1,33 @@
+{
+  "name": "@ig/auth-ui-models",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "build": "echo nothing to do",
+
+    "test": "npm run build && npm run tsc && npm run lint && npm run cover:unit",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.mjs ./src",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "test:unit": "cross-env NODE_ENV=test LOG_LEVEL=SILENT vitest",
+    "ut": "npm run test:unit --",
+    "test:verbose": "cross-env NODE_ENV=test LOG_LEVEL=VERBOSE vitest",
+    "cover:unit": "npm run test:unit -- run --coverage"
+  },
+  "dependencies": {
+    "@ig/utils": "*"
+  },
+  "devDependencies": {
+    "@ig/lint": "*",
+    "@ig/ts-deps": "*",
+    "@ig/vitest": "*",
+    "@types/node": "^25.0.3",
+    "cross-env": "^7.0.3"
+  }
+}

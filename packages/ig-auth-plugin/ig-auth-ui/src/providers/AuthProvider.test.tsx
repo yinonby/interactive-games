@@ -1,21 +1,22 @@
 
 import type { LoggerAdapter } from '@ig/utils';
-import { render, waitFor } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import React from 'react';
-import { Text } from 'react-native';
-import * as AuthController from '../model/controllers/user-actions/AuthController';
-import { AuthProvider, useAuth, type AuthContextT } from './AuthProvider';
-import * as AuthUtils from './AuthUtils';
+import { Text, View } from 'react-native';
+import * as AuthLoginInfoModel from '../model/rtk/AuthLoginInfoModel';
+import { AuthProvider, useAuth } from './AuthProvider';
 
-describe('AuthProvider and useAppConfig (React Native)', () => {
-  const existingUserId = 'existingUserId';
+jest.mock('../components/AuthLoginView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
 
-  // AuthUi mocks
-  const onGuestLoginMock = jest.fn();
-  const useAuthControllerSpy = jest.spyOn(AuthController, 'useAuthController');
-  useAuthControllerSpy.mockReturnValue({
-    onGuestLogin: onGuestLoginMock,
-  });
+  return {
+    AuthLoginView: View,
+  };
+});
+
+describe('AuthProvider and useAuth', () => {
+  const spy_useAuthLoginInfoModel = jest.spyOn(AuthLoginInfoModel, 'useAuthLoginInfoModel');
 
   const loggerMock: LoggerAdapter = {
     trace: jest.fn(),
@@ -26,174 +27,129 @@ describe('AuthProvider and useAppConfig (React Native)', () => {
   };
   const onUnknownErrorMock = jest.fn();
 
-  // AppConfigUtils mocks
-  const getLocalUserIdSpy = jest.spyOn(AuthUtils, 'getLocalAccountId');
-  const setLocalUserIdSpy = jest.spyOn(AuthUtils, 'setLocalAccountId');
-
-  const TestChild: React.FC = () => {
-    return (
-      <Text testID="text-tid">
-        Hello
-      </Text>
-    );
-  };
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders activity indicator', async () => {
-    const { getByTestId, queryByTestId } = render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-      </AuthProvider>
-    );
+  describe('AuthProvider', () => {
+    it('renders activity indicator', async () => {
+      spy_useAuthLoginInfoModel.mockReturnValue({
+        isLoading: true,
+        isError: false,
+      });
 
-    getByTestId('RnuiActivityIndicator-tid');
+      const { getByTestId } = render(
+        <AuthProvider
+          logger={loggerMock}
+          onUnknownError={onUnknownErrorMock}
+        >
+          <View />
+        </AuthProvider>
+      );
 
-    await waitFor(() =>
-      expect(getLocalUserIdSpy).toHaveBeenCalled()
-    );
+      getByTestId('RnuiActivityIndicator-tid');
+    });
 
-    expect(queryByTestId('RnuiActivityIndicator-tid')).toBeNull();
+    it('handles error', async () => {
+      spy_useAuthLoginInfoModel.mockReturnValue({
+        isLoading: false,
+        isError: true,
+        appErrCode: 'appError:unknown',
+      });
+
+      render(
+        <AuthProvider
+          logger={loggerMock}
+          onUnknownError={onUnknownErrorMock}
+        >
+          <View />
+        </AuthProvider>
+      );
+
+      expect(onUnknownErrorMock).toHaveBeenCalledWith('appError:unknown');
+    });
+
+    it('renders AuthLoginView', async () => {
+      spy_useAuthLoginInfoModel.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: {
+          authId: null,
+        }
+      });
+
+      const { getByTestId } = render(
+        <AuthProvider
+          logger={loggerMock}
+          onUnknownError={onUnknownErrorMock}
+        >
+          <View />
+        </AuthProvider>
+      );
+
+      getByTestId('AuthLoginView-tid');
+    });
+
+    it('renders children', async () => {
+      spy_useAuthLoginInfoModel.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: {
+          authId: 'AUTHID1',
+        }
+      });
+
+      const TestChild: React.FC = () => {
+        return (
+          <Text testID="Text-tid">
+            Hello
+          </Text>
+        );
+      };
+
+      const { getByTestId } = render(
+        <AuthProvider
+          logger={loggerMock}
+          onUnknownError={onUnknownErrorMock}
+        >
+          <TestChild />
+        </AuthProvider>
+      );
+
+      getByTestId('Text-tid');
+    });
   });
 
-  it('creates new local user id, guest login fails', async () => {
-    getLocalUserIdSpy.mockResolvedValue(null);
-    onGuestLoginMock.mockRejectedValue('ERROR');
+  describe('useAuth', () => {
+    it('renders children', async () => {
+      spy_useAuthLoginInfoModel.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: {
+          authId: 'AUTHID1',
+        }
+      });
 
-    render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-      </AuthProvider>
-    );
+      const TestChild: React.FC = () => {
+        const { curAuthId } = useAuth();
 
-    await waitFor(() =>
-      expect(onGuestLoginMock).toHaveBeenCalled()
-    );
+        return (
+          <Text testID="Text-tid">
+            {curAuthId}
+          </Text>
+        );
+      };
 
-    // verify calls
-    expect(getLocalUserIdSpy).toHaveBeenCalled();
-    expect(onGuestLoginMock).toHaveBeenCalled();
-    expect(onUnknownErrorMock).toHaveBeenCalledWith('ERROR');
-  });
+      const { getByText } = render(
+        <AuthProvider
+          logger={loggerMock}
+          onUnknownError={onUnknownErrorMock}
+        >
+          <TestChild />
+        </AuthProvider>
+      );
 
-  it('creates new local user id, guest login succeeds', async () => {
-    getLocalUserIdSpy.mockResolvedValue(null);
-    onGuestLoginMock.mockResolvedValue('ACCOUNT1');
-
-    render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-      </AuthProvider>
-    );
-
-    await waitFor(() =>
-      expect(setLocalUserIdSpy).toHaveBeenCalled()
-    );
-
-    // verify calls
-    expect(getLocalUserIdSpy).toHaveBeenCalled();
-    expect(onGuestLoginMock).toHaveBeenCalled();
-    expect(setLocalUserIdSpy).toHaveBeenCalledWith('ACCOUNT1');
-  });
-
-  it('uses existing local user id', async () => {
-    getLocalUserIdSpy.mockResolvedValue(existingUserId);
-
-    render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-      </AuthProvider>
-    );
-
-    await waitFor(() =>
-      expect(getLocalUserIdSpy).toHaveBeenCalled()
-    );
-
-    // verify calls
-    expect(getLocalUserIdSpy).toHaveBeenCalled();
-  });
-
-  it('renders correctly', async () => {
-    getLocalUserIdSpy.mockResolvedValue(null);
-
-    const { getByTestId, queryByTestId } = render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-      </AuthProvider>
-    );
-
-    await waitFor(() =>
-      expect(getLocalUserIdSpy).toHaveBeenCalled()
-    );
-
-    // verify components
-    expect(queryByTestId('RnuiActivityIndicator-tid')).toBeNull();
-
-    const child = getByTestId('text-tid');
-    expect(child.props.children).toBe('Hello');
-  });
-
-  it('renders multiple children correctly', async () => {
-    getLocalUserIdSpy.mockResolvedValue(null);
-
-    const { getAllByTestId } = render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestChild />
-        <TestChild />
-      </AuthProvider>
-    );
-
-    await waitFor(() =>
-      expect(getLocalUserIdSpy).toHaveBeenCalled()
-    );
-
-    const children = getAllByTestId('text-tid');
-    expect(children).toHaveLength(2);
-  });
-
-  it('useAppConfig returns the exact config object', async () => {
-    // setup mocks
-    getLocalUserIdSpy.mockResolvedValue(existingUserId);
-
-    let contextValue!: AuthContextT;
-    const TestConsumer: React.FC = () => {
-      (contextValue = useAuth());
-      return null;
-    };
-
-    render(
-      <AuthProvider
-        logger={loggerMock}
-        onUnknownError={onUnknownErrorMock}
-      >
-        <TestConsumer />
-      </AuthProvider>
-    );
-
-    await waitFor(() =>
-      expect(getLocalUserIdSpy).toHaveBeenCalled()
-    );
-
-    expect(contextValue.curAuthId).toBe(existingUserId);
+      getByText('AUTHID1');
+    });
   });
 });

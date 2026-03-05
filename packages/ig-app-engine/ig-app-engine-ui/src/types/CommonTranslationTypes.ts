@@ -1,4 +1,5 @@
 
+import type { AuthTranslationKeyT } from '@ig/auth-ui-models';
 import type { GamesTranslationKeyT } from '@ig/games-engine-ui-models';
 import type { AppErrorCodeT } from './AppErrorTypes';
 
@@ -22,4 +23,4 @@ export type CommonTranslationKeyT =
   | "common:solutionIncorrect"
 ;
 
-export type AppTranslationKeyT = AppErrorCodeT | CommonTranslationKeyT | GamesTranslationKeyT;
+export type AppTranslationKeyT = AppErrorCodeT | CommonTranslationKeyT | AuthTranslationKeyT | GamesTranslationKeyT;

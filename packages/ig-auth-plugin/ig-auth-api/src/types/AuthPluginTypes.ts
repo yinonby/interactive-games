@@ -5,7 +5,7 @@ import type { Request, Response } from 'express';
 
 export type AuthPluginConfigT = {
   getSignupServiceTransactionAdapter: () => SignupServiceTransactionAdapter,
-  getSignupPluginAdapter: () => SignupPluginAdapter | undefined,
+  getSignupPluginAdapter: () => SignupPluginAdapter,
 }
 
 export interface ApolloContextT {

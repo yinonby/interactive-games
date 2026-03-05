@@ -1,17 +1,17 @@
 
-import type { AccountIdT } from '@ig/app-engine-models';
+import type { AuthIdT } from '@ig/auth-models';
 import { useStorage } from '@ig/platform-ui';
 
 // local user id utils
 
-const localAccountIdKey = 'gnm::localAccountId';
+const localAuthIdKey = 'gnm::localAuthId';
 
-export const getLocalAccountId = async (): Promise<AccountIdT | null> => {
+export const getLocalAuthId = async (): Promise<AuthIdT | null> => {
   const storage = useStorage();
-  return await storage.getItem(localAccountIdKey);
+  return await storage.getItem(localAuthIdKey);
 }
 
-export const setLocalAccountId = async (accountId: AccountIdT): Promise<void> => {
+export const setLocalAuthId = async (accountId: AuthIdT): Promise<void> => {
   const storage = useStorage();
-  await storage.setItem(localAccountIdKey, accountId);
+  await storage.setItem(localAuthIdKey, accountId);
 }

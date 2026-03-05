@@ -4,14 +4,24 @@
 
 import type { AuthIdT } from '../../user/AuthTypes';
 
-export const healthQuery = `
-  query Health {
-    _health
+export const getLoginInfoQuery = `
+  query GetLoginInfo {
+    loginInfo: getLoginInfo {
+      authId
+    }
   }
 `;
 
-export type HealthQuryResultT = {
-  _health: boolean,
+export type GetLoginInfoResultDataT = {
+  authId: AuthIdT | null,
+}
+
+export type GetLoginInfoResultT = {
+  loginInfo: GetLoginInfoResultDataT,
+}
+
+export type GetLoginInfoReponseT = {
+  data: GetLoginInfoResultT,
 }
 
 // mutation

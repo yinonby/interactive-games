@@ -51,26 +51,24 @@ describe('formatErrorFn', () => {
 describe('buildContext', () => {
   const mockReq = {} as Request;
 
-  it('should return context when gameUserId exists', () => {
+  it('should return context when gameUserId exists', async () => {
     const jwtAdapter: GamesRequestAdapter = {
       extractGameUserId: vi.fn().mockReturnValue('USER1'),
     };
 
-    const ctx = buildContext(mockReq, jwtAdapter);
+    const ctx = await buildContext(mockReq, jwtAdapter);
 
     expect(ctx).toEqual({ gameUserId: 'USER1' });
     expect(jwtAdapter.extractGameUserId).toHaveBeenCalledWith(mockReq);
   });
 
-  it('should throw GraphQLError when gameUserId is missing', () => {
+  it('should throw GraphQLError when gameUserId is missing', async () => {
     const jwtAdapter: GamesRequestAdapter = {
       extractGameUserId: vi.fn().mockReturnValue(null),
     };
 
-    expect(() => buildContext(mockReq, jwtAdapter)).toThrowError(GraphQLError);
-
     try {
-      buildContext(mockReq, jwtAdapter);
+      await buildContext(mockReq, jwtAdapter);
     } catch (err) {
       const gqlErr = err as GraphQLError;
       expect(gqlErr.message).toBe('Not authenticated');

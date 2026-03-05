@@ -25,6 +25,7 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
     jwtCookieDomain: string,
     jwtCookieIsSecure: boolean,
     private readonly authJwtPropNames: AuthJwtPropNamesT,
+    private getAccountsTableAdapter: () => AccountsTableAdapter,
     private cookieUtils = new CookieUtils(jwtCookieDomain, jwtCookieIsSecure, jwtExpiresInMs),
     private logger: LoggerAdapter = new BeLogger(),
   ) { }
@@ -36,7 +37,7 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
     this.setJwt(user.userId, accountId, res);
   }
 
-  public extractRequestAuthId(req: Request): AuthIdT | null {
+  public async extractRequestAuthId(req: Request): Promise<AuthIdT | null> {
     if (req.cookies === undefined) {
       this.logger.debug('Missing request cookies');
       return null;
@@ -66,7 +67,14 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
       throw new EngineApiError('Jwt token missing account id', 'engineApiError:invalidJwt');
     }
 
-    return decodedJwt[this.authJwtPropNames.accountIdFieldName] as AuthIdT;
+    const accountId: AccountIdT = decodedJwt[this.authJwtPropNames.accountIdFieldName] as AccountIdT;
+    const account: AccountT | null = await this.getAccountsTableAdapter().getAccount(accountId);
+    if (account === null) {
+      this.logger.debug(`Account does not exist, accountId [${accountId}]`);
+      return null;
+    }
+
+    return accountId as AuthIdT;
   }
 
   // service methods

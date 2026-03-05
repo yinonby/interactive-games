@@ -7,7 +7,9 @@ import { createGraphqlRouter } from './GraphqlRouter';
 
 describe('GraphqlRouter', () => {
   const mock_SignupServiceTransactionAdapter = {} as SignupServiceTransactionAdapter;
-  const mock_SignupPluginAdapter = {} as SignupPluginAdapter;
+  const mock_SignupPluginAdapter = {
+    extractRequestAuthId: vi.fn(),
+  } as unknown as SignupPluginAdapter;
   const publicPluginConfig: AuthPluginConfigT = {
     getSignupServiceTransactionAdapter: () => mock_SignupServiceTransactionAdapter,
     getSignupPluginAdapter: () => mock_SignupPluginAdapter,

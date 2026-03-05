@@ -42,7 +42,6 @@ export async function createGraphqlRouter(
     formatError: formatErrorFn,
   });
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   const contextFn = async ({ req }: { req: Request }): Promise<GamesGraphqlContextT> => {
     return buildContext(req, gamesRequestAdapter);
   };

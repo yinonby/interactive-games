@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@ig/auth-models": "*",
+    "@ig/auth-ui-models": "*",
     "@ig/client-utils": "*",
     "@ig/app-engine-models": "*",
     "@ig/games-engine-models": "*",
     "@ig/games-engine-ui-models": "*",
-    "@ig/games-wordle-ui-models": "*",
     "@ig/platform-ui": "*",
     "@ig/rnui": "*",
     "@reduxjs/toolkit": "^2.11.2",

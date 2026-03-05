@@ -45,7 +45,7 @@ export interface GameInstancesTableAdapter {
 }
 
 export interface GamesRequestAdapter {
-  extractGameUserId(req: Request): GameUserIdT | null;
+  extractGameUserId(req: Request): Promise<GameUserIdT | null>;
 }
 
 export interface GamesUserAdapter {

@@ -1,6 +1,6 @@
 
 import type { AccountIdT, AccountT } from '@ig/app-engine-models';
-import { buildFullTestAccount } from '@ig/app-engine-models/test/test-index';
+import { buildAccountMock } from '@ig/app-engine-models/test/test-index';
 import type { LoggerAdapter } from '@ig/utils';
 import { MongoAccountsTable } from './MongoAccountsTable';
 
@@ -29,10 +29,10 @@ describe('MongoAccountsTable', () => {
     it('should return array of accounts', async () => {
       const accountId1: AccountIdT = 'ACCOUNT1';
       const accountId2: AccountIdT = 'ACCOUNT2';
-      const mockAccount1: AccountT = buildFullTestAccount({
+      const mockAccount1: AccountT = buildAccountMock({
         accountId: accountId1,
       });
-      const mockAccount2: AccountT = buildFullTestAccount({
+      const mockAccount2: AccountT = buildAccountMock({
         accountId: accountId2,
       });
       const instance = new MongoAccountsTable();
@@ -51,7 +51,7 @@ describe('MongoAccountsTable', () => {
   describe('getAccount', () => {
     it('should return array of accounts', async () => {
       const accountId1: AccountIdT = 'ACCOUNT1';
-      const mockAccount1: AccountT = buildFullTestAccount({
+      const mockAccount1: AccountT = buildAccountMock({
         accountId: accountId1,
       });
       const instance = new MongoAccountsTable();
@@ -68,7 +68,7 @@ describe('MongoAccountsTable', () => {
 
   describe('createAccount', () => {
     it('should insert account', async () => {
-      const mockAccount1: AccountT = buildFullTestAccount({});
+      const mockAccount1: AccountT = buildAccountMock({});
       const instance = new MongoAccountsTable();
 
       const res1 = await instance.getAccounts();
@@ -81,7 +81,7 @@ describe('MongoAccountsTable', () => {
     });
 
     it('should fail to create user with an existing unique key', async () => {
-      const mockAccount1: AccountT = buildFullTestAccount({});
+      const mockAccount1: AccountT = buildAccountMock({});
       const instance = new MongoAccountsTable();
 
       const res1 = await instance.getAccounts();
@@ -95,7 +95,7 @@ describe('MongoAccountsTable', () => {
     });
 
     it('should fail to create user with an empty nickname', async () => {
-      const mockAccount1: AccountT = buildFullTestAccount({
+      const mockAccount1: AccountT = buildAccountMock({
         nickname: '',
       });
       const instance = new MongoAccountsTable();

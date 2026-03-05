@@ -4,7 +4,11 @@ import { gql } from 'graphql-tag';
 
 const authGraphqlQueryTypeDefs = gql`
   type Query {
-    _health: Boolean!
+    getLoginInfo: GetLoginInfoResult!
+  }
+
+  type GetLoginInfoResult {
+    authId: String
   }
 `;
 
