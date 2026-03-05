@@ -1,8 +1,12 @@
 
 import { useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { useAuth } from '@ig/auth-ui';
+import type { ChatMsgSenderIdT } from '@ig/chat-models';
 import { ChatView } from '@ig/chat-ui';
-import { getGameInstanceConversationId, type PublicGameInstanceT } from '@ig/games-engine-models';
+import {
+  getGameInstanceConversationId, type GameUserIdT,
+  type PublicGameInstanceT
+} from '@ig/games-engine-models';
 import { RnuiCard, RnuiGrid, RnuiGridItem } from '@ig/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -20,15 +24,16 @@ export type GameInstanceViewPropsT = TestableComponentT & {
 export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
   const { publicGameInstance } = props;
   const { publicPlayerInfos } = publicGameInstance;
-  const { curAccountId } = useAuth();
+  const { curAuthId } = useAuth();
+  const curGameUserId = curAuthId as GameUserIdT;
   const publicGameConfig = publicGameInstance.publicGameConfig;
   const logger = useClientLogger();
   const genericStyles = useGenericStyles();
 
-  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curAccountId);
+  const curPublicPlayerInfo = publicPlayerInfos.find(e => e.playerId === curGameUserId);
   if (curPublicPlayerInfo === undefined) {
     logger.error(`Unexpected game instance not belonging to player,` +
-      `gameInstanceId [${publicGameInstance.gameInstanceId}] curAccountId [${curAccountId}]`);
+      `gameInstanceId [${publicGameInstance.gameInstanceId}] curGameUserId [${curGameUserId}]`);
     return null;
   }
 
@@ -47,7 +52,10 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
 
         <RnuiGridItem key="summary" xs={12} sm={12} md={12} lg={6} xl={6} >
           <View>
-            <GameImageCard testID='GameImageCard-tid' minimalPublicGameConfig={publicGameConfig} includeFreeLabel={false}>
+            <GameImageCard testID='GameImageCard-tid'
+              minimalPublicGameConfig={publicGameConfig}
+              includeFreeLabel={false}
+            >
               <View style={genericStyles.spacing}>
                 <GameInstanceConfigSummaryView
                   testID="GameInstanceConfigSummaryView-tid"
@@ -79,7 +87,7 @@ export const GameInstanceView: FC<GameInstanceViewPropsT> = (props) => {
               <ChatView
                 testID="ChatView-tid"
                 conversationId={getGameInstanceConversationId(publicGameInstance.gameInstanceId)}
-                senderId={curAccountId}
+                senderId={curGameUserId as ChatMsgSenderIdT}
                 senderDisplayName={curPublicPlayerInfo.playerNickname}
               />
             </RnuiCard>
