@@ -1,3 +1,3 @@
 
-export * from './src/types/translation/GamesTranslationsTypes';
+export * from './src/types/GamesTranslationsTypes';
 

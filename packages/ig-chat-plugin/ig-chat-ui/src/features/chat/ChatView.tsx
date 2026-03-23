@@ -15,6 +15,7 @@ import {
   useChatController
 } from '../../domains/chat/controller/user-actions/ChatController';
 import { useChatModel } from '../../domains/chat/model/rtk/ChatModel';
+import { ChatSyncProvider } from './ChatSyncProvider';
 
 export type ChatViewPropsT = TestableComponentT & {
   conversationId: ChatConversationIdT,
@@ -63,37 +64,39 @@ export const ChatView: FC<ChatViewPropsT> = (props) => {
   }
 
   return (
-    <View style={genericStyles.spacing}>
-      <RnuiText testID="chat-title-tid" variant="titleMedium">{t("common:chat")}</RnuiText>
+    <ChatSyncProvider conversationId={conversationId}>
+      <View style={genericStyles.spacing}>
+        <RnuiText testID="chat-title-tid" variant="titleMedium">{t("common:chat")}</RnuiText>
 
-      <View style={{ maxHeight: 200 }}>
-        <FlatList<ChatMessageT>
-          testID="FlatList-tid"
-          ref={listRef}
-          data={chatModelData.chatMessages}
-          keyExtractor={(m, index) => index.toString()}
-          renderItem={({ item }) =>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <RnuiText variant="titleSmall">{item.senderDisplayName}: </RnuiText>
-              <RnuiText>{item.msgContent}</RnuiText>
-            </View>}
-          onContentSizeChange={() =>
-            listRef.current?.scrollToEnd({ animated: true })
-          }
-        />
-      </View>
+        <View style={{ maxHeight: 200 }}>
+          <FlatList<ChatMessageT>
+            testID="FlatList-tid"
+            ref={listRef}
+            data={chatModelData.chatMessages}
+            keyExtractor={(m, index) => index.toString()}
+            renderItem={({ item }) =>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <RnuiText variant="titleSmall">{item.senderDisplayName}: </RnuiText>
+                <RnuiText>{item.msgContent}</RnuiText>
+              </View>}
+            onContentSizeChange={() =>
+              listRef.current?.scrollToEnd({ animated: true })
+            }
+          />
+        </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 16 }}>
-        <RnuiTextInput
-          testID="RnuiTextInput-tid"
-          submitBehavior="submit"
-          style={genericStyles.flex1}
-          value={msgContent}
-          onChangeText={setMsgContent}
-          onSubmitEditing={handlePress}
-        />
-        <RnuiIconButton testID="send-msg-btn-tid" size="xs" icon="send" onPress={handlePress}/>
+        <View style={{ flexDirection: "row", alignItems: "center", marginTop: 16 }}>
+          <RnuiTextInput
+            testID="RnuiTextInput-tid"
+            submitBehavior="submit"
+            style={genericStyles.flex1}
+            value={msgContent}
+            onChangeText={setMsgContent}
+            onSubmitEditing={handlePress}
+          />
+          <RnuiIconButton testID="send-msg-btn-tid" size="xs" icon="send" onPress={handlePress}/>
+        </View>
       </View>
-    </View>
+    </ChatSyncProvider>
   );
 };

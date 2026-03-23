@@ -49,9 +49,7 @@ async def test_handle_ws_client_conn_account_none():
 async def test_handle_ws_client_conn_account_id_not_none():
     # --- Setup mocks ---
     mock_websocket = AsyncMock()
-    mock_websocket.request = Request(
-        path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"}
-    )
+    mock_websocket.request = Request(path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"})
     mock_websocket.send = AsyncMock()
     mock_websocket.close = AsyncMock()
 
@@ -76,9 +74,7 @@ async def test_handle_ws_client_conn_account_id_not_none():
 
     # --- Assertions ---
     mock_auth_token_manager.get_account_id_from_auth_token.assert_called_once_with("valid-token")
-    server.handle_ws_client_conn_for_account_id.assert_called_once_with(
-        mock_websocket, "account123"
-    )
+    server.handle_ws_client_conn_for_account_id.assert_called_once_with(mock_websocket, "account123")
     mock_websocket.close.assert_not_called()
 
 
@@ -150,9 +146,7 @@ def test_get_account_id_from_auth_token_missing_auth_jwt_cookie():
 def test_get_account_id_from_auth_token_missing_account_id_in_auth_jwt_cookie():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
-    mock_websocket.request = Request(
-        path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"}
-    )
+    mock_websocket.request = Request(path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"})
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
     mock_auth_token_manager.get_account_id_from_auth_token.return_value = None
@@ -175,9 +169,7 @@ def test_get_account_id_from_auth_token_missing_account_id_in_auth_jwt_cookie():
 def test_get_account_id_from_auth_token_success():
     # --- Setup mocks ---
     mock_websocket = MagicMock()
-    mock_websocket.request = Request(
-        path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"}
-    )
+    mock_websocket.request = Request(path="", headers={"Cookie": AUTH_JWT_COOKIE_NAME + "=valid-token"})
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)
     mock_auth_token_manager.get_account_id_from_auth_token.return_value = "account123"
@@ -204,9 +196,7 @@ def test_get_account_id_from_auth_token_success_with_multiple_cookies():
     mock_websocket = MagicMock()
     mock_websocket.request = Request(
         path="",
-        headers={
-            "Cookie": "cookie1=val1;" + AUTH_JWT_COOKIE_NAME + "=valid-token" + ";cookie2=val2;"
-        },
+        headers={"Cookie": "cookie1=val1;" + AUTH_JWT_COOKIE_NAME + "=valid-token" + ";cookie2=val2;"},
     )
 
     mock_auth_token_manager = MagicMock(spec=AppAuthTokenManager)

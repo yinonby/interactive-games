@@ -1,10 +1,12 @@
 
 import type { ChatLogicAdapter, ChatMessagesTableAdapter } from '@ig/chat-be-models';
 import type { ChatConversationIdT, ChatMessageT, ChatMsgIdT, CreateChatMessageInputT } from '@ig/chat-models';
+import type { ChatUpdateNotificationAdapter } from '../types/ChatPluginTypes';
 
 export class ChatLogic implements ChatLogicAdapter {
   constructor(
     private chatMessagesTableAdapter: ChatMessagesTableAdapter,
+    private chatUpdateNotificationAdapter: ChatUpdateNotificationAdapter,
   ) { }
 
   public async getMostRecentChatMessages(
@@ -43,7 +45,11 @@ export class ChatLogic implements ChatLogicAdapter {
       msgContent,
       sentTs,
     } = input;
-    return await this.chatMessagesTableAdapter.createChatMessage(conversationId, conversationKind,
-      senderId, senderDisplayName, msgContent, sentTs);
+    const chatMsgId: ChatMsgIdT = await this.chatMessagesTableAdapter.createChatMessage(conversationId,
+      conversationKind, senderId, senderDisplayName, msgContent, sentTs);
+
+    await this.chatUpdateNotificationAdapter.onChatUpdate(conversationId);
+
+    return chatMsgId;
   }
 }

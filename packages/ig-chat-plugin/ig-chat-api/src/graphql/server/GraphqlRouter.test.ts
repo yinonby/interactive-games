@@ -1,4 +1,5 @@
 
+import type { ChatUpdateNotificationAdapter } from '@/types/ChatPluginTypes';
 import type { ChatDbAdapter } from '@ig/chat-be-models';
 import express from 'express';
 import request from 'supertest';
@@ -9,11 +10,12 @@ describe('GraphqlRouter', () => {
   const mock_ChatDbAdapter: ChatDbAdapter = {
     getChatMessagesTableAdapter: vi.fn(),
   } as unknown as ChatDbAdapter;
+  const mock_chatUpdateNotificationAdapter = {} as ChatUpdateNotificationAdapter;
 
   let app: express.Express;
 
   beforeAll(async () => {
-    const router = await createGraphqlRouter(mock_ChatDbAdapter);
+    const router = await createGraphqlRouter(mock_ChatDbAdapter, mock_chatUpdateNotificationAdapter);
     app = express();
     app.use(express.json());
     app.use(router);

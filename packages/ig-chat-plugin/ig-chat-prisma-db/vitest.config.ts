@@ -7,7 +7,9 @@ export default defineConfig({
   ...baseViteUserConfig,
   test: {
     ...baseViteUserConfig.test,
-    setupFiles: ["./test/setup.ts"],
+    setupFiles: ['./test/setup.ts'],
+    maxConcurrency: 1,
+    maxWorkers: 1,
   },
   resolve: {
     alias: {

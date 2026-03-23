@@ -1,7 +1,7 @@
 
 import { DAYS_TO_MS, getEnvVarInt, getEnvVarStr } from '@ig/utils';
 
-type ApiEnvVarsT = {
+export type ApiEnvVarsT = {
   sysDomain: string,
   apiListenPort: number,
   webCorsOrigin: string,
@@ -13,6 +13,15 @@ type ApiEnvVarsT = {
   mongoDb: {
     listenPort: number,
   },
+  redis: {
+    listenPort: number,
+    redisChatUpdateNotificationChannelName: string,
+    redisMsgKindFieldName: string,
+    redisGameInstanceUpdateMsgKind: string,
+    redisChatUpdateMsgKind: string,
+    redisGameInstanceIdFieldName: string,
+    redisConversationIdFieldName: string,
+  },
 }
 
 export const getApiEnvVars = (): ApiEnvVarsT => {
@@ -23,6 +32,13 @@ export const getApiEnvVars = (): ApiEnvVarsT => {
   const jwtAlgorithm = getEnvVarStr('IG_ENV__AUTH__JWT_ALGORITHM');
   const jwtExpiresInDays = getEnvVarInt('IG_ENV__AUTH__JWT_EXPIRY_DAYS');
   const mongoDbListenPort = getEnvVarInt('IG_ENV__MONGODB__LISTERN_PORT');
+  const redisListenPort = getEnvVarInt('IG_ENV__REDIS__LISTEN_PORT');
+  const redisChatUpdateNotificationChannelName = getEnvVarStr('IG_ENV__REDIS__CHAT_UPDATE_NOTIFICATION_CHANNEL_NAME');
+  const redisMsgKindFieldName = getEnvVarStr('IG_ENV__REDIS__MSG_KIND_FIELD_NAME');
+  const redisGameInstanceUpdateMsgKind = getEnvVarStr('IG_ENV__REDIS__GAME_INSTANCE_UPDATE_MSG_KIND');
+  const redisChatUpdateMsgKind = getEnvVarStr('IG_ENV__REDIS__CHAT_UPDATE_MSG_KIND');
+  const redisGameInstanceIdFieldName = getEnvVarStr('IG_ENV__REDIS__GAME_INSTANCE_ID_FIELD_NAME');
+  const redisConversationIdFieldName = getEnvVarStr('IG_ENV__REDIS__CONVERSATION_ID_FIELD_NAME');
 
   return {
     sysDomain: sysDomain,
@@ -36,24 +52,15 @@ export const getApiEnvVars = (): ApiEnvVarsT => {
     mongoDb: {
       listenPort: mongoDbListenPort,
     },
-  }
-}
-
-type ExpoEnvVarsT = {
-  webBaseUrl: string,
-  apiBaseUrl: string,
-  wssBaseUrl: string,
-}
-
-export const getExpoEnvVars = (): ExpoEnvVarsT => {
-  const webBaseUrl = getEnvVarStr('IG_ENV__WEB__BASE_URL');
-  const apiBaseUrl = getEnvVarStr('IG_ENV__API__BASE_URL');
-  const wssBaseUrl = getEnvVarStr('IG_ENV__WSS__BASE_URL');
-
-  return {
-    webBaseUrl: webBaseUrl,
-    apiBaseUrl: apiBaseUrl,
-    wssBaseUrl: wssBaseUrl,
+    redis: {
+      listenPort: redisListenPort,
+      redisChatUpdateNotificationChannelName,
+      redisMsgKindFieldName,
+      redisGameInstanceUpdateMsgKind,
+      redisChatUpdateMsgKind,
+      redisGameInstanceIdFieldName,
+      redisConversationIdFieldName,
+    },
   }
 }
 

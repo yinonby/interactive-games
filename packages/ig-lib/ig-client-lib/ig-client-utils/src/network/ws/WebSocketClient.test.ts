@@ -33,9 +33,7 @@ describe("WebSocketClient", () => {
   });
 
   it("connects and receives messages", () => {
-    type MsgKind = "PING";
-
-    const client = new WebSocketClient<MsgKind, MsgKind>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     const handler = vi.fn();
 
     client.subscribe(handler);
@@ -57,9 +55,7 @@ describe("WebSocketClient", () => {
   });
 
   it("connects and receives messages: missing msgKind, handler not called", () => {
-    type MsgKind = "PING";
-
-    const client = new WebSocketClient<MsgKind, MsgKind>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     const handler = vi.fn();
 
     client.subscribe(handler);
@@ -75,44 +71,59 @@ describe("WebSocketClient", () => {
   });
 
   it("sends messages when connected", () => {
-    type MsgKind = "HELLO";
-
-    const client = new WebSocketClient<never, MsgKind>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     client.connect();
 
-    client.send("HELLO", { test: 123 });
+    client.send({ test: 123 });
 
     expect(wsInstance.send).toHaveBeenCalledWith(
-      JSON.stringify({
-        msgKind: "HELLO",
-        payload: { test: 123 },
-      })
+      JSON.stringify({ test: 123 })
     );
   });
 
   it("does not send when socket is disconnected", () => {
-    type MsgKind = "HELLO";
-
-    const client = new WebSocketClient<never, MsgKind>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     client.connect();
     client.disconnect();
 
-    client.send("HELLO");
+    client.send({ test: 123 });
 
     expect(wsInstance.send).not.toHaveBeenCalled();
   });
 
   it("does not send when socket is not open", () => {
-    type MsgKind = "HELLO";
-
-    const client = new WebSocketClient<never, MsgKind>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     client.connect();
 
     wsInstance.readyState = wsInstance.CLOSED;
 
-    client.send("HELLO");
+    client.send({ test: 123 });
 
     expect(wsInstance.send).not.toHaveBeenCalled();
+  });
+
+  it("queues messages when not ready, and sends them when open", () => {
+    const client = new WebSocketClient(loggerMock, "ws://test");
+
+    // connect
+    client.connect();
+
+    // set to not ready
+    wsInstance.readyState = wsInstance.CONNECTING;
+    client.send({ test: 123 });
+
+    // verify not sent
+    expect(wsInstance.send).not.toHaveBeenCalled();
+
+    wsInstance.readyState = wsInstance.OPEN;
+    if (!wsInstance.onopen) {
+      throw new Error('Unexpected missing onopen callback');
+    }
+    wsInstance.onopen();
+
+    expect(wsInstance.send).toHaveBeenCalledWith(
+      JSON.stringify({ test: 123 })
+    );
   });
 
   it("reconnects automatically after unexpected close", () => {
@@ -195,8 +206,7 @@ describe("WebSocketClient", () => {
   });
 
   it("unsubscribe removes handler", () => {
-    type MsgKind = "PING";
-    const client = new WebSocketClient<MsgKind, never>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
     const handler = vi.fn();
 
     const unsubscribe = client.subscribe(handler);
@@ -212,8 +222,7 @@ describe("WebSocketClient", () => {
   });
 
   it("calls logger.warn on socket error", () => {
-    type MsgKind = "PING";
-    const client = new WebSocketClient<MsgKind, never>(loggerMock, "ws://test");
+    const client = new WebSocketClient(loggerMock, "ws://test");
 
     client.connect();
 

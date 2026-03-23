@@ -1,7 +1,6 @@
 
-import { useClientLogger, type AppDispatch } from '@ig/app-engine-ui';
-import type { LoggerAdapter } from '@ig/utils';
-import { handleChatWebSocketMessage } from './ChatWebSocketController';
+import { type AppDispatch } from '@ig/app-engine-ui';
+import { createWebsocketChatUpdatesMessageHandler, type ChatWebsocketUpdatesConfigT } from './ChatWebSocketController';
 
 // mocks
 jest.mock(
@@ -12,59 +11,60 @@ jest.mock(
 );
 
 // import after mocks
-import type { ChatWebSocketMsgKindT } from '@ig/chat-models';
 import {
   handleChatUpdateWebSocketMessage,
 } from '../domains/chat/controller/ws-actions/ChatUpdateWebSocketController';
 
 // tests
 
-describe('handleChatWebSocketMessage', () => {
+describe('createWebsocketChatUpdatesMessageHandler', () => {
   const dispatch = jest.fn() as unknown as AppDispatch;
-  const logger: LoggerAdapter = useClientLogger();
+  const config = {
+    chatUpdateNotificationName: 'chatUpdateNotification',
+    conversationIdFieldName: 'conversationId',
+  } as ChatWebsocketUpdatesConfigT;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('handles chatUpdate messages, no payload', () => {
-    const wasHandled = handleChatWebSocketMessage(
-      'chatUpdate',
+  it('handles update messages, no payload', () => {
+    const wasHandled = createWebsocketChatUpdatesMessageHandler(config)(
+      config.chatUpdateNotificationName,
       { conversationId: 'C1' },
       dispatch,
-      logger,
     );
 
     expect(wasHandled).toBe(true);
     expect(handleChatUpdateWebSocketMessage).toHaveBeenCalledTimes(1);
     expect(handleChatUpdateWebSocketMessage).toHaveBeenCalledWith(
+      config.conversationIdFieldName,
       { conversationId: 'C1' },
       dispatch
     );
   });
 
-  it('handles chatUpdate messages, with payload', () => {
-    const wasHandled = handleChatWebSocketMessage(
-      'chatUpdate',
+  it('handles update messages, with payload', () => {
+    const wasHandled = createWebsocketChatUpdatesMessageHandler(config)(
+      config.chatUpdateNotificationName,
       undefined,
       dispatch,
-      logger,
     );
 
     expect(wasHandled).toBe(true);
     expect(handleChatUpdateWebSocketMessage).toHaveBeenCalledTimes(1);
     expect(handleChatUpdateWebSocketMessage).toHaveBeenCalledWith(
+      config.conversationIdFieldName,
       undefined,
       dispatch
     );
   });
 
   it('does not handle other messages', () => {
-    const wasHandled = handleChatWebSocketMessage(
-      'invalid-message' as ChatWebSocketMsgKindT,
+    const wasHandled = createWebsocketChatUpdatesMessageHandler(config)(
+      'invalid-message',
       undefined,
       dispatch,
-      logger,
     );
 
     expect(wasHandled).toBe(false);

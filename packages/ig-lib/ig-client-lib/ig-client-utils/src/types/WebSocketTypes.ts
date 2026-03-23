@@ -1,10 +1,10 @@
 
-export type WebSocketMessageHandlerT<RCV_MSG_KIND, PAYLOAD_T = unknown> =
-  (msgType: RCV_MSG_KIND, payload?: PAYLOAD_T) => void;
+export type WebsocketMessagePayloadT = Record<string, string | object>;
+export type WebsocketMessageHandlerT = (msgKind: string, payload?: WebsocketMessagePayloadT) => void;
 
-export interface WebSocketAdapter<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> {
+export interface WebsocketAdapter {
   connect(): void;
   disconnect(): void;
-  send(msgType: SND_MSG_KIND, payload?: PAYLOAD_T): void;
-  subscribe(handler: WebSocketMessageHandlerT<RCV_MSG_KIND, PAYLOAD_T>): () => boolean;
+  subscribe(handler: WebsocketMessageHandlerT): () => boolean;
+  send(message: object): void;
 }

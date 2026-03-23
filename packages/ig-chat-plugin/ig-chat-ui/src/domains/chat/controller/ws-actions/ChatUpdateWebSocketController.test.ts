@@ -20,6 +20,17 @@ describe('handleChatUpdateWebSocketMessage', () => {
     jest.clearAllMocks();
   });
 
+  it('does not dispatch when payload in undefined', () => {
+    handleChatUpdateWebSocketMessage(
+      'conversationId',
+      undefined,
+      dispatch
+    );
+
+    expect(chatRtkApiUtil.invalidateTags).not.toHaveBeenCalled();
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
   it('dispatches invalidateTags on chat update', () => {
     const invalidateResult = { type: 'TEST_ACTION', payload: [] };
 
@@ -29,6 +40,7 @@ describe('handleChatUpdateWebSocketMessage', () => {
     );
 
     handleChatUpdateWebSocketMessage(
+      'conversationId',
       { conversationId: 'giid-1' },
       dispatch
     );

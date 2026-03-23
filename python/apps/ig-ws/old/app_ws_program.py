@@ -39,14 +39,10 @@ class AppWebSocketProgram:
         )
 
     async def start(self) -> None:
-        ws_task = asyncio.create_task(
-            self.web_socket_server.start_loop(), name="AppWebSocketProgram"
-        )
+        ws_task = asyncio.create_task(self.web_socket_server.start_loop(), name="AppWebSocketProgram")
         redis_task = asyncio.create_task(self.redis_client.start_loop(), name="RedisClient")
 
-        done, pending = await asyncio.wait(
-            [ws_task, redis_task], return_when=asyncio.FIRST_EXCEPTION
-        )
+        done, pending = await asyncio.wait([ws_task, redis_task], return_when=asyncio.FIRST_EXCEPTION)
 
         for task in done:
             if task.exception():  # check if it raised an exception

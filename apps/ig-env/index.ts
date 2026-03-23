@@ -11,5 +11,6 @@ dotenv.config({ override: true, path: envFilesDir + "/.env.local" }); // load ge
 dotenv.config({ override: true, path: envFilesDir + `/.env.${process.env.NODE_ENV}` }); // load env-specific file
 dotenv.config({ override: true, path: envFilesDir + `/.env.${process.env.NODE_ENV}.local` }); // load env-specific secrets file
 
-export { getApiEnvVars, getDevHttpProxyEnvVars, getExpoEnvVars } from './src/Env';
+export { getApiEnvVars, getDevHttpProxyEnvVars } from './src/Env';
+export { getExpoEnvVars } from './src/ExpoEnv.ts';
 

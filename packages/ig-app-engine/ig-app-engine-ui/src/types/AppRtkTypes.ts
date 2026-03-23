@@ -12,3 +12,11 @@ export type AppRtkErrorT = {
   appErrCode: AppErrorCodeT,
   errMsg?: string
 }
+
+export type AppRtkQueryReturnValue<T = unknown, E = unknown> = {
+    error: E;
+    data?: undefined;
+} | {
+    error?: undefined;
+    data: T;
+};

@@ -64,9 +64,7 @@ class AppWebSocketServer(WebSocketServer):
 
         return account_id
 
-    async def handle_ws_client_conn_for_account_id(
-        self, websocket: ServerConnection, account_id: str
-    ) -> None:
+    async def handle_ws_client_conn_for_account_id(self, websocket: ServerConnection, account_id: str) -> None:
         topic = IPC_TOPIC_USER_PREFIX + account_id
         queue: asyncio.Queue[str] = self.ipc.subscribe(topic)
 
@@ -85,9 +83,7 @@ class AppWebSocketServer(WebSocketServer):
             self.logger.debug(f"WebSocket Server: Account {account_id} disconnected")
             self.ipc.unsubscribe(topic, queue)
 
-    async def handle_queue_message_loop(
-        self, websocket: ServerConnection, queue: asyncio.Queue[str]
-    ) -> None:
+    async def handle_queue_message_loop(self, websocket: ServerConnection, queue: asyncio.Queue[str]) -> None:
         while True:
             msg = await queue.get()
             await self.handle_queue_message(websocket, msg)

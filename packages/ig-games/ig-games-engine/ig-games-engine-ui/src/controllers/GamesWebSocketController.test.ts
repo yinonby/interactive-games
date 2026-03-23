@@ -1,60 +1,103 @@
 
 import { useClientLogger, type AppDispatch } from '@ig/app-engine-ui';
-import type { GamesWebSocketMessagePayloadT, GamesWebSocketMsgKindT } from '@ig/games-engine-models';
+import { createWebsocketChatUpdatesMessageHandler, type ChatWebsocketUpdatesConfigT } from '@ig/chat-ui';
 import type { LoggerAdapter } from '@ig/utils';
-import { handleGamesWebSocketMessage } from './GamesWebSocketController';
-
-jest.mock(
-  '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController',
-  () => ({
-    handleGamesInstanceWebSocketMessage: jest.fn(),
-  })
-);
-
-// import after mocks
-
 import {
-  handleGamesInstanceWebSocketMessage,
+  createGameInstanceUpdatesWebsocketMessageHandler,
+  type GameInstanceWebsocketUpdatesConfigT,
 } from '../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController';
+import { createWebsocketMessageHandler, type WebsocketUpdatesConfigT } from './GamesWebSocketController';
+
+jest.mock('@ig/chat-ui', () => ({
+  createWebsocketChatUpdatesMessageHandler: jest.fn(),
+}));
+
+jest.mock('../domains/game-instance/controller/ws-actions/GameInstanceWebSocketController', () => ({
+  createGameInstanceUpdatesWebsocketMessageHandler: jest.fn(),
+}));
 
 // tests
 
-describe('handleGamesWebSocketMessage', () => {
+describe('createWebsocketMessageHandler', () => {
   const dispatch = jest.fn() as unknown as AppDispatch;
   const logger: LoggerAdapter = useClientLogger();
+
+  const config: WebsocketUpdatesConfigT = {
+    gameInstanceWebsocketUpdatesConfig: {
+      gameInstanceUpdateNotificationName: 'gameInstanceUpdateNotification',
+    } as GameInstanceWebsocketUpdatesConfigT,
+    chatWebsocketUpdatesConfig: {
+      chatUpdateNotificationName: 'chatUpdateNotification',
+    } as ChatWebsocketUpdatesConfigT,
+  }
+
+  const mock_createGameInstanceUpdatesWebsocketMessageHandler =
+    createGameInstanceUpdatesWebsocketMessageHandler as jest.Mock;
+  const mock_createWebsocketChatUpdatesMessageHandler =
+    createWebsocketChatUpdatesMessageHandler as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('handles gamesInstanceUpdate messages', () => {
-    const payload: GamesWebSocketMessagePayloadT = { gameInstanceId: '123' };
+  it('handles games instance ipdate notification', () => {
+    // setup mocks
+    const mock_handler = jest.fn();
+    mock_createGameInstanceUpdatesWebsocketMessageHandler.mockReturnValue(mock_handler);
+    const payload = { gameInstanceId: '123' };
 
-    const wassHandled = handleGamesWebSocketMessage(
-      'gamesInstanceUpdate',
+    const wasHandled = createWebsocketMessageHandler(config)(
+      config.gameInstanceWebsocketUpdatesConfig.gameInstanceUpdateNotificationName,
       payload,
       dispatch,
       logger,
     );
 
-    expect(wassHandled).toBe(true);
-    expect(handleGamesInstanceWebSocketMessage).toHaveBeenCalledTimes(1);
-    expect(handleGamesInstanceWebSocketMessage).toHaveBeenCalledWith(
-      'gamesInstanceUpdate',
+    expect(wasHandled).toBe(true);
+    expect(mock_createGameInstanceUpdatesWebsocketMessageHandler).toHaveBeenCalledWith(
+      config.gameInstanceWebsocketUpdatesConfig,
+    );
+    expect(mock_handler).toHaveBeenCalledWith(
+      config.gameInstanceWebsocketUpdatesConfig.gameInstanceUpdateNotificationName,
       payload,
       dispatch,
     );
   });
 
+  it('handles chat ipdate notification', () => {
+    // setup mocks
+    const mock_handler = jest.fn();
+    mock_createWebsocketChatUpdatesMessageHandler.mockReturnValue(mock_handler);
+    const payload = { gameInstanceId: '123' };
+
+    const wasHandled = createWebsocketMessageHandler(config)(
+      config.chatWebsocketUpdatesConfig.chatUpdateNotificationName,
+      payload,
+      dispatch,
+      logger,
+    );
+
+    expect(wasHandled).toBe(true);
+    expect(mock_createWebsocketChatUpdatesMessageHandler).toHaveBeenCalledTimes(1);
+    expect(mock_createWebsocketChatUpdatesMessageHandler).toHaveBeenCalledWith(
+      config.chatWebsocketUpdatesConfig,
+    );
+    expect(mock_handler).toHaveBeenCalledWith(
+      config.chatWebsocketUpdatesConfig.chatUpdateNotificationName,
+      payload,
+      dispatch,
+    )
+  });
+
   it('does not handle other messages', () => {
-    const wassHandled = handleGamesWebSocketMessage(
-      'invalid-message' as GamesWebSocketMsgKindT,
+    const wasHandled = createWebsocketMessageHandler(config)(
+      'invalid-message',
       undefined,
       dispatch,
       logger,
     );
 
-    expect(wassHandled).toBe(false);
-    expect(handleGamesInstanceWebSocketMessage).not.toHaveBeenCalled();
+    expect(wasHandled).toBe(false);
+    expect(mock_createGameInstanceUpdatesWebsocketMessageHandler).not.toHaveBeenCalled();
   });
 });
