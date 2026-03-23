@@ -1,8 +1,7 @@
 
 import type { HttpAdapter } from '@ig/client-utils';
 import type { LoggerAdapter } from '@ig/utils';
-import type { AppRtkErrorT } from '../../../types/AppRtkTypes';
-import type { AppRtkQueryReturnValue } from './AppRtkDefs';
+import type { AppRtkErrorT, AppRtkQueryReturnValue } from '../../../types/AppRtkTypes';
 import { extractAppRtkError } from './AppRtkUtils';
 
 export const handleDefaultRequest = async (args: {

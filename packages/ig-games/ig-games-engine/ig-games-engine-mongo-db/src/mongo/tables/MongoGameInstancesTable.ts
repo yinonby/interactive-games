@@ -90,6 +90,7 @@ export class MongoGameInstancesTable extends MongoDbTable<GameInstanceT> impleme
   public async startPlaying(gameInstanceId: GameInstanceIdT): Promise<void> {
     await this.updateExactlyOne({ gameInstanceId }, {
       ['gameState.gameStatus']: 'inProcess',
+      ['gameState.levelStates.0.levelStatus']: 'levelInProcess',
     });
   }
 

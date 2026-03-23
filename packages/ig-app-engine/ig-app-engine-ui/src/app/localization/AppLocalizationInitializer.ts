@@ -1,7 +1,7 @@
 
+import { usePlatformUiLocalization } from '@ig/platform-ui';
 import i18next, { type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { usePlatformUiLocalization } from '../../../../../ig-lib/ig-client-lib/ig-platform-ui';
 
 // must be called from root _layout, before anything is rendered
 export const initI18n = (resources: Resource) => {

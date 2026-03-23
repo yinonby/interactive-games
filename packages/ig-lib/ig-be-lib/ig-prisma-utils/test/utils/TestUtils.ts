@@ -1,23 +1,20 @@
 
+import {
+  getPostgressContainerCreateTimeout,
+  type PostgresContainerAdapter, startPostgresContainer
+} from '@ig/dev-containers';
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { SqlDriverAdapterFactory } from '@prisma/client/runtime/client';
 import fs from 'fs';
 import path from 'path';
-import { isCI } from 'std-env';
-import { GenericContainer, type StartedTestContainer } from 'testcontainers';
 
-const exposedPort = 5432;
 let _sqlDbTestContainerSinglton: SqlDbTestContainer | null = null;
 
 export class SqlDbTestContainer {
-  constructor(private container: StartedTestContainer) {}
+  constructor(private postgresContainerAdapter: PostgresContainerAdapter) {}
 
   public getConnectionString(): string {
-    const host = this.container.getHost();
-    const port = this.container.getMappedPort(exposedPort);
-    const databaseUrl = `postgresql://postgres:pass@${host}:${port}/postgres`;
-
-    return databaseUrl;
+    return this.postgresContainerAdapter.getConnectionString();
   }
 
   public getTestingSqlDriverAdapterFactory(): SqlDriverAdapterFactory {
@@ -29,7 +26,7 @@ export class SqlDbTestContainer {
   }
 
   public async stop(): Promise<void> {
-    await this.container.stop();
+    await this.postgresContainerAdapter.stop();
   }
 }
 
@@ -39,12 +36,9 @@ export async function startTestingSqlDbContainer(): Promise<SqlDbTestContainer> 
   }
 
   try {
-    const container = await new GenericContainer('postgres:16')
-      .withEnvironment({'POSTGRES_PASSWORD': 'pass'})
-      .withExposedPorts(exposedPort)
-      .start();
+    const postgresContainerAdapter: PostgresContainerAdapter = await startPostgresContainer();
 
-    _sqlDbTestContainerSinglton = new SqlDbTestContainer(container);
+    _sqlDbTestContainerSinglton = new SqlDbTestContainer(postgresContainerAdapter);
     return _sqlDbTestContainerSinglton;
   } catch (err) {
     console.error('Error starting SQL DB test container, please run docker');
@@ -53,8 +47,7 @@ export async function startTestingSqlDbContainer(): Promise<SqlDbTestContainer> 
 }
 
 export const getSqlDbTestContainerCreateTimeout = (): number => {
-  // use 60 seconds in CI
-  return isCI ? 60000 : 10000;
+  return getPostgressContainerCreateTimeout();
 }
 
 export function getTestingSqlDbContainerSinglton(): SqlDbTestContainer {

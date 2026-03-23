@@ -5,7 +5,10 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./expo": "./expo-index.ts"
+  },
   "scripts": {
     "build": "echo nothing to do",
 

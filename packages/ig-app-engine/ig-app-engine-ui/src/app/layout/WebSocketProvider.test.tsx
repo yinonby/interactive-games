@@ -1,8 +1,7 @@
 
-import type { WebSocketAdapter } from '@ig/client-utils';
+import type { WebsocketAdapter } from '@ig/client-utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
-import type { AppWebSocketMessagePayloadT, AppWebSocketRcvMsgKindT } from '../../types/AppWebSocketMsgTypes';
 import { WebSocketProvider } from './WebSocketProvider';
 
 // mocks
@@ -12,7 +11,7 @@ describe("WebSocketProvider", () => {
   const disconnectMock = jest.fn();
   const subscribeMock = jest.fn();
   const unsubscribeMock = jest.fn();
-  const wsClient: WebSocketAdapter<AppWebSocketRcvMsgKindT, never, AppWebSocketMessagePayloadT> = {
+  const wsClient: WebsocketAdapter = {
     connect: connectMock,
     disconnect: disconnectMock,
     subscribe: subscribeMock,
@@ -56,7 +55,7 @@ describe("WebSocketProvider", () => {
     // capture the subscribed handler
     const wsHandler = subscribeMock.mock.calls[0][0];
 
-    const msgKind = "update" as AppWebSocketRcvMsgKindT;
+    const msgKind = "update";
     const payload = { foo: "bar" };
 
     wsHandler(msgKind, payload);

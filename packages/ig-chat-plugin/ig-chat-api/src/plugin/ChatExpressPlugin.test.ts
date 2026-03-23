@@ -3,7 +3,7 @@ import type { ExpressAppInfoT } from '@ig/be-utils';
 import type { ChatDbAdapter } from '@ig/chat-be-models';
 import type { Router } from 'express';
 import * as graphqlModule from '../graphql/server/GraphqlRouter';
-import type { ChatPluginConfigT } from '../types/ChatPluginTypes';
+import type { ChatPluginConfigT, ChatUpdateNotificationAdapter } from '../types/ChatPluginTypes';
 import { chatApiPlugin } from './ChatExpressPlugin';
 
 describe('chatApiPlugin', () => {
@@ -23,11 +23,15 @@ describe('chatApiPlugin', () => {
       chatDbAdapter: {
         init: vi.fn(),
       } as unknown as ChatDbAdapter,
+      chatUpdateNotificationAdapter: {
+        init: vi.fn(),
+      } as unknown as ChatUpdateNotificationAdapter,
     } as ChatPluginConfigT;
 
     const router = await chatApiPlugin.initRouter(appInfoMock, pluginConfigMock);
 
-    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(pluginConfigMock.chatDbAdapter);
+    expect(graphqlModule.createGraphqlRouter).toHaveBeenCalledWith(pluginConfigMock.chatDbAdapter,
+      pluginConfigMock.chatUpdateNotificationAdapter);
     expect(router).toBe(mockRouter);
   });
 });

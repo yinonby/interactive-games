@@ -1,7 +1,9 @@
 
 import type { AppDispatch } from '@ig/app-engine-ui';
-import type { GamesInstanceUpdateWebSocketMsgKindT } from '@ig/games-engine-models';
-import { handleGamesInstanceWebSocketMessage } from './GameInstanceWebSocketController';
+import {
+  createGameInstanceUpdatesWebsocketMessageHandler,
+  type GameInstanceWebsocketUpdatesConfigT
+} from './GameInstanceWebSocketController';
 
 // mock the RTK API util
 jest.mock("../../model/rtk/GameInstanceRtkApi", () => ({
@@ -13,12 +15,27 @@ jest.mock("../../model/rtk/GameInstanceRtkApi", () => ({
 // import mocked util AFTER jest.mock
 import { gameInstanceRtkApiUtil } from '../../model/rtk/GameInstanceRtkApi';
 
-describe("handleGamesInstanceWebSocketMessage", () => {
+describe("createGameInstanceUpdatesWebsocketMessageHandler(config)", () => {
   const dispatch = jest.fn() as unknown as AppDispatch;
   const invalidateTagsSpy = jest.spyOn(gameInstanceRtkApiUtil, 'invalidateTags');
+  const config: GameInstanceWebsocketUpdatesConfigT = {
+    gameInstanceUpdateNotificationName: 'gamesInstanceUpdate',
+    gameInstanceIdFieldName: 'gameInstanceId',
+  }
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it("does not dispatch when payload is undefined", () => {
+    createGameInstanceUpdatesWebsocketMessageHandler(config)(
+      config.gameInstanceUpdateNotificationName,
+      undefined,
+      dispatch
+    );
+
+    expect(gameInstanceRtkApiUtil.invalidateTags).not.toHaveBeenCalled();
+    expect(dispatch).not.toHaveBeenCalled();
   });
 
   it("dispatches invalidateTags on gamesInstanceUpdate", () => {
@@ -29,8 +46,8 @@ describe("handleGamesInstanceWebSocketMessage", () => {
       invalidateResult
     );
 
-    handleGamesInstanceWebSocketMessage(
-      "gamesInstanceUpdate",
+    createGameInstanceUpdatesWebsocketMessageHandler(config)(
+      config.gameInstanceUpdateNotificationName,
       { gameInstanceId: "giid-1" },
       dispatch
     );
@@ -44,14 +61,12 @@ describe("handleGamesInstanceWebSocketMessage", () => {
     expect(dispatch).toHaveBeenCalledWith(invalidateResult);
   });
 
-  it("throws on invalid message kind", () => {
-    expect(() =>
-      handleGamesInstanceWebSocketMessage(
-        "invalid-message" as GamesInstanceUpdateWebSocketMsgKindT,
-        { gameInstanceId: "giid-1" },
-        dispatch
-      )
-    ).toThrow("Invalid message type");
+  it("does not dispatch when message kind is invalid", () => {
+    createGameInstanceUpdatesWebsocketMessageHandler(config)(
+      "invalid-message",
+      { gameInstanceId: "giid-1" },
+      dispatch
+    );
 
     expect(gameInstanceRtkApiUtil.invalidateTags).not.toHaveBeenCalled();
     expect(dispatch).not.toHaveBeenCalled();

@@ -1,4 +1,5 @@
 
+import type { ChatUpdateNotificationAdapter } from '@/types/ChatPluginTypes';
 import { ApolloServer } from '@apollo/server';
 import type { ChatDbAdapter, ChatMessagesTableAdapter } from '@ig/chat-be-models';
 import { buildFullTestChatMessage } from '@ig/chat-models/test-utils';
@@ -21,8 +22,10 @@ describe('createChatSchema', () => {
       getChatMessagesTableAdapter: () => mock_GamesChatMessagesTableAdapter,
     } as ChatDbAdapter;
 
+    const mock_chatUpdateNotificationAdapter = {} as ChatUpdateNotificationAdapter;
+
     // --- create schema ---
-    const schema = createChatSchema(mock_ChatDbAdapter);
+    const schema = createChatSchema(mock_ChatDbAdapter, mock_chatUpdateNotificationAdapter);
 
     // --- create Apollo server ---
     const server = new ApolloServer({ schema });

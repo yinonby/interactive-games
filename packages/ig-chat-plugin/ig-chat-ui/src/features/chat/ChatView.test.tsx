@@ -10,6 +10,19 @@ import * as ChatControllerModule from '../../domains/chat/controller/user-action
 import * as ChatModelModule from '../../domains/chat/model/rtk/ChatModel';
 import { ChatView } from './ChatView';
 
+// mocks
+
+jest.mock('./ChatSyncProvider', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ChatSyncProvider: View,
+  };
+});
+
+// tests
+
 describe('ChatView', () => {
   const spy_useChatModel = jest.spyOn(ChatModelModule, 'useChatModel');
   const spy_useChatController = jest.spyOn(ChatControllerModule, 'useChatController');

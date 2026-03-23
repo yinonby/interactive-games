@@ -16,7 +16,7 @@
   "scripts": {
     "start": "npm run reset:watchman && npm run start:dev",
     "start:dev": "./scripts/python/src/start/start-all-dev.sh",
-    "start:redis": "docker run --name redis -p 6379:6379 -d redis",
+    "start:redis": "docker run --name redis -p 4500:6379 -d redis",
 
     "test": "npm run husky:verify:setup && npm run test:all",
     "test:all": "./scripts/python/src/test/test-all.py",

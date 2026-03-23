@@ -1,25 +1,19 @@
 
 import type { LoggerAdapter } from '@ig/utils';
-import type { WebSocketAdapter, WebSocketMessageHandlerT } from '../../types/WebSocketTypes';
+import type { WebsocketAdapter, WebsocketMessageHandlerT, WebsocketMessagePayloadT } from '../../types/WebSocketTypes';
 
-type WsRcvMessageT<RCV_MSG_KIND, PAYLOAD_T = unknown> = {
-  msgKind: RCV_MSG_KIND,
-  payload?: PAYLOAD_T,
+type WsRcvMessageT = {
+  msgKind: string, // must match IG_ENV__WS__NOTIFICATION_KIND_FIELD_NAME
+  payload?: WebsocketMessagePayloadT, // must match IG_ENV__WS__NOTIFICATION_PAYLOAD_FIELD_NAME
 }
 
-type WsSndMessageT<SND_MSG_KIND, PAYLOAD_T = unknown> = {
-  msgKind: SND_MSG_KIND,
-  payload?: PAYLOAD_T,
-}
-
-export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> implements
-  WebSocketAdapter<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T>
-{
+export class WebSocketClient implements WebsocketAdapter {
   private socket?: WebSocket;
-  private handlers = new Set<WebSocketMessageHandlerT<RCV_MSG_KIND, PAYLOAD_T>>();
+  private handlers = new Set<WebsocketMessageHandlerT>();
   private reconnectTimeout?: ReturnType<typeof setTimeout>;
   private isAwaitingReconnect = false;
   private manuallyClosed = false;
+  private queuedSendMessages: object[] = []; // queue for down time
 
   constructor(
     private logger: LoggerAdapter,
@@ -31,15 +25,18 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
     if (this.socket) return;
 
     this.manuallyClosed = false;
+
+    this.logger.info('[WS] connecting...');
     this.socket = new WebSocket(this.url);
 
     this.socket.onopen = (): void => {
       this.logger.info('[WS] connected');
+      this.sendMessagesInQueue(); // send any messages queued in down time
     };
 
     this.socket.onmessage = (event): void => {
       try {
-        const wsMessage: WsRcvMessageT<RCV_MSG_KIND, PAYLOAD_T> = JSON.parse(event.data) as WsRcvMessageT<RCV_MSG_KIND, PAYLOAD_T>;
+        const wsMessage: WsRcvMessageT = JSON.parse(event.data) as WsRcvMessageT;
         if (wsMessage.msgKind === undefined) {
           this.logger.warn('[WS] Missing msgKind', event.data);
           throw new Error("Missing msgKind");
@@ -73,24 +70,33 @@ export class WebSocketClient<RCV_MSG_KIND, SND_MSG_KIND, PAYLOAD_T = unknown> im
     this.socket = undefined;
   }
 
-  public send(msgKind: SND_MSG_KIND, payload?: PAYLOAD_T): void {
+  public send(message: object): void {
     if (!this.socket) {
       this.logger.warn('[WS] not connected');
       return;
-    } else if (this.socket.readyState !== this.socket.OPEN) {
-      this.logger.warn('[WS] not ready');
+    }
+
+    if (this.socket.readyState !== this.socket.OPEN) {
+      this.logger.warn('[WS] not ready, queueing message');
+      this.queuedSendMessages.push(message);
+    } else {
+      this.socket.send(JSON.stringify(message));
+    }
+  }
+
+  private sendMessagesInQueue(): void {
+    if (!this.socket) {
+      this.logger.warn('[WS] not connected');
       return;
     }
 
-    const wsSendMessage: WsSndMessageT<SND_MSG_KIND, PAYLOAD_T> = {
-      msgKind: msgKind,
-      payload: payload,
+    this.logger.info('[WS] sending messages from queue');
+    for (const wsSendMessage of this.queuedSendMessages) {
+      this.socket.send(JSON.stringify(wsSendMessage));
     }
-
-    this.socket.send(JSON.stringify(wsSendMessage));
   }
 
-  public subscribe(handler: WebSocketMessageHandlerT<RCV_MSG_KIND, PAYLOAD_T>): () => boolean {
+  public subscribe(handler: WebsocketMessageHandlerT): () => boolean {
     this.handlers.add(handler);
     return () => this.handlers.delete(handler);
   }

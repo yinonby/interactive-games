@@ -1,9 +1,13 @@
 
+import { getExpoEnvVars } from '@ig/env/expo';
 import dotenv from 'dotenv';
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 dotenv.config({ override: true, path: "../../.env" }); // load env file
 dotenv.config({ override: true, path: `../../.env.${process.env.NODE_ENV}` }); // load env-specific env file
+
+const expoEnvVars = getExpoEnvVars();
+const { webBaseUrl, apiBaseUrl, wssBaseUrl } = expoEnvVars;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -12,9 +16,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     ...config.extra,
     env: {
-      appUrl: process.env.IG_ENV__WEB__BASE_URL,
-      apiUrl: process.env.IG_ENV__API__BASE_URL,
-      wssUrl: process.env.IG_ENV__WSS__BASE_URL,
+      appUrl: webBaseUrl,
+      apiUrl: apiBaseUrl,
+      wssUrl: wssBaseUrl,
+      expoEnvVars: expoEnvVars,
     },
   },
 });
