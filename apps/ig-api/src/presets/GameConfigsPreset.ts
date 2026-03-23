@@ -65,7 +65,18 @@ const wordleEnGameConfig: GameConfigT = {
   // for full public config
   extraTimeMinutes: 10,
   extraTimeLimitDurationInfo: { kind: 'limited', durationMs: MIN_TO_MS(20) },
-  publicLevelConfigs: [],
+  publicLevelConfigs: [{
+    levelName: 'Wordle - EAsy',
+    publicPluginConfig: {
+      kind: 'wordle',
+      publicWordleConfig: {
+        langCode: 'en',
+        wordLength: 5,
+        difficulty: 'easy',
+        allowedGuessesNum: 6,
+      }
+    }
+  }],
 }
 
 const wordleEsGameConfig: GameConfigT = {

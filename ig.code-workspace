@@ -7,11 +7,10 @@
   "settings": {
     "workbench.tree.expandMode": "doubleClick",
     "git.ignoreLimitWarning": true,
-    "typescript.tsdk": "./node_modules/typescript/lib",
-    "typescript.preferences.preferTypeOnlyAutoImports": true,
-    "typescript.preferences.quoteStyle": "single",
-    "javascript.preferences.quoteStyle": "single",
-    "javascript.updateImportsOnFileMove.enabled": "always",
+    "js/ts.tsdk.path": "./node_modules/typescript/lib",
+    "js/ts.preferences.preferTypeOnlyAutoImports": true,
+    "js/ts.preferences.quoteStyle": "single",
+    "js/ts.updateImportsOnFileMove.enabled": "always",
     "editor.rulers": [
       120
     ],

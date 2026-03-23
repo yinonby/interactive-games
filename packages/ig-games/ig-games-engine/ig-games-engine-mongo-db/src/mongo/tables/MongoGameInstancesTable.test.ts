@@ -143,6 +143,9 @@ describe('MongoGameInstancesTable', () => {
         gameInstanceId: 'GI1',
         gameState: buildGameStateMock({
           gameStatus: 'notStarted',
+          levelStates: [buildLevelStateMock({
+            levelStatus: 'notStarted',
+          })],
         })
       });
       const instance = new MongoGameInstancesTable();
@@ -156,6 +159,7 @@ describe('MongoGameInstancesTable', () => {
 
       const res2 = await instance.getPublicGameInstance('GI1');
       expect(res2?.gameState.gameStatus).toEqual('inProcess');
+      expect(res2?.gameState.levelStates[0].levelStatus).toEqual('levelInProcess');
     });
   });
 

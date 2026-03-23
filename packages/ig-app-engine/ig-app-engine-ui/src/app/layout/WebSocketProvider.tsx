@@ -1,19 +1,18 @@
 
-import { useEffect, useRef, type ReactNode } from 'react';
-import type { WebSocketAdapter, WebSocketMessageHandlerT } from '../../../../../ig-lib/ig-client-lib/ig-client-utils';
+import type { WebsocketAdapter, WebsocketMessageHandlerT } from '@ig/client-utils';
+import type { TestableComponentT } from '@ig/rnui';
+import { useEffect, useRef, type PropsWithChildren } from 'react';
 
-export type WebSocketProviderPropsT<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T> = {
-  wsClient: WebSocketAdapter<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T>,
-  msgHandler: WebSocketMessageHandlerT<MSG_KIND_T, PAYLOAD_T>,
-  children: ReactNode,
-  testID?: string,
+export type WebSocketProviderPropsT = TestableComponentT & {
+  wsClient: WebsocketAdapter,
+  msgHandler: WebsocketMessageHandlerT,
 };
 
-export function WebSocketProvider<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T>(
-  props: WebSocketProviderPropsT<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T>
+export function WebSocketProvider(
+  props: PropsWithChildren<WebSocketProviderPropsT>
 ) {
   const { wsClient, msgHandler, children } = props;
-  const wsClientRef = useRef<WebSocketAdapter<MSG_KIND_T, SND_MSG_KIND, PAYLOAD_T>>(wsClient);
+  const wsClientRef = useRef(wsClient);
 
   useEffect(() => {
     wsClientRef.current.connect();

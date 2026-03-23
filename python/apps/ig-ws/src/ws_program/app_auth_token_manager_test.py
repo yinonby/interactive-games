@@ -2,9 +2,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from ws_program.app_defs import AUTH_JWT_ACCOUNT_ID_FIELD_NAME, AUTH_JWT_USER_ID_FIELD_NAME
-
 from .app_auth_token_manager import AppAuthTokenManager
+
+AUTH_JWT_ACCOUNT_ID_FIELD_NAME = "accout_id"
+AUTH_JWT_USER_ID_FIELD_NAME = "user_id"
+app_auth_env_vars = {
+    "AUTH_JWT_ACCOUNT_ID_FIELD_NAME": AUTH_JWT_ACCOUNT_ID_FIELD_NAME,
+    "AUTH_JWT_USER_ID_FIELD_NAME": AUTH_JWT_USER_ID_FIELD_NAME,
+}
 
 
 @pytest.mark.parametrize(
@@ -22,7 +27,7 @@ from .app_auth_token_manager import AppAuthTokenManager
 )
 def test_get_user_id_from_auth_token(monkeypatch, decode_side_effect, decoded_token, expected):
     # Arrange
-    manager = AppAuthTokenManager(jwt_secret="secret", jwt_algorithms=["HS256"])
+    manager = AppAuthTokenManager(jwt_secret="secret", jwt_algorithms=["HS256"], app_auth_env_vars=app_auth_env_vars)
 
     # Patch decode_token on the internal jwt_utils
     if decode_side_effect:
@@ -57,7 +62,7 @@ def test_get_user_id_from_auth_token(monkeypatch, decode_side_effect, decoded_to
 )
 def test_get_account_id_from_auth_token(monkeypatch, decode_side_effect, decoded_token, expected):
     # Arrange
-    manager = AppAuthTokenManager(jwt_secret="secret", jwt_algorithms=["HS256"])
+    manager = AppAuthTokenManager(jwt_secret="secret", jwt_algorithms=["HS256"], app_auth_env_vars=app_auth_env_vars)
 
     # Patch decode_token on the internal jwt_utils
     if decode_side_effect:

@@ -8,6 +8,7 @@ export * from './src/express/ExpressApp';
 export * from './src/graphql/GraphqlAuthDirective';
 export * from './src/jwt/JwtUtils';
 export * from './src/logger/BeLogger';
+export * from './src/redis/RedisClient';
 export * from './src/types/exported/DbTypes';
 export * from './src/types/exported/ExpressTypes';
 

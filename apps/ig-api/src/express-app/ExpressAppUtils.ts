@@ -19,6 +19,7 @@ import { useGamesPluginContainer } from './GamesPlugin';
 export const useExpressAppStarterInfo = (
   mongoConnString: string,
   sqlDbConnString: string,
+  redisUrl: string,
 ): ExpressAppStarterInfoT => {
   const apiEnvVars = getApiEnvVars();
 
@@ -35,7 +36,8 @@ export const useExpressAppStarterInfo = (
   const appEnginePluginContainer: ExpressPluginContainerT<unknown> = useAppEnginePluginContainer(engineMongoDb);
   const authPluginContainer: ExpressPluginContainerT<AuthPluginConfigT> = useAuthPluginContainer(authMongoDb,
     engineMongoDb);
-  const chatPluginContainer: ExpressPluginContainerT<ChatPluginConfigT> = useChatPluginContainer(gamesPrismaDb);
+  const chatPluginContainer: ExpressPluginContainerT<ChatPluginConfigT> = useChatPluginContainer(redisUrl,
+    gamesPrismaDb, apiEnvVars.redis);
   const gamesPluginContainer: ExpressPluginContainerT<GamesPluginConfigT> =
     useGamesPluginContainer(gamesMongoDb, engineMongoDb);
 

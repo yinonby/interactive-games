@@ -8,8 +8,12 @@ export const chatApiPlugin: ExpressPluginT<ChatPluginConfigT> = {
   initRouter: async (appInfo: ExpressAppInfoT, publicPluginConfig: ChatPluginConfigT): Promise<Router> => {
     // init prisma db
     await publicPluginConfig.chatDbAdapter.init();
+    await publicPluginConfig.chatUpdateNotificationAdapter.init();
 
-    const router = await createGraphqlRouter(publicPluginConfig.chatDbAdapter);
+    const router = await createGraphqlRouter(
+      publicPluginConfig.chatDbAdapter,
+      publicPluginConfig.chatUpdateNotificationAdapter,
+    );
 
     return router;
   },

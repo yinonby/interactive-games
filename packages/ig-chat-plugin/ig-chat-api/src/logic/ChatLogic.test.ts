@@ -1,3 +1,4 @@
+import type { ChatUpdateNotificationAdapter } from '@/types/ChatPluginTypes';
 import type { ChatMessagesTableAdapter } from '@ig/chat-be-models';
 import type { ChatMessageT, CreateChatMessageInputT } from '@ig/chat-models';
 import { buildFullTestChatMessage } from '@ig/chat-models/test-utils';
@@ -15,6 +16,9 @@ describe('ChatLogic', () => {
     getNextChatMessages: mock_getNextChatMessages,
     createChatMessage: mock_createChatMessage,
   };
+  const mock_chatUpdateNotificationAdapter = {
+    onChatUpdate: vi.fn(),
+  } as unknown as ChatUpdateNotificationAdapter;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -29,7 +33,7 @@ describe('ChatLogic', () => {
 
       mock_getMostRecentChatMessages.mockResolvedValue(chatMessages);
 
-      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter);
+      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter, mock_chatUpdateNotificationAdapter);
       const result = await chatLogic.getMostRecentChatMessages('123', 5);
 
       expect(mock_getMostRecentChatMessages).toHaveBeenCalledWith('123', 5);
@@ -46,7 +50,7 @@ describe('ChatLogic', () => {
 
       mock_getPreviousChatMessages.mockResolvedValue(chatMessages);
 
-      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter);
+      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter, mock_chatUpdateNotificationAdapter);
       const result = await chatLogic.getPreviousChatMessages('123', 3, 5);
 
       expect(mock_getPreviousChatMessages).toHaveBeenCalledWith('123', 3, 5);
@@ -63,7 +67,7 @@ describe('ChatLogic', () => {
 
       mock_getNextChatMessages.mockResolvedValue(chatMessages);
 
-      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter);
+      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter, mock_chatUpdateNotificationAdapter);
       const result = await chatLogic.getNextChatMessages('123', 3, 5);
 
       expect(mock_getNextChatMessages).toHaveBeenCalledWith('123', 3, 5);
@@ -85,7 +89,7 @@ describe('ChatLogic', () => {
       const expectedMessageId = 'msg-1';
       mock_createChatMessage.mockResolvedValue(expectedMessageId);
 
-      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter);
+      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter, mock_chatUpdateNotificationAdapter);
       const result = await chatLogic.createChatMessage(input);
 
       expect(mock_createChatMessage).toHaveBeenCalledWith(
@@ -96,6 +100,7 @@ describe('ChatLogic', () => {
         'Hello',
         1234567890,
       );
+      expect(mock_chatUpdateNotificationAdapter.onChatUpdate).toHaveBeenCalledWith('123');
       expect(result).toBe(expectedMessageId);
     });
 
@@ -112,7 +117,7 @@ describe('ChatLogic', () => {
       const error = new Error('Database error');
       mock_createChatMessage.mockRejectedValue(error);
 
-      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter);
+      const chatLogic = new ChatLogic(mock_ChatMessagesTableAdapter, mock_chatUpdateNotificationAdapter);
       await expect(chatLogic.createChatMessage(input)).rejects.toThrow('Database error');
     });
   });

@@ -116,8 +116,8 @@ export const gameInstanceGraphqlTypesTypeDefs = gql`
 
   type LevelState {
     levelStatus: LevelStatusEnum!
-    startTimeTs: Int
-    solvedTimeTs: Int
+    startTimeTs: Float
+    solvedTimeTs: Float
 
     pluginState: PluginState!
   }
@@ -137,9 +137,9 @@ export const gameInstanceGraphqlTypesTypeDefs = gql`
 
   type GameState {
     gameStatus: GameStatusEnum!
-    startTimeTs: Int
-    lastGivenExtraTimeTs: Int
-    finishTimeTs: Int
+    startTimeTs: Float
+    lastGivenExtraTimeTs: Float
+    finishTimeTs: Float
     levelStates: [LevelState!]!
   }
 

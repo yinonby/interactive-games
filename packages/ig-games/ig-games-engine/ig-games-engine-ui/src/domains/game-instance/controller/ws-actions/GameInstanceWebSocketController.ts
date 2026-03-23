@@ -1,18 +1,30 @@
 
 import type { AppDispatch } from '@ig/app-engine-ui';
-import type { GamesInstanceUpdateWebSocketMsgKindT, GamesInstanceWebSocketMessagePayloadT } from '@ig/games-engine-models';
+import type { WebsocketMessagePayloadT } from '@ig/client-utils';
 import { gameInstanceRtkApiUtil } from '../../model/rtk/GameInstanceRtkApi';
 
-export const handleGamesInstanceWebSocketMessage = (
-  msgKind: GamesInstanceUpdateWebSocketMsgKindT,
-  payload: GamesInstanceWebSocketMessagePayloadT,
+export type GameInstanceWebsocketUpdatesConfigT = {
+  gameInstanceUpdateNotificationName: string,
+  gameInstanceIdFieldName: string,
+}
+
+export const createGameInstanceUpdatesWebsocketMessageHandler = (config: GameInstanceWebsocketUpdatesConfigT) => (
+  msgKind: string,
+  payload: WebsocketMessagePayloadT | undefined,
   dispatch: AppDispatch,
 ): void => {
-  if (msgKind === "gamesInstanceUpdate") {
+  if (payload === undefined) {
+    return;
+  }
+
+  if (msgKind === config.gameInstanceUpdateNotificationName) {
     dispatch(
-      gameInstanceRtkApiUtil.invalidateTags([{ type: 'GameInstanceTag', id: payload.gameInstanceId }])
+      gameInstanceRtkApiUtil.invalidateTags([{
+        type: 'GameInstanceTag',
+        id: payload[config.gameInstanceIdFieldName] as string,
+      }])
     );
   } else {
-    throw new Error("Invalid message type");
+    return;
   }
 }

@@ -4,14 +4,16 @@ import { expressMiddleware } from '@as-integrations/express5';
 import { mergeSchemas } from '@graphql-tools/schema';
 import type { ChatDbAdapter } from '@ig/chat-be-models';
 import { Router } from 'express';
+import type { ChatUpdateNotificationAdapter } from '../../types/ChatPluginTypes';
 import { createChatSchema } from '../chat/ChatSchema';
 
 // returns an express router for this graphql endpoint
 export async function createGraphqlRouter(
   chatDbAdapter: ChatDbAdapter,
+  chatUpdateNotificationAdapter: ChatUpdateNotificationAdapter,
 ): Promise<Router> {
   const router = Router();
-  const chatSchema = createChatSchema(chatDbAdapter);
+  const chatSchema = createChatSchema(chatDbAdapter, chatUpdateNotificationAdapter);
 
   // create the combined schema
   const schema = mergeSchemas({

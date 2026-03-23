@@ -1,9 +1,15 @@
 
 export { useAppErrorHandling } from './src/app/error-handling/AppErrorHandlingProvider';
-export { useAppConfig, type AppConfigContextT } from './src/app/layout/AppConfigProvider';
+export {
+  useAppConfig,
+  useWebsocketTopicSubscriptionProvider, type AppConfigContextT
+} from './src/app/layout/AppConfigProvider';
 export { AppRootLayout } from './src/app/layout/AppRootLayout';
 export { initI18n } from './src/app/localization/AppLocalizationInitializer';
-export { useAppLocalization, type AppLocalizationContextT } from './src/app/localization/AppLocalizationProvider';
+export {
+  useAppLocalization,
+  type AppLocalizationContextT
+} from './src/app/localization/AppLocalizationProvider';
 export * from './src/app/model/reducers/AppReduxStore';
 export * from './src/app/model/reducers/GameUiConfigReducer';
 export * from './src/app/model/rtk/AppRtkApi';
