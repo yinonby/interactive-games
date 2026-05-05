@@ -9,7 +9,6 @@ import {
 } from '@ig/be-utils';
 import { generateUuidv4, type LoggerAdapter } from '@ig/utils';
 import { type Request, type Response } from 'express';
-import { EngineApiError } from '../../types/EngineApiTypes';
 
 export type AuthJwtPropNamesT = {
   accountIdFieldName: string,
@@ -54,17 +53,17 @@ export class AppEngineSignupPlugin implements SignupPluginAdapter {
       decodedJwt = decodeJwt(cookie, this.jwtSecret);
     } catch (error: unknown) {
       this.logger.debug('Invalid Jwt token', error);
-      throw new EngineApiError('Invalid Jwt token', 'engineApiError:invalidJwt');
+      return null;
     }
 
     if (typeof decodedJwt === 'string') {
       this.logger.debug('Invalid Jwt payload');
-      throw new EngineApiError('Invalid Jwt payload', 'engineApiError:invalidJwt');
+      return null;
     }
 
     if (decodedJwt[this.authJwtPropNames.accountIdFieldName] === undefined) {
       this.logger.debug('Jwt token missing account id');
-      throw new EngineApiError('Jwt token missing account id', 'engineApiError:invalidJwt');
+      return null;
     }
 
     const accountId: AccountIdT = decodedJwt[this.authJwtPropNames.accountIdFieldName] as AccountIdT;

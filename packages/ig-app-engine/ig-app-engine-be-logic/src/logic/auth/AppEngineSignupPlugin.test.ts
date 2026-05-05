@@ -108,7 +108,7 @@ describe('AppEngineSignupPlugin', () => {
       expect(authId).toEqual(null);
     });
 
-    it('fails when decode throws', async () => {
+    it('returns null when decode throws', async () => {
       spy_decodeJwt.mockImplementation(() => { throw new Error('ERROR') });
 
       const plugin = new AppEngineSignupPlugin(
@@ -126,10 +126,12 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
+
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
     });
 
-    it('fails when jwt payload is a string', async () => {
+    it('returns null when jwt payload is a string', async () => {
       spy_decodeJwt.mockReturnValue('invalid string token');
 
       const plugin = new AppEngineSignupPlugin(
@@ -147,10 +149,12 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
+
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
     });
 
-    it('fails when jwt payload does not contain account id', async () => {
+    it('returns null when jwt payload does not contain account id', async () => {
       spy_decodeJwt.mockReturnValue({});
 
       const plugin = new AppEngineSignupPlugin(
@@ -168,7 +172,9 @@ describe('AppEngineSignupPlugin', () => {
           [authJwtPropNames.cookieName]: 'COOKIE',
         }
       } as Request;
-      await expect(plugin.extractRequestAuthId(req)).rejects.toThrow();
+
+      const authId = await plugin.extractRequestAuthId(req);
+      expect(authId).toEqual(null);
     });
 
     it('returns null when account does not exist', async () => {
