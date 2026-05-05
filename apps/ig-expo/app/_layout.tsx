@@ -2,12 +2,15 @@
 import { useGameTheme, useImageAssetDefs } from '@/src/utils/AssetDefs';
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from '@/src/utils/GameUiConfig';
 import { getI18nResources } from '@/src/utils/TranslationsAssetDefs';
-import { AppRootLayout, initI18n, useAppErrorHandling, useClientLogger } from '@ig/app-engine-ui';
+import { AppRootLayout, initI18n, useAppErrorHandling, useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { AuthProvider } from '@ig/auth-ui';
 import { ChatProvider } from '@ig/chat-ui';
 import { GamesProvider, createWebsocketMessageHandler, type WebsocketUpdatesConfigT } from '@ig/games-engine-ui';
+import { RnuiImage, RnuiText } from '@ig/rnui';
 import Constants from 'expo-constants';
 import { Stack } from 'expo-router';
+import type { ReactNode } from 'react';
+import { View } from 'react-native';
 
 type ExpoEnvVarsT = {
   webBaseUrl: string,
@@ -76,6 +79,35 @@ function InnerLayout() {
 
   const { websocketConfig } = expoEnvVars;
 
+  const buildHeaderTitleFn = (subtitle?: string): (props: {
+    children: string,
+    tintColor?: string | undefined,
+  }) => ReactNode => {
+    function HeaderTitle(props: {
+      children: string;
+      tintColor?: string;
+    }): ReactNode {
+      const assetDefs = useImageAssetDefs();
+      const genericStyles = useGenericStyles();
+
+      return (
+        <View style={[genericStyles.flexRow, genericStyles.spacing, genericStyles.flex1 ]}>
+          <View style={{ width: 32 }} >
+            <RnuiImage imageSource={assetDefs['app-logo-32']} height={32} />
+          </View>
+
+          {subtitle &&
+            <RnuiText variant='titleMedium'>
+              {subtitle}
+            </RnuiText>
+          }
+        </View>
+      );
+    }
+
+    return HeaderTitle;
+  }
+
   return (
     <AuthProvider
       logger={logger}
@@ -88,12 +120,12 @@ function InnerLayout() {
           gameInstanceUpdateNotificationTopicPrefix={websocketConfig.gameInstanceUpdateNotificationConfig.gameInstanceUpdateNotificationTopicPrefix}
         > { /* depends on AppRootLayout and AuthProvider */}
           <Stack>
-            <Stack.Screen name="index" options={{ title: 'Game & More' }} />
-            <Stack.Screen name="app/games/index" options={{ title: 'Game & More / Games' }} />
-            <Stack.Screen name="app/games/dashboard" options={{ title: 'Game & More / All Games' }} />
-            <Stack.Screen name="app/games/accept-invite/[invitationCode]" options={{ title: 'Game & More / Accept Invitation' }} />
-            <Stack.Screen name="app/games/[gameConfigId]/dashboard" options={{ title: 'Game & More / Your Games' }} />
-            <Stack.Screen name="app/games/instance/[gameInstanceId]/dashboard" options={{ title: 'Game & More / Game Dashboard' }} />
+            <Stack.Screen name="index" options={{ headerTitle: buildHeaderTitleFn() }} />
+            <Stack.Screen name="app/games/index" options={{ headerTitle: buildHeaderTitleFn('Games') }} />
+            <Stack.Screen name="app/games/dashboard" options={{ headerTitle: buildHeaderTitleFn('All Games') }} />
+            <Stack.Screen name="app/games/accept-invite/[invitationCode]" options={{ headerTitle:buildHeaderTitleFn('Accept Invitation') }} />
+            <Stack.Screen name="app/games/[gameConfigId]/dashboard" options={{ headerTitle: buildHeaderTitleFn('Your Games') }} />
+            <Stack.Screen name="app/games/instance/[gameInstanceId]/dashboard" options={{ headerTitle: buildHeaderTitleFn('Game Dashboard') }} />
           </Stack>
         </GamesProvider>
       </ChatProvider>
