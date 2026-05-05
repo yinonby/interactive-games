@@ -5,4 +5,5 @@ export type AppImageAssetT =
   | "wordle-1"
   | "wordle-2"
   | "wordle-3"
+  | 'app-logo-32'
 ;

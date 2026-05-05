@@ -1,4 +1,4 @@
 
 export type EngineApiErrorCodeT =
-  | "engineApiError:invalidJwt"
+  | "engineApiError:unknown"
 ;
