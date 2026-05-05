@@ -14,6 +14,7 @@ export const useImageAssetDefs = (): Record<AppImageAssetT, RnuiImageSourceT> =>
     'wordle-1': require('../../assets/images/games/wordle-1.jpg'),
     'wordle-2': require('../../assets/images/games/wordle-2.jpg'),
     'wordle-3': require('../../assets/images/games/wordle-3.jpg'),
+    'app-logo-32': require('../../assets/images/logo/app-logo-32.jpg'),
   }
 }
 

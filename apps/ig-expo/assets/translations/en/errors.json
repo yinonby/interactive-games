@@ -7,7 +7,7 @@
     "unknown": "An unknown error has occurred, please refresh your page or app"
   },
   "engineApiError": {
-    "invalidJwt": "Invalid authentication token"
+    "unknown": "Unknown server error"
   },
   "gamesApiError": {
     "unknownError": "Unknown server error",
