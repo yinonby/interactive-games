@@ -17,7 +17,9 @@ export const AppLocalizationProvider: React.FC<PropsWithChildren<AppLocalization
   const { t: _t } = useTranslation();
 
   const t = (tKey: AppTranslationKeyT, options?: TOptions): string => {
-    return _t(tKey, options);
+    const key = tKey as string;
+    const defaultValue = key;
+    return _t(key, defaultValue, options);
   }
 
   const value: AppLocalizationContextT = {

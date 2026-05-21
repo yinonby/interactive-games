@@ -37,7 +37,7 @@ describe('AppLocalizationProvider', () => {
     );
 
     expect(useTranslationMock).toHaveBeenCalled();
-    expect(tMock).toHaveBeenCalledWith('testKey', undefined);
+    expect(tMock).toHaveBeenCalledWith('testKey', 'testKey', undefined);
     expect(getByTestId('out').props.children).toBe('translated:testKey');
   });
 });

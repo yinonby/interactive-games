@@ -15,7 +15,6 @@ export const appRtkHttpAdapterGeneratorProviderMock: AppRtkHttpAdapterGeneratorP
   }
 }
 
-
 const guestLoginResponse: GuestLoginResponseT = { data: { guestLoginResult: { authId: 'ACCOUNT1' }}};
 const getLoginInfoReponse: GetLoginInfoReponseT = { data: { loginInfo: { authId: 'ACCOUNT2' }}};
 let currentRequest: 'getLoginInfo' | 'guestLogin' | 'error' = 'error';
