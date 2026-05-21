@@ -11,7 +11,9 @@ export const useAuthLocalization = (): AuthLocalizationT => {
   const { t: _t } = useTranslation();
 
   const t = (tKey: AuthTranslationKeyT, options?: TOptions): string => {
-    return _t(tKey, options);
+    const key = tKey as string;
+    const defaultValue = key;
+    return _t(key, defaultValue, options);
   }
 
   return { t };

@@ -29,7 +29,7 @@ describe('AuthLocalization', () => {
     );
 
     expect(mock_useTranslation).toHaveBeenCalled();
-    expect(mock_t).toHaveBeenCalledWith('testKey', undefined);
+    expect(mock_t).toHaveBeenCalledWith('testKey', 'testKey', undefined);
     expect(getByTestId('Text-tid').props.children).toBe('translated:testKey');
   });
 });

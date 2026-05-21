@@ -1,6 +1,7 @@
 
 import { useGameTheme, useImageAssetDefs } from '@/src/utils/AssetDefs';
 import { useGameRnuiStyles, useGameUiConfig, useGamesUiUrlPathsAdapter } from '@/src/utils/GameUiConfig';
+import { ignoreLogs } from '@/src/utils/LogUtils';
 import { getI18nResources } from '@/src/utils/TranslationsAssetDefs';
 import { AppRootLayout, initI18n, useAppErrorHandling, useClientLogger, useGenericStyles } from '@ig/app-engine-ui';
 import { AuthProvider } from '@ig/auth-ui';
@@ -33,6 +34,13 @@ type ExpoEnvVarsT = {
 // init i18n must be made once, before any rendering, because i18n is a singleton
 const resources = getI18nResources();
 initI18n(resources);
+
+// silence errors
+ignoreLogs([
+  'Invalid DOM property `transform-origin`',
+  'Animated: `useNativeDriver` is not supported',
+  'props.pointerEvents is deprecated',
+]);
 
 export default function RootLayout() {
   const expoEnvVars: ExpoEnvVarsT | undefined = Constants.expoConfig?.extra?.env.expoEnvVars;

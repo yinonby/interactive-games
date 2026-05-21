@@ -39,7 +39,9 @@ const GameActionButton: FC<GameActionButtonPropsT> = ({ gamesUiUrlPathsAdapter, 
 
   return (
     <PlatformUiLink href={gameInstanceUrl} asChild>
-      <RnuiButton testID="open-game-btn-tid" size="xs">{t("common:open")}</RnuiButton>
+      <RnuiButton testID="open-game-btn-tid" size="xs">
+        {t("common:open")}
+      </RnuiButton>
     </PlatformUiLink>
   );
 };

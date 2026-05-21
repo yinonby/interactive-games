@@ -10,12 +10,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
     }
   }
 }
