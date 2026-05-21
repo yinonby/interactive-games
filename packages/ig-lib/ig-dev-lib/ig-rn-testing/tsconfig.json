@@ -12,21 +12,20 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "target": "ESNext",
     "lib": ["ESNext", "DOM"], // Include DOM types if using web + RN
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "declaration": false,
     "declarationMap": false,
     "types": ["node", "jest"],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
     }
   }
 }

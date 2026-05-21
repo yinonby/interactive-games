@@ -30,9 +30,10 @@
     "cover:report:open:py": "./scripts/python/src/coverage/py/open-py-coverage-report.py",
 
     "reinstall": "npm run clean && npm install",
-    "clean": "npm run clean:modules && npm run clean:lock",
+    "clean": "npm run clean:modules && npm run clean:lock && npm run clean:expo",
     "clean:modules": "for x in $(find . -name node_modules); do rm -rf $x; done",
     "clean:lock": "rm package-lock.json",
+    "clean:expo": "rm -rf $TMPDIR/metro-*",
 
     "reset:watchman": "watchman watch-del-all >/dev/null",
 

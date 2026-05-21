@@ -8,7 +8,6 @@
   "main": "index.ts",
   "scripts": {
     "build": "echo nothing to do",
-
     "test": "npm run build && npm run tsc && npm run lint && npm run cover:unit",
     "tsc": "npx tsc",
     "lint": "npm run lint:eslint && npm run lint:cycles",
@@ -22,11 +21,12 @@
   "dependencies": {
     "@ig/utils": "*",
     "@react-native-clipboard/clipboard": "^1.16.3",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-confirmation-code-field": "^8.0.1",
-    "react-native-paper": "^5.14.5",
-    "react-native-qrcode-styled": "^0.4.0"
+    "react": "19.2.0",
+    "react-native": "0.83.6",
+    "react-native-confirmation-code-field": "^9.0.0",
+    "react-native-paper": "^5.15.2",
+    "react-native-qrcode-styled": "^0.4.0",
+    "react-native-svg": "15.15.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

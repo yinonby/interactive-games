@@ -10,11 +10,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
     }
   }
 }

@@ -10,12 +10,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "@ig/prisma-utils/test-utils": ["../../packages/ig-lib/ig-be-lib/ig-prisma-utils/test/test-index.ts"],
     }
   }

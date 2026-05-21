@@ -37,6 +37,7 @@ export const AuthLoginView: FC<AuthLoginViewPropsT> = ({ onAuthGuestLogin }) => 
               testID='RnuiTextInput-nickname-tid'
               label={t('auth:nickname')}
               onChangeText={setNickname}
+              value={nickname}
             />
 
             <RnuiButton
